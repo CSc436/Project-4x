@@ -7,6 +7,7 @@ public class Tile {
 	 * owner
 	 * occupied by
 	 * image
+	 * terrain type
 	 */
 		
 	private boolean passable = true;

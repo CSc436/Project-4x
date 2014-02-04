@@ -9,11 +9,9 @@ public class GameBoard {
 		cols = col;
 		map = new Tile[row][col];
 
-		// sequential
 		final long startTime = System.currentTimeMillis();
-
-		for (int r = 0; r < rows; r++) {
-			for (int c = 0; c < cols; c++) {
+		for (int c = 0; c < cols; c++) {
+			for (int r = 0; r < rows; r++) {
 
 				map[r][c] = new Tile();
 
