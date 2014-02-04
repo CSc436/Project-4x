@@ -21,6 +21,14 @@ public class GameBoard {
 		cols = col;
 		map = new Tile[row][col];
 
+		// create players
+
+		players = new ArrayList<Player>();
+		for (int i = 0; i < numPlayers; i++) {
+			players.add(new Player("player" + i));
+		}
+
+		// create tiles
 		// needs optimization!
 		final long startTime = System.currentTimeMillis();
 
