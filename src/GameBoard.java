@@ -1,0 +1,40 @@
+public class GameBoard {
+
+	Tile[][] map;
+	private int rows;
+	private int cols;
+
+	public GameBoard(int row, int col) {
+		rows = row;
+		cols = col;
+		map = new Tile[row][col];
+
+		// sequential
+		final long startTime = System.currentTimeMillis();
+
+		for (int r = 0; r < rows; r++) {
+			for (int c = 0; c < cols; c++) {
+
+				map[r][c] = new Tile();
+
+			}
+		}
+		final long endTime = System.currentTimeMillis();
+		System.out.println("Total execution time: " + (endTime - startTime));
+
+	}
+
+	public int getRows() {
+		return rows;
+	}
+
+	public int getCols() {
+		return cols;
+
+	}
+
+	public Tile getTileAt(int x, int y) {
+		return map[x][y];
+	}
+
+}
