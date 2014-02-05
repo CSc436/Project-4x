@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import com.fourx.Player;
+
 /* 
  *  Programmer :  Ben Deininger
  * 		
