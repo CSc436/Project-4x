@@ -57,5 +57,9 @@ public class Tile {
 		unitsOccupying.add(u);
 
 	}
+	
+	public float getHeight() {
+		return height;
+	}
 
 }
