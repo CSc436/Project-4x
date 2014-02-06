@@ -17,10 +17,11 @@ import entities.Unit;
 
 public class GameBoard {
 
-	Tile[][] map;
+	private Tile[][] map;
 	private int rows;
 	private int cols;
-	ArrayList<Player> players;
+	private ArrayList<Player> players;
+	private static Random rand = new Random();
 
 	public GameBoard(int row, int col, int numPlayers) {
 		rows = row;
@@ -37,15 +38,8 @@ public class GameBoard {
 		// create a noisemap
 		System.out.println("Building noisemap...");
 		long startTime = System.currentTimeMillis();
-
-		float[][] noisemap = DSGen(row, System.currentTimeMillis(), 0.1f);
-
-		for (int r = 0; r < rows; r++) {
-			for (int c = 0; c < cols; c++) {
-
-			}
-		}
-
+		float[][] noisemap = diamondSquareGenerator(row,
+				System.currentTimeMillis(), 0.1f);
 		long endTime = System.currentTimeMillis();
 		System.out.println("Total execution time: " + (endTime - startTime));
 
@@ -68,9 +62,9 @@ public class GameBoard {
 				// create a new tile
 
 				map[r][c] = new Tile(resource, height);
-				System.out.printf("%3f ", noisemap[r][c]);
+				// System.out.printf("%3f ", noisemap[r][c]);
 			}
-			System.out.println();
+			// System.out.println();
 		}
 		endTime = System.currentTimeMillis();
 		System.out.println("Total execution time: " + (endTime - startTime));
@@ -111,7 +105,8 @@ public class GameBoard {
 	 * http://en.wikipedia.org/wiki/Diamond-square_algorithm
 	 */
 
-	public static float[][] DSGen(int SIZE, long seed, float roughness) {
+	public static float[][] diamondSquareGenerator(int SIZE, long seed,
+			float roughness) {
 		// size is the nearest power of 2 that fully contains SIZE plus 1
 		int size = (1 << (int) Math.ceil(Math.log(SIZE) / Math.log(2))) + 1;
 
@@ -130,8 +125,6 @@ public class GameBoard {
 
 		return noise;
 	}
-
-	private static Random rand = new Random();
 
 	private static void dsIter(float[][] noise, int size, float roughness) {
 		int sideLength = size - 1;
