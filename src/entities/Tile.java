@@ -1,7 +1,6 @@
-import java.util.ArrayList;
+package entities;
 
-import entities.Resource;
-import entities.Unit;
+import java.util.ArrayList;
 
 public class Tile {
 
@@ -26,10 +25,12 @@ public class Tile {
 
 	private boolean passable = true;
 	private Resource resource;
+	private float height;
 
-	public Tile(int resourceNum) {
+	public Tile(int resourceNum, float heightMap) {
 
 		unitsOccupying = new ArrayList<Unit>();
+		height = heightMap;
 
 		if (resourceNum == 0) {
 

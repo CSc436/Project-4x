@@ -3,6 +3,7 @@ import java.util.Random;
 
 import entities.Infantry;
 import entities.Player;
+import entities.Tile;
 import entities.Unit;
 
 /* 
@@ -33,10 +34,25 @@ public class GameBoard {
 			players.add(new Player("player" + i));
 		}
 
+		// create a noisemap
+		System.out.println("Building noisemap...");
+		long startTime = System.currentTimeMillis();
+
+		float[][] noisemap = DSGen(row, System.currentTimeMillis(), 0.1f);
+
+		for (int r = 0; r < rows; r++) {
+			for (int c = 0; c < cols; c++) {
+
+			}
+		}
+
+		long endTime = System.currentTimeMillis();
+		System.out.println("Total execution time: " + (endTime - startTime));
+
 		// create tiles
 		// needs optimization!
 		System.out.println("Building Board...");
-		long startTime = System.currentTimeMillis();
+		startTime = System.currentTimeMillis();
 
 		// create a random number generator
 		Random rand = new Random();
@@ -47,42 +63,26 @@ public class GameBoard {
 
 				// give the tile a random resource number
 				int resource = rand.nextInt(4);
+				float height = noisemap[r][c];
 
 				// create a new tile
-				map[r][c] = new Tile(resource);
 
-			}
-		}
-		long endTime = System.currentTimeMillis();
-		System.out.println("Total execution time: " + (endTime - startTime));
-
-		// create a noisemap
-		System.out.println("Building noisemap...");
-		startTime = System.currentTimeMillis();
-
-		float[][] noisemap = DSGen(row, System.currentTimeMillis(), 0.1f);
-
-		for (int r = 0; r < rows; r++) {
-			for (int c = 0; c < cols; c++) {
+				map[r][c] = new Tile(resource, height);
 				System.out.printf("%3f ", noisemap[r][c]);
-
 			}
 			System.out.println();
 		}
-
 		endTime = System.currentTimeMillis();
 		System.out.println("Total execution time: " + (endTime - startTime));
 
-		
 		// player creation
 		Player player1 = new Player("p1");
 		player1.setName("p2");
-		
+
 		// placing a unit
 		Unit temp = new Infantry(player1);
 		this.placeUnitAt(temp, 0, 0);
-		
-	
+
 	}
 
 	// -----------------------------------------------------------------------------------------
