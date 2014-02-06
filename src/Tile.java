@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+import entities.Resource;
+import entities.Unit;
+
 public class Tile {
 
 	/*
@@ -39,7 +42,7 @@ public class Tile {
 			resource = Resource.FOOD;
 		} else {
 
-			resource = Resource.GOLD;
+			resource = Resource.STONE;
 		}
 
 	}
@@ -53,6 +56,5 @@ public class Tile {
 		unitsOccupying.add(u);
 
 	}
-	
 
 }
