@@ -1,152 +1,201 @@
 package com.client;
 
 import com.shared.FieldVerifier;
+import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.googlecode.gwtgl.array.Float32Array;
+import com.googlecode.gwtgl.binding.WebGLBuffer;
+import com.googlecode.gwtgl.binding.WebGLProgram;
+import com.googlecode.gwtgl.binding.WebGLRenderingContext;
+import com.googlecode.gwtgl.binding.WebGLShader;
+import com.googlecode.gwtgl.binding.WebGLTexture;
+import com.googlecode.gwtgl.binding.WebGLUniformLocation;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class _x implements EntryPoint {
-	/**
-	 * The message displayed to the user when the server cannot be reached or
-	 * returns an error.
-	 */
-	private static final String SERVER_ERROR = "An error occurred while "
-			+ "attempting to contact the server. Please check your network "
-			+ "connection and try again.";
+	private WebGLRenderingContext glContext;
+    private WebGLProgram shaderProgram;
+    private WebGLTexture texture;
+    private int vertexPositionAttribute, vertexTexCoordAttrib;
+    private WebGLBuffer vertexBuffer, texCoordBuffer;
 
-	/**
-	 * Create a remote service proxy to talk to the server-side Greeting service.
-	 */
-	private final GreetingServiceAsync greetingService = GWT
-			.create(GreetingService.class);
+    public void onModuleLoad() {
+            final Canvas webGLCanvas = Canvas.createIfSupported();
+            webGLCanvas.setCoordinateSpaceHeight(500);
+            webGLCanvas.setCoordinateSpaceWidth(500);
+            glContext = (WebGLRenderingContext) webGLCanvas.getContext("experimental-webgl");
+            if(glContext == null) {
+                    Window.alert("Sorry, Your Browser doesn't support WebGL!");
+            }
+            glContext.viewport(0, 0, 500, 500);
+            
+            RootPanel.get("gwtGL").add(webGLCanvas);
+            start();
+    }
+    
+    private void start() {
+   	 initShaders();
+        glContext.clearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glContext.clearDepth(1.0f);
+        glContext.enable(WebGLRenderingContext.DEPTH_TEST);
+        glContext.depthFunc(WebGLRenderingContext.LEQUAL);
+        initBuffers();
+		 initTexture();
+		 //drawScene();
+    }
+    
+    private void initTexture() {
+        texture = glContext.createTexture();
+        glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
+        glContext.texImage2D(WebGLRenderingContext.TEXTURE_2D, 0, WebGLRenderingContext.RGB, 
+       		 WebGLRenderingContext.RGB, WebGLRenderingContext.UNSIGNED_BYTE, 
+       		 ImageElement.as(getImage(ClientResources.INSTANCE.riverTexture()).getElement()));
+        glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D, WebGLRenderingContext.TEXTURE_MAG_FILTER, WebGLRenderingContext.LINEAR);
+        glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D, WebGLRenderingContext.TEXTURE_MIN_FILTER, WebGLRenderingContext.LINEAR);
+        glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, null);
+        //System.out.println(texture);
+    }
+    
+    public Image getImage(final ImageResource imageResource) {
+    	//System.out.println("(" + imageResource.getWidth() + ", " + imageResource.getHeight() +")");
+        final Image img = new Image();
+        img.addLoadHandler(new LoadHandler() {
+                @Override
+                public void onLoad(LoadEvent event) {
+                        RootPanel.get().remove(img);
+                        drawScene();
+                }
+        });
+        img.setVisible(false);
+        RootPanel.get().add(img);
 
-	/**
-	 * This is the entry point method.
-	 */
-	public void onModuleLoad() {
-		final Button sendButton = new Button("Send");
-		final TextBox nameField = new TextBox();
-		nameField.setText("GWT User");
-		final Label errorLabel = new Label();
+        img.setUrl(imageResource.getSafeUri());
+        //System.out.println(img);
+        return img;
+}
 
-		// We can add style names to widgets
-		sendButton.addStyleName("sendButton");
+    
+    public void initShaders() {
+        WebGLShader fragmentShader = getShader(WebGLRenderingContext.FRAGMENT_SHADER, ClientResources.INSTANCE.fragmentShader().getText());
+        WebGLShader vertexShader = getShader(WebGLRenderingContext.VERTEX_SHADER, ClientResources.INSTANCE.vertexShader().getText());
 
-		// Add the nameField and sendButton to the RootPanel
-		// Use RootPanel.get() to get the entire body element
-		RootPanel.get("nameFieldContainer").add(nameField);
-		RootPanel.get("sendButtonContainer").add(sendButton);
-		RootPanel.get("errorLabelContainer").add(errorLabel);
+        shaderProgram = glContext.createProgram();
+        glContext.attachShader(shaderProgram, vertexShader);
+        glContext.attachShader(shaderProgram, fragmentShader);
+        glContext.linkProgram(shaderProgram);
 
-		// Focus the cursor on the name field when the app loads
-		nameField.setFocus(true);
-		nameField.selectAll();
+        if (!glContext.getProgramParameterb(shaderProgram, WebGLRenderingContext.LINK_STATUS)) {
+                throw new RuntimeException("Could not initialise shaders");
+        }
 
-		// Create the popup dialog box
-		final DialogBox dialogBox = new DialogBox();
-		dialogBox.setText("Remote Procedure Call");
-		dialogBox.setAnimationEnabled(true);
-		final Button closeButton = new Button("Close");
-		// We can set the id of a widget by accessing its Element
-		closeButton.getElement().setId("closeButton");
-		final Label textToServerLabel = new Label();
-		final HTML serverResponseLabel = new HTML();
-		VerticalPanel dialogVPanel = new VerticalPanel();
-		dialogVPanel.addStyleName("dialogVPanel");
-		dialogVPanel.add(new HTML("<b>Sending name to the server:</b>"));
-		dialogVPanel.add(textToServerLabel);
-		dialogVPanel.add(new HTML("<br><b>Server replies:</b>"));
-		dialogVPanel.add(serverResponseLabel);
-		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-		dialogVPanel.add(closeButton);
-		dialogBox.setWidget(dialogVPanel);
+        glContext.useProgram(shaderProgram);
 
-		// Add a handler to close the DialogBox
-		closeButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				dialogBox.hide();
-				sendButton.setEnabled(true);
-				sendButton.setFocus(true);
-			}
-		});
+        vertexPositionAttribute = glContext.getAttribLocation(shaderProgram, "vertexPosition");
+        vertexTexCoordAttrib = glContext.getAttribLocation(shaderProgram, "vertexTexCoord");
+        
+        glContext.enableVertexAttribArray(vertexPositionAttribute);
+        glContext.enableVertexAttribArray(vertexTexCoordAttrib);
+    }
+    
+    private WebGLShader getShader(int type, String source) {
+        WebGLShader shader = glContext.createShader(type);
 
-		// Create a handler for the sendButton and nameField
-		class MyHandler implements ClickHandler, KeyUpHandler {
-			/**
-			 * Fired when the user clicks on the sendButton.
-			 */
-			public void onClick(ClickEvent event) {
-				sendNameToServer();
-			}
+        glContext.shaderSource(shader, source);
+        glContext.compileShader(shader);
 
-			/**
-			 * Fired when the user types in the nameField.
-			 */
-			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					sendNameToServer();
-				}
-			}
+        if (!glContext.getShaderParameterb(shader, WebGLRenderingContext.COMPILE_STATUS)) {
+                throw new RuntimeException(glContext.getShaderInfoLog(shader));
+        }
 
-			/**
-			 * Send the name from the nameField to the server and wait for a response.
-			 */
-			private void sendNameToServer() {
-				// First, we validate the input.
-				errorLabel.setText("");
-				String textToServer = nameField.getText();
-				if (!FieldVerifier.isValidName(textToServer)) {
-					errorLabel.setText("Please enter at least four characters");
-					return;
-				}
+        return shader;
+    }
+    
+    private void initBuffers() {
+        vertexBuffer = glContext.createBuffer();
+        glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, vertexBuffer);
+        float[] vertices = new float[]{
+                         1.0f,  1.0f,  -2.5f, // first vertex
+                        -1.0f, 1.0f,  -2.5f, // second vertex
+                         1.0f, -1.0f,  -2.5f,  // third vertex
+                         -1.0f, -1.0f, -2.5f
+        };
+        glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER, Float32Array.create(vertices), WebGLRenderingContext.STATIC_DRAW);
+    
+        texCoordBuffer = glContext.createBuffer();
+        glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, texCoordBuffer);
+        float[] colors = new float[]{
+                1.0f, 0.0f, 
+                0.0f, 0.0f, 
+                1.0f, 1.0f, 
+                0.0f, 1.0f
+        };
+        glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER, Float32Array.create(colors), WebGLRenderingContext.STATIC_DRAW);
+    }
+    
+    private void drawScene() {
+        glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT | WebGLRenderingContext.DEPTH_BUFFER_BIT);
+       
+        // create perspective matrix
+        float[] perspectiveMatrix = createPerspectiveMatrix(45, 1, 0.1f, 1000);
+        WebGLUniformLocation uniformLocation = glContext.getUniformLocation(shaderProgram, "perspectiveMatrix");
+       
+    	 // vertices
+        glContext.uniformMatrix4fv(uniformLocation, false, perspectiveMatrix);
+        glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, vertexBuffer);
+        glContext.vertexAttribPointer(vertexPositionAttribute, 3, WebGLRenderingContext.FLOAT, false, 0, 0);
+        
+        // texture coordinates
+        glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, texCoordBuffer);
+        glContext.vertexAttribPointer(vertexTexCoordAttrib, 2, WebGLRenderingContext.FLOAT, false, 0, 0);
+       
+        // texture data
+        glContext.activeTexture(glContext.TEXTURE0);
+        glContext.bindTexture(glContext.TEXTURE_2D, texture);
+        glContext.uniform1i(glContext.getUniformLocation(shaderProgram,  "texture"), 0);
+        
+        // draw geometry
+        glContext.drawArrays(WebGLRenderingContext.TRIANGLE_STRIP, 0, 4);
+        glContext.flush();
+    }
+    
+    private float[] createPerspectiveMatrix(int fieldOfViewVertical, float aspectRatio, float minimumClearance, float maximumClearance) {
+        float top    = minimumClearance * (float)Math.tan(fieldOfViewVertical * Math.PI / 360.0);
+        float bottom = -top;
+        float left   = bottom * aspectRatio;
+        float right  = top * aspectRatio;
 
-				// Then, we send the input to the server.
-				sendButton.setEnabled(false);
-				textToServerLabel.setText(textToServer);
-				serverResponseLabel.setText("");
-				greetingService.greetServer(textToServer,
-						new AsyncCallback<String>() {
-							public void onFailure(Throwable caught) {
-								// Show the RPC error message to the user
-								dialogBox
-										.setText("Remote Procedure Call - Failure");
-								serverResponseLabel
-										.addStyleName("serverResponseLabelError");
-								serverResponseLabel.setHTML(SERVER_ERROR);
-								dialogBox.center();
-								closeButton.setFocus(true);
-							}
+        float X = 2*minimumClearance/(right-left);
+        float Y = 2*minimumClearance/(top-bottom);
+        float A = (right+left)/(right-left);
+        float B = (top+bottom)/(top-bottom);
+        float C = -(maximumClearance+minimumClearance)/(maximumClearance-minimumClearance);
+        float D = -2*maximumClearance*minimumClearance/(maximumClearance-minimumClearance);
 
-							public void onSuccess(String result) {
-								dialogBox.setText("Remote Procedure Call");
-								serverResponseLabel
-										.removeStyleName("serverResponseLabelError");
-								serverResponseLabel.setHTML(result);
-								dialogBox.center();
-								closeButton.setFocus(true);
-							}
-						});
-			}
-		}
-
-		// Add a handler to send the name to the server
-		MyHandler handler = new MyHandler();
-		sendButton.addClickHandler(handler);
-		nameField.addKeyUpHandler(handler);
-	}
+        return new float[]{     X, 0.0f, A, 0.0f,
+                                                0.0f, Y, B, 0.0f,
+                                                0.0f, 0.0f, C, -1.0f,
+                                                0.0f, 0.0f, D, 0.0f};
+    }
 }
