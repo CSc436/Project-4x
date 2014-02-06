@@ -69,10 +69,16 @@ public class GameBoard {
 		endTime = System.currentTimeMillis();
 		System.out.println("Total execution time: " + (endTime - startTime));
 
-		// test placing a unit
-		Unit temp = new Infantry();
+		
+		// player creation
+		Player player1 = new Player("p1");
+		player1.setName("p2");
+		
+		// placing a unit
+		Unit temp = new Infantry(player1);
 		this.placeUnitAt(temp, 0, 0);
-
+		
+	
 	}
 
 	// -----------------------------------------------------------------------------------------

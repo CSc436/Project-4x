@@ -6,8 +6,8 @@
 
 public class Infantry extends Unit {
 
-	public Infantry() {
-		super();
+	public Infantry(Player p) {
+		super(p);
 	}
 
 }

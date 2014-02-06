@@ -10,6 +10,13 @@ public abstract class Unit {
 	private int health;
 	private Player owner;
 
+	public Unit(Player p) {
+
+		health = 100;
+		owner = p;
+
+	}
+
 	// GET / SET
 	public int getHealth() {
 		return health;
