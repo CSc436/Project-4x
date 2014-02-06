@@ -7,9 +7,10 @@ public class GameBoardTest {
 	@Test
 	public void test() {
 
-		GameBoard game = new GameBoard(2000, 4000, 2);
-		assertEquals(2000, game.getRows());
-		assertEquals(4000, game.getCols());
+		GameBoard game = new GameBoard(20, 20, 2);
+		assertEquals(20, game.getRows());
+		assertEquals(20, game.getCols());
+		
 
 	}
 }
