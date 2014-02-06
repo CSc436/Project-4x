@@ -1,6 +1,7 @@
 package com.client;
 
 import com.shared.FieldVerifier;
+import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -8,6 +9,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -16,137 +20,143 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.googlecode.gwtgl.array.Float32Array;
+import com.googlecode.gwtgl.binding.WebGLBuffer;
+import com.googlecode.gwtgl.binding.WebGLProgram;
+import com.googlecode.gwtgl.binding.WebGLRenderingContext;
+import com.googlecode.gwtgl.binding.WebGLShader;
+import com.googlecode.gwtgl.binding.WebGLUniformLocation;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class _x implements EntryPoint {
-	/**
-	 * The message displayed to the user when the server cannot be reached or
-	 * returns an error.
-	 */
-	private static final String SERVER_ERROR = "An error occurred while "
-			+ "attempting to contact the server. Please check your network "
-			+ "connection and try again.";
 
-	/**
-	 * Create a remote service proxy to talk to the server-side Greeting service.
-	 */
-	private final GreetingServiceAsync greetingService = GWT
-			.create(GreetingService.class);
+	private WebGLRenderingContext glContext;
+	private WebGLProgram shaderProgram;
+	private int vertexPositionAttribute;
+	private WebGLBuffer vertexBuffer;
 
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		final Button sendButton = new Button("Send");
-		final TextBox nameField = new TextBox();
-		nameField.setText("GWT User");
-		final Label errorLabel = new Label();
+		final Canvas webGLCanvas = Canvas.createIfSupported();
 
-		// We can add style names to widgets
-		sendButton.addStyleName("sendButton");
-
-		// Add the nameField and sendButton to the RootPanel
-		// Use RootPanel.get() to get the entire body element
-		RootPanel.get("nameFieldContainer").add(nameField);
-		RootPanel.get("sendButtonContainer").add(sendButton);
-		RootPanel.get("errorLabelContainer").add(errorLabel);
-
-		// Focus the cursor on the name field when the app loads
-		nameField.setFocus(true);
-		nameField.selectAll();
-
-		// Create the popup dialog box
-		final DialogBox dialogBox = new DialogBox();
-		dialogBox.setText("Remote Procedure Call");
-		dialogBox.setAnimationEnabled(true);
-		final Button closeButton = new Button("Close");
-		// We can set the id of a widget by accessing its Element
-		closeButton.getElement().setId("closeButton");
-		final Label textToServerLabel = new Label();
-		final HTML serverResponseLabel = new HTML();
-		VerticalPanel dialogVPanel = new VerticalPanel();
-		dialogVPanel.addStyleName("dialogVPanel");
-		dialogVPanel.add(new HTML("<b>Sending name to the server:</b>"));
-		dialogVPanel.add(textToServerLabel);
-		dialogVPanel.add(new HTML("<br><b>Server replies:</b>"));
-		dialogVPanel.add(serverResponseLabel);
-		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-		dialogVPanel.add(closeButton);
-		dialogBox.setWidget(dialogVPanel);
-
-		// Add a handler to close the DialogBox
-		closeButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				dialogBox.hide();
-				sendButton.setEnabled(true);
-				sendButton.setFocus(true);
+		RootPanel.get("gwtGL").add(webGLCanvas);
+		//System.out.println(webGLCanvas.getParent().getOffsetHeight());
+		//System.out.println(webGLCanvas.getParent().getOffsetWidth());
+		webGLCanvas.setCoordinateSpaceHeight(webGLCanvas.getParent().getOffsetHeight());
+		webGLCanvas.setCoordinateSpaceWidth(webGLCanvas.getParent().getOffsetWidth());
+		glContext = (WebGLRenderingContext) webGLCanvas
+				.getContext("experimental-webgl");
+		if (glContext == null) {
+			Window.alert("Sorry, your browser doesn't support WebGL!");
+		}
+		glContext.viewport(0, 0, webGLCanvas.getParent().getOffsetHeight(), webGLCanvas.getParent().getOffsetWidth());
+		Window.addResizeHandler(new ResizeHandler() {
+			@Override
+			public void onResize(ResizeEvent e) {
+				webGLCanvas.setCoordinateSpaceHeight(webGLCanvas.getParent().getOffsetHeight());
+				webGLCanvas.setCoordinateSpaceWidth(webGLCanvas.getParent().getOffsetWidth());
+				glContext.viewport(0, 0, webGLCanvas.getParent().getOffsetHeight(), webGLCanvas.getParent().getOffsetWidth());
 			}
 		});
+		start();
+	}
 
-		// Create a handler for the sendButton and nameField
-		class MyHandler implements ClickHandler, KeyUpHandler {
-			/**
-			 * Fired when the user clicks on the sendButton.
-			 */
-			public void onClick(ClickEvent event) {
-				sendNameToServer();
-			}
+	private void start() {
+		initShaders();
+		glContext.clearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glContext.clearDepth(1.0f);
+		glContext.enable(WebGLRenderingContext.DEPTH_TEST);
+		glContext.depthFunc(WebGLRenderingContext.LEQUAL);
+		initBuffers();
 
-			/**
-			 * Fired when the user types in the nameField.
-			 */
-			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					sendNameToServer();
-				}
-			}
+		drawScene();
+	}
 
-			/**
-			 * Send the name from the nameField to the server and wait for a response.
-			 */
-			private void sendNameToServer() {
-				// First, we validate the input.
-				errorLabel.setText("");
-				String textToServer = nameField.getText();
-				if (!FieldVerifier.isValidName(textToServer)) {
-					errorLabel.setText("Please enter at least four characters");
-					return;
-				}
+	public void initShaders() {
+		WebGLShader fragmentShader = getShader(
+				WebGLRenderingContext.FRAGMENT_SHADER, Shaders.INSTANCE
+						.fragmentShader().getText());
+		WebGLShader vertexShader = getShader(
+				WebGLRenderingContext.VERTEX_SHADER, Shaders.INSTANCE
+						.vertexShader().getText());
 
-				// Then, we send the input to the server.
-				sendButton.setEnabled(false);
-				textToServerLabel.setText(textToServer);
-				serverResponseLabel.setText("");
-				greetingService.greetServer(textToServer,
-						new AsyncCallback<String>() {
-							public void onFailure(Throwable caught) {
-								// Show the RPC error message to the user
-								dialogBox
-										.setText("Remote Procedure Call - Failure");
-								serverResponseLabel
-										.addStyleName("serverResponseLabelError");
-								serverResponseLabel.setHTML(SERVER_ERROR);
-								dialogBox.center();
-								closeButton.setFocus(true);
-							}
+		shaderProgram = glContext.createProgram();
+		glContext.attachShader(shaderProgram, vertexShader);
+		glContext.attachShader(shaderProgram, fragmentShader);
+		glContext.linkProgram(shaderProgram);
 
-							public void onSuccess(String result) {
-								dialogBox.setText("Remote Procedure Call");
-								serverResponseLabel
-										.removeStyleName("serverResponseLabelError");
-								serverResponseLabel.setHTML(result);
-								dialogBox.center();
-								closeButton.setFocus(true);
-							}
-						});
-			}
+		if (!glContext.getProgramParameterb(shaderProgram,
+				WebGLRenderingContext.LINK_STATUS)) {
+			throw new RuntimeException("Could not initialise shaders");
 		}
 
-		// Add a handler to send the name to the server
-		MyHandler handler = new MyHandler();
-		sendButton.addClickHandler(handler);
-		nameField.addKeyUpHandler(handler);
+		glContext.useProgram(shaderProgram);
+
+		vertexPositionAttribute = glContext.getAttribLocation(shaderProgram,
+				"vertexPosition");
+		glContext.enableVertexAttribArray(vertexPositionAttribute);
 	}
+
+	private WebGLShader getShader(int type, String source) {
+		WebGLShader shader = glContext.createShader(type);
+
+		glContext.shaderSource(shader, source);
+		glContext.compileShader(shader);
+
+		if (!glContext.getShaderParameterb(shader,
+				WebGLRenderingContext.COMPILE_STATUS)) {
+			throw new RuntimeException(glContext.getShaderInfoLog(shader));
+		}
+
+		return shader;
+	}
+
+	private void initBuffers() {
+		vertexBuffer = glContext.createBuffer();
+		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, vertexBuffer);
+		float[] vertices = new float[] { 0.0f, 1.0f, -5.0f, // first vertex
+				-1.0f, -1.0f, -5.0f, // second vertex
+				1.0f, -1.0f, -5.0f // third vertex
+		};
+		glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER,
+				Float32Array.create(vertices),
+				WebGLRenderingContext.STATIC_DRAW);
+	}
+
+	private void drawScene() {
+		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT
+				| WebGLRenderingContext.DEPTH_BUFFER_BIT);
+		float[] perspectiveMatrix = createPerspectiveMatrix(45, 1, 0.1f, 1000);
+		WebGLUniformLocation uniformLocation = glContext.getUniformLocation(
+				shaderProgram, "perspectiveMatrix");
+		glContext.uniformMatrix4fv(uniformLocation, false, perspectiveMatrix);
+		glContext.vertexAttribPointer(vertexPositionAttribute, 3,
+				WebGLRenderingContext.FLOAT, false, 0, 0);
+		glContext.drawArrays(WebGLRenderingContext.TRIANGLES, 0, 3);
+	}
+
+	private float[] createPerspectiveMatrix(int fieldOfViewVertical,
+			float aspectRatio, float minimumClearance, float maximumClearance) {
+		float top = minimumClearance
+				* (float) Math.tan(fieldOfViewVertical * Math.PI / 360.0);
+		float bottom = -top;
+		float left = bottom * aspectRatio;
+		float right = top * aspectRatio;
+
+		float X = 2 * minimumClearance / (right - left);
+		float Y = 2 * minimumClearance / (top - bottom);
+		float A = (right + left) / (right - left);
+		float B = (top + bottom) / (top - bottom);
+		float C = -(maximumClearance + minimumClearance)
+				/ (maximumClearance - minimumClearance);
+		float D = -2 * maximumClearance * minimumClearance
+				/ (maximumClearance - minimumClearance);
+
+		return new float[] { X, 0.0f, A, 0.0f, 0.0f, Y, B, 0.0f, 0.0f, 0.0f, C,
+				-1.0f, 0.0f, 0.0f, D, 0.0f };
+	};
 }
