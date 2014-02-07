@@ -14,8 +14,8 @@ public class Player {
 		techTree = new TechnologyTree(this);
 	}
 	
-	public void research(String name) {
-		techTree.research(name);
+	public boolean research(String name) {
+		return techTree.research(name);
 	}
 
 }

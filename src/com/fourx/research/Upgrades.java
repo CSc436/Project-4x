@@ -12,14 +12,14 @@ public class Upgrades {
 	public Upgrades() {
 		mapping = new HashMap<String, BuffStats>();
 		for(TYPE type: TYPE.values()) {
-			mapping.put(type.getValue(), new BuffStats());
+			mapping.put(type.name(), new BuffStats());
 		}
 	}
 	
 	public void addTechnology(Technology tech) {
 		ArrayList<TYPE> appliesTo = tech.getAppliesTo();
 		for(int i = 0; i < appliesTo.size(); i++) {
-			BuffStats s = mapping.get(appliesTo.get(i).getValue());
+			BuffStats s = mapping.get(appliesTo.get(i).name());
 			s.add(tech.getStats());
 		}
 	}

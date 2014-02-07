@@ -7,10 +7,11 @@ import com.fourx.buffs.TYPE;
 import com.fourx.research.Technology;
 import com.fourx.research.TechnologyEnum;
 
-public class InfantryDamage1 extends Technology {
+public class InfantryDamage2 extends Technology {
 
-	public InfantryDamage1() {
+	public InfantryDamage2() {
 		super();
+		requirements.add(TechnologyEnum.INFANTRYDAMAGE1);
 		buffstats = new BuffStats();
 		buffstats.damage = 1;
 		appliesTo = new ArrayList<TYPE>();
