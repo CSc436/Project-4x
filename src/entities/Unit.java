@@ -26,6 +26,7 @@ public abstract class Unit {
 
 		health = 100;
 		owner = p;
+		
 
 	}
 

@@ -14,7 +14,7 @@ public class Tile {
 	 * 
 	 * 
 	 * 
-	 * tentative variables : resource owner occupied by image terrain type
+	 * tentative variables :
 	 */
 
 	// More than 1 unit
@@ -24,6 +24,7 @@ public class Tile {
 	private Resource resource;
 	private float height;
 	private Player owner;
+	private Terrain type;
 
 	public Tile(int resourceNum, float heightMap) {
 
@@ -58,6 +59,7 @@ public class Tile {
 		unitsOccupying.add(u);
 	}
 
+	// may need t/f to signify success
 	public void removeUnit(Unit u) {
 
 		for (int c = 0; c < unitsOccupying.size(); c++) {
@@ -91,4 +93,10 @@ public class Tile {
 		return owner;
 	}
 
+	public Boolean hasOwner() {
+		if (owner != null)
+			return false;
+		else
+			return true;
+	}
 }
