@@ -6,6 +6,17 @@ package entities;
  * information known about itself.  
  */
 
+
+// infantry
+// calvary
+// ranged
+// water?
+// transport?
+// trade cart
+// settler / worker
+
+
+
 public abstract class Unit {
 
 	private int health;

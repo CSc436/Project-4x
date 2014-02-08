@@ -1,5 +1,9 @@
 package entities;
+
 public class Player {
+
+	// scoring
+	// ints for resource counts
 
 	private String name;
 

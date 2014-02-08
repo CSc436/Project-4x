@@ -1,4 +1,7 @@
 package entities;
 public enum Resource {
-	GOLD, WOOD, FOOD, STONE;
+	//  weighted none resources
+	// independent weights per resource
+	// gold < wood, etc.
+	GOLD, WOOD, FOOD, STONE,NONE;
 }

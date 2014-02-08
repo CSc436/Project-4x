@@ -20,9 +20,6 @@ public class Tile {
 	// More than 1 unit
 	ArrayList<Unit> unitsOccupying;
 
-	// 1 unit
-	// Unit unitOccupying;
-
 	private boolean passable = true;
 	private Resource resource;
 	private float height;

@@ -1,5 +1,18 @@
 package entities;
+
 public abstract class Building {
+
+	// buildings will be > 1 tile
+	// int height
+	// int width
+	// int,int coordinates // or point
+
+	// initial building types
+
+	// unit producing
+	// resource producing
+	// research options
+	// defense units
 
 	private int health;
 	private Player owner;

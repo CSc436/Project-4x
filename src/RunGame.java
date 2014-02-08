@@ -1,4 +1,7 @@
 public class RunGame {
+	
+	
+	// controller class!
 
 	public static void main(String[] args) {
 
