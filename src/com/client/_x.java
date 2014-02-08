@@ -15,6 +15,7 @@ import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -42,29 +43,31 @@ public class _x implements EntryPoint {
 	private WebGLTexture texture;
 	private int vertexPositionAttribute, vertexTexCoordAttrib;
 	private WebGLBuffer vertexBuffer, texCoordBuffer;
+	private static int WIDTH, HEIGHT;
+	private static long startTime;
 
 	public void onModuleLoad() {
 		final Canvas webGLCanvas = Canvas.createIfSupported();
 
 		RootPanel.get("gwtGL").add(webGLCanvas);
-		webGLCanvas.setCoordinateSpaceHeight(webGLCanvas.getParent()
-				.getOffsetHeight());
-		webGLCanvas.setCoordinateSpaceWidth(webGLCanvas.getParent()
-				.getOffsetWidth());
 		
 		glContext = (WebGLRenderingContext) webGLCanvas
 				.getContext("experimental-webgl");
 		if (glContext == null) {
 			Window.alert("Sorry, your browser doesn't support WebGL!");
 		}
-		//This line will make the viewport fullscreen
-		/*glContext.viewport(0, 0, webGLCanvas.getParent().getOffsetHeight(),
-				webGLCanvas.getParent().getOffsetWidth());*/
 		
-		//This line makes the viewport 500x500 to display the rock picture
-		glContext.viewport(0, 0, 500, 500);
+		//These lines make the viewport fullscreen
+		webGLCanvas.setCoordinateSpaceHeight(webGLCanvas.getParent()
+				.getOffsetHeight());
+		webGLCanvas.setCoordinateSpaceWidth(webGLCanvas.getParent()
+				.getOffsetWidth());
+		HEIGHT = webGLCanvas.getParent().getOffsetHeight();
+		WIDTH = webGLCanvas.getParent().getOffsetWidth();
 		
-		//Resize callback
+		glContext.viewport(0, 0, WIDTH, HEIGHT);
+		
+		// Resize callback
 		Window.addResizeHandler(new ResizeHandler() {
 			@Override
 			public void onResize(ResizeEvent e) {
@@ -72,9 +75,12 @@ public class _x implements EntryPoint {
 						.getOffsetHeight());
 				webGLCanvas.setCoordinateSpaceWidth(webGLCanvas.getParent()
 						.getOffsetWidth());
-				glContext.viewport(0, 0, webGLCanvas.getParent()
-						.getOffsetHeight(), webGLCanvas.getParent()
-						.getOffsetWidth());
+				
+				HEIGHT = webGLCanvas.getParent().getOffsetHeight();
+				WIDTH = webGLCanvas.getParent().getOffsetWidth();
+				
+				glContext.viewport(0, 0, WIDTH, HEIGHT);
+
 			}
 		});
 		start();
@@ -87,8 +93,15 @@ public class _x implements EntryPoint {
 		glContext.enable(WebGLRenderingContext.DEPTH_TEST);
 		glContext.depthFunc(WebGLRenderingContext.LEQUAL);
 		initBuffers();
-		initTexture();
-		// drawScene();
+		//initTexture();
+		startTime = System.currentTimeMillis();
+	    Timer t = new Timer() {
+	        @Override
+	        public void run() {
+	          drawScene();
+	        }
+	      };
+	    t.scheduleRepeating(16);
 	}
 
 	private void initTexture() {
@@ -120,7 +133,7 @@ public class _x implements EntryPoint {
 			@Override
 			public void onLoad(LoadEvent event) {
 				RootPanel.get().remove(img);
-				drawScene();
+
 			}
 		});
 		img.setVisible(false);
@@ -216,10 +229,14 @@ public class _x implements EntryPoint {
 				WebGLRenderingContext.FLOAT, false, 0, 0);
 
 		// texture data
-		glContext.activeTexture(glContext.TEXTURE0);
-		glContext.bindTexture(glContext.TEXTURE_2D, texture);
-		glContext.uniform1i(
-				glContext.getUniformLocation(shaderProgram, "texture"), 0);
+		//glContext.activeTexture(glContext.TEXTURE0);
+		//glContext.bindTexture(glContext.TEXTURE_2D, texture);
+/*		glContext.uniform1i(
+				glContext.getUniformLocation(shaderProgram, "texture"), 0);*/
+		glContext.uniform2f(
+				glContext.getUniformLocation(shaderProgram, "resolution"), (float)WIDTH, (float)HEIGHT);
+		glContext.uniform1f(
+				glContext.getUniformLocation(shaderProgram, "time"), (System.currentTimeMillis() - startTime) / 1000.0f);
 
 		// draw geometry
 		glContext.drawArrays(WebGLRenderingContext.TRIANGLE_STRIP, 0, 4);
