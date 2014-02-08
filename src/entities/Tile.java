@@ -26,7 +26,8 @@ public class Tile {
 	private Player owner;
 	private Terrain type;
 
-	// private float regenerate
+	// private float resource regenerate rate
+	// private int resource number
 
 	public Tile(int resourceNum, float heightMap) {
 

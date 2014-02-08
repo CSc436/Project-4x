@@ -1,6 +1,7 @@
 package entities.units;
 
 import entities.Player;
+
 /*
  * Programmer:  Benjamin Deininger
  * 
@@ -10,7 +11,7 @@ import entities.Player;
 public class Infantry extends Unit {
 
 	public Infantry(Player p) {
-		super(p);
+		super(p, 100, 2);
 	}
 
 }

@@ -1,13 +1,13 @@
 package entities.units;
 
 import entities.Player;
+
 /*
  * Programmer:  Benjamin Deininger
  * 
  * Purpose:  This abstract class defines the concept of a unit.  Every unit will atleast have the following 
  * information known about itself.  
  */
-
 
 // infantry
 // calvary
@@ -16,19 +16,61 @@ import entities.Player;
 // transport?
 // trade cart
 // settler / worker
-
-
+// healing unit
 
 public abstract class Unit {
 
 	private int health;
 	private Player owner;
+	private int baseDmg;
+	private int augment;
+	private int maxHp;
 
-	public Unit(Player p) {
+	public Unit(Player p, int hp, int bDmg) {
 
-		health = 100;
+		maxHp = health = hp;
 		owner = p;
-		
+		baseDmg = bDmg;
+
+	}
+
+	public void setAugment(int n) {
+		augment = n;
+
+	}
+
+	public int getDamage() {
+		return baseDmg + augment;
+	}
+
+	// set health
+	// return true or false if the unit is dead
+	public boolean setHealth(int n) {
+
+		health = n;
+		if (health > maxHp)
+			health = maxHp;
+
+		if (health <= 0)
+			return false;
+		else
+			return true;
+
+	}
+
+	// negative n will be damage
+	// positive will be healing
+
+	public boolean modifyHealth(int n) {
+
+		health = health + n;
+		if (health > maxHp)
+			health = maxHp;
+
+		if (health <= 0)
+			return false;
+		else
+			return true;
 
 	}
 
