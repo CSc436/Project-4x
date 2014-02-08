@@ -1,6 +1,8 @@
 package com.client;
 
 import com.shared.FieldVerifier;
+import com.shared.IncrementRequest;
+import com.shared.Request;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -119,8 +121,9 @@ public class _x implements EntryPoint {
 				sendButton.setEnabled(false);
 				textToServerLabel.setText(textToServer);
 				serverResponseLabel.setText("");
-				greetingService.greetServer(textToServer,
-						new AsyncCallback<String>() {
+				Request toSend = IncrementRequest.generateRequest(0, 0);
+				greetingService.greetServer(toSend,
+						new AsyncCallback<Request[]>() {
 							public void onFailure(Throwable caught) {
 								// Show the RPC error message to the user
 								dialogBox
@@ -132,7 +135,7 @@ public class _x implements EntryPoint {
 								closeButton.setFocus(true);
 							}
 
-							public void onSuccess(String result) {
+							public void onSuccess(Request[] result) {
 								dialogBox.setText("Remote Procedure Call");
 								serverResponseLabel
 										.removeStyleName("serverResponseLabelError");
