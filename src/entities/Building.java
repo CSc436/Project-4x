@@ -3,10 +3,9 @@ package entities;
 public abstract class Building {
 
 	// buildings will be > 1 tile
-	// int height
-	// int width
-	// int,int coordinates // or point
 
+	
+	
 	// initial building types
 
 	// unit producing
@@ -15,12 +14,18 @@ public abstract class Building {
 	// defense units
 
 	private int health;
-	private Player owner;
+	private Player owner; // owner of the structure
+	private int height; // height of the structure
+	private int width; // width of the structure
+	private int x = -1;
+	private int y = -1; // dimensions on the game board
 
-	public Building(Player p) {
+	public Building(Player p, int h, int w) {
 
 		health = 100;
 		owner = p;
+		height = h;
+		width = w;
 
 	}
 
@@ -32,4 +37,11 @@ public abstract class Building {
 	public Player getOwner() {
 		return owner;
 	}
+
+	public void setLocation(int row, int col) {
+
+		x = row;
+		y = col;
+	}
+
 }

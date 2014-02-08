@@ -23,6 +23,7 @@ public class Tile {
 	private boolean passable = true;
 	private Resource resource;
 	private float height;
+	private Player owner;
 
 	public Tile(int resourceNum, float heightMap) {
 
@@ -49,14 +50,45 @@ public class Tile {
 		return passable;
 	}
 
-	public void placeUnit(Unit u) {
+	public void setPassable(Boolean b) {
+		passable = b;
+	}
 
+	public void placeUnit(Unit u) {
 		unitsOccupying.add(u);
+	}
+
+	public void removeUnit(Unit u) {
+
+		for (int c = 0; c < unitsOccupying.size(); c++) {
+
+			if (unitsOccupying.get(c).equals(u)) {
+				unitsOccupying.remove(u);
+			}
+
+		}
 
 	}
-	
+
+	public Resource getResource() {
+		return resource;
+	}
+
 	public float getHeight() {
 		return height;
+	}
+
+	public int getUnitCount() {
+		return unitsOccupying.size();
+	}
+
+	public void setOwner(Player p) {
+		owner = p;
+
+	}
+
+	public Player getOwner() {
+		return owner;
 	}
 
 }
