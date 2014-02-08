@@ -1,4 +1,6 @@
-package entities;
+package entities.buildings;
+
+import entities.Player;
 
 public abstract class Castle {
 

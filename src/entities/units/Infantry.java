@@ -1,4 +1,6 @@
-package entities;
+package entities.units;
+
+import entities.Player;
 /*
  * Programmer:  Benjamin Deininger
  * 

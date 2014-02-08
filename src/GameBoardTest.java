@@ -2,10 +2,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import entities.Infantry;
 import entities.Player;
 import entities.Tile;
-import entities.Unit;
+import entities.units.Infantry;
+import entities.units.Unit;
 
 public class GameBoardTest {
 
@@ -33,15 +33,9 @@ public class GameBoardTest {
 		assertEquals(true, tester.isPassable());
 		tester.setPassable(false);
 		assertEquals(false, tester.isPassable());
-		assertEquals(2, tester.getUnitCount());
 
 		System.out.println("Resource: " + tester.getResource());
 		System.out.println("Height :" + tester.getHeight());
-
-		tester.removeUnit(temp);
-		assertEquals(1, tester.getUnitCount());
-		tester.removeUnit(temp2);
-		assertEquals(0, tester.getUnitCount());
 
 		assertEquals(null, tester.getOwner());
 		tester.setOwner(juan);

@@ -2,6 +2,8 @@ package entities;
 
 import java.util.ArrayList;
 
+import entities.units.Unit;
+
 public class Tile {
 
 	/*
@@ -17,8 +19,6 @@ public class Tile {
 	 * tentative variables :
 	 */
 
-	// More than 1 unit
-	ArrayList<Unit> unitsOccupying;
 
 	private boolean passable = true;
 	private Resource resource;
@@ -26,9 +26,10 @@ public class Tile {
 	private Player owner;
 	private Terrain type;
 
+	// private float regenerate
+
 	public Tile(int resourceNum, float heightMap) {
 
-		unitsOccupying = new ArrayList<Unit>();
 		height = heightMap;
 
 		if (resourceNum == 0) {
@@ -45,6 +46,8 @@ public class Tile {
 			resource = Resource.STONE;
 		}
 
+		calculateTerrainType();
+
 	}
 
 	public boolean isPassable() {
@@ -55,22 +58,7 @@ public class Tile {
 		passable = b;
 	}
 
-	public void placeUnit(Unit u) {
-		unitsOccupying.add(u);
-	}
-
-	// may need t/f to signify success
-	public void removeUnit(Unit u) {
-
-		for (int c = 0; c < unitsOccupying.size(); c++) {
-
-			if (unitsOccupying.get(c).equals(u)) {
-				unitsOccupying.remove(u);
-			}
-
-		}
-
-	}
+	
 
 	public Resource getResource() {
 		return resource;
@@ -80,9 +68,6 @@ public class Tile {
 		return height;
 	}
 
-	public int getUnitCount() {
-		return unitsOccupying.size();
-	}
 
 	public void setOwner(Player p) {
 		owner = p;
@@ -93,10 +78,39 @@ public class Tile {
 		return owner;
 	}
 
-	public Boolean hasOwner() {
+	public boolean hasOwner() {
 		if (owner == null)
 			return false;
 		else
 			return true;
+	}
+
+	
+	/*
+	 * 1391895502278
+	 */
+
+	public void calculateTerrainType() {
+
+		float newHeight = 255 * height;
+
+		if (newHeight < 132) {
+			type = Terrain.WATER;
+		} else if (newHeight < 136) {
+			type = Terrain.DIRT;
+		} else if(newHeight < 140) {
+			type = Terrain.GRASS;
+		} else if(newHeight < 156) {
+			type = Terrain.HILL;
+		} else if(newHeight < 184) {
+			type = Terrain.MOUNTAIN;
+		} else {
+			type = Terrain.SNOW;
+		}
+
+	}
+
+	public Terrain getTerrainType() {
+		return type;
 	}
 }

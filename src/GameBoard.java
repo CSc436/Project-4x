@@ -2,10 +2,10 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
-import entities.Infantry;
 import entities.Player;
 import entities.Tile;
-import entities.Unit;
+import entities.units.Infantry;
+import entities.units.Unit;
 
 /* 
  *  Programmer :  Ben Deininger
@@ -63,9 +63,10 @@ public class GameBoard {
 				// create a new tile
 
 				map[r][c] = new Tile(resource, height);
-				System.out.printf("%3f ", noisemap[r][c]);
+				// System.out.print(map[r][c].getHeight() + " ");
+				// System.out.printf("%10s",map[r][c].getTerrainType());
 			}
-			System.out.println();
+			// System.out.println();
 		}
 		endTime = System.currentTimeMillis();
 		System.out.println("Total execution time: " + (endTime - startTime));
@@ -92,8 +93,6 @@ public class GameBoard {
 			map[x][y].getOwner().addUnit(u);
 		}
 
-		map[x][y].placeUnit(u);
-
 	}
 
 	/*
@@ -110,6 +109,8 @@ public class GameBoard {
 		// seed random number generator
 		rand.setSeed(seed);
 		float[][] noise = new float[size][size];
+
+		System.out.println("SEED : " + seed);
 
 		// initialize the corner values
 		noise[0][0] = rand.nextFloat();
@@ -144,22 +145,6 @@ public class GameBoard {
 			float N, E, S, W;
 
 			// diamonds
-
-			/*
-			 * height -> color type = terrain type
-			 * 
-			 * 
-			 * for (int x = 0; x < SIZE; x++){ for (int y = 0; y < SIZE; y++){
-			 * 
-			 * int val = (int)(255*noise[x][y]); if (noise2[x][y] != 0)
-			 * g.setColor(new Color(224, 224, 224));
-			 * 
-			 * else g.setColor(( val < 132 ? new Color(0, 0, 128) : val < 136 ?
-			 * Color.BLUE : val < 140 ? new Color (255, 255, 64) : val < 156 ?
-			 * new Color(32, 110, 32) : val < 184 ? new Color(17, 70, 17) : val
-			 * < 202 ? new Color(76, 60, 22): val < 216 ? new Color(103, 80,
-			 * 30): new Color(160, 120, 90))); g.fillRect(x, y, 1, 1); } }
-			 */
 
 			for (int x = 0; x < size - 1; x += halfLen)
 				for (int y = (x + halfLen) % sideLength; y < size - 1; y += sideLength) {
