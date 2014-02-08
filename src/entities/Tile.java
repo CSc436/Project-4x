@@ -94,7 +94,7 @@ public class Tile {
 	}
 
 	public Boolean hasOwner() {
-		if (owner != null)
+		if (owner == null)
 			return false;
 		else
 			return true;
