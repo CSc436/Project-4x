@@ -11,7 +11,7 @@ import entities.Player;
 public class Infantry extends Unit {
 
 	public Infantry(Player p) {
-		super(p, 100, 2);
+		super(p, 100, 2, 1);
 	}
 
 }

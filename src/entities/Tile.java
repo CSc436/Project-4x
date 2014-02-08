@@ -19,12 +19,13 @@ public class Tile {
 	 * tentative variables :
 	 */
 
-
 	private boolean passable = true;
 	private Resource resource;
 	private float height;
 	private Player owner;
 	private Terrain type;
+
+	private boolean occupiedByBuilding = false;
 
 	// private float resource regenerate rate
 	// private int resource number
@@ -51,6 +52,10 @@ public class Tile {
 
 	}
 
+	public boolean isOccupiedByBuilding() {
+		return occupiedByBuilding;
+	}
+
 	public boolean isPassable() {
 		return passable;
 	}
@@ -59,8 +64,6 @@ public class Tile {
 		passable = b;
 	}
 
-	
-
 	public Resource getResource() {
 		return resource;
 	}
@@ -68,7 +71,6 @@ public class Tile {
 	public float getHeight() {
 		return height;
 	}
-
 
 	public void setOwner(Player p) {
 		owner = p;
@@ -86,9 +88,9 @@ public class Tile {
 			return true;
 	}
 
-	
 	/*
-	 * 1391895502278
+	 * either find good seed values or tweak the algorithm to not generate pure
+	 * water 1391895502278
 	 */
 
 	public void calculateTerrainType() {
@@ -99,11 +101,11 @@ public class Tile {
 			type = Terrain.WATER;
 		} else if (newHeight < 136) {
 			type = Terrain.DIRT;
-		} else if(newHeight < 140) {
+		} else if (newHeight < 140) {
 			type = Terrain.GRASS;
-		} else if(newHeight < 156) {
+		} else if (newHeight < 156) {
 			type = Terrain.HILL;
-		} else if(newHeight < 184) {
+		} else if (newHeight < 184) {
 			type = Terrain.MOUNTAIN;
 		} else {
 			type = Terrain.SNOW;

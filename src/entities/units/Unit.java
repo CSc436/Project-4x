@@ -25,18 +25,28 @@ public abstract class Unit {
 	private int baseDmg;
 	private int augment;
 	private int maxHp;
+	private int movementRange;
 
-	public Unit(Player p, int hp, int bDmg) {
+	public Unit(Player p, int hp, int bDmg, int mR) {
 
 		maxHp = health = hp;
 		owner = p;
 		baseDmg = bDmg;
+		movementRange = mR;
 
 	}
 
 	public void setAugment(int n) {
 		augment = n;
 
+	}
+
+	public void setMovementRange(int newMR) {
+		movementRange = newMR;
+	}
+
+	public int getMovementRange() {
+		return movementRange;
 	}
 
 	public int getDamage() {
