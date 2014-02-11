@@ -260,7 +260,9 @@ public class _x implements EntryPoint {
 		float D = -2 * maximumClearance * minimumClearance
 				/ (maximumClearance - minimumClearance);
 
-		return new float[] { X, 0.0f, A, 0.0f, 0.0f, Y, B, 0.0f, 0.0f, 0.0f, C,
-				-1.0f, 0.0f, 0.0f, D, 0.0f };
+		return new float[] {	X, 		0.0f, 	A, 	0.0f, 
+								0.0f, 	Y, 		B, 	0.0f, 
+								0.0f, 	0.0f, 	C, 	-1.0f, 
+								0.0f, 	0.0f, 	D, 	0.0f };
 	}
 }
