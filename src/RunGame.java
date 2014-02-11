@@ -21,7 +21,7 @@ public class RunGame {
 
 		frame.setContentPane(test);
 
-		if (args.length == 4) {
+		if (args.length == 3) {
 
 		} else {
 

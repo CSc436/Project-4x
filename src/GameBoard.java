@@ -51,13 +51,13 @@ public class GameBoard {
 
 		// create a random number generator
 		Random rand = new Random();
-		rand.setSeed(4);
+		rand.setSeed(16);
 
 		for (int c = 0; c < cols; c++) {
 			for (int r = 0; r < rows; r++) {
 
 				// give the tile a random resource number
-				int resource = rand.nextInt(4);
+				int resource = rand.nextInt(16);
 				float height = noisemap[r][c];
 
 				// create a new tile

@@ -1,5 +1,7 @@
 package entities;
 
+import entities.Resource;
+
 /**
  * 
  * @author Benjamin Deininger, Travis Strattom, and Nicholas Topping
@@ -52,8 +54,10 @@ public class Tile {
 			resource = Resource.WOOD;
 		} else if (resourceNum == 2) {
 			resource = Resource.FOOD;
-		} else {
+		} else if(resourceNum == 3) {
 			resource = Resource.STONE;
+		} else {
+			resource = Resource.NONE;
 		}
 
 		owner = null;
