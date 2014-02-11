@@ -16,7 +16,7 @@ public abstract class Building {
 	// resource producing
 	// research options
 	// defense units
-
+	private int maxHp;
 	private int health;
 	private Player owner; // owner of the structure
 	private int height; // height of the structure
@@ -26,9 +26,9 @@ public abstract class Building {
 
 	private Queue<Unit> buildingQ = new LinkedList<Unit>();
 
-	public Building(Player p, int h, int w) {
+	public Building(Player p, int h, int w, int hp) {
 
-		health = 100;
+		maxHp = health = hp;
 		owner = p;
 		height = h;
 		width = w;
@@ -40,25 +40,51 @@ public abstract class Building {
 		return health;
 	}
 
+	public void setHealth(int hp) {
+		if (hp > maxHp)
+			health = maxHp;
+		else if (hp < 0)
+			health = 0;
+		else
+			health = hp;
+	}
+
+	/*
+	 * This method modifies the health Use: hp - Negative values will afflict
+	 * damage to the health - Positive values will "heal" the building
+	 * (restoring health)
+	 * 
+	 * Can't heal a building past its maximum health. Return -- true if unit is
+	 * still alive after modification, false if dead.
+	 */
+	public boolean modifyHealth(int hp) {
+		health += hp;
+		if (health > maxHp)
+			health = maxHp;
+
+		return health > 0;
+	}
+
 	public Player getOwner() {
 		return owner;
 	}
 
 	public void setLocation(int row, int col) {
-
 		x = row;
 		y = col;
 	}
 
+	/*
+	 * Holding the Queue for the units that the building is responsible for
+	 * producing. It can add units to its queue or remove finished units from
+	 * its queue
+	 */
 	public boolean queueUnit(Unit u) {
-
 		return buildingQ.offer(u);
-
 	}
 
-	public void dequeueUnit() {
+	public Unit dequeueUnit() {
+		return buildingQ.poll();
 
-		
-		
 	}
 }

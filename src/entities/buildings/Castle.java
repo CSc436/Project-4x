@@ -2,18 +2,18 @@ package entities.buildings;
 
 import entities.Player;
 
-public abstract class Castle {
+public class Castle extends Building {
 
 	// main hub
-	// int height
-	// int width
-	// int,int coordinates // or point
-	// int level [increases health, area, research]
-	// int influence area
-	// int local population cap
-	// research?
+	private int castleLevel;
+	private int populationCap;
+	private int influenceArea;
 
-	private int health;
-	private Player owner;
-
+	public Castle(Player p, int h, int w) {
+		super(p, h, w, 1000);
+		castleLevel = 1;
+		populationCap = 100; // Random number for now.
+		influenceArea = 2; // a nxn radius from the row and column of its board
+							// tile.
+	}
 }
