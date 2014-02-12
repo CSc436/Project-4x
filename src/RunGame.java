@@ -11,7 +11,7 @@ public class RunGame {
 
 	public static void main(String[] args) {
 
-		GameBoard game = new GameBoard(200, 200, 2);
+		GameBoard game = new GameBoard(800, 800, 2);
 
 		JFrame frame = new JFrame("display");
 		frame.setVisible(true);
@@ -49,9 +49,9 @@ class draw extends JPanel {
 			for (int c = 0; c < game.getCols(); c++) {
 
 				if (game.getTileAt(r, c).getTerrainType() == Terrain.DIRT)
-					g.setColor(Color.black);
+					g.setColor(new Color(255, 241, 212));
 				else if (game.getTileAt(r, c).getTerrainType() == Terrain.WATER)
-					g.setColor(Color.blue);
+					g.setColor(new Color(51, 126, 255));
 				else if (game.getTileAt(r, c).getTerrainType() == Terrain.HILL)
 					g.setColor(new Color(139, 131, 120));
 				else if (game.getTileAt(r, c).getTerrainType() == Terrain.MOUNTAIN)
@@ -59,9 +59,9 @@ class draw extends JPanel {
 				else if (game.getTileAt(r, c).getTerrainType() == Terrain.SNOW)
 					g.setColor(new Color(255, 255, 255));
 				else
-					g.setColor(Color.GREEN);
+					g.setColor(new Color(118,208,108));
 
-				g.fillRect(r * 4, c * 4, 4, 4);
+				g.fillRect(r * 1, c * 1, 1, 1);
 
 			}
 		}

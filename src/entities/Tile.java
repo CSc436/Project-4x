@@ -226,11 +226,11 @@ public class Tile {
 			return Terrain.WATER;
 		} else if (newHeight < 136) {
 			return Terrain.DIRT;
-		} else if (newHeight < 140) {
+		} else if (newHeight < 140 + 5) {
 			return Terrain.GRASS;
-		} else if (newHeight < 156) {
+		} else if (newHeight < 156 + 10) {
 			return Terrain.HILL;
-		} else if (newHeight < 184) {
+		} else if (newHeight < 184 + 5) {
 			return Terrain.MOUNTAIN;
 		} else {
 			return Terrain.SNOW;

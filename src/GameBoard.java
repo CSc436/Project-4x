@@ -23,6 +23,7 @@ public class GameBoard {
 	private int cols;
 	private ArrayList<Player> players;
 	private static Random rand = new Random();
+	private float averageHeight = 0f; 			// Stores the average height of the noise map. 
 
 	public GameBoard(int row, int col, int numPlayers) {
 		rows = row;
@@ -53,16 +54,34 @@ public class GameBoard {
 		Random rand = new Random();
 		rand.setSeed(16);
 
+		System.out.println("\nAverage Height: " + this.averageHeight);
+		
+		float heightAdjust = 0.0f; 
+		// Determine adjustment for height
+		if (this.averageHeight < 0.5f) // If average height is less than .5, it is a 'waterworld'
+		{
+			heightAdjust = 0.55f - this.averageHeight;
+		} else if (this.averageHeight > 0.7f) // if average height is greater than .7, it is a 'winter wonderland'
+		{
+			heightAdjust = (0.7f - this.averageHeight - 0.05f); // will give us a negative height. to lower some of the terain. (hopefully)
+		}
+		System.out.println("Height Adjust: " + heightAdjust + "\n");
+		
+		//---------------------------------------------------------------------------------------------
+		// TODO modify resource distribution here.
+		// Default all to NONE. Then create distributions of all other resources.
 		for (int c = 0; c < cols; c++) {
 			for (int r = 0; r < rows; r++) {
 
 				// give the tile a random resource number
 				int resource = rand.nextInt(16);
 				float height = noisemap[r][c];
-
+				// TODO adjust height based on max and minHeight
+				
+				
 				// create a new tile
 
-				map[r][c] = new Tile(resource, height);
+				map[r][c] = new Tile(resource, height + heightAdjust); // Use the adjusted height to create the tile
 				// System.out.print(map[r][c].getHeight() + " ");
 				// System.out.printf("%10s",map[r][c].getTerrainType());
 			}
@@ -101,7 +120,8 @@ public class GameBoard {
 	 * http://en.wikipedia.org/wiki/Diamond-square_algorithm
 	 */
 
-	public static float[][] diamondSquareGenerator(int SIZE, long seed,
+	// Note: removed 'static' modifier
+	public float[][] diamondSquareGenerator(int SIZE, long seed,
 			float roughness) {
 		// size is the nearest power of 2 that fully contains SIZE plus 1
 		int size = (1 << (int) Math.ceil(Math.log(SIZE) / Math.log(2))) + 1;
@@ -121,10 +141,23 @@ public class GameBoard {
 		// begin Diamond Squares iteration
 		dsIter(noise, size, roughness);
 
+		// TODO possibly inline with dsIter, but for now iterate through and calculate averageheight
+		for (int x = 0; x < noise.length; x++)
+		{
+			for (int y = 0; y < noise[x].length; y++)
+			{
+				this.averageHeight += noise[x][y];
+			}	
+		}
+		
+		// make averageHeight the average (not just the sum)
+		this.averageHeight = averageHeight / (noise.length * noise[0].length);
+		
 		return noise;
 	}
 
-	private static void dsIter(float[][] noise, int size, float roughness) {
+	// Note: Removed 'static' modifier
+	private void dsIter(float[][] noise, int size, float roughness) {
 		int sideLength = size - 1;
 		int sizeMinus = size - 1;
 		float rough = roughness, avg;
