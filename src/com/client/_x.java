@@ -34,8 +34,8 @@ public class _x implements EntryPoint {
 	/**
 	 * Create a remote service proxy to talk to the server-side Greeting service.
 	 */
-	private final GreetingServiceAsync greetingService = GWT
-			.create(GreetingService.class);
+	private final SimpleSimulatorAsync simpleSimulator = GWT
+			.create(SimpleSimulator.class);
 
 	/**
 	 * This is the entry point method.
@@ -93,7 +93,7 @@ public class _x implements EntryPoint {
 			 * Fired when the user clicks on the sendButton.
 			 */
 			public void onClick(ClickEvent event) {
-				sendNameToServer();
+				sendSimulationRequest();
 			}
 
 			/**
@@ -101,14 +101,14 @@ public class _x implements EntryPoint {
 			 */
 			public void onKeyUp(KeyUpEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					sendNameToServer();
+					sendSimulationRequest();
 				}
 			}
 
 			/**
-			 * Send the name from the nameField to the server and wait for a response.
+			 * Send a request to alter the state of the server-side simulation
 			 */
-			private void sendNameToServer() {
+			private void sendSimulationRequest() {
 				// First, we validate the input.
 				errorLabel.setText("");
 				String textToServer = nameField.getText();
@@ -122,14 +122,13 @@ public class _x implements EntryPoint {
 				textToServerLabel.setText(textToServer);
 				serverResponseLabel.setText("");
 				Request toSend = IncrementRequest.generateRequest(0, 0);
-				greetingService.greetServer(toSend,
+				
+				simpleSimulator.sendRequest(toSend,
 						new AsyncCallback<Request[]>() {
 							public void onFailure(Throwable caught) {
 								// Show the RPC error message to the user
-								dialogBox
-										.setText("Remote Procedure Call - Failure");
-								serverResponseLabel
-										.addStyleName("serverResponseLabelError");
+								dialogBox.setText("Remote Procedure Call - Failure");
+								serverResponseLabel.addStyleName("serverResponseLabelError");
 								serverResponseLabel.setHTML(SERVER_ERROR);
 								dialogBox.center();
 								closeButton.setFocus(true);
@@ -137,8 +136,7 @@ public class _x implements EntryPoint {
 
 							public void onSuccess(Request[] result) {
 								dialogBox.setText("Remote Procedure Call");
-								serverResponseLabel
-										.removeStyleName("serverResponseLabelError");
+								serverResponseLabel.removeStyleName("serverResponseLabelError");
 								serverResponseLabel.setHTML(result);
 								dialogBox.center();
 								closeButton.setFocus(true);
@@ -151,5 +149,29 @@ public class _x implements EntryPoint {
 		MyHandler handler = new MyHandler();
 		sendButton.addClickHandler(handler);
 		nameField.addKeyUpHandler(handler);
+		
+		simpleSimulator.startSimulation(new AsyncCallback<String>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				dialogBox.setText("Remote Procedure Call - Failure");
+				serverResponseLabel.addStyleName("serverResponseLabelError");
+				serverResponseLabel.setHTML(SERVER_ERROR);
+				dialogBox.center();
+				closeButton.setFocus(true);
+			}
+
+			@Override
+			public void onSuccess(String result) {
+				// TODO Auto-generated method stub
+				dialogBox.setText("Remote Procedure Call");
+				serverResponseLabel.removeStyleName("serverResponseLabelError");
+				serverResponseLabel.setHTML(result);
+				dialogBox.center();
+				closeButton.setFocus(true);
+			}
+			
+		});
 	}
 }

@@ -6,7 +6,9 @@ import com.shared.Request;
 /**
  * The async counterpart of <code>GreetingService</code>.
  */
-public interface GreetingServiceAsync {
-	void greetServer(Request input, AsyncCallback<Request[]> callback)
+public interface SimpleSimulatorAsync {
+	void sendRequest(Request input, AsyncCallback<Request[]> callback)
 			throws IllegalArgumentException;
+	
+	void startSimulation(AsyncCallback<String> callback);
 }
