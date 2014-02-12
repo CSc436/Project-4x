@@ -14,9 +14,6 @@ public abstract class Civilization {
 		research_max_level = new HashMap<String, Integer>();
 	}
 	
-	public HashMap<String, Integer> getMaxLevels() {
-		return research_max_level;
-	}
 	
 	/**
 	 * Each Civilization can decrease the maximum levels of research available to them.
