@@ -2,7 +2,6 @@ package com.research;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import com.fourx.Player;
@@ -10,49 +9,37 @@ import com.fourx.buffs.TYPE;
 import com.fourx.research.TechnologyEnum;
 
 public class TestResearching {
-	Player p;
-
-	@Before
-	public void setUp() throws Exception {
-		p = new Player("BOB");
-	}
-
+	
 	@Test
-	public void double_research() {
-		String tech = TechnologyEnum.INFANTRYDAMAGE1.name();
-		// INFANTRY damage starts at 0.
-		assertEquals(0, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
-
-		p.research(tech);
-		// successfully researched this technology, damage is now 1.
-		assertEquals(1, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
-
-		// This research fails because the player has already researched it.
-		// INFANTRY damage remains unchanged.
-		p.research(tech);
-		assertEquals(1, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
+	public void researchTime() {
+		Player p = new Player("BOB", 9999, 9999, 9999, 9999);
 	}
-
+	
 	@Test
-	public void requirements() {
+	public void researchCosts() {
+		Player p = new Player("BOB", 250, 250, 250, 250);
 		String tech = TechnologyEnum.INFANTRYDAMAGE1.name();
-		String tech_2 = TechnologyEnum.INFANTRYDAMAGE2.name();
-		// INFANTRY damage starts at 0.
-		assertEquals(0, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
 		
-		// fails because INFANTRYDAMAGE1 is required.
-		assertEquals(false, p.research(tech_2));
-		// INFANTRY damage is still 0.
-		assertEquals(0, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
-		
-		// has no requirements, INFANTRY damage is now 1.
+		// First Research works
 		assertEquals(true, p.research(tech));
+		assertEquals(0, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
+		
+		// only after the right amount of time has passed, does this research complete.
+		p.researchStep(40);
+		// still needs 10 more units of time to complete.
+		assertEquals(0, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
+
+		p.researchStep(10);
 		assertEquals(1, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
 		
-		// This time it works because INFANTRYDAMAGE2 required INFANTRYDAMAGE1.
-		assertEquals(true, p.research(tech_2));
-		// successfully researched INFANTRYDAMAGE2, INFANTRY.damage is now 2.
-		assertEquals(2, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);		
-
+		// Second also works
+		assertEquals(true, p.research(tech));
+		p.researchStep(90);
+		
+		// not enough resources
+		assertEquals(false, p.research(tech));
+		
+		// check damage for INFANTRY. should be 2 now
+		assertEquals(11, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
 	}
 }
