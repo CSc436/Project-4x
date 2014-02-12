@@ -12,7 +12,7 @@ public abstract class Technology {
 	protected ArrayList<TYPE> appliesTo;
 	
 	protected int current_level;
-	protected int max_level;
+	private int max_level;
 	protected Resources[] costs;
 	protected BuffStats[] buffstats;
 	protected int[] time;
@@ -23,7 +23,7 @@ public abstract class Technology {
 		current_level = 1;
 		
 		// Multi-level stuff
-		max_level = max_levels;
+		setMax_level(max_levels);
 		buffstats = new BuffStats[max_levels];
 		costs = new Resources[max_levels];
 		time = new int[max_levels];
@@ -48,5 +48,13 @@ public abstract class Technology {
 
 	public void completeResearch(Player p) {
 		completeResearch();
+	}
+
+	public int getMax_level() {
+		return max_level;
+	}
+
+	public void setMax_level(int max_level) {
+		this.max_level = max_level;
 	}
 }

@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import com.fourx.Player;
-import com.fourx.civilizations.Civilization;
 
 public class TechnologyTree {
 	private Player p;
@@ -30,27 +29,7 @@ public class TechnologyTree {
 			}
 			technologies.put(t.name(), tech);
 		}
-		alterMaxLevels(p.getCivilization());
-	}
-	
-	/**
-	 * Each Civilization can decrease the maximum levels of research available to them.
-	 * example: A civilization is bad at infantry, so it only gets 1 research level into infantry damage.
-	 * 
-	 * @param civ - the civilization passed in from the player object.
-	 */
-	private void alterMaxLevels(Civilization civ) {
-		HashMap<String, Integer> max_levels = civ.getMaxLevels();
-		Set<String> level_keys = max_levels.keySet();
-		
-		Iterator<String> iter = level_keys.iterator();
-		while(iter.hasNext()) {
-			String key = iter.next();
-			if (technologies.containsKey(key)) {
-				Technology t = technologies.get(key);
-				t.max_level = max_levels.get(key);
-			}
-		}
+		p.getCivilization().alterMaxLevels(technologies);
 	}
 
 	/**
@@ -137,7 +116,7 @@ public class TechnologyTree {
 		if (technologies.containsKey(name)) {
 			Technology t = technologies.get(name);
 			if (researched.containsKey(name)) {
-				if (researched.get(name).intValue() == t.max_level) {
+				if (researched.get(name).intValue() == t.getMax_level()) {
 					return false;
 				}
 			}
