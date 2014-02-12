@@ -1,8 +1,15 @@
+package entities;
+
+import java.util.ArrayList;
+
 public class Player {
 
-	private final String name;
-//	Tentative resource types suggested during planning
-	private int totalGold, totalWood, totalFood, totalResearchPts;
+	// scoring
+	// ints for resource counts
+
+	private String name;
+	private int totalGold, totalWood, totalFood, totalStone, totalResearchPts;
+	private ArrayList<Unit> units;
 	
 //	Bare constructor
 	public Player(){
@@ -10,7 +17,9 @@ public class Player {
 		totalGold = 0;
 		totalWood = 0;
 		totalFood = 0;
+		totalStone = 0;
 		totalResearchPts = 0;
+		units = new ArrayList<Unit>();
 	}
 	
 	public Player(String alias) {
@@ -18,16 +27,28 @@ public class Player {
 		totalGold = 0;
 		totalWood = 0;
 		totalFood = 0;
+		totalStone = 0;
 		totalResearchPts = 0;
 	}
 	
-	public Player(String alias, int startingGold, int startingWood, int startingFood, int startingRPts){
+	public Player(String alias, int startingGold, int startingWood, int startingFood, int startingStone, int startingRPts){
 		name = alias;
 		totalGold = startingGold;
 		totalWood = startingWood;
 		totalFood = startingFood;
+		totalStone = startingStone;
 		totalResearchPts = startingRPts;
 	}
+	
+	public void setName(String newName) {
+		name = newName;
+	}
+
+	
+	public void addUnit(Unit u) {
+		units.add(u);
+	}
+
 	/*
 	 * The following receive methods increment the associated
 	 * resource pool.
@@ -42,6 +63,10 @@ public class Player {
 
 	public void receiveFood(int receiveAmt){
 		totalFood += receiveAmt;
+	}
+	
+	public void receiveStone(int receiveAmt){
+		totalStone += receiveAmt;
 	}
 	
 	public void receiveResearchPts(int receiveAmt){
@@ -104,6 +129,20 @@ public class Player {
 		return true;
 	}
 	
+	public boolean spendStone(int spendAmt){
+		if (spendAmt < 0){
+			System.err.println("Invalid spendAmt in class Player, method spendStone");
+			return false;
+		}
+		if (totalStone < spendAmt){
+			return false;
+		}
+		totalStone -= spendAmt;
+		return true;
+		
+	}
+	
+	
 	public String getAlias(){
 		return name;
 	}
@@ -124,21 +163,3 @@ public class Player {
 		return totalResearchPts;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
