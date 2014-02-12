@@ -6,7 +6,7 @@ import com.fourx.resources.Resources;
 public class Player {
 
 	private final String name;
-	private TechnologyTree techTree;
+	public TechnologyTree techTree;
 	public Upgrades upgrades;
 	private Resources resources;
 
@@ -41,4 +41,12 @@ public class Player {
 	}
 	
 	public Resources getResources() { return resources; }
+
+	public int getTimeRemaining(String tech) {
+		return techTree.getTimeRemaining(tech);
+	}
+
+	public int getResearchLevel(String tech) {
+		return techTree.getResearchLevel(tech);
+	}
 }

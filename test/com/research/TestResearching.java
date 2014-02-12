@@ -13,6 +13,19 @@ public class TestResearching {
 	@Test
 	public void researchTime() {
 		Player p = new Player("BOB", 9999, 9999, 9999, 9999);
+		String tech = TechnologyEnum.INFANTRYDAMAGE1.name();
+		
+		// This research takes 50 units of time to complete.
+		assertEquals(true, p.research(tech));
+		assertEquals(0, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
+		
+		// only after the right amount of time has passed, does this research complete.
+		p.researchStep(40);
+		// still needs 10 more units of time to complete.
+		assertEquals(0, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
+
+		p.researchStep(10);
+		assertEquals(1, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
 	}
 	
 	@Test
@@ -25,11 +38,7 @@ public class TestResearching {
 		assertEquals(0, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
 		
 		// only after the right amount of time has passed, does this research complete.
-		p.researchStep(40);
-		// still needs 10 more units of time to complete.
-		assertEquals(0, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
-
-		p.researchStep(10);
+		p.researchStep(50);
 		assertEquals(1, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
 		
 		// Second also works

@@ -3,14 +3,14 @@ package com.fourx.research;
 import com.fourx.research.technologies.*;
 
 public enum TechnologyEnum {
-	INFANTRYDAMAGE1(new InfantryDamage());
+	INFANTRYDAMAGE1(InfantryDamage.class);
 	
-	private Technology value;
-	private TechnologyEnum(Technology tech) {
+	private Class<Technology> value;
+	private TechnologyEnum(Class tech) {
 		value = tech;
 	}
 	
-	public Technology getValue() {
+	public Class<Technology> getValue() {
 		return value;
 	}
 }

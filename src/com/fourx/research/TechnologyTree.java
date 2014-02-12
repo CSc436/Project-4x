@@ -7,9 +7,9 @@ import java.util.Set;
 import com.fourx.Player;
 
 public class TechnologyTree {
-	Player p;
+	private Player p;
 
-	private HashMap<String, Technology> technologies;
+	public HashMap<String, Technology> technologies;
 	private HashMap<String, Integer> currently_researching;
 	private HashMap<String, Integer> researched;
 
@@ -20,7 +20,12 @@ public class TechnologyTree {
 		technologies = new HashMap<String, Technology>();
 		currently_researching = new HashMap<String, Integer>();
 		for (TechnologyEnum t : TechnologyEnum.values()) {
-			Technology tech = t.getValue();
+			Technology tech = null;
+			try {
+				tech = t.getValue().newInstance();
+			} catch (InstantiationException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
 			technologies.put(t.name(), tech);
 		}
 	}
@@ -48,23 +53,27 @@ public class TechnologyTree {
 	 * 
 	 * @param time - a unit of time that progresses the researching towards research completion.
 	 */
-	public void researchStep(int time) {
+	public boolean researchStep(int time) {
+		boolean completed = false;
 		// There most likely won't be that many researches going on at once,
 		// updating them all won't cause a problem.
 		Set<String> keys = currently_researching.keySet();
 		Iterator<String> iter = keys.iterator();
 		while (iter.hasNext()) {
 			String key = iter.next();
-			researchStep(key, time);
+			completed |= researchStep(key, time);
 		}
+		return completed;
 	}
 	
 	/**
 	 * 
 	 * @param key - which research to progress towards completion.
 	 * @param time - the amount of time to move the research forwards.
+	 * 
+	 * @return - returns whether a research completed in this time step.
 	 */
-	private void researchStep(String key, int time) {
+	private boolean researchStep(String key, int time) {
 		Integer value = currently_researching.get(key);
 		
 		if (value - time <= 0) {
@@ -76,9 +85,23 @@ public class TechnologyTree {
 			
 			// remove from currently researching.
 			currently_researching.remove(key);
+			return true;
 		}
 		// decrease time left.
 		currently_researching.put(key, value - time);
+		return false;
+	}
+	
+	public int getTimeRemaining(String key) {
+		if (currently_researching.containsKey(key))
+			return currently_researching.get(key);
+		return -1;
+	}
+	
+	public int getResearchLevel(String key) {
+		if (technologies.containsKey(key))
+			return technologies.get(key).current_level;
+		return -1;
 	}
 
 	/**
