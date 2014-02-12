@@ -173,5 +173,7 @@ public class _x implements EntryPoint {
 			}
 			
 		});
+		
+		// Now need to implement scheduled polling of server
 	}
 }

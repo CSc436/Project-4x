@@ -1,14 +1,25 @@
 package com.server;
 
-public class MovingNumber {
+import java.io.Serializable;
+
+public class MovingNumber implements Serializable {
 	public double value;
 	public double velocity; // Movement velocity, in units per second
 	public double targetValue;
+	public int turnNumber;
+	
+	public MovingNumber() {
+		value = 0;
+		targetValue = 0;
+		velocity = 1;
+		turnNumber = 0;
+	}
 	
 	public MovingNumber(double initValue, double vel) {
 		value = initValue;
 		targetValue = initValue;
 		velocity = vel;
+		turnNumber = 0;
 	}
 	
 	public void increment() {

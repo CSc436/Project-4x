@@ -1,6 +1,7 @@
 package com.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.server.MovingNumber;
 import com.shared.Request;
 
 /**
@@ -11,4 +12,6 @@ public interface SimpleSimulatorAsync {
 			throws IllegalArgumentException;
 	
 	void startSimulation(AsyncCallback<String> callback);
+	
+	void getSimulationState(AsyncCallback<MovingNumber> callback);
 }

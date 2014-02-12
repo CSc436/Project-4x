@@ -55,4 +55,9 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 		modelThread.start();
 		return null;
 	}
+
+	@Override
+	public MovingNumber getSimulationState() {
+		return m.getNumber();
+	}
 }
