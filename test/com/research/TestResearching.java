@@ -16,15 +16,15 @@ public class TestResearching {
 		String tech = TechnologyEnum.INFANTRYDAMAGE1.name();
 		
 		// This research takes 50 units of time to complete.
-		assertEquals(true, p.research(tech));
+		assertEquals(true, p.getTechTree().research(tech));
 		assertEquals(0, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
 		
 		// only after the right amount of time has passed, does this research complete.
-		p.researchStep(40);
+		p.getTechTree().researchStep(40);
 		// still needs 10 more units of time to complete.
 		assertEquals(0, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
 
-		p.researchStep(10);
+		p.getTechTree().researchStep(10);
 		assertEquals(1, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
 	}
 	
@@ -34,19 +34,19 @@ public class TestResearching {
 		String tech = TechnologyEnum.INFANTRYDAMAGE1.name();
 		
 		// First Research works
-		assertEquals(true, p.research(tech));
+		assertEquals(true, p.getTechTree().research(tech));
 		assertEquals(0, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
 		
 		// only after the right amount of time has passed, does this research complete.
-		p.researchStep(50);
+		p.getTechTree().researchStep(50);
 		assertEquals(1, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
 		
 		// Second also works
-		assertEquals(true, p.research(tech));
-		p.researchStep(90);
+		assertEquals(true, p.getTechTree().research(tech));
+		p.getTechTree().researchStep(90);
 		
 		// not enough resources
-		assertEquals(false, p.research(tech));
+		assertEquals(false, p.getTechTree().research(tech));
 		
 		// check damage for INFANTRY. should be 2 now
 		assertEquals(11, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);

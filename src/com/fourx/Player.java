@@ -32,21 +32,7 @@ public class Player {
 		return name;
 	}
 	
-	public boolean research(String name) {
-		return techTree.research(name);
-	}
-	
-	public void researchStep(int time) {
-		techTree.researchStep(time);
-	}
-	
 	public Resources getResources() { return resources; }
+	public TechnologyTree getTechTree() { return techTree; }
 
-	public int getTimeRemaining(String tech) {
-		return techTree.getTimeRemaining(tech);
-	}
-
-	public int getResearchLevel(String tech) {
-		return techTree.getResearchLevel(tech);
-	}
 }
