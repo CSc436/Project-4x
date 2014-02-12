@@ -6,13 +6,17 @@ import org.junit.Test;
 
 import com.fourx.Player;
 import com.fourx.buffs.TYPE;
+import com.fourx.civilizations.PerfectCivilization;
+import com.fourx.civilizations.TestCivilization;
 import com.fourx.research.TechnologyEnum;
+import com.fourx.research.TechnologyTree;
+import com.fourx.resources.Resources;
 
 public class TestResearching {
 	
 	@Test
 	public void researchTime() {
-		Player p = new Player("BOB", 9999, 9999, 9999, 9999);
+		Player p = new Player("BOB", new Resources(9999, 9999, 9999, 9999), new PerfectCivilization());
 		String tech = TechnologyEnum.INFANTRYDAMAGE1.name();
 		
 		// This research takes 50 units of time to complete.
@@ -30,7 +34,7 @@ public class TestResearching {
 	
 	@Test
 	public void researchCosts() {
-		Player p = new Player("BOB", 250, 250, 250, 250);
+		Player p = new Player("BOB", new Resources(250, 250, 250, 250), new PerfectCivilization());
 		String tech = TechnologyEnum.INFANTRYDAMAGE1.name();
 		
 		// First Research works
@@ -50,5 +54,21 @@ public class TestResearching {
 		
 		// check damage for INFANTRY. should be 2 now
 		assertEquals(11, p.upgrades.mapping.get(TYPE.INFANTRY.name()).damage);
+	}
+	
+	@Test
+	public void civilizationResearch() {
+		// TestCivilization can only research INFANTRYDAMAGE1 once.
+		Player p = new Player("BOB", new Resources(9999, 9999, 9999, 9999), new TestCivilization());
+		String tech = TechnologyEnum.INFANTRYDAMAGE1.name();
+		
+		assertEquals(1, p.techTree.getResearchLevel(tech));
+		
+		TechnologyTree t = p.getTechTree();
+		t.research(tech);
+		t.researchStep(9999);
+		
+		// since we set the maximum level to 1, we should not be able to research this a second time.
+		assertEquals(false, t.research(tech));
 	}
 }

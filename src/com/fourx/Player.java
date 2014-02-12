@@ -1,4 +1,6 @@
 package com.fourx;
+import com.fourx.civilizations.Civilization;
+import com.fourx.civilizations.PerfectCivilization;
 import com.fourx.research.TechnologyTree;
 import com.fourx.research.Upgrades;
 import com.fourx.resources.Resources;
@@ -9,21 +11,23 @@ public class Player {
 	public TechnologyTree techTree;
 	public Upgrades upgrades;
 	private Resources resources;
+	private Civilization civ;
 
 	
 //	Bare constructor
 	public Player(){
-		this("");
+		this("", new PerfectCivilization());
 	}
 	
-	public Player(String alias) {
-		this(alias, 0, 0, 0, 0);
+	public Player(String alias, Civilization civ) {
+		this(alias, new Resources(0,0,0,0), civ);
 	}
 	
-	public Player(String alias, int startingGold, int startingWood, int startingFood, int startingRPts){
+	public Player(String alias, Resources resources, Civilization civ){
 		name = alias;
+		this.civ = civ;
 		
-		resources = new Resources(startingGold, startingWood, startingFood, startingRPts);
+		this.resources = resources;
 		upgrades = new Upgrades();
 		techTree = new TechnologyTree(this);
 	}
@@ -34,5 +38,6 @@ public class Player {
 	
 	public Resources getResources() { return resources; }
 	public TechnologyTree getTechTree() { return techTree; }
-
+	public Civilization getCivilization() { return civ; }
+	
 }

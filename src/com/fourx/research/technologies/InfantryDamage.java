@@ -1,5 +1,6 @@
 package com.fourx.research.technologies;
 
+import com.fourx.Player;
 import com.fourx.buffs.TYPE;
 import com.fourx.research.Technology;
 import com.fourx.resources.Resources;
@@ -21,5 +22,10 @@ public class InfantryDamage extends Technology {
 		time[1] = 90;
 		time[2] = 180;
 		appliesTo.add(TYPE.INFANTRY);
+	}
+	
+	@Override
+	public void completeResearch(Player p) {
+		completeResearch();
 	}
 }

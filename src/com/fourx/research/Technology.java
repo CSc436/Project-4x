@@ -2,6 +2,7 @@ package com.fourx.research;
 
 import java.util.ArrayList;
 
+import com.fourx.Player;
 import com.fourx.buffs.BuffStats;
 import com.fourx.buffs.TYPE;
 import com.fourx.resources.Resources;
@@ -43,5 +44,9 @@ public abstract class Technology {
 
 	public Integer getResearchTime() {
 		return time[current_level - 1];
+	}
+
+	public void completeResearch(Player p) {
+		completeResearch();
 	}
 }
