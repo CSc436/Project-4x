@@ -1,6 +1,7 @@
 package com.client;
 
 import com.shared.FieldVerifier;
+import com.client.matrixutils.FloatMatrix;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -210,9 +211,13 @@ public class _x implements EntryPoint {
 	private void drawScene() {
 		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT
 				| WebGLRenderingContext.DEPTH_BUFFER_BIT);
+		
+		float time = (System.currentTimeMillis() - startTime) / 1000.0f;
 
 		// create perspective matrix
-		float[] perspectiveMatrix = createPerspectiveMatrix(45, 1, 0.1f, 1000);
+		float[] perspectiveMatrix = FloatMatrix.createCameraMatrix(
+				0.0f, 0.0f,time, 0.0f, 0.0f, -10.0f * (float)Math.abs(Math.sin(time/100.0)),
+				45, 1, 0.1f, 1000000f).columnWiseData();//createPerspectiveMatrix(45, 1, 0.1f, 1000);
 		WebGLUniformLocation uniformLocation = glContext.getUniformLocation(
 				shaderProgram, "perspectiveMatrix");
 
@@ -236,7 +241,7 @@ public class _x implements EntryPoint {
 		glContext.uniform2f(
 				glContext.getUniformLocation(shaderProgram, "resolution"), (float)WIDTH, (float)HEIGHT);
 		glContext.uniform1f(
-				glContext.getUniformLocation(shaderProgram, "time"), (System.currentTimeMillis() - startTime) / 1000.0f);
+				glContext.getUniformLocation(shaderProgram, "time"), time);//(System.currentTimeMillis() - startTime) / 1000.0f);
 
 		// draw geometry
 		glContext.drawArrays(WebGLRenderingContext.TRIANGLE_STRIP, 0, 4);
