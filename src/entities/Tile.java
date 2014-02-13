@@ -27,6 +27,8 @@ public class Tile {
 	private boolean occupiedByBuliding = false; // keeps track of whether or not
 												// tile is occupied by buliding.
 
+	// TODO add private int resource amount;
+	
 	// private float regenerate
 
 	/*
@@ -60,6 +62,7 @@ public class Tile {
 		}
 
 		// TODO add 'determine resource amount' function
+		// TODO based on resource type set resource regeneration
 		
 		owner = null;
 		passable = true;
@@ -86,6 +89,7 @@ public class Tile {
 		resource = r;
 		
 		// TODO add 'determine resource amount' function
+		// TODO based on resource type set resource regeneration
 		
 		owner = null;
 		passable = true;
@@ -93,10 +97,24 @@ public class Tile {
 	}
 	
 	// TODO add 'determine resource amount' function
+	public int determineResourceAmount(Resource r)
+	{
+		return 0;
+	}
 	
 	// TODO add 'Generate resource' function
+	public void generateResource()
+	{
+		// based on regenerate float generate new value
+		// set current value
+	}
 	
 	// TODO add 'remove resource amount' function - return int of # resources gathered
+	public int takeResources(int amount)
+	{
+		// TODO return maximum amount that can be returned
+		return amount;
+	}
 	
 	/*
 	 * isOccupiedByBuilding(): Description: returns whether or not tile is
