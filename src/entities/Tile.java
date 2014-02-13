@@ -30,19 +30,18 @@ public class Tile {
 	// private float regenerate
 
 	/*
-	 * Tile(): Description: Constructor for Tile Object. Determines the terrain
+	 * Tile(): 
+	 * Description: Constructor for Tile Object. Determines the terrain
 	 * type based on heightMap, and assigns resource.
 	 * 
 	 * Parameters:
-	 * 
 	 * @param int resourceNum - the number of the resource, Currently 0 for
 	 * Gold, 1 for wood, 2 for food, and 3 for stone
 	 * 
 	 * @param float heightMap - the height of this specific tile, determines the
 	 * terrain type.
 	 * 
-	 * Return Value:
-	 * 
+	 * Return Value: 
 	 * @return a new Tile object.
 	 */
 	public Tile(int resourceNum, float heightMap) {
@@ -60,11 +59,45 @@ public class Tile {
 			resource = Resource.NONE;
 		}
 
+		// TODO add 'determine resource amount' function
+		
 		owner = null;
 		passable = true;
 		terrain = calculateTerrainType(height);
 	}
 
+	/*
+	 * Tile(): 
+	 * Description: Constructor for Tile Object. Determines the terrain
+	 * type based on heightMap, and assigns resource.
+	 * 
+	 * Parameters:
+	 * @param Resource r - the resource to assign (generally NONE for constructor)
+	 * 
+	 * @param float heightMap - the height of this specific tile, determines the
+	 * terrain type.
+	 * 
+	 * Return Value: 
+	 * @return a new Tile object.
+	 */
+	public Tile(Resource r, float heightMap) {
+		height = heightMap;
+
+		resource = r;
+		
+		// TODO add 'determine resource amount' function
+		
+		owner = null;
+		passable = true;
+		terrain = calculateTerrainType(height);
+	}
+	
+	// TODO add 'determine resource amount' function
+	
+	// TODO add 'Generate resource' function
+	
+	// TODO add 'remove resource amount' function - return int of # resources gathered
+	
 	/*
 	 * isOccupiedByBuilding(): Description: returns whether or not tile is
 	 * occupied by buliding

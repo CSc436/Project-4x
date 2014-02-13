@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import entities.Player;
+import entities.Resource;
 import entities.Tile;
 import entities.units.Infantry;
 import entities.units.Unit;
@@ -51,8 +52,8 @@ public class GameBoard {
 		startTime = System.currentTimeMillis();
 
 		// create a random number generator
-		Random rand = new Random();
-		rand.setSeed(16);
+		//Random rand = new Random();
+		//rand.setSeed(16);
 
 		System.out.println("\nAverage Height: " + this.averageHeight);
 		
@@ -68,25 +69,42 @@ public class GameBoard {
 		System.out.println("Height Adjust: " + heightAdjust + "\n");
 		
 		//---------------------------------------------------------------------------------------------
-		// TODO modify resource distribution here.
 		// Default all to NONE. Then create distributions of all other resources.
 		for (int c = 0; c < cols; c++) {
 			for (int r = 0; r < rows; r++) {
 
 				// give the tile a random resource number
-				int resource = rand.nextInt(16);
+				//int resource = rand.nextInt(16);
 				float height = noisemap[r][c];
-				// TODO adjust height based on max and minHeight
-				
-				
-				// create a new tile
 
-				map[r][c] = new Tile(resource, height + heightAdjust); // Use the adjusted height to create the tile
+				map[r][c] = new Tile(Resource.NONE, height + heightAdjust); // Use the adjusted height to create the tile
 				// System.out.print(map[r][c].getHeight() + " ");
 				// System.out.printf("%10s",map[r][c].getTerrainType());
 			}
 			// System.out.println();
 		}
+		
+		// TODO Perform resource distribution here.
+			// Characteristics
+				// Resource amount
+					// lots of wood 
+					// lots of food ('natural' animals/plants)
+					// good amount of stone
+					// limited gold
+				// Distribution
+					// Food concentrated in grass lands /Dirt
+					// wood concentrated in grasslands/hills
+					// Stone concentrated in hills/mountains/snow
+					// Gold concentrated in hills/mountains/snow
+		
+		// TODO distribute players 
+			// Based on num players 
+				// 1 - place player roughly in center
+				// 2 - place players caddy corner 
+				// 3 + 4 - place players in corners of map
+				// 5 - 1-4 place in corner, 5 place in center.
+			// attempt to distribute near resources. 
+		
 		endTime = System.currentTimeMillis();
 		System.out.println("Total execution time: " + (endTime - startTime));
 
