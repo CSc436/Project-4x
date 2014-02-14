@@ -25,24 +25,33 @@ public class GameBoardTest {
 
 		GameBoard game = new GameBoard(20, 20, 2);
 		Player juan = new Player("juan");
-		
+
 		Unit temp = new Infantry(juan, -1, -1);
 		Unit temp2 = new Infantry(juan, -1, -1);
-		Building b = new Barracks(juan,4,4,100);
+		Building b = new Barracks(juan, 4, 4, 100);
 
 		game.placeUnitAt(temp, 15, 15);
 		game.placeBuildingAt(b, 15, 15);
 		//
-		
+
 		assertFalse(juan.hasUnitAt(0, 0));
 		assertFalse(juan.hasUnitAt(1, 1));
 		assertTrue(juan.hasUnitAt(15, 15));
-		//assertTrue(game.getTileAt(0, 0).);
-		
-// need to test
-		assertTrue(game.getTileAt(15,15).isOccupiedByBuilding());
+		// assertTrue(game.getTileAt(0, 0).);
 
-		
+		// need to test
+		assertFalse(game.getTileAt(15, 14).isOccupiedByBuilding());
+		assertTrue(game.getTileAt(15, 15).isOccupiedByBuilding());
+		assertTrue(game.getTileAt(18, 15).isOccupiedByBuilding());
+		assertFalse(game.getTileAt(14, 19).isOccupiedByBuilding());
+
+		game.removeBuilding(b);
+
+		assertFalse(game.getTileAt(15, 14).isOccupiedByBuilding());
+		assertFalse(game.getTileAt(15, 15).isOccupiedByBuilding());
+		assertFalse(game.getTileAt(18, 15).isOccupiedByBuilding());
+		assertFalse(game.getTileAt(14, 19).isOccupiedByBuilding());
+
 	}
 
 }

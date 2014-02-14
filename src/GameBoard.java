@@ -121,12 +121,14 @@ public class GameBoard {
 
 				// set the area of the rectangle to be occupied by a building
 
-				for (int r = x; r < b.getWidth(); r++) {
+				for (int r = x; r < (x + b.getHeight()); r++) {
 
-					for (int c = y; c < b.getHeight(); c++) {
+					for (int c = y; c < (y + b.getWidth()); c++) {
 						map[r][c].setIsOccupiedByBuilding(true);
 					}
 				}
+				
+				b.setLocation(x, y);
 			} else {
 				System.err.println("The building does not fit on the map");
 			}
@@ -153,9 +155,9 @@ public class GameBoard {
 		int height = b.getHeight();
 		int width = b.getWidth();
 
-		for (int r = 0; r < b.getWidth(); r++) {
+		for (int r = x; r < (x + b.getHeight()); r++) {
 
-			for (int c = 0; c < b.getHeight(); c++) {
+			for (int c = y; c < (y + b.getWidth()); c++) {
 				map[r][c].setIsOccupiedByBuilding(false);
 			}
 		}
