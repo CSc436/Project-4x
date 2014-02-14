@@ -121,14 +121,47 @@ public class GameBoard {
 
 				// set the area of the rectangle to be occupied by a building
 
-				for (int r = 0; r < b.getWidth(); r++) {
+				for (int r = x; r < b.getWidth(); r++) {
 
-					for (int c = 0; c < b.getHeight(); c++) {
+					for (int c = y; c < b.getHeight(); c++) {
 						map[r][c].setIsOccupiedByBuilding(true);
 					}
 				}
+			} else {
+				System.err.println("The building does not fit on the map");
+			}
+		} else {
+			System.err
+					.println("The owner of the building does not own the tile");
+		}
+	}
+
+	public void removeUnit(Unit u) {
+
+		Player owner = u.getOwner();
+		owner.removeUnit(u);
+
+	}
+
+	// precondition : the building is guaranteed to be in range
+	public void removeBuilding(Building b) {
+
+		Player owner = b.getOwner();
+		int x = b.getX();
+		int y = b.getY();
+
+		int height = b.getHeight();
+		int width = b.getWidth();
+
+		for (int r = 0; r < b.getWidth(); r++) {
+
+			for (int c = 0; c < b.getHeight(); c++) {
+				map[r][c].setIsOccupiedByBuilding(false);
 			}
 		}
+
+		owner.removeBuilding(b);
+
 	}
 
 	/*

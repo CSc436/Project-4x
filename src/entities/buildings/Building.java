@@ -75,6 +75,14 @@ public abstract class Building {
 		y = col;
 	}
 
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
 	public int getHeight() {
 		return height;
 	}
