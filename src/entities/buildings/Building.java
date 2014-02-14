@@ -16,6 +16,10 @@ public abstract class Building {
 	// resource producing
 	// research options
 	// defense units
+	
+	
+	//garrison?
+	
 	private int maxHp;
 	private int health;
 	private Player owner; // owner of the structure

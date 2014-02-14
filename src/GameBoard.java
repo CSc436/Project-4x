@@ -127,7 +127,7 @@ public class GameBoard {
 						map[r][c].setIsOccupiedByBuilding(true);
 					}
 				}
-				
+
 				b.setLocation(x, y);
 			} else {
 				System.err.println("The building does not fit on the map");
@@ -142,6 +142,14 @@ public class GameBoard {
 
 		Player owner = u.getOwner();
 		owner.removeUnit(u);
+
+	}
+
+	// need restriction for distance
+
+	public void moveUnit(Unit u, int x, int y) {
+
+		u.setLocation(x, y);
 
 	}
 
