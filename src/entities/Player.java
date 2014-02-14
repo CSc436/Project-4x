@@ -17,6 +17,7 @@ public class Player {
 	public Player(String alias) {
 		name = alias;
 		units = new ArrayList<Unit>();
+		buildings = new ArrayList<Building>();
 
 	}
 
@@ -28,8 +29,13 @@ public class Player {
 	public void addUnit(Unit u) {
 		units.add(u);
 	}
-	
 
-	
-	
+	public void addBuilding(Building b) {
+		buildings.add(b);
+	}
+
+	public String getName() {
+		return name;
+	}
+
 }

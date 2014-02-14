@@ -32,6 +32,7 @@ public abstract class Building {
 		owner = p;
 		height = h;
 		width = w;
+		owner.addBuilding(this);
 
 	}
 
@@ -72,6 +73,14 @@ public abstract class Building {
 	public void setLocation(int row, int col) {
 		x = row;
 		y = col;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public int getWidth() {
+		return width;
 	}
 
 	/*

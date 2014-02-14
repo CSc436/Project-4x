@@ -4,6 +4,7 @@ import java.util.Random;
 
 import entities.Player;
 import entities.Tile;
+import entities.buildings.Building;
 import entities.units.Infantry;
 import entities.units.Unit;
 
@@ -29,7 +30,7 @@ public class GameBoard {
 		cols = col;
 		map = new Tile[row][col];
 
-		// create players
+		// create players with default "playerIDno" names
 
 		players = new ArrayList<Player>();
 		for (int i = 0; i < numPlayers; i++) {
@@ -87,12 +88,47 @@ public class GameBoard {
 		return map[x][y];
 	}
 
+	public ArrayList<Player> getPlayerList() {
+		return players;
+	}
+
 	public void placeUnitAt(Unit u, int x, int y) {
 
-		if (map[x][y].hasOwner()) {
-			map[x][y].getOwner().addUnit(u);
+		// if the tile has no owner, the unit owner becomes the tile owner
+
+		if (!map[x][y].hasOwner()) {
+			map[x][y].setOwner(u.getOwner());
 		}
 
+		// set the unit's coodinates
+		u.setLocation(x, y);
+
+	}
+
+	public void placeBuildingAt(Building b, int x, int y) {
+
+		// the tile must be owned to place a building
+		if (b.getOwner().equals(map[x][y].getOwner())) {
+
+			// calculate the distance to the the bottom right corner
+			int dc = (cols - (x + b.getWidth() - 1));
+			int dr = (rows - (y + b.getHeight() - 1));
+
+			// if the placement of the building does not go off the map
+			if (dc > 0 && dr > 0) {
+
+				map[x][y].getOwner().addBuilding(b);
+
+				// set the area of the rectangle to be occupied by a building
+
+				for (int r = 0; r < b.getWidth(); r++) {
+
+					for (int c = 0; c < b.getHeight(); c++) {
+						map[r][c].setIsOccupiedByBuilding(true);
+					}
+				}
+			}
+		}
 	}
 
 	/*

@@ -24,7 +24,7 @@ public class Tile {
 							// though mostly it will not have an ownder
 	private Terrain terrain; // The type of terrain for this tile, based upne
 								// height.
-	private boolean occupiedByBuliding = false; // keeps track of whether or not
+	private boolean occupiedByBuilding = false; // keeps track of whether or not
 												// tile is occupied by buliding.
 
 	// private float regenerate
@@ -54,7 +54,7 @@ public class Tile {
 			resource = Resource.WOOD;
 		} else if (resourceNum == 2) {
 			resource = Resource.FOOD;
-		} else if(resourceNum == 3) {
+		} else if (resourceNum == 3) {
 			resource = Resource.STONE;
 		} else {
 			resource = Resource.NONE;
@@ -74,7 +74,7 @@ public class Tile {
 	 * @return boolean value; true if occupied, false if not.
 	 */
 	public boolean isOccupiedByBuilding() {
-		return occupiedByBuliding;
+		return occupiedByBuilding;
 	}
 
 	/*
@@ -181,6 +181,7 @@ public class Tile {
 	 * @return Player object that is the current owner (may be null)
 	 */
 	public Player getOwner() {
+
 		return owner;
 	}
 
@@ -246,5 +247,9 @@ public class Tile {
 	 */
 	public Terrain getTerrainType() {
 		return terrain;
+	}
+
+	public void setIsOccupiedByBuilding(boolean t) {
+		occupiedByBuilding = t;
 	}
 }
