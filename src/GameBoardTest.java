@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import entities.Player;
 import entities.Tile;
+import entities.buildings.Barracks;
+import entities.buildings.Building;
 import entities.units.Infantry;
 import entities.units.Unit;
 
@@ -23,25 +25,33 @@ public class GameBoardTest {
 
 		GameBoard game = new GameBoard(20, 20, 2);
 		Player juan = new Player("juan");
-		Unit temp = new Infantry(juan);
-		Unit temp2 = new Infantry(juan);
-		game.placeUnitAt(temp, 0, 0);
-		game.placeUnitAt(temp2, 0, 0);
 
-		Tile tester = game.getTileAt(0, 0);
+		Unit temp = new Infantry(juan, -1, -1);
+		Unit temp2 = new Infantry(juan, -1, -1);
+		Building b = new Barracks(juan, 4, 4, 100);
 
-		assertEquals(true, tester.isPassable());
-		tester.setPassable(false);
-		assertEquals(false, tester.isPassable());
+		game.placeUnitAt(temp, 15, 15);
+		game.placeBuildingAt(b, 15, 15);
+		//
 
-		System.out.println("Resource: " + tester.getResource());
-		System.out.println("Height :" + tester.getHeight());
+		assertFalse(juan.hasUnitAt(0, 0));
+		assertFalse(juan.hasUnitAt(1, 1));
+		assertTrue(juan.hasUnitAt(15, 15));
+		// assertTrue(game.getTileAt(0, 0).);
 
-		assertEquals(null, tester.getOwner());
-		tester.setOwner(juan);
-		assertEquals(juan, tester.getOwner());
-		tester.setOwner(null);
-		assertEquals(null, tester.getOwner());
+		// need to test
+		assertFalse(game.getTileAt(15, 14).isOccupiedByBuilding());
+		assertTrue(game.getTileAt(15, 15).isOccupiedByBuilding());
+		assertTrue(game.getTileAt(18, 15).isOccupiedByBuilding());
+		assertFalse(game.getTileAt(14, 19).isOccupiedByBuilding());
+
+		game.removeBuilding(b);
+
+		assertFalse(game.getTileAt(15, 14).isOccupiedByBuilding());
+		assertFalse(game.getTileAt(15, 15).isOccupiedByBuilding());
+		assertFalse(game.getTileAt(18, 15).isOccupiedByBuilding());
+		assertFalse(game.getTileAt(14, 19).isOccupiedByBuilding());
 
 	}
+
 }

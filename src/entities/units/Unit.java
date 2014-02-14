@@ -26,14 +26,33 @@ public abstract class Unit {
 	private int augment;
 	private int maxHp;
 	private int movementRange;
+	private int x;
+	private int y;
 
-	public Unit(Player p, int hp, int bDmg, int mR) {
+	public Unit(Player p, int hp, int bDmg, int mR, int xco, int yco) {
 
 		maxHp = health = hp;
 		owner = p;
 		baseDmg = bDmg;
 		movementRange = mR;
+		p.addUnit(this);
 
+		x = xco;
+		y = yco;
+
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setLocation(int b, int c) {
+		x = b;
+		y = c;
 	}
 
 	public void setAugment(int n) {

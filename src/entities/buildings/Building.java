@@ -16,6 +16,10 @@ public abstract class Building {
 	// resource producing
 	// research options
 	// defense units
+	
+	
+	//garrison?
+	
 	private int maxHp;
 	private int health;
 	private Player owner; // owner of the structure
@@ -32,6 +36,7 @@ public abstract class Building {
 		owner = p;
 		height = h;
 		width = w;
+		owner.addBuilding(this);
 
 	}
 
@@ -72,6 +77,22 @@ public abstract class Building {
 	public void setLocation(int row, int col) {
 		x = row;
 		y = col;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public int getWidth() {
+		return width;
 	}
 
 	/*
