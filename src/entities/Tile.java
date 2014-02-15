@@ -18,6 +18,9 @@ public class Tile {
 	private boolean passable; // Boolean representing whether or not units can
 								// pass over/through a terrain tile.
 	private Resource resource; // Resource that populates this tile.
+	private int resourceAmount; // amount of resources tile has.
+	private float resourceReg; // this tile's resource regen rate.
+	
 	private float height; // Height generated from the diamondSquareGenerator in
 							// GameBoard
 	private Player owner; // The Player that contains possession of the tile,
@@ -27,9 +30,19 @@ public class Tile {
 	private boolean occupiedByBuilding = false; // keeps track of whether or not
 												// tile is occupied by buliding.
 
-	// TODO add private int resource amount;
+	// Resource Base Amounts - 'Average' amount a tile contiaining resource X will start with
+	private static int foodBase  = 200; 
+	private static int woodBase  = 100; 
+	private static int stoneBase = 300; 
+	private static int goldBase  = 500; 
 	
-	// private float regenerate
+	// Resource Regeneration rates - how much of resource will regenerate during each 'Tick'
+	private static float foodReg  = 1.100f; 
+	private static float woodReg  = 1.300f; 
+	private static float stoneReg = 1.050f; 
+	private static float goldReg  = 1.025f; 
+	
+
 
 	/*
 	 * Tile(): 
@@ -61,8 +74,8 @@ public class Tile {
 			resource = Resource.NONE;
 		}
 
-		// TODO add 'determine resource amount' function
-		// TODO based on resource type set resource regeneration
+		setResourceAmount(resource);
+		setResourceRegen(resource);
 		
 		owner = null;
 		passable = true;
@@ -88,32 +101,103 @@ public class Tile {
 
 		resource = r;
 		
-		// TODO add 'determine resource amount' function
-		// TODO based on resource type set resource regeneration
+		setResourceAmount(resource); 
+		setResourceRegen(resource);
 		
 		owner = null;
 		passable = true;
 		terrain = calculateTerrainType(height);
 	}
 	
-	// TODO add 'determine resource amount' function
-	public int determineResourceAmount(Resource r)
+	/*
+	 * setResourceRegen():
+	 * Description:
+	 * Based on resource type, sets the regen rate
+	 * 
+	 * Parameters:
+	 * @param Resource r - the resource to assign 
+	 * 
+	 * Return Value:
+	 * @return void 
+	 * 
+	 * TODO add noise to regen amounts? 
+	 */
+	public void setResourceRegen(Resource r)
 	{
-		return 0;
+		switch (r)
+		{
+			case NONE:
+				this.resourceReg = 0f;
+				break;
+			case GOLD:
+				this.resourceReg = goldReg;
+				break;
+			case STONE:
+				this.resourceReg = stoneReg;
+				break;
+			case FOOD:
+				this.resourceReg = foodReg;
+				break;
+			case WOOD:
+				this.resourceReg = woodReg; 
+				break;
+			default:
+				this.resourceReg = 0f;
+				break;
+		}
 	}
 	
-	// TODO add 'Generate resource' function
+	public int setResourceAmount(Resource r)
+	{
+		// TODO add noise. fluctuate starting amounts
+		switch (r)
+		{
+			case NONE:
+				this.resourceAmount = 0;
+				break;
+			case GOLD:
+				this.resourceAmount = goldBase;
+				break;
+			case STONE:
+				this.resourceAmount = stoneBase;
+				break;
+			case FOOD:
+				this.resourceAmount= foodBase;
+				break;
+			case WOOD:
+				this.resourceAmount = woodBase; 
+				break;
+			default:
+				this.resourceAmount = 0;
+				break;
+		}
+		return this.resourceAmount; 
+	}
+	
 	public void generateResource()
 	{
-		// based on regenerate float generate new value
-		// set current value
+		this.resourceAmount *= this.resourceReg;
 	}
 	
 	// TODO add 'remove resource amount' function - return int of # resources gathered
 	public int takeResources(int amount)
 	{
-		// TODO return maximum amount that can be returned
-		return amount;
+		int res;
+		if (this.resource == Resource.NONE || this.resourceAmount == 0)
+		{
+			return 0; 
+		} else if (this.resourceAmount < amount) 
+		{
+			res = this.resourceAmount;
+			this.resourceAmount = 0;
+			this.resourceReg = 0f;
+			this.resource = Resource.NONE;
+			return res; 
+		} else
+		{
+			this.resourceAmount -= amount;
+			return amount;
+		}
 	}
 	
 	/*
@@ -183,6 +267,9 @@ public class Tile {
 			return false;
 		}
 		this.resource = r;
+		setResourceAmount(this.resource);
+		setResourceRegen(this.resource);
+		
 		return true;
 	}
 
