@@ -5,6 +5,7 @@ public class Model implements Runnable {
 	public MovingNumber number;
 	public boolean isBlack;
 	public int timeStep = 200; // Number of milliseconds per simulation step
+	public int noise = 200;
 	
 	public Model() {
 		number = new MovingNumber(0.0,1.0);
@@ -17,8 +18,10 @@ public class Model implements Runnable {
 			long startTime = lastEndTime;
 			
 			simulateFrame();
+			int randNoise = (int) (Math.random() * noise); // See how timestep averaging works
+			randNoise = 0;
 			
-			while(System.currentTimeMillis() < startTime + timeStep);
+			while(System.currentTimeMillis() < startTime + timeStep + randNoise);
 			lastEndTime = System.currentTimeMillis();
 		}
 		

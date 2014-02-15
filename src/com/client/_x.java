@@ -1,9 +1,6 @@
 package com.client;
 
-import java.text.DecimalFormat;
-
 import com.shared.DecrementRequest;
-import com.shared.FieldVerifier;
 import com.shared.IncrementRequest;
 import com.shared.MovingNumber;
 import com.shared.Request;
@@ -39,8 +36,11 @@ public class _x implements EntryPoint {
 	private long lastUpdateTime;
 	private MovingNumber lastNumber = new MovingNumber();
 	private double interpVal;
+	private int averageTurnInterval = 200;
+	private int intervalsToStore = 10;
+	private int[] storedIntervals = new int[intervalsToStore];
+	private int intervalIndex = 0;
 	private int turnNumber = 0;
-	private int lastTurn = 0;
 
 	/**
 	 * Create a remote service proxy to talk to the server-side Greeting service.
@@ -79,8 +79,10 @@ public class _x implements EntryPoint {
 		final Button closeButton = new Button("Close");
 		// We can set the id of a widget by accessing its Element
 		closeButton.getElement().setId("closeButton");
-		final Label textToServerLabel = new Label();
 		final HTML serverResponseLabel = new HTML();
+		
+		for(int i = 0; i < intervalsToStore; i++)
+			storedIntervals[i] = averageTurnInterval;
 
 		// Add a handler to close the DialogBox
 		closeButton.addClickHandler(new ClickHandler() {
@@ -126,7 +128,7 @@ public class _x implements EntryPoint {
 				// Then, we send the input to the server.
 				serverResponseLabel.setText("");
 				r.setScheduledTurn(turnNumber+1);
-				r.setLastTurnReceived(lastTurn);
+				r.setLastTurnReceived(turnNumber);
 				
 				simpleSimulator.sendRequest(r,
 						new AsyncCallback<Request[]>() {
@@ -168,7 +170,7 @@ public class _x implements EntryPoint {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				simpleSimulator.getSimulationState(new AsyncCallback<MovingNumber>() {
+				simpleSimulator.getSimulationState(turnNumber + 1, new AsyncCallback<MovingNumber>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -179,8 +181,16 @@ public class _x implements EntryPoint {
 					public void onSuccess(MovingNumber result) {
 						lastNumber = nextNumber;
 						nextNumber = result;
-						lastUpdateTime = System.currentTimeMillis();
-
+						
+						long currTime = System.currentTimeMillis();
+						int lastInterval = (int) (currTime - lastUpdateTime);
+						lastUpdateTime = currTime;
+						
+						averageTurnInterval = averageTurnInterval + (lastInterval - storedIntervals[intervalIndex]) / intervalsToStore;
+						storedIntervals[intervalIndex] = lastInterval;
+						intervalIndex = (intervalIndex + 1) % intervalsToStore;
+						
+						System.out.println(averageTurnInterval);
 					}
 					
 				});
@@ -188,13 +198,13 @@ public class _x implements EntryPoint {
 			
 		};
 		
-		pollTimer.scheduleRepeating(200);
+		pollTimer.scheduleRepeating(averageTurnInterval);
 		
 		Timer renderTimer = new Timer() {
 
 			@Override
 			public void run() {
-				interpVal = lastNumber.value + (System.currentTimeMillis() - lastUpdateTime) * (nextNumber.value - lastNumber.value) / 200.0;
+				interpVal = lastNumber.value + (System.currentTimeMillis() - lastUpdateTime) * (nextNumber.value - lastNumber.value) / averageTurnInterval;
 				String numString = NumberFormat.getFormat("###0.0000").format(interpVal);
 				numberLabel.setText(numString);
 			}
@@ -202,5 +212,7 @@ public class _x implements EntryPoint {
 		};
 		
 		renderTimer.scheduleRepeating(33);
+		
+		
 	}
 }

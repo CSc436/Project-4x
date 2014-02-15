@@ -40,14 +40,15 @@ public class MovingNumber implements Serializable {
 			value = value < targetValue ? targetValue : value ;
 		}
 		
-		System.out.println(value);
+		turnNumber++;
+		System.out.println(value + " " + turnNumber);
 	}
 	
 	public boolean canIncrement() {
-		return value < 10.0;
+		return targetValue < 10.0;
 	}
 	
 	public boolean canDecrement() {
-		return value > -10.0;
+		return targetValue > -10.0;
 	}
 }

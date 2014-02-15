@@ -12,5 +12,5 @@ import com.shared.Request;
 public interface SimpleSimulator extends RemoteService {
 	Request[] sendRequest(Request input) throws IllegalArgumentException;
 	String startSimulation();
-	MovingNumber getSimulationState();
+	MovingNumber getSimulationState(int turn);
 }

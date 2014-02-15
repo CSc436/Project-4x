@@ -49,7 +49,9 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public MovingNumber getSimulationState() {
+	public MovingNumber getSimulationState(int turn) {
+		while(m.getNumber().turnNumber < turn);
+		
 		return m.getNumber();
 	}
 }
