@@ -130,7 +130,7 @@ public abstract class Unit extends GameObject {
 				break;
 			case DEATH:
 				// I DIED
-				System.out.println("Destroying Unit: " + this);
+				System.out.println(x);
 				getOwner().getUnits().removeUnit(this);
 			default:
 				break;
