@@ -3,6 +3,8 @@ package control;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fourx.civilizations.PerfectCivilization;
+import com.fourx.resources.Resources;
 import com.server.MovingNumber;
 
 import entities.buildings.Building;
@@ -16,7 +18,7 @@ public class Controller implements Runnable {
 	
 	public Controller() {
 		players = new ArrayList<Player>();
-		players.add(new Player("Bob", 500, 500, 500, 500, 500));
+		players.add(new Player("Bob", new Resources(500, 500, 500, 500), new PerfectCivilization()));
 		map = new GameBoard(5, 5, 2);
 		number = new MovingNumber(0.0,1.0);
 	}
@@ -52,7 +54,7 @@ public class Controller implements Runnable {
 	private void produceResources() {
 		for(Player player : players) {
 			for (Building building : player.getResourceBuildings()) {
-				building.gen
+				//TODO: building.gen
 			}
 		}
 	}

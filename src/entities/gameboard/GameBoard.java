@@ -2,6 +2,8 @@ package entities.gameboard;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.fourx.civilizations.PerfectCivilization;
+
 import control.Player;
 import entities.buildings.Building;
 import entities.units.Unit;
@@ -33,7 +35,7 @@ public class GameBoard {
 
 		players = new ArrayList<Player>();
 		for (int i = 0; i < numPlayers; i++) {
-			players.add(new Player("player" + i));
+			players.add(new Player("player" + i, new PerfectCivilization()));
 		}
 
 		// create a noisemap

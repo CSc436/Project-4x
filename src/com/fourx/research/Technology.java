@@ -2,10 +2,11 @@ package com.fourx.research;
 
 import java.util.ArrayList;
 
-import com.fourx.Player;
 import com.fourx.buffs.BuffStats;
 import com.fourx.buffs.TYPE;
 import com.fourx.resources.Resources;
+
+import control.Player;
 
 public abstract class Technology {
 	protected ArrayList<TechnologyEnum> requirements;

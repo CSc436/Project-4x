@@ -21,6 +21,9 @@ import entities.GameObject;
 
 public abstract class Unit extends GameObject{
 
+	
+	
+	// TODO:  wrap into a buff stat class
 	private int health;
 	private Player owner;
 	private int baseDmg;

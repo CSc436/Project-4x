@@ -3,9 +3,9 @@ package com.fourx.research;
 import com.fourx.research.technologies.*;
 
 public enum TechnologyEnum {
-	INFANTRYDAMAGE1(InfantryDamage.class);
+	INFANTRYDAMAGE1(InfantryDamage.class), DISABLEDTECHNOLOGY(DisabledTechnology.class);
 
-	private Class<Technology> value;
+	private Class<? extends Technology> value;
 
 	/**
 	 * 
@@ -15,11 +15,11 @@ public enum TechnologyEnum {
 	 *            because then we end up with only 1 instance of each
 	 *            Technology, but would still like to define them in this class.
 	 */
-	private TechnologyEnum(Class<?> tech) {
-		value = (Class<Technology>) tech;
+	private TechnologyEnum(Class<? extends Technology> tech) {
+		value = tech;
 	}
 
-	public Class<Technology> getValue() {
+	public Class<? extends Technology> getValue() {
 		return value;
 	}
 }

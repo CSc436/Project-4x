@@ -11,7 +11,7 @@ public abstract class Agent extends Unit {
 	private Map<String, Unit>  underlings;
 	
 	public Agent(Player p) {
-		super(p);
+		super(p,100,10,1,0,0);
 		underlings = new HashMap<String, Unit>();
 	}
 	

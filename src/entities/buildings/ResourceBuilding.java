@@ -1,9 +1,13 @@
 package entities.buildings;
 
+import com.fourx.resources.Resources;
+
 import control.Player;
 import entities.gameboard.Resource;
 
 public abstract class ResourceBuilding extends Building{
+	
+	protected final Resources resourceAmount;
 	
 	private final Resource resourceType;
 	private int baseGenerateAmt;
@@ -12,6 +16,9 @@ public abstract class ResourceBuilding extends Building{
 
 	public ResourceBuilding(Player p, int h, int w, Resource resource, int baseGenAmt) {
 		super(p, h, w, 100);
+		
+		// resources
+		resourceAmount = new Resources(0, -10, 0, 0);
 		resourceType = resource;
 		baseGenerateAmt = baseGenAmt;
 	}

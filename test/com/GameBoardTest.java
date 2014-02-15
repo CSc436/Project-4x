@@ -1,9 +1,12 @@
 package com;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+
+import com.fourx.civilizations.PerfectCivilization;
 
 import control.Player;
 import entities.buildings.Barracks;
@@ -27,7 +30,7 @@ public class GameBoardTest {
 	public void testTile() {
 
 		GameBoard game = new GameBoard(20, 20, 2);
-		Player juan = new Player("juan");
+		Player juan = new Player("juan", new PerfectCivilization());
 
 		Unit temp = new Infantry(juan, -1, -1);
 		Unit temp2 = new Infantry(juan, -1, -1);

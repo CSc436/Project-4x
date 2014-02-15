@@ -1,9 +1,10 @@
 package com.fourx.research.technologies;
 
-import com.fourx.Player;
 import com.fourx.buffs.TYPE;
 import com.fourx.research.Technology;
 import com.fourx.resources.Resources;
+
+import control.Player;
 
 public class InfantryDamage extends Technology {
 	public InfantryDamage() {

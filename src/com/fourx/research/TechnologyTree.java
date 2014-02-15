@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import com.fourx.Player;
+import com.fourx.annotations.TechDisabledByDefault;
+
+import control.Player;
 
 public class TechnologyTree {
 	private Player p;
@@ -23,13 +25,16 @@ public class TechnologyTree {
 			Technology tech = null;
 			// Don't mind this hack. Move along.
 			try {
-				tech = t.getValue().newInstance();
+				Class<? extends Technology> techClass = t.getValue();
+				if (!techClass.isAnnotationPresent(TechDisabledByDefault.class)) {
+					tech = techClass.newInstance();
+					technologies.put(t.name(), tech);
+				}
 			} catch (InstantiationException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
-			technologies.put(t.name(), tech);
 		}
-		p.getCivilization().alterMaxLevels(technologies);
+		p.getCivilization().modifyTechnologies(technologies);
 	}
 
 	/**
@@ -53,7 +58,9 @@ public class TechnologyTree {
 
 	/**
 	 * 
-	 * @param time - a unit of time that progresses the researching towards research completion.
+	 * @param time
+	 *            - a unit of time that progresses the researching towards
+	 *            research completion.
 	 */
 	public boolean researchStep(int time) {
 		boolean completed = false;
@@ -67,24 +74,26 @@ public class TechnologyTree {
 		}
 		return completed;
 	}
-	
+
 	/**
 	 * 
-	 * @param key - which research to progress towards completion.
-	 * @param time - the amount of time to move the research forwards.
+	 * @param key
+	 *            - which research to progress towards completion.
+	 * @param time
+	 *            - the amount of time to move the research forwards.
 	 * 
 	 * @return - returns whether a research completed in this time step.
 	 */
 	private boolean researchStep(String key, int time) {
 		Integer value = currently_researching.get(key);
-		
+
 		if (value - time <= 0) {
 			// complete the research.
 			Technology t = technologies.get(key);
 			p.upgrades.addTechnology(t);
 			researched.put(key, t.current_level);
 			t.completeResearch(p);
-			
+
 			// remove from currently researching.
 			currently_researching.remove(key);
 			return true;
@@ -93,13 +102,13 @@ public class TechnologyTree {
 		currently_researching.put(key, value - time);
 		return false;
 	}
-	
+
 	public int getTimeRemaining(String key) {
 		if (currently_researching.containsKey(key))
 			return currently_researching.get(key);
 		return -1;
 	}
-	
+
 	public int getResearchLevel(String key) {
 		if (technologies.containsKey(key))
 			return technologies.get(key).current_level;

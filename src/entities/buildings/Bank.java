@@ -25,7 +25,8 @@ public class Bank extends ResourceBuilding{
 	}
 	
 	public void generateResource() {
-		super.getOwner().receiveGold(super.calculateBundleAmount(bank_rateModifier));
+		getOwner().getResources().spend(resourceAmount);
+		//receiveGold(super.calculateBundleAmount(bank_rateModifier));
 	}
 
 	@Override
