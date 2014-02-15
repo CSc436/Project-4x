@@ -1,5 +1,7 @@
 package entities;
 
+import control.Player;
+
 public abstract class Castle {
 
 	// main hub

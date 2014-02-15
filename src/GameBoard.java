@@ -2,8 +2,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
+import control.Player;
 import entities.Infantry;
-import entities.Player;
 import entities.Tile;
 import entities.Unit;
 

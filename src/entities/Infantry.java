@@ -1,4 +1,6 @@
 package entities;
+
+import control.Player;
 /*
  * Programmer:  Benjamin Deininger
  * 

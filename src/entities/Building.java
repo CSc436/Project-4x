@@ -1,6 +1,8 @@
 package entities;
 
-public abstract class Building {
+import control.Player;
+
+public abstract class Building extends GameObject{
 
 	// buildings will be > 1 tile
 	// int height

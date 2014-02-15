@@ -1,4 +1,6 @@
 package entities;
+
+import control.Player;
 /*
  * Programmer:  Benjamin Deininger
  * 
@@ -17,7 +19,7 @@ package entities;
 
 
 
-public abstract class Unit {
+public abstract class Unit extends GameObject{
 
 	private int health;
 	private Player owner;
