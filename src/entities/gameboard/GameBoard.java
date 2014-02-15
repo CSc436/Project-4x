@@ -1,4 +1,6 @@
 package entities.gameboard;
+
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -24,8 +26,20 @@ public class GameBoard {
 	private int cols;
 	private ArrayList<Player> players;
 	private static Random rand = new Random();
-	private float averageHeight = 0f; 			// Stores the average height of the noise map. 
+	private float averageHeight = 0f; // Stores the average height of the noise
+										// map.
 
+	private static float foodMult = 0.050f; // 5% of tiles that can support food
+											// have food
+	private static float woodMult = 0.050f; // 5% of tiles that can support wood
+											// have wood
+	private static float stoneMult = 0.050f; // 5% of tiles that can support
+												// stone have stone
+	private static float goldMult = 0.002f; // 0.2% of tiles that can support
+											// gold have gold
+
+	
+	// numPlayers ==> list
 	public GameBoard(int row, int col, int numPlayers) {
 		rows = row;
 		cols = col;
@@ -52,59 +66,204 @@ public class GameBoard {
 		startTime = System.currentTimeMillis();
 
 		// create a random number generator
-		//Random rand = new Random();
-		//rand.setSeed(16);
+		// Random rand = new Random();
+		// rand.setSeed(16);
 
 		System.out.println("\nAverage Height: " + this.averageHeight);
-		
-		float heightAdjust = 0.0f; 
+
+		float heightAdjust = 0.0f;
 		// Determine adjustment for height
-		if (this.averageHeight < 0.5f) // If average height is less than .5, it is a 'waterworld'
+		if (this.averageHeight < 0.5f) // If average height is less than .5, it
+		// is a 'waterworld'
 		{
 			heightAdjust = 0.55f - this.averageHeight;
-		} else if (this.averageHeight > 0.7f) // if average height is greater than .7, it is a 'winter wonderland'
+		} else if (this.averageHeight > 0.7f) // if average height is greater
+		// than .7, it is a 'winter
+		// wonderland'
 		{
-			heightAdjust = (0.7f - this.averageHeight - 0.05f); // will give us a negative height. to lower some of the terain. (hopefully)
+			heightAdjust = (0.7f - this.averageHeight - 0.05f); // will give us
+			// a negative
+			// height. to
+			// lower some of
+			// the terain.
+			// (hopefully)
 		}
 		System.out.println("Height Adjust: " + heightAdjust + "\n");
-		
-		//---------------------------------------------------------------------------------------------
-		// Default all to NONE. Then create distributions of all other resources.
+
+		// ---------------------------------------------------------------------------------------------
+		// Default all to NONE. Then create distributions of all other
+		// resources.
+		ArrayList<ArrayList<Point>> terrainList = new ArrayList<ArrayList<Point>>();
+		for (int i = 0; i < 6; i++) {
+			terrainList.add(new ArrayList<Point>());
+		}
+
 		for (int c = 0; c < cols; c++) {
 			for (int r = 0; r < rows; r++) {
 
 				// give the tile a random resource number
-				//int resource = rand.nextInt(16);
+				// int resource = rand.nextInt(16);
 				float height = noisemap[r][c];
 
-				map[r][c] = new Tile(Resource.NONE, height + heightAdjust); // Use the adjusted height to create the tile
-				// System.out.print(map[r][c].getHeight() + " ");
-				// System.out.printf("%10s",map[r][c].getTerrainType());
+				map[r][c] = new Tile(Resource.NONE, height + heightAdjust); // Use
+																			// the
+																			// adjusted
+																			// height
+																			// to
+																			// create
+																			// the
+																			// tile
+				terrainList.get(map[r][c].getTerrainType().ordinal()).add(
+						new Point(r, c));
 			}
 			// System.out.println();
 		}
-		
+
+		// TODO issue with this strategy, if no terrain of certain type, will
+		// never finish distributing
+		// Resources EDIT: added quick fail safe. Still not best approach.
+		// TODO to add clustering (More realistic).
+
+		// TODO instead of generating percentage of resource based on total map
+		// size, determine based
+		// on size of
+		Random rnd = new Random();
+		int r, rp, rpp;
+		Point temp;
+
+		System.out.println("Base board build, distributing resources...");
+		System.out.println("Distributing food...");
+		int numFood = (int) (foodMult * (terrainList.get(
+				Terrain.WATER.ordinal()).size()
+				+ terrainList.get(Terrain.DIRT.ordinal()).size() + terrainList
+				.get(Terrain.GRASS.ordinal()).size()));
+		// food can exist in lists 0,1,2
+		while (numFood > 0) {
+			r = Math.abs(rnd.nextInt());
+
+			rp = r % 3;
+			if (terrainList.get(rp).size() == 0) {
+				continue;
+			}
+			rpp = r % terrainList.get(rp).size();
+
+			do {
+				if (terrainList.get(r % 3).size() == 0) {
+					break;
+				}
+				temp = terrainList.get(rp)
+						.get(rpp % terrainList.get(rp).size());
+				map[temp.x][temp.y].setResource(Resource.FOOD);
+				terrainList.get(rp).remove(rpp % terrainList.get(rp).size());
+				numFood--;
+			} while (rnd.nextBoolean());
+		}
+
+		System.out.println("Distributing wood...");
+		int numWood = (int) (woodMult * (terrainList.get(
+				Terrain.GRASS.ordinal()).size() + terrainList.get(
+				Terrain.HILL.ordinal()).size()));
+		// Wood can exist in lists 2 and 3
+		while (numWood > 0) {
+			r = Math.abs(rnd.nextInt());
+			rp = 2 + r % 2;
+			if (terrainList.get(rp).size() == 0) {
+				continue;
+			}
+			rpp = r % terrainList.get(rp).size();
+			do {
+				if (terrainList.get(rp).size() == 0) {
+					break;
+				}
+				temp = terrainList.get(rp)
+						.get(rpp % terrainList.get(rp).size());
+				map[temp.x][temp.y].setResource(Resource.WOOD);
+				terrainList.get(rp).remove(rpp % terrainList.get(rp).size());
+				numWood--;
+			} while (rnd.nextBoolean());
+		}
+
+		System.out.println("Distributing stone...");
+		int numStone = (int) (stoneMult * (terrainList.get(
+				Terrain.HILL.ordinal()).size()
+				+ terrainList.get(Terrain.MOUNTAIN.ordinal()).size() + terrainList
+				.get(Terrain.SNOW.ordinal()).size()));
+		// stone can exist in lists 3, 4, 5
+		while (numStone > 0) {
+			r = Math.abs(rnd.nextInt());
+			rp = 3 + r % 3;
+			if (terrainList.get(rp).size() == 0) {
+				continue;
+			}
+			rpp = r % terrainList.get(rp).size();
+			do {
+				if (terrainList.get(rp).size() == 0) {
+					break;
+				}
+				temp = terrainList.get(rp)
+						.get(rpp % terrainList.get(rp).size());
+				map[temp.x][temp.y].setResource(Resource.STONE);
+				terrainList.get(rp).remove(rpp % terrainList.get(rp).size());
+				numStone--;
+			} while (rnd.nextBoolean());
+		}
+
+		System.out.println("Distributing gold...");
+		int numGold = (int) (goldMult * (terrainList
+				.get(Terrain.HILL.ordinal()).size()
+				+ terrainList.get(Terrain.MOUNTAIN.ordinal()).size() + terrainList
+				.get(Terrain.SNOW.ordinal()).size()));
+		while (numGold > 0) {
+			r = Math.abs(rnd.nextInt());
+			rp = 3 + r % 3;
+			if (terrainList.get(rp).size() == 0) {
+				continue;
+			}
+			rpp = r % terrainList.get(rp).size();
+			do {
+				if (terrainList.get(rp).size() == 0) {
+					break;
+				}
+				temp = terrainList.get(rp)
+						.get(rpp % terrainList.get(rp).size());
+				map[temp.x][temp.y].setResource(Resource.GOLD);
+				terrainList.get(rp).remove(rpp % terrainList.get(rp).size());
+				numGold--;
+			} while (rnd.nextBoolean());
+		}
+
+		// TODO distribute players
+		// Based on num players
+		// 1 - place player roughly in center
+		// 2 - place players caddy corner
+		// 3 + 4 - place players in corners of map
+		// 5 - 1-4 place in corner, 5 place in center.
+		// attempt to distribute near resources.
+
+		endTime = System.currentTimeMillis();
+		System.out.println("Total execution time: " + (endTime - startTime));
+
 		// TODO Perform resource distribution here.
-			// Characteristics
-				// Resource amount
-					// lots of wood 
-					// lots of food ('natural' animals/plants)
-					// good amount of stone
-					// limited gold
-				// Distribution
-					// Food concentrated in grass lands /Dirt
-					// wood concentrated in grasslands/hills
-					// Stone concentrated in hills/mountains/snow
-					// Gold concentrated in hills/mountains/snow
-		
-		// TODO distribute players 
-			// Based on num players 
-				// 1 - place player roughly in center
-				// 2 - place players caddy corner 
-				// 3 + 4 - place players in corners of map
-				// 5 - 1-4 place in corner, 5 place in center.
-			// attempt to distribute near resources. 
-		
+		// Characteristics
+		// Resource amount
+		// lots of wood
+		// lots of food ('natural' animals/plants)
+		// good amount of stone
+		// limited gold
+		// Distribution
+		// Food concentrated in grass lands /Dirt
+		// wood concentrated in grasslands/hills
+		// Stone concentrated in hills/mountains/snow
+		// Gold concentrated in hills/mountains/snow
+
+		// TODO distribute players
+		// Based on num players
+		// 1 - place player roughly in center
+		// 2 - place players caddy corner
+		// 3 + 4 - place players in corners of map
+		// 5 - 1-4 place in corner, 5 place in center.
+		// attempt to distribute near resources.
+
 		endTime = System.currentTimeMillis();
 		System.out.println("Total execution time: " + (endTime - startTime));
 
@@ -153,7 +312,7 @@ public class GameBoard {
 			// if the placement of the building does not go off the map
 			if (dc > 0 && dr > 0) {
 
-				map[x][y].getOwner().addBuilding(b);
+				map[x][y].getOwner().getUnits().addBuilding(b);
 
 				// set the area of the rectangle to be occupied by a building
 
@@ -177,7 +336,7 @@ public class GameBoard {
 	public void removeUnit(Unit u) {
 
 		Player owner = u.getOwner();
-		owner.removeUnit(u);
+		owner.getUnits().removeUnit(u);
 
 	}
 
@@ -206,7 +365,7 @@ public class GameBoard {
 			}
 		}
 
-		owner.removeBuilding(b);
+		owner.getUnits().removeBuilding(b);
 
 	}
 
@@ -217,8 +376,7 @@ public class GameBoard {
 	 */
 
 	// Note: removed 'static' modifier
-	public float[][] diamondSquareGenerator(int SIZE, long seed,
-			float roughness) {
+	public float[][] diamondSquareGenerator(int SIZE, long seed, float roughness) {
 		// size is the nearest power of 2 that fully contains SIZE plus 1
 		int size = (1 << (int) Math.ceil(Math.log(SIZE) / Math.log(2))) + 1;
 
@@ -237,18 +395,17 @@ public class GameBoard {
 		// begin Diamond Squares iteration
 		dsIter(noise, size, roughness);
 
-		// TODO possibly inline with dsIter, but for now iterate through and calculate averageheight
-		for (int x = 0; x < noise.length; x++)
-		{
-			for (int y = 0; y < noise[x].length; y++)
-			{
+		// TODO possibly inline with dsIter, but for now iterate through and
+		// calculate averageheight
+		for (int x = 0; x < noise.length; x++) {
+			for (int y = 0; y < noise[x].length; y++) {
 				this.averageHeight += noise[x][y];
-			}	
+			}
 		}
-		
+
 		// make averageHeight the average (not just the sum)
 		this.averageHeight = averageHeight / (noise.length * noise[0].length);
-		
+
 		return noise;
 	}
 

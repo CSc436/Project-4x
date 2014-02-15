@@ -1,6 +1,9 @@
 package entities.units;
 
+import java.util.PriorityQueue;
+
 import control.Player;
+import entities.Action;
 import entities.GameObject;
 
 /*
@@ -19,11 +22,9 @@ import entities.GameObject;
 // settler / worker
 // healing unit
 
-public abstract class Unit extends GameObject{
+public abstract class Unit extends GameObject {
 
-	
-	
-	// TODO:  wrap into a buff stat class
+	// TODO: wrap into a buff stat class
 	private int health;
 	private Player owner;
 	private int baseDmg;
@@ -32,6 +33,7 @@ public abstract class Unit extends GameObject{
 	private int movementRange;
 	private int x;
 	private int y;
+	private PriorityQueue<Action> actionQueue;
 
 	public Unit(Player p, int hp, int bDmg, int mR, int xco, int yco) {
 
@@ -39,8 +41,8 @@ public abstract class Unit extends GameObject{
 		owner = p;
 		baseDmg = bDmg;
 		movementRange = mR;
-		p.addUnit(this);
-
+		p.getUnits().addUnit(this);
+		actionQueue = new PriorityQueue<Action>();
 		x = xco;
 		y = yco;
 
@@ -116,4 +118,24 @@ public abstract class Unit extends GameObject{
 		return owner;
 	}
 
+	public void addAction(Action a) {
+		actionQueue.add(a);
+	}
+
+	public void performActions() {
+		while (!actionQueue.isEmpty()) {
+			Action a = actionQueue.poll();
+			switch (a) {
+			case PLAYER_ATTACK_MOVE:
+				break;
+			case DEATH:
+				// I DIED
+				System.out.println("Destroying Unit: " + this);
+				getOwner().getUnits().removeUnit(this);
+			default:
+				break;
+			}
+			// TODO: do stuff
+		}
+	}
 }

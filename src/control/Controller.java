@@ -8,6 +8,7 @@ import com.fourx.resources.Resources;
 import com.server.MovingNumber;
 
 import entities.buildings.Building;
+import entities.buildings.ResourceBuilding;
 import entities.gameboard.GameBoard;
 
 
@@ -15,6 +16,8 @@ public class Controller implements Runnable {
 	List<Player> players;
 	GameBoard map;
 	MovingNumber number;
+	
+	
 	
 	public Controller() {
 		players = new ArrayList<Player>();
@@ -53,7 +56,7 @@ public class Controller implements Runnable {
 
 	private void produceResources() {
 		for(Player player : players) {
-			for (Building building : player.getResourceBuildings()) {
+			for (ResourceBuilding building : player.getUnits().getResourceBuildings()) {
 				//TODO: building.gen
 			}
 		}

@@ -9,6 +9,7 @@ import org.junit.Test;
 import com.fourx.civilizations.PerfectCivilization;
 
 import control.Player;
+import entities.PlayerUnits;
 import entities.buildings.Barracks;
 import entities.buildings.Building;
 import entities.gameboard.GameBoard;
@@ -40,9 +41,10 @@ public class GameBoardTest {
 		game.placeBuildingAt(b, 15, 15);
 		//
 
-		assertFalse(juan.hasUnitAt(0, 0));
-		assertFalse(juan.hasUnitAt(1, 1));
-		assertTrue(juan.hasUnitAt(15, 15));
+		PlayerUnits objects = juan.getUnits();
+		assertFalse(objects.hasUnitAt(0, 0));
+		assertFalse(objects.hasUnitAt(1, 1));
+		assertTrue(objects.hasUnitAt(15, 15));
 		// assertTrue(game.getTileAt(0, 0).);
 
 		// need to test
@@ -58,6 +60,13 @@ public class GameBoardTest {
 		assertFalse(game.getTileAt(18, 15).isOccupiedByBuilding());
 		assertFalse(game.getTileAt(14, 19).isOccupiedByBuilding());
 
+	}
+	
+	@Test
+	public void testAction() {
+		
+		GameBoard game = new GameBoard(200, 200, 2);
+		
 	}
 
 }
