@@ -1,8 +1,10 @@
+package com;
 import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.*;
 
+import control.GameBoard;
 import entities.Terrain;
 
 public class RunGame {

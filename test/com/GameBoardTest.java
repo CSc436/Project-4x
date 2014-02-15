@@ -1,7 +1,9 @@
+package com;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import control.GameBoard;
 import entities.Player;
 import entities.Tile;
 import entities.buildings.Barracks;
