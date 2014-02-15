@@ -6,6 +6,7 @@ import java.util.List;
 import com.server.MovingNumber;
 
 import entities.buildings.Building;
+import entities.gameboard.GameBoard;
 
 
 public class Controller implements Runnable {

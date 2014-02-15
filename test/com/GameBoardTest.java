@@ -1,13 +1,14 @@
 package com;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import control.GameBoard;
-import entities.Player;
-import entities.Tile;
+import control.Player;
 import entities.buildings.Barracks;
 import entities.buildings.Building;
+import entities.gameboard.GameBoard;
 import entities.units.Infantry;
 import entities.units.Unit;
 

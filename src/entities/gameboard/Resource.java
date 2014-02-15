@@ -1,4 +1,4 @@
-package entities;
+package entities.gameboard;
 public enum Resource {
 	//  weighted none resources
 	// independent weights per resource

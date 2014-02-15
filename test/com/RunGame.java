@@ -4,8 +4,8 @@ import java.awt.Graphics;
 
 import javax.swing.*;
 
-import control.GameBoard;
-import entities.Terrain;
+import entities.gameboard.GameBoard;
+import entities.gameboard.Terrain;
 
 public class RunGame {
 

@@ -1,6 +1,7 @@
-package entities;
+package entities.gameboard;
 
-import entities.Resource;
+import control.Player;
+
 
 /**
  * 

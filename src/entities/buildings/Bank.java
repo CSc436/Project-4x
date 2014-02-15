@@ -1,4 +1,9 @@
-package entities;
+package entities.buildings;
+
+import java.util.HashMap;
+
+import control.Player;
+import entities.gameboard.Resource;
 
 
 public class Bank extends ResourceBuilding{
@@ -21,5 +26,17 @@ public class Bank extends ResourceBuilding{
 	
 	public void generateResource() {
 		super.getOwner().receiveGold(super.calculateBundleAmount(bank_rateModifier));
+	}
+
+	@Override
+	protected void setActions() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public HashMap<String, String> getActions() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

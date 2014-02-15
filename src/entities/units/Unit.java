@@ -1,6 +1,7 @@
 package entities.units;
 
-import entities.Player;
+import control.Player;
+import entities.GameObject;
 
 /*
  * Programmer:  Benjamin Deininger
@@ -18,7 +19,7 @@ import entities.Player;
 // settler / worker
 // healing unit
 
-public abstract class Unit {
+public abstract class Unit extends GameObject{
 
 	private int health;
 	private Player owner;
