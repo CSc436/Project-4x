@@ -1,7 +1,7 @@
 package com.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.server.MovingNumber;
+import com.shared.MovingNumber;
 import com.shared.Request;
 
 /**
