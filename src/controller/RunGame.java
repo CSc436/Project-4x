@@ -1,3 +1,4 @@
+package controller;
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -35,9 +36,6 @@ public class RunGame {
 
 // 1391894924588
 
-/*
- * Used by gameboard for testing terrain generation and resource distribution.
- */
 class draw extends JPanel {
 
 	GameBoard game;

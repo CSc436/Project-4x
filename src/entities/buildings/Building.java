@@ -16,17 +16,18 @@ public abstract class Building {
 	// resource producing
 	// research options
 	// defense units
-	
-	
-	//garrison?
-	
+
+	// garrison?
+
 	private int maxHp;
 	private int health;
 	private Player owner; // owner of the structure
 	private int height; // height of the structure
 	private int width; // width of the structure
-	private int x = -1;
-	private int y = -1; // dimensions on the game board
+	private int x;
+	private int y; // dimensions on the game board
+	private float unitDirection;
+	private float unitSpeed;
 
 	private Queue<Unit> buildingQ = new LinkedList<Unit>();
 
