@@ -2,10 +2,12 @@ package control;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import entities.Building;
 import entities.Unit;
+import entities.buildings.Building;
 
 public class Player {
 
@@ -16,11 +18,13 @@ public class Player {
 	private int totalGold, totalWood, totalFood, totalStone, totalResearchPts;
 	private List<Unit> selectedUnits;
 	private List<Building> selectedBuildings;
+	private Set<Building> controlledBuildings;
 	
 	public Player(String alias) {
 		name = alias;
 		selectedUnits = new ArrayList<Unit>();
 		selectedBuildings = new ArrayList<Building>();
+		controlledBuildings = new HashSet<Building>();
 
 	}
 	
@@ -42,13 +46,17 @@ public class Player {
 		selectedUnits.add(unit);
 	}
 	
-	public HashMap<String, String> possibleActions() {
-		HashMap<String, String> temp = new HashMap<String, String>();
-		
-	}
+//	public HashMap<String, String> possibleActions() {
+//		HashMap<String, String> temp = new HashMap<String, String>();
+//		
+//	}
 	
 	public void selectBuilding(Building building) {
 		selectedBuildings.add(building);
+	}
+	
+	public Set<Building> getBuildings() {
+		return controlledBuildings;
 	}
 	
 	/*
@@ -163,6 +171,8 @@ public class Player {
 	public int getTotalResearchPts(){
 		return totalResearchPts;
 	}
+	
+	
 	
 	
 	

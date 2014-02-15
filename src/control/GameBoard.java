@@ -1,13 +1,10 @@
 package control;
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
-import entities.Player;
 import entities.Resource;
 import entities.Tile;
 import entities.buildings.Building;
-import entities.units.Infantry;
 import entities.units.Unit;
 
 /* 

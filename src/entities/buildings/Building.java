@@ -3,10 +3,11 @@ package entities.buildings;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import entities.Player;
+import control.Player;
+import entities.GameObject;
 import entities.units.Unit;
 
-public abstract class Building {
+public abstract class Building extends GameObject{
 
 	// buildings will be > 1 tile
 
@@ -36,7 +37,6 @@ public abstract class Building {
 		owner = p;
 		height = h;
 		width = w;
-		owner.addBuilding(this);
 
 	}
 

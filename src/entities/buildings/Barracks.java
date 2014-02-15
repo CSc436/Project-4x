@@ -1,12 +1,27 @@
 package entities.buildings;
 
-import entities.Player;
+import java.util.HashMap;
+
+import control.Player;
+
 
 public class Barracks extends Building {
 
 	public Barracks(Player p, int h, int w, int hp) {
 		super(p, h, w, hp);
 
+	}
+
+	@Override
+	protected void setActions() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public HashMap<String, String> getActions() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
