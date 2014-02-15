@@ -61,6 +61,7 @@ public class Player {
 		for (int c = 0; c < buildings.size(); c++) {
 			if (buildings.get(c).getX() == x && buildings.get(c).getY() == y)
 				return true;
+			
 		}
 		return false;
 

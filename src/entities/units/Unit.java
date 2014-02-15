@@ -26,8 +26,10 @@ public abstract class Unit {
 	private int augment;
 	private int maxHp;
 	private int movementRange;
-	private int x;
-	private int y;
+	private float unitDirection;
+	private float unitSpeed;
+	private float x;
+	private float y;
 
 	public Unit(Player p, int hp, int bDmg, int mR, int xco, int yco) {
 
@@ -42,11 +44,11 @@ public abstract class Unit {
 
 	}
 
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 
