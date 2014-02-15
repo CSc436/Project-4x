@@ -1,13 +1,13 @@
 package control;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import entities.Unit;
 import entities.buildings.Building;
+import entities.buildings.ResourceBuilding;
+import entities.units.Unit;
 
 public class Player {
 
@@ -18,13 +18,13 @@ public class Player {
 	private int totalGold, totalWood, totalFood, totalStone, totalResearchPts;
 	private List<Unit> selectedUnits;
 	private List<Building> selectedBuildings;
-	private Set<Building> controlledBuildings;
+	private Set<ResourceBuilding> resourceBuildings;
 	
 	public Player(String alias) {
 		name = alias;
 		selectedUnits = new ArrayList<Unit>();
 		selectedBuildings = new ArrayList<Building>();
-		controlledBuildings = new HashSet<Building>();
+		resourceBuildings = new HashSet<ResourceBuilding>();
 
 	}
 	
@@ -55,8 +55,8 @@ public class Player {
 		selectedBuildings.add(building);
 	}
 	
-	public Set<Building> getBuildings() {
-		return controlledBuildings;
+	public Set<ResourceBuilding> getResourceBuildings() {
+		return resourceBuildings;
 	}
 	
 	/*

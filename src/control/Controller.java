@@ -51,7 +51,7 @@ public class Controller implements Runnable {
 
 	private void produceResources() {
 		for(Player player : players) {
-			for (Building building : player.getBuildings()) {
+			for (Building building : player.getResourceBuildings()) {
 				building.gen
 			}
 		}
