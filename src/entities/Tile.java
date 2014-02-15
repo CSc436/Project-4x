@@ -31,16 +31,16 @@ public class Tile {
 												// tile is occupied by buliding.
 
 	// Resource Base Amounts - 'Average' amount a tile contiaining resource X will start with
-	private static int foodBase  = 200; 
-	private static int woodBase  = 100; 
-	private static int stoneBase = 300; 
-	private static int goldBase  = 500; 
+	private static final int foodBase  = 200; 
+	private static final int woodBase  = 100; 
+	private static final int stoneBase = 300; 
+	private static final int goldBase  = 500; 
 	
 	// Resource Regeneration rates - how much of resource will regenerate during each 'Tick'
-	private static float foodReg  = 1.100f; 
-	private static float woodReg  = 1.300f; 
-	private static float stoneReg = 1.050f; 
-	private static float goldReg  = 1.025f; 
+	private static final float foodReg  = 1.100f; 
+	private static final float woodReg  = 1.300f; 
+	private static final float stoneReg = 1.050f; 
+	private static final float goldReg  = 1.025f; 
 	
 
 
@@ -147,6 +147,19 @@ public class Tile {
 		}
 	}
 	
+	/*
+	 * setResourceAmount():
+	 * Description:
+	 * Sets the base amount of a resource for a tile. Values based on 
+	 * constants described at top of file.
+	 * TODO in future add ability to fluctuate start vlaues. 
+	 * 
+	 * Parameters:
+	 * @param Resource r - resource this tile will contain
+	 * 
+	 * Return value:
+	 * @return the amount of resource this tile is set to. 
+	 */
 	public int setResourceAmount(Resource r)
 	{
 		// TODO add noise. fluctuate starting amounts
@@ -174,12 +187,28 @@ public class Tile {
 		return this.resourceAmount; 
 	}
 	
+	/*
+	 * generateResource():
+	 * Description:
+	 * regenerates resource for given tile. Should be called once a 'Tick'
+	 */
 	public void generateResource()
 	{
 		this.resourceAmount *= this.resourceReg;
 	}
 	
-	// TODO add 'remove resource amount' function - return int of # resources gathered
+	/*
+	 * takeResource():
+	 * Description:
+	 * If current tile has a resource, allow player to take up to amount given. 
+	 * TODO: possibly add parameter that is resource they are trying to take? 
+	 * 
+	 * Parameters:
+	 * @param int amount - amount of resource unit/player is trying to take
+	 * 
+	 * Return value:
+	 * @return amount taken; can be 0 - amount (inclusive). 
+	 */
 	public int takeResources(int amount)
 	{
 		int res;

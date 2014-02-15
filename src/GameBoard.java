@@ -31,10 +31,10 @@ public class GameBoard {
 	private int numTiles; 						// Stores number of tiles contained within gameboard
 	
 	// Resource distribution constants - percentage of board that should contain X resource
-	private static float foodMult  = 0.050f;  	// 10% of tiles should have natural food (water can have food in form of fish)
-	private static float woodMult  = 0.050f; 	// 10% of tiles should have wood
-	private static float stoneMult = 0.050f; 	// 10% is stone
-	private static float goldMult  = 0.002f; 	// 5% is gold
+	private static float foodMult  = 0.050f;  	// 5% of tiles that can support food have food
+	private static float woodMult  = 0.050f; 	// 5% of tiles that can support wood have wood
+	private static float stoneMult = 0.050f; 	// 5% of tiles that can support stone have stone
+	private static float goldMult  = 0.002f; 	// 0.2% of tiles that can support gold have gold
 	
 	/*
 	 * GameBoard():
