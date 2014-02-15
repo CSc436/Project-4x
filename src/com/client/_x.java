@@ -1,5 +1,7 @@
 package com.client;
 
+import java.text.DecimalFormat;
+
 import com.shared.DecrementRequest;
 import com.shared.FieldVerifier;
 import com.shared.IncrementRequest;
@@ -12,6 +14,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -32,7 +35,10 @@ public class _x implements EntryPoint {
 			+ "attempting to contact the server. Please check your network "
 			+ "connection and try again.";
 	
-	private MovingNumber theNumber;
+	private MovingNumber nextNumber = new MovingNumber();
+	private long lastUpdateTime;
+	private MovingNumber lastNumber = new MovingNumber();
+	private double interpVal;
 	private int turnNumber = 0;
 	private int lastTurn = 0;
 
@@ -116,14 +122,8 @@ public class _x implements EntryPoint {
 			private void sendSimulationRequest(Request r) {
 				// First, we validate the input.
 				errorLabel.setText("");
-				String textToServer = nameField.getText();
-				if (!FieldVerifier.isValidName(textToServer)) {
-					errorLabel.setText("Please enter at least four characters");
-					return;
-				}
 
 				// Then, we send the input to the server.
-				textToServerLabel.setText(textToServer);
 				serverResponseLabel.setText("");
 				r.setScheduledTurn(turnNumber+1);
 				r.setLastTurnReceived(lastTurn);
@@ -157,6 +157,7 @@ public class _x implements EntryPoint {
 			@Override
 			public void onSuccess(String result) {
 				// TODO Auto-generated method stub
+				System.out.println("Simulation started");
 			}
 			
 		});
@@ -171,12 +172,15 @@ public class _x implements EntryPoint {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						
+						System.out.println("Unable to receive simulation state");
 					}
 
 					@Override
 					public void onSuccess(MovingNumber result) {
-						theNumber = result;
+						lastNumber = nextNumber;
+						nextNumber = result;
+						lastUpdateTime = System.currentTimeMillis();
+
 					}
 					
 				});
@@ -185,5 +189,18 @@ public class _x implements EntryPoint {
 		};
 		
 		pollTimer.scheduleRepeating(200);
+		
+		Timer renderTimer = new Timer() {
+
+			@Override
+			public void run() {
+				interpVal = lastNumber.value + (System.currentTimeMillis() - lastUpdateTime) * (nextNumber.value - lastNumber.value) / 200.0;
+				String numString = NumberFormat.getFormat("###0.0000").format(interpVal);
+				numberLabel.setText(numString);
+			}
+			
+		};
+		
+		renderTimer.scheduleRepeating(33);
 	}
 }

@@ -19,6 +19,7 @@ public class Model implements Runnable {
 			simulateFrame();
 			
 			while(System.currentTimeMillis() < startTime + timeStep);
+			lastEndTime = System.currentTimeMillis();
 		}
 		
 	}
@@ -40,7 +41,7 @@ public class Model implements Runnable {
 	}
 
 	public void decrement() {
-		number.decrement();;
+		number.decrement();
 	}
 	
 	public MovingNumber getNumber() {

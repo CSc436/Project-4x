@@ -39,6 +39,8 @@ public class MovingNumber implements Serializable {
 			value -= velocity * timeStep / 1000.0;
 			value = value < targetValue ? targetValue : value ;
 		}
+		
+		System.out.println(value);
 	}
 	
 	public boolean canIncrement() {

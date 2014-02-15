@@ -22,16 +22,6 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 	ConcurrentLinkedDeque<Request> requestQueue = new ConcurrentLinkedDeque<Request>();
 
 	public Request[] sendRequest(Request input) throws IllegalArgumentException {
-		// Verify that the input is valid.
-
-		String serverInfo = getServletContext().getServerInfo();
-		String userAgent = getThreadLocalRequest().getHeader("User-Agent");
-		
-		
-
-		// Escape data from the client to avoid cross-site script vulnerabilities.
-		userAgent = escapeHtml(userAgent);
-		
 		input.executeOn(m);
 
 		return new Request[] {input};
