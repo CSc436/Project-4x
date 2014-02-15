@@ -130,11 +130,11 @@ public class GameBoard {
 		{
 			r   = Math.abs(rnd.nextInt());
 			rp  = r % 3;
-			rpp = r % terrainList.get(rp).size();
 			if (terrainList.get(rp).size() == 0)
 			{
 				continue;
 			}
+			rpp = r % terrainList.get(rp).size();
 			do
 			{
 				if (terrainList.get(r % 3).size() == 0)
