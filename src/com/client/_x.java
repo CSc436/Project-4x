@@ -1,32 +1,25 @@
 package com.client;
 
-import com.shared.FieldVerifier;
+import java.util.HashSet;
+
 import com.client.matrixutils.FloatMatrix;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.googlecode.gwtgl.array.Float32Array;
 import com.googlecode.gwtgl.binding.WebGLBuffer;
 import com.googlecode.gwtgl.binding.WebGLProgram;
@@ -38,6 +31,7 @@ import com.googlecode.gwtgl.binding.WebGLUniformLocation;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
+
 public class _x implements EntryPoint {
 	private WebGLRenderingContext glContext;
 	private WebGLProgram shaderProgram;
@@ -46,6 +40,8 @@ public class _x implements EntryPoint {
 	private WebGLBuffer vertexBuffer, texCoordBuffer;
 	private static int WIDTH, HEIGHT;
 	private static long startTime;
+	private float camX = 0.0f, camY= 2.0f, camZ = 2.0f;
+	private HashSet<Integer> pressed = new HashSet<Integer>();
 
 	public void onModuleLoad() {
 		final Canvas webGLCanvas = Canvas.createIfSupported();
@@ -68,6 +64,26 @@ public class _x implements EntryPoint {
 		
 		glContext.viewport(0, 0, WIDTH, HEIGHT);
 		
+		webGLCanvas.addKeyDownHandler(new KeyDownHandler(){
+
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				// TODO Auto-generated method stub
+				pressed.add(event.getNativeKeyCode());
+			}
+			
+		});
+		
+		webGLCanvas.addKeyUpHandler(new KeyUpHandler(){
+
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				// TODO Auto-generated method stub
+				pressed.remove(event.getNativeKeyCode());
+			}
+
+		});
+		
 		// Resize callback
 		Window.addResizeHandler(new ResizeHandler() {
 			@Override
@@ -87,6 +103,22 @@ public class _x implements EntryPoint {
 		start();
 	}
 
+	private void updateCamera() {
+		// TODO Auto-generated method stub
+		for (int i : pressed)
+			switch(i){
+				case KeyCodes.KEY_W:	camY -= 0.1f;
+										break;
+				case KeyCodes.KEY_S: 	camY += 0.1f;
+										break;
+				case KeyCodes.KEY_A:	camX += 0.1f;
+										break;
+				case KeyCodes.KEY_D: 	camX -= 0.1f;
+										break;
+				default:				break;
+			}
+	}
+	
 	private void start() {
 		initShaders();
 		glContext.clearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -99,7 +131,8 @@ public class _x implements EntryPoint {
 	    Timer t = new Timer() {
 	        @Override
 	        public void run() {
-	          drawScene();
+	        	updateCamera();
+	        	drawScene();
 	        }
 	      };
 	    t.scheduleRepeating(16);
@@ -134,7 +167,6 @@ public class _x implements EntryPoint {
 			@Override
 			public void onLoad(LoadEvent event) {
 				RootPanel.get().remove(img);
-
 			}
 		});
 		img.setVisible(false);
@@ -215,14 +247,14 @@ public class _x implements EntryPoint {
 		float time = (System.currentTimeMillis() - startTime) / 1000.0f;
 
 		// create perspective matrix
-		float[] perspectiveMatrix = FloatMatrix.createCameraMatrix(
-				0.0f, 0.0f,time, 0.0f, 0.0f, -10.0f * (float)Math.abs(Math.sin(time/100.0)),
-				45, 1, 0.1f, 1000000f).columnWiseData();//createPerspectiveMatrix(45, 1, 0.1f, 1000);
+		float[] cameraMatrix = FloatMatrix.createCameraMatrix(
+				0.0f, 0.785398163f, 0.0f, 45, (float)WIDTH/(float)HEIGHT, 0.1f, 1000000f).columnWiseData();//createPerspectiveMatrix(45, 1, 0.1f, 1000);
+		
 		WebGLUniformLocation uniformLocation = glContext.getUniformLocation(
 				shaderProgram, "perspectiveMatrix");
 
 		// vertices
-		glContext.uniformMatrix4fv(uniformLocation, false, perspectiveMatrix);
+		glContext.uniformMatrix4fv(uniformLocation, false, cameraMatrix);
 		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, vertexBuffer);
 		glContext.vertexAttribPointer(vertexPositionAttribute, 3,
 				WebGLRenderingContext.FLOAT, false, 0, 0);
@@ -233,11 +265,8 @@ public class _x implements EntryPoint {
 		glContext.vertexAttribPointer(vertexTexCoordAttrib, 2,
 				WebGLRenderingContext.FLOAT, false, 0, 0);
 
-		// texture data
-		//glContext.activeTexture(glContext.TEXTURE0);
-		//glContext.bindTexture(glContext.TEXTURE_2D, texture);
-/*		glContext.uniform1i(
-				glContext.getUniformLocation(shaderProgram, "texture"), 0);*/
+		// uniforms
+		glContext.uniform3f(glContext.getUniformLocation(shaderProgram, "camPos"), camX, camY, -camZ);
 		glContext.uniform2f(
 				glContext.getUniformLocation(shaderProgram, "resolution"), (float)WIDTH, (float)HEIGHT);
 		glContext.uniform1f(
@@ -248,7 +277,7 @@ public class _x implements EntryPoint {
 		glContext.flush();
 	}
 
-	private float[] createPerspectiveMatrix(int fieldOfViewVertical,
+	/*private float[] createPerspectiveMatrix(int fieldOfViewVertical,
 			float aspectRatio, float minimumClearance, float maximumClearance) {
 		float top = minimumClearance
 				* (float) Math.tan(fieldOfViewVertical * Math.PI / 360.0);
@@ -269,5 +298,5 @@ public class _x implements EntryPoint {
 								0.0f, 	Y, 		B, 	0.0f, 
 								0.0f, 	0.0f, 	C, 	-1.0f, 
 								0.0f, 	0.0f, 	D, 	0.0f };
-	}
+	}*/
 }

@@ -59,6 +59,16 @@ public class FloatMatrix {
 		return result;
 	}
 	
+	public static FloatMatrix flipXZMatrix(){
+		float [][] data = {
+				{0.0f,	0.0f,	1.0f,	0.0f},
+				{0.0f,	1.0f,	0.0f,	0.0f},
+				{1.0f,	0.0f,	0.0f,	0.0f},
+				{0.0f,	0.0f,	0.0f,	1.0f}
+		};
+		return new FloatMatrix(data);
+	}
+	
 	/**
 	 * Creates a transformation matrix
 	 * <p>
@@ -74,25 +84,22 @@ public class FloatMatrix {
 	 * @param z		z component of translation
 	 * @return		a {@link FloatMatrix} transformation
 	 */
-	private static FloatMatrix createTransformationMatrix(	float roll, float pitch, float yaw, 
-													float x, float y, float z){
-		float cosRoll = (float) Math.cos(roll); 
-		float sinRoll = (float) Math.sin(roll);
-		float cosPitch = (float) Math.cos(pitch); 
-		float sinPitch = (float) Math.sin(pitch);
-		float cosYaw = (float) Math.cos(yaw); 
-		float sinYaw = (float) Math.sin(yaw);
+	private static FloatMatrix createRotationMatrix(float roll, float pitch, float yaw){
+		float sinA = (float)Math.sin(roll); float cosA = (float)Math.cos(roll);
+		float sinB = (float)Math.sin(yaw); float cosB = (float)Math.cos(yaw);
+		float sinY = (float)Math.sin(pitch); float cosY = (float)Math.cos(pitch);
 		
 		float[][] data = {
-				{cosYaw * cosPitch,	cosYaw * sinPitch * sinRoll	- sinYaw * cosRoll,	cosYaw * sinPitch * cosRoll + sinYaw * sinRoll, -x  },
-				{sinYaw * cosPitch,	sinYaw * sinPitch * sinRoll + cosYaw * cosRoll, sinYaw * sinPitch * cosRoll - cosYaw * sinRoll, -y  },
-				{- sinPitch,		cosPitch * sinRoll,								cosPitch * cosRoll,								-z  },
-				{0.0f,				0.0f,											0.0f,											1.0f}
+				{cosA*cosB,		cosA*sinB*sinY - sinA*cosY,		cosA*sinB*cosY + sinA*sinY, 	0.0f},
+				{sinA*cosB,		sinA*sinB*sinY + cosA*cosY,		sinA*sinB*cosY - cosA*sinY, 	0.0f},
+				{-sinB,			cosB*sinY,						cosB*cosY,					 	0.0f},
+				{0.0f,			0.0f,							0.0f,						 	1.0f}
 		};
+		
 		return new FloatMatrix(data);
 	}
 	
-	private static FloatMatrix createPerspectiveMatrix(int fieldOfViewVertical,
+	public static FloatMatrix createPerspectiveMatrix(int fieldOfViewVertical,
 			float aspectRatio, float nearPlane, float farPlane) {
 		float top = nearPlane
 				* (float) Math.tan(fieldOfViewVertical * Math.PI / 360.0);
@@ -119,17 +126,80 @@ public class FloatMatrix {
 	}
 	
 	public static FloatMatrix createCameraMatrix(	float roll, float pitch, float yaw,
-											float x,	float y,	float z,
-											int fov, float aspectRatio, float near, float far){
+													int fov, float aspectRatio, float near, float far){
 		
-		return FloatMatrix.multiply(createPerspectiveMatrix(fov, aspectRatio, near, far), createTransformationMatrix(roll, pitch, yaw, x, y, z));
+		return FloatMatrix.multiply(createRotationMatrix(roll, pitch, yaw), createPerspectiveMatrix(fov, aspectRatio, near, far));
 	}
+	
+	public static FloatMatrix translationMatrix(float x, float y, float z){
+		float[][] data= {
+				{1.0f,	0.0f,	0.0f,	x},
+				{0.0f,	1.0f,	0.0f,	y},
+				{0.0f,	0.0f,	1.0f,	z},
+				{0.0f,	0.0f,	0.0f,	1.0f}
+		};
+		
+		return new FloatMatrix(data);
+	}
+	
+	public static FloatMatrix rotMatrixX(float angle){ // pitch
+		float sinAngle = (float)Math.sin(angle);
+		float cosAngle = (float)Math.cos(angle);
+		
+		float[][] data = {
+				{1.0f,	0.0f,		0.0f, 		0.0f},
+				{0.0f,	cosAngle, -sinAngle, 	0.0f},
+				{0.0f,	sinAngle, cosAngle, 	0.0f},
+				{0.0f,	0.0f,		0.0f,		1.0f}
+		};
+		
+		return new FloatMatrix(data);
+	}
+	
+	public static FloatMatrix rotMatrixY(float angle){ // yaw
+		float sinAngle = (float)Math.sin(angle);
+		float cosAngle = (float)Math.cos(angle);
+		
+		float[][] data = {
+				{cosAngle,	0.0f,	sinAngle, 	0.0f},
+				{0.0f,	 	1.0f,	0.0f,		0.0f},
+				{-sinAngle,	0.0f,	cosAngle,	0.0f},
+				{0.0f,		0.0f,	0.0f,		1.0f}
+		};
+		
+		return new FloatMatrix(data);
+	}
+	
+	public static FloatMatrix rotMatrixZ(float angle){ // roll
+		float sinAngle = (float)Math.sin(angle);
+		float cosAngle = (float)Math.cos(angle);
+		
+		float[][] data = {
+				{cosAngle,	-sinAngle, 	0.0f,	0.0f},
+				{sinAngle,	cosAngle, 	0.0f,	0.0f},
+				{0.0f,		0.0f,		1.0f,	0.0f},
+				{0.0f,		0.0f,		0.0f,	1.0f}
+		};
+		
+		return new FloatMatrix(data);
+	}
+	
+	
 	
 	public float [] columnWiseData(){
 		float [] result = new float[ROWS * COLS];
 		int i = 0;
 		for (int r = 0; r < ROWS; r++)
 			for (int c = 0; c < COLS; c++)
+				result[i++] = data[r][c];
+		return result;
+	}
+	
+	public float[] rowWiseData(){
+		float [] result = new float[ROWS * COLS];
+		int i = 0;
+		for (int c = 0; c < COLS; c++)
+			for (int r = 0; r < ROWS; r++)
 				result[i++] = data[r][c];
 		return result;
 	}
@@ -151,21 +221,6 @@ public class FloatMatrix {
 	}
 	
 	public static void main(String[] args){
-/*		FloatMatrix first = new FloatMatrix(2, 2);
-		float [][] data = {	{1, 2}, 
-							{3, 4}	};
-		first.setData(data);
-		
-		float [][] data2 = {	{1, 2, 3}, 
-								{4, 5, 6}	};
-
-		System.out.printf("(%s, %s)\n", data2.length, data2[0].length);
-		FloatMatrix second = new FloatMatrix(2, 3);
-		second.setData(data2);
-		
-		System.out.println(first + "\n" + second);
-		System.out.println(FloatMatrix.multiply(first, second));*/
-		
-		System.out.println(FloatMatrix.createCameraMatrix(0.0f, 0.0f, 0.0f, 0.0f,0.0f, 0.0f, 60, 16.0f/9.0f, 1.0f, 1000.0f).columnWiseData());
+		System.out.println(FloatMatrix.createCameraMatrix(0.0f, 0.0f, 0.0f, 60, 16.0f/9.0f, 1.0f, 1000.0f));
 	}
 }
