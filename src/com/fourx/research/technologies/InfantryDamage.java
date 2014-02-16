@@ -1,6 +1,6 @@
 package com.fourx.research.technologies;
 
-import com.fourx.buffs.TYPE;
+import com.fourx.buffs.UnitType;
 import com.fourx.research.Technology;
 import com.fourx.resources.Resources;
 
@@ -22,7 +22,7 @@ public class InfantryDamage extends Technology {
 		time[0] = 50;
 		time[1] = 90;
 		time[2] = 180;
-		appliesTo.add(TYPE.INFANTRY);
+		appliesTo.add(UnitType.INFANTRY);
 	}
 	
 	@Override

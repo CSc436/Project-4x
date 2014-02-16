@@ -3,14 +3,14 @@ package com.fourx.research;
 import java.util.ArrayList;
 
 import com.fourx.buffs.BuffStats;
-import com.fourx.buffs.TYPE;
+import com.fourx.buffs.UnitType;
 import com.fourx.resources.Resources;
 
 import control.Player;
 
 public abstract class Technology {
 	protected ArrayList<TechnologyEnum> requirements;
-	protected ArrayList<TYPE> appliesTo;
+	protected ArrayList<UnitType> appliesTo;
 	
 	protected int current_level;
 	private int max_level;
@@ -20,7 +20,7 @@ public abstract class Technology {
 	
 	public Technology(int max_levels) {
 		requirements = new ArrayList<TechnologyEnum>();
-		appliesTo = new ArrayList<TYPE>();
+		appliesTo = new ArrayList<UnitType>();
 		current_level = 1;
 		
 		// Multi-level stuff
@@ -34,7 +34,7 @@ public abstract class Technology {
 	}
 	
 	public ArrayList<TechnologyEnum> getRequirements(){ return requirements; };
-	public ArrayList<TYPE> getAppliesTo(){ return appliesTo; };
+	public ArrayList<UnitType> getAppliesTo(){ return appliesTo; };
 	
 	public BuffStats getStats(){ return buffstats[current_level - 1]; }
 	public Resources getCost() { return costs[current_level - 1]; }

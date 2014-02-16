@@ -2,9 +2,13 @@ package entities.units;
 
 import java.util.PriorityQueue;
 
+import com.fourx.buffs.UnitType;
+
 import control.Player;
 import entities.Action;
+import entities.BaseStatsEnum;
 import entities.GameObject;
+import entities.UnitStats;
 
 /*
  * Programmer:  Benjamin Deininger
@@ -24,28 +28,35 @@ import entities.GameObject;
 
 public abstract class Unit extends GameObject {
 
-	// TODO: wrap into a buff stat class
-	private int health;
 	private Player owner;
-	private int baseDmg;
-	private int augment;
-	private int maxHp;
-	private int movementRange;
+
+	private UnitType type = UnitType.INFANTRY;
+	private BaseStatsEnum baseStats;
+
+	private UnitStats stats;
+
 	private int x;
 	private int y;
 	private PriorityQueue<Action> actionQueue;
 
-	public Unit(Player p, int hp, int bDmg, int mR, int xco, int yco) {
+	public Unit(Player p, BaseStatsEnum baseStats, UnitType type, int xco,
+			int yco) {
+		this.baseStats = baseStats;
+		this.type = type;
+		updateStats();
 
-		maxHp = health = hp;
 		owner = p;
-		baseDmg = bDmg;
-		movementRange = mR;
 		p.getUnits().addUnit(this);
 		actionQueue = new PriorityQueue<Action>();
 		x = xco;
 		y = yco;
+	}
 
+	/**
+	 * called to reset the stats of the unit to (basestats + upgrades)
+	 */
+	public void updateStats() {
+		stats = baseStats.augment(stats, type.getStats(owner));
 	}
 
 	public int getX() {
@@ -56,72 +67,78 @@ public abstract class Unit extends GameObject {
 		return y;
 	}
 
+	/**
+	 * 
+	 * @param b - x coordinate of the unit.
+	 * @param c - y coordinate of the unit.
+	 */
 	public void setLocation(int b, int c) {
 		x = b;
 		y = c;
 	}
 
-	public void setAugment(int n) {
-		augment = n;
-
-	}
-
-	public void setMovementRange(int newMR) {
-		movementRange = newMR;
-	}
-
-	public int getMovementRange() {
-		return movementRange;
-	}
-
-	public int getDamage() {
-		return baseDmg + augment;
-	}
-
-	// set health
-	// return true or false if the unit is dead
+	/**
+	 * 
+	 * @param n - set the health of the Unit to the specified amount.
+	 * @return - whether the unit is still alive.
+	 */
 	public boolean setHealth(int n) {
+		stats.health = n;
+		if (stats.health > stats.max_health)
+			stats.health = stats.max_health;
 
-		health = n;
-		if (health > maxHp)
-			health = maxHp;
-
-		if (health <= 0)
+		if (stats.health <= 0)
 			return false;
 		else
 			return true;
 
 	}
 
-	// negative n will be damage
-	// positive will be healing
-
+	/**
+	 * 
+	 * @param n
+	 *            - the amount of health to modify the unit by. can be a
+	 *            negative amount to specify damage.
+	 * @return - whether the unit is still alive.
+	 */
 	public boolean modifyHealth(int n) {
 
-		health = health + n;
-		if (health > maxHp)
-			health = maxHp;
+		stats.health = stats.health + n;
+		if (stats.health > stats.max_health)
+			stats.health = stats.max_health;
 
-		if (health <= 0)
+		if (stats.health <= 0)
 			return false;
 		else
 			return true;
 
 	}
 
-	// GET / SET
-	public int getHealth() {
-		return health;
+	/**
+	 * 
+	 * @return - the current health of the Unit.
+	 */
+	public float getHealth() {
+		return stats.health;
 	}
 
 	public Player getOwner() {
 		return owner;
 	}
 
+	/**
+	 * 
+	 * @param a
+	 *            - add an action to the PriorityQueue to be performed during
+	 *            the turn.
+	 */
 	public void addAction(Action a) {
 		actionQueue.add(a);
 	}
 
+	/**
+	 * Logic to handle actions that the Unit may do.
+	 */
 	public void performActions() {
 		while (!actionQueue.isEmpty()) {
 			Action a = actionQueue.poll();

@@ -48,7 +48,7 @@ class draw extends JPanel {
 	}
 
 	public void paintComponent(Graphics g) {
-
+		long start = System.currentTimeMillis();
 		for (int r = 0; r < game.getRows(); r++) {
 			for (int c = 0; c < game.getCols(); c++) {
 				if (game.getTileAt(r, c).getResource() == Resource.FOOD) {
@@ -78,7 +78,7 @@ class draw extends JPanel {
 
 			}
 		}
-
+		long end = System.currentTimeMillis();
+		System.out.println("JPanel Setup Time: " + (end - start));
 	}
-
 }

@@ -2,7 +2,10 @@ package entities.units;
 
 import java.util.HashMap;
 
+import com.fourx.buffs.UnitType;
+
 import control.Player;
+import entities.BaseStatsEnum;
 
 
 /*
@@ -14,7 +17,7 @@ import control.Player;
 public class Infantry extends Unit {
 
 	public Infantry(Player p, int x, int y) {
-		super(p, 100, 2, 1, x, y);
+		super(p, BaseStatsEnum.FOOTMAN, UnitType.INFANTRY, x, y);
 	}
 
 	@Override

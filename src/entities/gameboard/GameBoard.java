@@ -1,10 +1,10 @@
 package entities.gameboard;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
 
 import com.fourx.civilizations.PerfectCivilization;
+import com.fourx.util.Point;
 
 import control.Player;
 import entities.buildings.Building;
