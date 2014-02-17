@@ -121,7 +121,7 @@ public abstract class Agent extends Unit{
 	/*
 	 * commandUnit():
 	 * Description:
-	 * 
+	 * Issues command to a given unit? TODO 
 	 */
 	private void commandUnit(Unit u)
 	{

@@ -2,6 +2,7 @@ package controller;
 import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
 
 import entities.Player;
@@ -31,11 +32,13 @@ public class GameBoard {
 	private float averageHeight = 0f; // Stores the average height of the noise
 										// map.
 
-	private static float foodMult  = 0.050f;  	// 5% of tiles that can support food have food
-	private static float woodMult  = 0.050f; 	// 5% of tiles that can support wood have wood
-	private static float stoneMult = 0.050f; 	// 5% of tiles that can support stone have stone
-	private static float goldMult  = 0.002f; 	// 0.2% of tiles that can support gold have gold
+	private static final float foodMult  = 0.050f;  	// 5% of tiles that can support food have food
+	private static final float woodMult  = 0.20f; 	// 5% of tiles that can support wood have wood
+	private static final float stoneMult = 0.050f; 	// 5% of tiles that can support stone have stone
+	private static final float goldMult  = 0.002f; 	// 0.2% of tiles that can support gold have gold
 	
+	
+	// Note: need to call a distribute resource function in order to distribute resources on map
 	public GameBoard(int row, int col, int numPlayers) {
 		rows = row;
 		cols = col;
@@ -86,147 +89,14 @@ public class GameBoard {
 		}
 		System.out.println("Height Adjust: " + heightAdjust + "\n");
 
-		// ---------------------------------------------------------------------------------------------
-		// Default all to NONE. Then create distributions of all other
-		// resources.
-		ArrayList<ArrayList<Point>> terrainList = new ArrayList<ArrayList<Point>>();
-		for (int i = 0; i < 6; i++)
-		{
-			terrainList.add(new ArrayList<Point>());
-		}
-		
-		
 		for (int c = 0; c < cols; c++) {
 			for (int r = 0; r < rows; r++) {
-
-				// give the tile a random resource number
-				//int resource = rand.nextInt(16);
 				float height = noisemap[r][c];
-
 				map[r][c] = new Tile(Resource.NONE, height + heightAdjust); // Use the adjusted height to create the tile
-				terrainList.get(map[r][c].getTerrainType().ordinal()).add(new Point(r, c));
 			}
-			// System.out.println();
-		}
-		
-
-		// TODO issue with this strategy, if no terrain of certain type, will never finish distributing 
-		// Resources EDIT: added quick fail safe. Still not best approach. 
-		// TODO to add clustering (More realistic). 
-		
-		// TODO instead of generating percentage of resource based on total map size, determine based 
-		// on size of 
-		Random rnd = new Random();
-		int r, rp,rpp;
-		Point temp;
-	
-		System.out.println("Base board build, distributing resources...");
-		System.out.println("Distributing food...");
-		int numFood = (int) (foodMult * (terrainList.get(Terrain.WATER.ordinal()).size() +
-				                         terrainList.get(Terrain.DIRT.ordinal()).size() +
-				                         terrainList.get(Terrain.GRASS.ordinal()).size()));
-		// food can exist in lists 0,1,2
-		while (numFood > 0)
-		{
-			r   = Math.abs(rnd.nextInt());
-			rp  = r % 3;
-			if (terrainList.get(rp).size() == 0)
-			{
-				continue;
-			}
-			rpp = r % terrainList.get(rp).size();
-			do
-			{
-				if (terrainList.get(r % 3).size() == 0)
-				{
-					break;
-				}
-				temp = terrainList.get(rp).get(rpp % terrainList.get(rp).size());
-				map[temp.x][temp.y].setResource(Resource.FOOD);
-				terrainList.get(rp).remove(rpp % terrainList.get(rp).size());
-				numFood--;
-			} while(rnd.nextBoolean());
-		}
-		
-		System.out.println("Distributing wood...");
-		int numWood = (int) (woodMult * (terrainList.get(Terrain.GRASS.ordinal()).size() +
-                                         terrainList.get(Terrain.HILL.ordinal()).size()));
-		// Wood can exist in lists 2 and 3
-		while (numWood > 0)
-		{
-			r   = Math.abs(rnd.nextInt());
-			rp  = 2 + r % 2;
-			if (terrainList.get(rp).size() == 0)
-			{
-				continue;
-			}
-			rpp = r % terrainList.get(rp).size();
-			do 
-			{
-				if ( terrainList.get(rp).size() == 0)
-				{
-					break;
-				}
-				temp = terrainList.get(rp).get(rpp % terrainList.get(rp).size());
-				map[temp.x][temp.y].setResource(Resource.WOOD);
-				terrainList.get(rp).remove(rpp % terrainList.get(rp).size());
-				numWood--;
-			} while(rnd.nextBoolean());
-		}
-		
-		System.out.println("Distributing stone...");
-		int numStone = (int) (stoneMult * (terrainList.get(Terrain.HILL.ordinal()).size() +
-                                           terrainList.get(Terrain.MOUNTAIN.ordinal()).size() + 
-                                           terrainList.get(Terrain.SNOW.ordinal()).size()));
-		// stone can exist in lists 3, 4, 5
-		while (numStone > 0)
-		{
-			r   = Math.abs(rnd.nextInt());
-			rp  = 3 + r % 3;
-			if (terrainList.get(rp).size() == 0)
-			{
-				continue;
-			}
-			rpp = r % terrainList.get(rp).size();
-			do 
-			{
-				if (terrainList.get(rp).size() == 0)
-				{
-					break;
-				}
-				temp = terrainList.get(rp).get(rpp % terrainList.get(rp).size());
-				map[temp.x][temp.y].setResource(Resource.STONE);
-				terrainList.get(rp).remove(rpp % terrainList.get(rp).size());
-				numStone--;
-			} while(rnd.nextBoolean());
-		}
-		
-		System.out.println("Distributing gold...");
-		int numGold = (int) (goldMult * (terrainList.get(Terrain.HILL.ordinal()).size() +
-                                         terrainList.get(Terrain.MOUNTAIN.ordinal()).size() + 
-                                         terrainList.get(Terrain.SNOW.ordinal()).size()));
-		while (numGold > 0)
-		{
-			r   = Math.abs(rnd.nextInt());
-			rp  = 3 + r % 3;
-			if (terrainList.get(rp).size() == 0)
-			{
-				continue;
-			}
-			rpp = r % terrainList.get(rp).size();
-			do
-			{
-				if (terrainList.get(rp).size() == 0)
-				{
-					break;
-				}
-				temp = terrainList.get(rp).get(rpp % terrainList.get(rp).size());
-				map[temp.x][temp.y].setResource(Resource.GOLD);
-				terrainList.get(rp).remove(rpp % terrainList.get(rp).size());
-				numGold--;
-			} while(rnd.nextBoolean());
 		}
 
+		
 		// TODO distribute players
 		// Based on num players
 		// 1 - place player roughly in center
@@ -240,6 +110,104 @@ public class GameBoard {
 
 	}
 
+	
+	/*
+	 * resourceDistNatural():
+	 * Description:
+	 * Default resource distribution, uses constants at top of file. 
+	 * Allocates tile types into a variety of linkedlists, attempts to perform
+	 * 'realistic' resource distribution 
+	 */
+	public void resourceDistNatural()
+	{
+		ArrayList<ArrayList<Point>> terrainList = new ArrayList<ArrayList<Point>>();
+		// Init lists for terain types 
+		for (int i = 0; i < 6; i++)
+		{
+			terrainList.add(new ArrayList<Point>());
+		}
+		
+		// Add different tiles to lists. 
+		for (int i = 0; i < map.length; i++)
+		{
+			for (int j = 0; j < map[i].length; j++)
+			{
+				terrainList.get(map[i][j].getTerrainType().ordinal()).add(new Point(i, j));				
+			}
+		}
+	
+		System.out.println("Distributing resources in Natural Fashion...");
+		System.out.println("Distributing food...");
+		int numFood = (int) (foodMult * (terrainList.get(Terrain.WATER.ordinal()).size() +
+				                         terrainList.get(Terrain.DIRT.ordinal()).size() +
+				                         terrainList.get(Terrain.GRASS.ordinal()).size()));
+		// food can exist in lists 0,1,2
+		terrainList = resourceDistNaturalHelp(terrainList, numFood, Resource.FOOD, 0, 3); 
+		
+		System.out.println("Distributing wood...");
+		int numWood = (int) (woodMult * (terrainList.get(Terrain.GRASS.ordinal()).size() +
+                                         terrainList.get(Terrain.HILL.ordinal()).size()));
+		terrainList = resourceDistNaturalHelp(terrainList, numWood, Resource.WOOD, 2, 2); 
+		// Wood can exist in lists 2 and 3
+		
+		System.out.println("Distributing stone...");
+		int numStone = (int) (stoneMult * (terrainList.get(Terrain.HILL.ordinal()).size() +
+                                           terrainList.get(Terrain.MOUNTAIN.ordinal()).size() + 
+                                           terrainList.get(Terrain.SNOW.ordinal()).size()));
+		terrainList = resourceDistNaturalHelp(terrainList, numStone, Resource.STONE, 3, 3); 
+		
+		System.out.println("Distributing gold...");
+		int numGold = (int) (goldMult * (terrainList.get(Terrain.HILL.ordinal()).size() +
+                                         terrainList.get(Terrain.MOUNTAIN.ordinal()).size() + 
+                                         terrainList.get(Terrain.SNOW.ordinal()).size()));
+		terrainList = resourceDistNaturalHelp(terrainList, numGold, Resource.GOLD, 3, 3); 
+	}
+	
+	/*
+	 * resourceDistNaturalHelp():
+	 * Description:
+	 * Distributes one given resource. 
+	 * 
+	 * Parameters:
+	 * @param terrainList - list of available terrain tiles that can have resources
+	 * @param numRes - number of specific resource to distribute
+	 * @param res - resource to distribute 
+	 * @param offset - offset in terrainList, first list this resource can appear in 
+	 * @param numLists - number of lists this resource can appear in. 
+	 * 
+	 * Return Value:
+	 * @retrun the altered terrainList
+	 */
+	private ArrayList<ArrayList<Point>> resourceDistNaturalHelp(ArrayList<ArrayList<Point>> terrainList, int numRes, Resource res, int offset, int numLists)
+	{
+		Point temp; 
+		Random rnd = new Random();
+		int r, rp, rpp; 
+		while (numRes > 0)
+		{
+			r   = Math.abs(rnd.nextInt());
+			rp  = offset + r % numLists;
+			if (terrainList.get(rp).size() == 0)
+			{
+				continue;
+			}
+			rpp = r % terrainList.get(rp).size();
+			do
+			{
+				if (terrainList.get(rp).size() == 0)
+				{
+					break;
+				}
+				temp = terrainList.get(rp).get(rpp % terrainList.get(rp).size());
+				map[temp.x][temp.y].setResource(res);
+				terrainList.get(rp).remove(rpp % terrainList.get(rp).size());
+				numRes--;
+			} while(rnd.nextBoolean());
+		}
+		return terrainList;
+	}
+	
+	
 	// -----------------------------------------------------------------------------------------
 	public int getRows() {
 		return rows;

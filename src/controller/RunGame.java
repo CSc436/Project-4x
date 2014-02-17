@@ -14,6 +14,7 @@ public class RunGame {
 	public static void main(String[] args) {
 
 		GameBoard game = new GameBoard(800, 800, 2);
+		game.resourceDistNatural();
 
 		JFrame frame = new JFrame("display");
 		frame.setVisible(true);
