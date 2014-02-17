@@ -19,6 +19,8 @@
 
   <!-- Other module inherits                                      -->
   <inherits name='com.googlecode.gwtgl.binding'/>
+  <!-- GQuery -->
+  <inherits name='com.google.gwt.query.Query'/>
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.client._x'/>
 

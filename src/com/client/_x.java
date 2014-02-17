@@ -15,6 +15,7 @@ import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -33,6 +34,13 @@ import com.googlecode.gwtgl.binding.WebGLRenderingContext;
 import com.googlecode.gwtgl.binding.WebGLShader;
 import com.googlecode.gwtgl.binding.WebGLTexture;
 import com.googlecode.gwtgl.binding.WebGLUniformLocation;
+import com.google.gwt.query.client.GQuery;
+import com.google.gwt.query.client.Function;
+import com.google.gwt.query.client.Selector;
+import com.google.gwt.query.client.Selectors;
+
+import static com.google.gwt.query.client.GQuery.*;
+import static com.google.gwt.query.client.css.CSS.*;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -83,7 +91,39 @@ public class _x implements EntryPoint {
 
 			}
 		});
+		
+		initClickHandlers();
 		start();
+	}
+	
+	private void initClickHandlers() {
+		//City Menu Button
+		$("#city-button").click(new Function() {
+			public boolean f(Event e) {
+				//Show city menu
+				$("#sidebar").animate("width:'toggle'");
+				return true; //Default return true
+			}
+		});
+		
+		//Agent Menu Button
+		$("#agent-button").click(new Function() {
+			public boolean f(Event e) {
+				//Show agent menu
+				$("#sidebar").animate("width:'toggle'");
+				return true; //Default return true
+			}
+		});
+		
+		//Sidebar close/open
+		$("#sidebar-hide").click(new Function() {
+			public boolean f(Event e) {
+				//Hide agent menu
+				$("#sidebar").animate("width:'toggle'");
+				
+				return true; //Default return true
+			}
+		});
 	}
 
 	private void start() {

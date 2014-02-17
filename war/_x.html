@@ -1,41 +1,71 @@
 <!doctype html>
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 
-    <link type="text/css" rel="stylesheet" href="_x.css">
+<!-- CSS -->
+<!-- <link type="text/css" rel="stylesheet" href="_x.css"> -->
+<!-- <link type="text/css" rel="stylesheet" href="style1.css"> -->
+<link type="text/css" rel="stylesheet" href="style2.css">
 
-    <title>Web Application Starter Project</title>
+<!-- FONTS -->
+<!-- <link href='http://fonts.googleapis.com/css?family=Russo+One' rel='stylesheet' type='text/css'> -->
+<!-- font-family: 'Russo One', sans-serif -->
+<!-- <link href='http://fonts.googleapis.com/css?family=New+Rocker' rel='stylesheet' type='text/css'> -->
+<!-- font-family: 'New Rocker', cursive; -->
+<!-- <link href='http://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'> -->
+<!-- font-family: 'Architects Daughter', cursive; -->
+<link
+	href='http://fonts.googleapis.com/css?family=Macondo+Swash+Caps|MedievalSharp|Pirata+One|Rye'
+	rel='stylesheet' type='text/css'>
+<!-- font-family: '[name]', cursive; -->
 
-    <script type="text/javascript" language="javascript" src="_x/_x.nocache.js"></script>
-    
-    <style type="text/css">
-    	body, html {
-    		width: 100%;
-    		height: 100%;
-    		border: 0px;
-    		padding: 0px;
-    		margin: 0px;
-    	}
 
-    	#gwtGL {
-    		width: 100%;
-    		height: 100%;
-    	}
-    </style>
-  </head>
-  
-  <body>
 
-    <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
-    
-    <noscript>
-      <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
-        Your web browser must have JavaScript enabled
-        in order for this application to display correctly.
-      </div>
-    </noscript>
+<title>4X Game</title>
 
-    <div id="gwtGL"></div>
-  </body>
+<script type="text/javascript" language="javascript"
+	src="_x/_x.nocache.js"></script>
+
+</head>
+
+<body>
+
+	<!-- <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe> -->
+
+	<noscript>
+		<div
+			style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
+			Your web browser must have JavaScript enabled in order for this
+			application to display correctly.</div>
+	</noscript>
+	<div id="toolbar-div">
+		<span id="banner">4X GAME</span>
+		<ul id="toolbar">
+			<li><a href="#" id="agent-button">A</a></li>
+			<li><a href="#" id="city-button">C</a></li>
+		</ul>
+	</div>
+
+	<div id="sidebar">
+		Here is some sidebar text
+		<div id="sidebar-hide">&lt;&lt;</div>
+	</div>
+
+	<div id="gwtGL"></div>
+
+	<div id="tile-info">
+		Tile info <br> More info
+	</div>
+	<div id="minimap"></div>
+
+	<script
+		src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			console.log("done");
+			
+		});
+	</script>
+</body>
 </html>

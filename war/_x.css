@@ -1,34 +1,68 @@
-/** Add css rules here for your application. */
-
-
-/** Example rules used by the template application (remove for your app) */
-h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
+body,html {
+	width: 100%;
+	height: 100%;
+	border: 0px;
+	padding: 0px;
+	margin: 0px;
 }
 
-.sendButton {
-  display: block;
-  font-size: 16pt;
+#gwtGL {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	top: 0;
+	left: 0;
 }
 
-/** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-  width: 400px;
+#toolbar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 8%;
+	min-height: 50px;
+	max-height: 60px;
+	background-color: green;
+	padding: 0;
+	margin: 0;
+	z-index: 999;
 }
 
-.dialogVPanel {
-  margin: 5px;
+#sidebar {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	height: 92%;
+	width: 350px;
+	background-color: yellow;
+	padding: 0;
+	margin: 0;
+	z-index: 999;
+	/*Probably have to set a max-height here*/
 }
 
-.serverResponseLabelError {
-  color: red;
+#tile-info {
+	position: fixed;
+	right: 0;
+	bottom: 120px;
+	width: 120px;
+	background-color: red;
+	padding: 0;
+	margin: 0;
+	height: 50px;
+	z-index: 999;
 }
 
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
+#minimap {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	height: 120px;
+	width: 120px;
+	background-color: blue;
+	padding: 0;
+	margin: 0;
+	z-index: 999;
 }
