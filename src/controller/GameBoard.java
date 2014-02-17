@@ -180,6 +180,9 @@ public class GameBoard {
 	 */
 	private ArrayList<ArrayList<Point>> resourceDistNaturalHelp(ArrayList<ArrayList<Point>> terrainList, int numRes, Resource res, int offset, int numLists)
 	{
+		if (terrainList.size() == 0)
+			return terrainList;
+		
 		Point temp; 
 		Random rnd = new Random();
 		int r, rp, rpp; 
