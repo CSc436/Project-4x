@@ -1,5 +1,6 @@
 package com.client;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.client.matrixutils.FloatMatrix;
@@ -45,6 +46,7 @@ public class _x implements EntryPoint {
 	private float camX = 0.0f, camY= 20.0f, camZ = 20.0f;
 	private boolean in = false, out = false, up = false, down = false, right = false, left = false;
 	private long time;
+	private ArrayList<Tile> tiles = new ArrayList<Tile>();
 
 	public void onModuleLoad() {
 		final Canvas webGLCanvas = Canvas.createIfSupported();
@@ -149,6 +151,11 @@ public class _x implements EntryPoint {
 		
 		cameraMatrix = FloatMatrix.createCameraMatrix(
 				0.0f, 0.785398163f, 0.0f, 45, (float)WIDTH/(float)HEIGHT, 0.1f, 1000000f).columnWiseData();
+		
+		for (int x = -3; x <= 3; x++)
+			for (int y = -3; y <= 3; y++)
+				tiles.add(new Tile(x, y, LandType.Plains, glContext));
+		
 		start();
 	}
 
@@ -174,13 +181,15 @@ public class _x implements EntryPoint {
 	}
 	
 	private void start() {
-		initShaders();
 		glContext.clearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glContext.clearDepth(1.0f);
 		glContext.enable(WebGLRenderingContext.DEPTH_TEST);
 		glContext.depthFunc(WebGLRenderingContext.LEQUAL);
-		initBuffers();
+		
 		initTexture();
+		initShaders();
+		//initBuffers();
+
 		startTime = System.currentTimeMillis();
 	    Timer t = new Timer() {
 	        @Override
@@ -210,7 +219,9 @@ public class _x implements EntryPoint {
 		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
 				WebGLRenderingContext.TEXTURE_MIN_FILTER,
 				WebGLRenderingContext.LINEAR);
-		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, null);
+	    // Bind the texture to texture unit 0
+        glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
+        glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
 		// System.out.println(texture);
 	}
 
@@ -250,8 +261,6 @@ public class _x implements EntryPoint {
 			throw new RuntimeException("Could not initialise shaders");
 		}
 
-		glContext.useProgram(shaderProgram);
-
 		vertexPositionAttribute = glContext.getAttribLocation(shaderProgram,
 				"vertexPosition");
 		vertexTexCoordAttrib = glContext.getAttribLocation(shaderProgram,
@@ -260,11 +269,6 @@ public class _x implements EntryPoint {
 		texUniform = glContext.getUniformLocation(shaderProgram, "texture");
 		matrixUniform = glContext.getUniformLocation(shaderProgram, "perspectiveMatrix");
 		camPosUniform = glContext.getUniformLocation(shaderProgram, "camPos");
-		resolutionUniform = glContext.getUniformLocation(shaderProgram, "resolution");
-		timeUniform = glContext.getUniformLocation(shaderProgram, "time");
-
-		glContext.enableVertexAttribArray(vertexPositionAttribute);
-		glContext.enableVertexAttribArray(vertexTexCoordAttrib);
 	}
 
 	private WebGLShader getShader(int type, String source) {
@@ -299,18 +303,20 @@ public class _x implements EntryPoint {
 				0.0f, 1.0f };
 		glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER,
 				Float32Array.create(colors), WebGLRenderingContext.STATIC_DRAW);
+		
+		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, null);
 	}
 
 	private void drawScene() {
 		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT
 				| WebGLRenderingContext.DEPTH_BUFFER_BIT);
 		
-		float time = (System.currentTimeMillis() - startTime) / 1000.0f;
-
-		// create perspective matrix
-				
-		//WebGLUniformLocation uniformLocation = glContext.getUniformLocation(
-		//		shaderProgram, "perspectiveMatrix");
+/*		float time = (System.currentTimeMillis() - startTime) / 1000.0f;
+		
+		glContext.useProgram(shaderProgram);
+		
+		glContext.enableVertexAttribArray(vertexPositionAttribute);
+		glContext.enableVertexAttribArray(vertexTexCoordAttrib);
 
 		// vertices
 		glContext.uniformMatrix4fv(matrixUniform, false, cameraMatrix);
@@ -326,18 +332,26 @@ public class _x implements EntryPoint {
 
 		// uniforms
 		glContext.uniform3f(camPosUniform, camX, camY, -camZ);
-		glContext.uniform2f(resolutionUniform, (float)WIDTH, (float)HEIGHT);
-		glContext.uniform1f(timeUniform, time);//(System.currentTimeMillis() - startTime) / 1000.0f);
 
-	    // Bind the texture to texture unit 0
-        glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
-        glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
+
 
         // Point the uniform sampler to texture unit 0
         glContext.uniform1i(texUniform, 0);
 		
 		// draw geometry
 		glContext.drawArrays(WebGLRenderingContext.TRIANGLE_STRIP, 0, 4);
+		
+		// unbind/disable things
+		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, null);
+		glContext.disableVertexAttribArray(vertexPositionAttribute);
+		glContext.disableVertexAttribArray(vertexTexCoordAttrib);
+		
+		glContext.useProgram(null);*/
+		
+	
+		for (Tile tile : tiles)
+			tile.render2(shaderProgram, 0, cameraMatrix, camX, camY, camZ);
+			
 		glContext.flush();
 	}
 }

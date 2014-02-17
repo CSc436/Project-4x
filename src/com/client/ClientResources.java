@@ -21,4 +21,19 @@ public interface ClientResources extends ClientBundle{
     
     @Source(value={"vertex-shader.txt"})
     TextResource vertexShader();
+    
+    @Source(value={"fs_red.txt"})
+    TextResource redShader();
+    
+    @Source(value={"vs_simple.txt"})
+    TextResource simpleVertexShader();
+    
+    @Source(value={"simple_colors.vs"})
+    TextResource simpleColorsVS();
+    
+    @Source(value={"simple_colors.fs"})
+    TextResource simpleColorsFS();
+    
+    @Source(value={"simple_outline.fs"})
+    TextResource simpleOutlineFS();
 }
