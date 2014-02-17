@@ -37,11 +37,14 @@ public class _x implements EntryPoint {
 	private WebGLProgram shaderProgram;
 	private WebGLTexture texture;
 	private int vertexPositionAttribute, vertexTexCoordAttrib;
+	private WebGLUniformLocation texUniform, resolutionUniform, timeUniform, matrixUniform, camPosUniform;
 	private WebGLBuffer vertexBuffer, texCoordBuffer;
 	private static int WIDTH, HEIGHT;
 	private static long startTime;
-	private float camX = 0.0f, camY= 2.0f, camZ = 2.0f;
-	private HashSet<Integer> pressed = new HashSet<Integer>();
+	private float [] cameraMatrix;
+	private float camX = 0.0f, camY= 20.0f, camZ = 20.0f;
+	private boolean in = false, out = false, up = false, down = false, right = false, left = false;
+	private long time;
 
 	public void onModuleLoad() {
 		final Canvas webGLCanvas = Canvas.createIfSupported();
@@ -65,11 +68,35 @@ public class _x implements EntryPoint {
 		glContext.viewport(0, 0, WIDTH, HEIGHT);
 		
 		webGLCanvas.addKeyDownHandler(new KeyDownHandler(){
-
+			private long lastHit = System.currentTimeMillis();
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				// TODO Auto-generated method stub
-				pressed.add(event.getNativeKeyCode());
+
+				if (time - lastHit < 100)
+					return;
+				
+				lastHit = time;
+					
+				switch(event.getNativeKeyCode()){
+					case KeyCodes.KEY_UP:
+					case KeyCodes.KEY_W:	up = true;
+											break;
+					case KeyCodes.KEY_DOWN:
+					case KeyCodes.KEY_S: 	down = true;
+											break;
+					case KeyCodes.KEY_LEFT:
+					case KeyCodes.KEY_A:	left = true;
+											break;
+					case KeyCodes.KEY_RIGHT:
+					case KeyCodes.KEY_D: 	right = true;
+											break;
+					case KeyCodes.KEY_E:	in = true;
+											break;
+					case KeyCodes.KEY_Q:	out = true;
+											break;
+					default:				break;
+				}
 			}
 			
 		});
@@ -78,8 +105,25 @@ public class _x implements EntryPoint {
 
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
-				// TODO Auto-generated method stub
-				pressed.remove(event.getNativeKeyCode());
+				switch(event.getNativeKeyCode()){
+					case KeyCodes.KEY_UP:
+					case KeyCodes.KEY_W:	up = false;
+											break;
+					case KeyCodes.KEY_DOWN:
+					case KeyCodes.KEY_S: 	down = false;
+											break;
+					case KeyCodes.KEY_LEFT:
+					case KeyCodes.KEY_A:	left = false;
+											break;
+					case KeyCodes.KEY_RIGHT:
+					case KeyCodes.KEY_D: 	right = false;
+											break;
+					case KeyCodes.KEY_E:	in = false;
+											break;
+					case KeyCodes.KEY_Q:	out = false;
+											break;
+					default:				break;
+				}
 			}
 
 		});
@@ -97,26 +141,36 @@ public class _x implements EntryPoint {
 				WIDTH = webGLCanvas.getParent().getOffsetWidth();
 				
 				glContext.viewport(0, 0, WIDTH, HEIGHT);
+				cameraMatrix = FloatMatrix.createCameraMatrix(
+						0.0f, 0.785398163f, 0.0f, 45, (float)WIDTH/(float)HEIGHT, 0.1f, 1000000f).columnWiseData();
 
 			}
 		});
+		
+		cameraMatrix = FloatMatrix.createCameraMatrix(
+				0.0f, 0.785398163f, 0.0f, 45, (float)WIDTH/(float)HEIGHT, 0.1f, 1000000f).columnWiseData();
 		start();
 	}
 
 	private void updateCamera() {
 		// TODO Auto-generated method stub
-		for (int i : pressed)
-			switch(i){
-				case KeyCodes.KEY_W:	camY -= 0.1f;
-										break;
-				case KeyCodes.KEY_S: 	camY += 0.1f;
-										break;
-				case KeyCodes.KEY_A:	camX += 0.1f;
-										break;
-				case KeyCodes.KEY_D: 	camX -= 0.1f;
-										break;
-				default:				break;
-			}
+		float delta = camZ / 10.0f;
+		if (up)
+			camY -= delta;
+		if (down)
+			camY += delta;
+		if (left)
+			camX += delta;
+		if (right)
+			camX -= delta;
+		if (in && camZ >= 2.0){
+			camZ -= 1.0f;
+			camY -= 1.0f;
+		}
+		if (out && camZ <= 25.0f){
+			camZ += 1.0f;
+			camY += 1.0f;
+		}
 	}
 	
 	private void start() {
@@ -126,11 +180,12 @@ public class _x implements EntryPoint {
 		glContext.enable(WebGLRenderingContext.DEPTH_TEST);
 		glContext.depthFunc(WebGLRenderingContext.LEQUAL);
 		initBuffers();
-		//initTexture();
+		initTexture();
 		startTime = System.currentTimeMillis();
 	    Timer t = new Timer() {
 	        @Override
 	        public void run() {
+	        	time = System.currentTimeMillis();
 	        	updateCamera();
 	        	drawScene();
 	        }
@@ -180,7 +235,7 @@ public class _x implements EntryPoint {
 	public void initShaders() {
 		WebGLShader fragmentShader = getShader(
 				WebGLRenderingContext.FRAGMENT_SHADER, ClientResources.INSTANCE
-						.fragmentShader().getText());
+						.textureShader().getText());
 		WebGLShader vertexShader = getShader(
 				WebGLRenderingContext.VERTEX_SHADER, ClientResources.INSTANCE
 						.vertexShader().getText());
@@ -201,6 +256,12 @@ public class _x implements EntryPoint {
 				"vertexPosition");
 		vertexTexCoordAttrib = glContext.getAttribLocation(shaderProgram,
 				"vertexTexCoord");
+		
+		texUniform = glContext.getUniformLocation(shaderProgram, "texture");
+		matrixUniform = glContext.getUniformLocation(shaderProgram, "perspectiveMatrix");
+		camPosUniform = glContext.getUniformLocation(shaderProgram, "camPos");
+		resolutionUniform = glContext.getUniformLocation(shaderProgram, "resolution");
+		timeUniform = glContext.getUniformLocation(shaderProgram, "time");
 
 		glContext.enableVertexAttribArray(vertexPositionAttribute);
 		glContext.enableVertexAttribArray(vertexTexCoordAttrib);
@@ -247,14 +308,12 @@ public class _x implements EntryPoint {
 		float time = (System.currentTimeMillis() - startTime) / 1000.0f;
 
 		// create perspective matrix
-		float[] cameraMatrix = FloatMatrix.createCameraMatrix(
-				0.0f, 0.785398163f, 0.0f, 45, (float)WIDTH/(float)HEIGHT, 0.1f, 1000000f).columnWiseData();//createPerspectiveMatrix(45, 1, 0.1f, 1000);
-		
-		WebGLUniformLocation uniformLocation = glContext.getUniformLocation(
-				shaderProgram, "perspectiveMatrix");
+				
+		//WebGLUniformLocation uniformLocation = glContext.getUniformLocation(
+		//		shaderProgram, "perspectiveMatrix");
 
 		// vertices
-		glContext.uniformMatrix4fv(uniformLocation, false, cameraMatrix);
+		glContext.uniformMatrix4fv(matrixUniform, false, cameraMatrix);
 		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, vertexBuffer);
 		glContext.vertexAttribPointer(vertexPositionAttribute, 3,
 				WebGLRenderingContext.FLOAT, false, 0, 0);
@@ -266,37 +325,19 @@ public class _x implements EntryPoint {
 				WebGLRenderingContext.FLOAT, false, 0, 0);
 
 		// uniforms
-		glContext.uniform3f(glContext.getUniformLocation(shaderProgram, "camPos"), camX, camY, -camZ);
-		glContext.uniform2f(
-				glContext.getUniformLocation(shaderProgram, "resolution"), (float)WIDTH, (float)HEIGHT);
-		glContext.uniform1f(
-				glContext.getUniformLocation(shaderProgram, "time"), time);//(System.currentTimeMillis() - startTime) / 1000.0f);
+		glContext.uniform3f(camPosUniform, camX, camY, -camZ);
+		glContext.uniform2f(resolutionUniform, (float)WIDTH, (float)HEIGHT);
+		glContext.uniform1f(timeUniform, time);//(System.currentTimeMillis() - startTime) / 1000.0f);
 
+	    // Bind the texture to texture unit 0
+        glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
+        glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
+
+        // Point the uniform sampler to texture unit 0
+        glContext.uniform1i(texUniform, 0);
+		
 		// draw geometry
 		glContext.drawArrays(WebGLRenderingContext.TRIANGLE_STRIP, 0, 4);
 		glContext.flush();
 	}
-
-	/*private float[] createPerspectiveMatrix(int fieldOfViewVertical,
-			float aspectRatio, float minimumClearance, float maximumClearance) {
-		float top = minimumClearance
-				* (float) Math.tan(fieldOfViewVertical * Math.PI / 360.0);
-		float bottom = -top;
-		float left = bottom * aspectRatio;
-		float right = top * aspectRatio;
-
-		float X = 2 * minimumClearance / (right - left);
-		float Y = 2 * minimumClearance / (top - bottom);
-		float A = (right + left) / (right - left);
-		float B = (top + bottom) / (top - bottom);
-		float C = -(maximumClearance + minimumClearance)
-				/ (maximumClearance - minimumClearance);
-		float D = -2 * maximumClearance * minimumClearance
-				/ (maximumClearance - minimumClearance);
-
-		return new float[] {	X, 		0.0f, 	A, 	0.0f, 
-								0.0f, 	Y, 		B, 	0.0f, 
-								0.0f, 	0.0f, 	C, 	-1.0f, 
-								0.0f, 	0.0f, 	D, 	0.0f };
-	}*/
 }

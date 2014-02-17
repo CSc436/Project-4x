@@ -15,6 +15,10 @@ public interface ClientResources extends ClientBundle{
     @Source(value={"fragment-shader.txt"})
     TextResource fragmentShader();
     
+	
+    @Source(value={"texture-shader.txt"})
+    TextResource textureShader();
+    
     @Source(value={"vertex-shader.txt"})
     TextResource vertexShader();
 }
