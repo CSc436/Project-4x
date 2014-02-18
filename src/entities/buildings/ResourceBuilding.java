@@ -11,7 +11,7 @@ public abstract class ResourceBuilding extends Building{
 	private static double globalRateModifier = 0.0;
 
 	public ResourceBuilding(Player p, int h, int w, Resource resource, int baseGenAmt) {
-		super(p, h, w, 100);
+		super(p, h, w, 100,1);
 		resourceType = resource;
 		baseGenerateAmt = baseGenAmt;
 	}

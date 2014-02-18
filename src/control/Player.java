@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import entities.Unit;
+import entities.units.*;
 import entities.buildings.Building;
 
 public class Player {

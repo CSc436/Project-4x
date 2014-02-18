@@ -26,17 +26,19 @@ public abstract class Building extends GameObject{
 	private Player owner; // owner of the structure
 	private int height; // height of the structure
 	private int width; // width of the structure
+	private int level;
 	private int x = -1;
 	private int y = -1; // dimensions on the game board
 
 	private Queue<Unit> buildingQ = new LinkedList<Unit>();
 
-	public Building(Player p, int h, int w, int hp) {
+	public Building(Player p, int h, int w, int hp, int lv) {
 
 		maxHp = health = hp;
 		owner = p;
 		height = h;
 		width = w;
+		level = lv;
 
 	}
 
@@ -95,6 +97,9 @@ public abstract class Building extends GameObject{
 		return width;
 	}
 
+	public int getLevel() {
+		return level;
+	}
 	/*
 	 * Holding the Queue for the units that the building is responsible for
 	 * producing. It can add units to its queue or remove finished units from

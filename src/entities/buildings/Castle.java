@@ -8,13 +8,12 @@ import control.Player;
 public class Castle extends Building {
 
 	// main hub
-	private int castleLevel;
+
 	private int populationCap;
 	private int influenceArea;
 
-	public Castle(Player p, int h, int w) {
-		super(p, h, w, 1000);
-		castleLevel = 1;
+	public Castle(Player p, int h, int w, int hp) {
+		super(p, h, w, hp,1);
 		populationCap = 100; // Random number for now.
 		influenceArea = 2; // a nxn radius from the row and column of its board
 							// tile.
