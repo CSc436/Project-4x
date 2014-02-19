@@ -1,7 +1,7 @@
 package com.client;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import com.client.matrixutils.FloatMatrix;
 import com.google.gwt.canvas.client.Canvas;
@@ -40,13 +40,18 @@ public class _x implements EntryPoint {
 	private int vertexPositionAttribute, vertexTexCoordAttrib;
 	private WebGLUniformLocation texUniform, resolutionUniform, timeUniform, matrixUniform, camPosUniform;
 	private WebGLBuffer vertexBuffer, texCoordBuffer;
+	private Float32Array vertexData, texCoordData;
 	private static int WIDTH, HEIGHT;
 	private static long startTime;
 	private float [] cameraMatrix;
-	private float camX = 0.0f, camY= 20.0f, camZ = 20.0f;
+	private float camX = 0.0f, camY= -20.0f, camZ = 20.0f;
 	private boolean in = false, out = false, up = false, down = false, right = false, left = false;
 	private long time;
-	private ArrayList<Tile> tiles = new ArrayList<Tile>();
+	
+	private final int GRID_WIDTH = 32;
+	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
+	
+	private ArrayList<RenderTile> tiles = new ArrayList<RenderTile>();
 
 	public void onModuleLoad() {
 		final Canvas webGLCanvas = Canvas.createIfSupported();
@@ -143,40 +148,37 @@ public class _x implements EntryPoint {
 				WIDTH = webGLCanvas.getParent().getOffsetWidth();
 				
 				glContext.viewport(0, 0, WIDTH, HEIGHT);
-				cameraMatrix = FloatMatrix.createCameraMatrix(
-						0.0f, 0.785398163f, 0.0f, 45, (float)WIDTH/(float)HEIGHT, 0.1f, 1000000f).columnWiseData();
-
+				makeCameraMatrix();
 			}
 		});
 		
-		cameraMatrix = FloatMatrix.createCameraMatrix(
-				0.0f, 0.785398163f, 0.0f, 45, (float)WIDTH/(float)HEIGHT, 0.1f, 1000000f).columnWiseData();
-		
-		for (int x = -3; x <= 3; x++)
-			for (int y = -3; y <= 3; y++)
-				tiles.add(new Tile(x, y, LandType.Plains, glContext));
-		
+		makeCameraMatrix();	
 		start();
+	}
+	
+	private void makeCameraMatrix(){
+		//4.71238898
+		cameraMatrix = FloatMatrix.createCameraMatrix(0.0f, 3.14159f + .785398163f, 0.0f, 45, (float)WIDTH/(float)HEIGHT, 0.1f, 1000000f).columnWiseData();
 	}
 
 	private void updateCamera() {
 		// TODO Auto-generated method stub
 		float delta = camZ / 10.0f;
 		if (up)
-			camY -= delta;
-		if (down)
 			camY += delta;
+		if (down)
+			camY -= delta;
 		if (left)
 			camX += delta;
 		if (right)
 			camX -= delta;
 		if (in && camZ >= 2.0){
 			camZ -= 1.0f;
-			camY -= 1.0f;
+			camY += 1.0f;
 		}
 		if (out && camZ <= 25.0f){
 			camZ += 1.0f;
-			camY += 1.0f;
+			camY -= 1.0f;
 		}
 	}
 	
@@ -188,8 +190,10 @@ public class _x implements EntryPoint {
 		
 		initTexture();
 		initShaders();
-		//initBuffers();
-
+		
+		makeTiles();
+		initBuffers();
+		
 		startTime = System.currentTimeMillis();
 	    Timer t = new Timer() {
 	        @Override
@@ -204,6 +208,7 @@ public class _x implements EntryPoint {
 
 	private void initTexture() {
 		texture = glContext.createTexture();
+		
 		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
 		glContext.texImage2D(
 				WebGLRenderingContext.TEXTURE_2D,
@@ -212,22 +217,26 @@ public class _x implements EntryPoint {
 				WebGLRenderingContext.RGB,
 				WebGLRenderingContext.UNSIGNED_BYTE,
 				ImageElement.as(getImage(
-						ClientResources.INSTANCE.riverTexture()).getElement()));
+						ClientResources.INSTANCE.terrainTextures()).getElement()));
 		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
 				WebGLRenderingContext.TEXTURE_MAG_FILTER,
 				WebGLRenderingContext.LINEAR);
 		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
 				WebGLRenderingContext.TEXTURE_MIN_FILTER,
 				WebGLRenderingContext.LINEAR);
-	    // Bind the texture to texture unit 0
+		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
+				WebGLRenderingContext.TEXTURE_WRAP_S,
+				WebGLRenderingContext.CLAMP_TO_EDGE);
+		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
+				WebGLRenderingContext.TEXTURE_WRAP_T,
+				WebGLRenderingContext.CLAMP_TO_EDGE);
+		glContext.generateMipmap(WebGLRenderingContext.TEXTURE_2D);
+
         glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
         glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
-		// System.out.println(texture);
 	}
 
 	public Image getImage(final ImageResource imageResource) {
-		// System.out.println("(" + imageResource.getWidth() + ", " +
-		// imageResource.getHeight() +")");
 		final Image img = new Image();
 		img.addLoadHandler(new LoadHandler() {
 			@Override
@@ -239,7 +248,6 @@ public class _x implements EntryPoint {
 		RootPanel.get().add(img);
 
 		img.setUrl(imageResource.getSafeUri());
-		// System.out.println(img);
 		return img;
 	}
 
@@ -288,30 +296,43 @@ public class _x implements EntryPoint {
 	private void initBuffers() {
 		vertexBuffer = glContext.createBuffer();
 		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, vertexBuffer);
-		float[] vertices = new float[] { 1.0f, 1.0f, -2.5f, // first vertex
-				-1.0f, 1.0f, -2.5f, // second vertex
-				1.0f, -1.0f, -2.5f, // third vertex
-				-1.0f, -1.0f, -2.5f };
-		glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER,
-				Float32Array.create(vertices),
-				WebGLRenderingContext.STATIC_DRAW);
-
-		texCoordBuffer = glContext.createBuffer();
-		glContext
-				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, texCoordBuffer);
-		float[] colors = new float[] { 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-				0.0f, 1.0f };
-		glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER,
-				Float32Array.create(colors), WebGLRenderingContext.STATIC_DRAW);
+		//glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER, (NUM_TILES + 2) * 3 * 4, WebGLRenderingContext.DYNAMIC_DRAW);
+		glContext.bufferData(glContext.ARRAY_BUFFER, vertexData, WebGLRenderingContext.DYNAMIC_DRAW);
 		
-		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, null);
+		texCoordBuffer = glContext.createBuffer();
+		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, texCoordBuffer);
+		//glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER, (NUM_TILES + 2) * 2 * 4, WebGLRenderingContext.DYNAMIC_DRAW);
+		
+		glContext.bufferData(glContext.ARRAY_BUFFER, texCoordData, WebGLRenderingContext.DYNAMIC_DRAW);
+	}
+	
+	private void makeTiles(){
+		System.out.println("Generating Tiles:");
+		
+		float[][] heightmap = DiamondSquare.DSGen(GRID_WIDTH, System.currentTimeMillis(), 0.2f);
+		LandType type;
+
+		vertexData = Float32Array.create(NUM_TILES * 6 * 3);
+		texCoordData = Float32Array.create(NUM_TILES * 6 * 2);
+		int index = 0;
+		for (int x = 0; x < GRID_WIDTH; x++)
+			for (int y = 0; y < GRID_WIDTH; y++){
+				int val = (int)(255*heightmap[x][y]);
+				type = (val < 84 ? LandType.Ocean : 
+					val < 100 ? LandType.Shore :
+						val < 132 ? LandType.Beach : LandType.Grass);
+				RenderTile.addTileToBuffer(x, y, 1.0f, index++, type, glContext, vertexData, texCoordData);
+				if (index % 10 == 0){
+					float percent = (100 * index) / (float)NUM_TILES;
+					percent = ((int)(100 * percent))/100.0f;
+					System.out.println(percent + "%");
+				}
+			}
 	}
 
 	private void drawScene() {
 		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT
 				| WebGLRenderingContext.DEPTH_BUFFER_BIT);
-		
-/*		float time = (System.currentTimeMillis() - startTime) / 1000.0f;
 		
 		glContext.useProgram(shaderProgram);
 		
@@ -325,33 +346,21 @@ public class _x implements EntryPoint {
 				WebGLRenderingContext.FLOAT, false, 0, 0);
 
 		// texture coordinates
-		glContext
-				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, texCoordBuffer);
+		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, texCoordBuffer);
 		glContext.vertexAttribPointer(vertexTexCoordAttrib, 2,
 				WebGLRenderingContext.FLOAT, false, 0, 0);
 
 		// uniforms
-		glContext.uniform3f(camPosUniform, camX, camY, -camZ);
+		glContext.uniform3f(camPosUniform, camX, camY, camZ);
 
-
-
-        // Point the uniform sampler to texture unit 0
+		// texture
+        glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
+        glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
         glContext.uniform1i(texUniform, 0);
 		
 		// draw geometry
-		glContext.drawArrays(WebGLRenderingContext.TRIANGLE_STRIP, 0, 4);
+		glContext.drawArrays(WebGLRenderingContext.TRIANGLES, 0, NUM_TILES * 6);
 		
-		// unbind/disable things
-		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, null);
-		glContext.disableVertexAttribArray(vertexPositionAttribute);
-		glContext.disableVertexAttribArray(vertexTexCoordAttrib);
-		
-		glContext.useProgram(null);*/
-		
-	
-		for (Tile tile : tiles)
-			tile.render2(shaderProgram, 0, cameraMatrix, camX, camY, camZ);
-			
 		glContext.flush();
 	}
 }
