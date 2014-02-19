@@ -1,32 +1,27 @@
 package com.client;
 
-import com.shared.FieldVerifier;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+
+import com.client.matrixutils.FloatMatrix;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.googlecode.gwtgl.array.Float32Array;
 import com.googlecode.gwtgl.binding.WebGLBuffer;
 import com.googlecode.gwtgl.binding.WebGLProgram;
@@ -45,36 +40,126 @@ import static com.google.gwt.query.client.css.CSS.*;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
+
 public class _x implements EntryPoint {
 	private WebGLRenderingContext glContext;
 	private WebGLProgram shaderProgram;
 	private WebGLTexture texture;
 	private int vertexPositionAttribute, vertexTexCoordAttrib;
+	private WebGLUniformLocation texUniform, resolutionUniform, timeUniform,
+			matrixUniform, camPosUniform;
 	private WebGLBuffer vertexBuffer, texCoordBuffer;
+	private Float32Array vertexData, texCoordData;
 	private static int WIDTH, HEIGHT;
 	private static long startTime;
+	private float[] cameraMatrix;
+	private float camX = 0.0f, camY = -20.0f, camZ = 20.0f;
+	private boolean in = false, out = false, up = false, down = false,
+			right = false, left = false;
+	private long time;
+
+	private final int GRID_WIDTH = 32;
+	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
+
+	private ArrayList<RenderTile> tiles = new ArrayList<RenderTile>();
 
 	public void onModuleLoad() {
 		final Canvas webGLCanvas = Canvas.createIfSupported();
 
 		RootPanel.get("gwtGL").add(webGLCanvas);
-		
+
 		glContext = (WebGLRenderingContext) webGLCanvas
 				.getContext("experimental-webgl");
 		if (glContext == null) {
 			Window.alert("Sorry, your browser doesn't support WebGL!");
 		}
-		
-		//These lines make the viewport fullscreen
+
+		// These lines make the viewport fullscreen
 		webGLCanvas.setCoordinateSpaceHeight(webGLCanvas.getParent()
 				.getOffsetHeight());
 		webGLCanvas.setCoordinateSpaceWidth(webGLCanvas.getParent()
 				.getOffsetWidth());
 		HEIGHT = webGLCanvas.getParent().getOffsetHeight();
 		WIDTH = webGLCanvas.getParent().getOffsetWidth();
-		
+
 		glContext.viewport(0, 0, WIDTH, HEIGHT);
-		
+
+		webGLCanvas.addKeyDownHandler(new KeyDownHandler() {
+			private long lastHit = System.currentTimeMillis();
+
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				// TODO Auto-generated method stub
+
+				if (time - lastHit < 100)
+					return;
+
+				lastHit = time;
+
+				switch (event.getNativeKeyCode()) {
+				case KeyCodes.KEY_UP:
+				case KeyCodes.KEY_W:
+					up = true;
+					break;
+				case KeyCodes.KEY_DOWN:
+				case KeyCodes.KEY_S:
+					down = true;
+					break;
+				case KeyCodes.KEY_LEFT:
+				case KeyCodes.KEY_A:
+					left = true;
+					break;
+				case KeyCodes.KEY_RIGHT:
+				case KeyCodes.KEY_D:
+					right = true;
+					break;
+				case KeyCodes.KEY_E:
+					in = true;
+					break;
+				case KeyCodes.KEY_Q:
+					out = true;
+					break;
+				default:
+					break;
+				}
+			}
+
+		});
+
+		webGLCanvas.addKeyUpHandler(new KeyUpHandler() {
+
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				switch (event.getNativeKeyCode()) {
+				case KeyCodes.KEY_UP:
+				case KeyCodes.KEY_W:
+					up = false;
+					break;
+				case KeyCodes.KEY_DOWN:
+				case KeyCodes.KEY_S:
+					down = false;
+					break;
+				case KeyCodes.KEY_LEFT:
+				case KeyCodes.KEY_A:
+					left = false;
+					break;
+				case KeyCodes.KEY_RIGHT:
+				case KeyCodes.KEY_D:
+					right = false;
+					break;
+				case KeyCodes.KEY_E:
+					in = false;
+					break;
+				case KeyCodes.KEY_Q:
+					out = false;
+					break;
+				default:
+					break;
+				}
+			}
+
+		});
+
 		// Resize callback
 		Window.addResizeHandler(new ResizeHandler() {
 			@Override
@@ -83,111 +168,149 @@ public class _x implements EntryPoint {
 						.getOffsetHeight());
 				webGLCanvas.setCoordinateSpaceWidth(webGLCanvas.getParent()
 						.getOffsetWidth());
-				
+
 				HEIGHT = webGLCanvas.getParent().getOffsetHeight();
 				WIDTH = webGLCanvas.getParent().getOffsetWidth();
-				
-				glContext.viewport(0, 0, WIDTH, HEIGHT);
 
+				glContext.viewport(0, 0, WIDTH, HEIGHT);
+				makeCameraMatrix();
 			}
 		});
-		
+
 		initClickHandlers();
+		makeCameraMatrix();
 		start();
 	}
-	
+
 	private void initClickHandlers() {
-		//City Menu Button
+		// City Menu Button
 		$("#city-button").click(new Function() {
 			public boolean f(Event e) {
-				//Show city menu
+				// Show city menu
 				$("#sidebar").animate("width:'toggle'");
-				return true; //Default return true
+				return true; // Default return true
 			}
 		});
-		
-		//Agent Menu Button
+
+		// Agent Menu Button
 		$("#agent-button").click(new Function() {
 			public boolean f(Event e) {
-				//Show agent menu
+				// Show agent menu
 				$("#sidebar").animate("width:'toggle'");
-				return true; //Default return true
+				return true; // Default return true
 			}
 		});
-		
-		//Sidebar close/open
+
+		// Sidebar close/open
 		$("#sidebar-hide").click(new Function() {
 			public boolean f(Event e) {
-				//Hide agent menu
+				// Hide agent menu
 				$("#sidebar").animate("width:'toggle'");
-				
-				return true; //Default return true
+
+				return true; // Default return true
 			}
 		});
+	}
+
+	private void makeCameraMatrix() {
+		// 4.71238898
+		cameraMatrix = FloatMatrix.createCameraMatrix(0.0f,
+				3.14159f + .785398163f, 0.0f, 45,
+				(float) WIDTH / (float) HEIGHT, 0.1f, 1000000f)
+				.columnWiseData();
+	}
+
+	private void updateCamera() {
+		// TODO Auto-generated method stub
+		float delta = camZ / 10.0f;
+		if (up)
+			camY += delta;
+		if (down)
+			camY -= delta;
+		if (left)
+			camX += delta;
+		if (right)
+			camX -= delta;
+		if (in && camZ >= 2.0) {
+			camZ -= 1.0f;
+			camY += 1.0f;
+		}
+		if (out && camZ <= 25.0f) {
+			camZ += 1.0f;
+			camY -= 1.0f;
+		}
 	}
 
 	private void start() {
-		initShaders();
 		glContext.clearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glContext.clearDepth(1.0f);
 		glContext.enable(WebGLRenderingContext.DEPTH_TEST);
 		glContext.depthFunc(WebGLRenderingContext.LEQUAL);
+
+		initTexture();
+		initShaders();
+
+		makeTiles();
 		initBuffers();
-		//initTexture();
+
 		startTime = System.currentTimeMillis();
-	    Timer t = new Timer() {
-	        @Override
-	        public void run() {
-	          drawScene();
-	        }
-	      };
-	    t.scheduleRepeating(16);
+		Timer t = new Timer() {
+			@Override
+			public void run() {
+				time = System.currentTimeMillis();
+				updateCamera();
+				drawScene();
+			}
+		};
+		t.scheduleRepeating(16);
 	}
 
 	private void initTexture() {
 		texture = glContext.createTexture();
+
 		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
-		glContext.texImage2D(
-				WebGLRenderingContext.TEXTURE_2D,
-				0,
-				WebGLRenderingContext.RGB,
-				WebGLRenderingContext.RGB,
-				WebGLRenderingContext.UNSIGNED_BYTE,
-				ImageElement.as(getImage(
-						ClientResources.INSTANCE.riverTexture()).getElement()));
+		glContext.texImage2D(WebGLRenderingContext.TEXTURE_2D, 0,
+				WebGLRenderingContext.RGB, WebGLRenderingContext.RGB,
+				WebGLRenderingContext.UNSIGNED_BYTE, ImageElement.as(getImage(
+						ClientResources.INSTANCE.terrainTextures())
+						.getElement()));
 		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
 				WebGLRenderingContext.TEXTURE_MAG_FILTER,
 				WebGLRenderingContext.LINEAR);
 		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
 				WebGLRenderingContext.TEXTURE_MIN_FILTER,
 				WebGLRenderingContext.LINEAR);
-		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, null);
-		// System.out.println(texture);
+		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
+				WebGLRenderingContext.TEXTURE_WRAP_S,
+				WebGLRenderingContext.CLAMP_TO_EDGE);
+		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
+				WebGLRenderingContext.TEXTURE_WRAP_T,
+				WebGLRenderingContext.CLAMP_TO_EDGE);
+		glContext.generateMipmap(WebGLRenderingContext.TEXTURE_2D);
+
+		glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
+		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
 	}
 
 	public Image getImage(final ImageResource imageResource) {
-		// System.out.println("(" + imageResource.getWidth() + ", " +
-		// imageResource.getHeight() +")");
 		final Image img = new Image();
 		img.addLoadHandler(new LoadHandler() {
 			@Override
 			public void onLoad(LoadEvent event) {
 				RootPanel.get().remove(img);
-
 			}
 		});
 		img.setVisible(false);
 		RootPanel.get().add(img);
 
 		img.setUrl(imageResource.getSafeUri());
-		// System.out.println(img);
 		return img;
 	}
 
 	public void initShaders() {
 		WebGLShader fragmentShader = getShader(
 				WebGLRenderingContext.FRAGMENT_SHADER, ClientResources.INSTANCE
-						.fragmentShader().getText());
+						.textureShader().getText());
 		WebGLShader vertexShader = getShader(
 				WebGLRenderingContext.VERTEX_SHADER, ClientResources.INSTANCE
 						.vertexShader().getText());
@@ -202,15 +325,15 @@ public class _x implements EntryPoint {
 			throw new RuntimeException("Could not initialise shaders");
 		}
 
-		glContext.useProgram(shaderProgram);
-
 		vertexPositionAttribute = glContext.getAttribLocation(shaderProgram,
 				"vertexPosition");
 		vertexTexCoordAttrib = glContext.getAttribLocation(shaderProgram,
 				"vertexTexCoord");
 
-		glContext.enableVertexAttribArray(vertexPositionAttribute);
-		glContext.enableVertexAttribArray(vertexTexCoordAttrib);
+		texUniform = glContext.getUniformLocation(shaderProgram, "texture");
+		matrixUniform = glContext.getUniformLocation(shaderProgram,
+				"perspectiveMatrix");
+		camPosUniform = glContext.getUniformLocation(shaderProgram, "camPos");
 	}
 
 	private WebGLShader getShader(int type, String source) {
@@ -230,34 +353,57 @@ public class _x implements EntryPoint {
 	private void initBuffers() {
 		vertexBuffer = glContext.createBuffer();
 		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, vertexBuffer);
-		float[] vertices = new float[] { 1.0f, 1.0f, -2.5f, // first vertex
-				-1.0f, 1.0f, -2.5f, // second vertex
-				1.0f, -1.0f, -2.5f, // third vertex
-				-1.0f, -1.0f, -2.5f };
-		glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER,
-				Float32Array.create(vertices),
-				WebGLRenderingContext.STATIC_DRAW);
+		// glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER, (NUM_TILES +
+		// 2) * 3 * 4, WebGLRenderingContext.DYNAMIC_DRAW);
+		glContext.bufferData(glContext.ARRAY_BUFFER, vertexData,
+				WebGLRenderingContext.DYNAMIC_DRAW);
 
 		texCoordBuffer = glContext.createBuffer();
 		glContext
 				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, texCoordBuffer);
-		float[] colors = new float[] { 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-				0.0f, 1.0f };
-		glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER,
-				Float32Array.create(colors), WebGLRenderingContext.STATIC_DRAW);
+		// glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER, (NUM_TILES +
+		// 2) * 2 * 4, WebGLRenderingContext.DYNAMIC_DRAW);
+
+		glContext.bufferData(glContext.ARRAY_BUFFER, texCoordData,
+				WebGLRenderingContext.DYNAMIC_DRAW);
+	}
+
+	private void makeTiles() {
+		System.out.println("Generating Tiles:");
+
+		float[][] heightmap = DiamondSquare.DSGen(GRID_WIDTH,
+				System.currentTimeMillis(), 0.2f);
+		LandType type;
+
+		vertexData = Float32Array.create(NUM_TILES * 6 * 3);
+		texCoordData = Float32Array.create(NUM_TILES * 6 * 2);
+		int index = 0;
+		for (int x = 0; x < GRID_WIDTH; x++)
+			for (int y = 0; y < GRID_WIDTH; y++) {
+				int val = (int) (255 * heightmap[x][y]);
+				type = (val < 84 ? LandType.Ocean : val < 100 ? LandType.Shore
+						: val < 132 ? LandType.Beach : LandType.Grass);
+				RenderTile.addTileToBuffer(x, y, 1.0f, index++, type,
+						glContext, vertexData, texCoordData);
+				if (index % 10 == 0) {
+					float percent = (100 * index) / (float) NUM_TILES;
+					percent = ((int) (100 * percent)) / 100.0f;
+					System.out.println(percent + "%");
+				}
+			}
 	}
 
 	private void drawScene() {
 		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT
 				| WebGLRenderingContext.DEPTH_BUFFER_BIT);
 
-		// create perspective matrix
-		float[] perspectiveMatrix = createPerspectiveMatrix(45, 1, 0.1f, 1000);
-		WebGLUniformLocation uniformLocation = glContext.getUniformLocation(
-				shaderProgram, "perspectiveMatrix");
+		glContext.useProgram(shaderProgram);
+
+		glContext.enableVertexAttribArray(vertexPositionAttribute);
+		glContext.enableVertexAttribArray(vertexTexCoordAttrib);
 
 		// vertices
-		glContext.uniformMatrix4fv(uniformLocation, false, perspectiveMatrix);
+		glContext.uniformMatrix4fv(matrixUniform, false, cameraMatrix);
 		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, vertexBuffer);
 		glContext.vertexAttribPointer(vertexPositionAttribute, 3,
 				WebGLRenderingContext.FLOAT, false, 0, 0);
@@ -268,39 +414,17 @@ public class _x implements EntryPoint {
 		glContext.vertexAttribPointer(vertexTexCoordAttrib, 2,
 				WebGLRenderingContext.FLOAT, false, 0, 0);
 
-		// texture data
-		//glContext.activeTexture(glContext.TEXTURE0);
-		//glContext.bindTexture(glContext.TEXTURE_2D, texture);
-/*		glContext.uniform1i(
-				glContext.getUniformLocation(shaderProgram, "texture"), 0);*/
-		glContext.uniform2f(
-				glContext.getUniformLocation(shaderProgram, "resolution"), (float)WIDTH, (float)HEIGHT);
-		glContext.uniform1f(
-				glContext.getUniformLocation(shaderProgram, "time"), (System.currentTimeMillis() - startTime) / 1000.0f);
+		// uniforms
+		glContext.uniform3f(camPosUniform, camX, camY, camZ);
+
+		// texture
+		glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
+		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
+		glContext.uniform1i(texUniform, 0);
 
 		// draw geometry
-		glContext.drawArrays(WebGLRenderingContext.TRIANGLE_STRIP, 0, 4);
+		glContext.drawArrays(WebGLRenderingContext.TRIANGLES, 0, NUM_TILES * 6);
+
 		glContext.flush();
-	}
-
-	private float[] createPerspectiveMatrix(int fieldOfViewVertical,
-			float aspectRatio, float minimumClearance, float maximumClearance) {
-		float top = minimumClearance
-				* (float) Math.tan(fieldOfViewVertical * Math.PI / 360.0);
-		float bottom = -top;
-		float left = bottom * aspectRatio;
-		float right = top * aspectRatio;
-
-		float X = 2 * minimumClearance / (right - left);
-		float Y = 2 * minimumClearance / (top - bottom);
-		float A = (right + left) / (right - left);
-		float B = (top + bottom) / (top - bottom);
-		float C = -(maximumClearance + minimumClearance)
-				/ (maximumClearance - minimumClearance);
-		float D = -2 * maximumClearance * minimumClearance
-				/ (maximumClearance - minimumClearance);
-
-		return new float[] { X, 0.0f, A, 0.0f, 0.0f, Y, B, 0.0f, 0.0f, 0.0f, C,
-				-1.0f, 0.0f, 0.0f, D, 0.0f };
 	}
 }

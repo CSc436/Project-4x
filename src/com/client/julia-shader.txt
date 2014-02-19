@@ -6,6 +6,8 @@ precision mediump float;
 uniform vec2 resolution;
 uniform float time;
 
+varying vec2 texCoord;
+
 const int MAX_ITER = 256;
 
 vec4 getColor (float val){
@@ -76,8 +78,10 @@ vec4 color2(float val){
 
 void main(void){
 	float ts = time / 2.0;
-	vec2 uv = gl_FragCoord.xy - resolution.xy * 0.5;
-	uv *= 2.5 / min( resolution.x, resolution.y );
+	//vec2 uv = gl_FragCoord.xy - resolution.xy * 0.5;
+	vec2 uv = texCoord - 0.5;
+	uv *= 2.5;
+
 	
 	vec2 c = vec2(sin(ts) - cos(ts/4.0) + cos(ts/4.0), cos(ts/2.0) - sin(ts/8.0));
 	vec2 z = uv;
