@@ -1,32 +1,33 @@
 package control;
 
+import java.util.ArrayList;
+
 import com.fourx.civilizations.Civilization;
 import com.fourx.civilizations.PerfectCivilization;
 import com.fourx.research.TechnologyTree;
 import com.fourx.research.Upgrades;
 import com.fourx.resources.Resources;
 
-
 /* state
-based on state, the unit will:
-continue following orders
-interrupt current orders for an active action
-allow other object to give unit an order
-*/
-
+ based on state, the unit will:
+ continue following orders
+ interrupt current orders for an active action
+ allow other object to give unit an order
+ */
 
 import entities.PlayerUnits;
+import entities.units.Unit;
 
 public class Player {
 
 	private final String name;
 
-	// select and deselect
 	private PlayerUnits objects;
 	public TechnologyTree techTree;
 	public Upgrades upgrades;
 	private Resources resources;
 	private Civilization civ;
+	private CommandQueue cq;
 
 	// Bare constructor
 	public Player() {
@@ -40,6 +41,7 @@ public class Player {
 	public Player(String alias, Resources resources, Civilization civ) {
 		name = alias;
 		// civilization
+
 		this.civ = civ;
 
 		// resources
@@ -51,12 +53,13 @@ public class Player {
 		// technology
 		upgrades = new Upgrades();
 		techTree = new TechnologyTree(this);
+		cq = new CommandQueue();
 	}
 
 	public String getAlias() {
 		return name;
 	}
-	
+
 	public PlayerUnits getUnits() {
 		return objects;
 	}
@@ -71,5 +74,10 @@ public class Player {
 
 	public Civilization getCivilization() {
 		return civ;
+	}
+
+	public CommandQueue getCommandQueue() {
+
+		return cq;
 	}
 }

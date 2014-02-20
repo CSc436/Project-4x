@@ -9,6 +9,7 @@ import org.junit.Test;
 import com.fourx.civilizations.PerfectCivilization;
 
 import control.Player;
+import entities.Action;
 import entities.PlayerUnits;
 import entities.buildings.Barracks;
 import entities.buildings.Building;
@@ -33,40 +34,55 @@ public class GameBoardTest {
 		GameBoard game = new GameBoard(20, 20, 2);
 		Player juan = new Player("juan", new PerfectCivilization());
 
-		Unit temp = new Infantry(juan, -1, -1);
-		Unit temp2 = new Infantry(juan, -1, -1);
-		Building b = new Barracks(juan, 4, 4, 100);
-
-		game.placeUnitAt(temp, 15, 15);
-		game.placeBuildingAt(b, 15, 15);
-		//
-
-		PlayerUnits objects = juan.getUnits();
-		assertFalse(objects.hasUnitAt(0, 0));
-		assertFalse(objects.hasUnitAt(1, 1));
-		assertTrue(objects.hasUnitAt(15, 15));
-		// assertTrue(game.getTileAt(0, 0).);
-
-		// need to test
-		assertFalse(game.getTileAt(15, 14).isOccupiedByBuilding());
-		assertTrue(game.getTileAt(15, 15).isOccupiedByBuilding());
-		assertTrue(game.getTileAt(18, 15).isOccupiedByBuilding());
-		assertFalse(game.getTileAt(14, 19).isOccupiedByBuilding());
-
-		game.removeBuilding(b);
-
-		assertFalse(game.getTileAt(15, 14).isOccupiedByBuilding());
-		assertFalse(game.getTileAt(15, 15).isOccupiedByBuilding());
-		assertFalse(game.getTileAt(18, 15).isOccupiedByBuilding());
-		assertFalse(game.getTileAt(14, 19).isOccupiedByBuilding());
-
 	}
-	
+
 	@Test
 	public void testAction() {
-		
+
+		// create a 200x200 board with 2 players
 		GameBoard game = new GameBoard(200, 200, 2);
-		
+		// get the player references
+		Player p1 = game.getPlayerList().get(0);
+		Player p2 = game.getPlayerList().get(1);
+
+		// no units should be added to this game yet
+		assertEquals(0, p1.getUnits().getUnitList().size());
+		assertEquals(0, p2.getUnits().getUnitList().size());
+
+		// add a unit to player 1
+		Unit temp = new Infantry(p1, 1, 1);
+
+		assertEquals(1, p1.getUnits().getUnitList().size());
+		assertEquals(0, p2.getUnits().getUnitList().size());
+
+		// add a unit to player 2
+		Unit temp2 = new Infantry(p2, 2, 2);
+
+		// add some actions
+		temp.addAction(Action.PLAYER_ATTACK);
+		temp.addAction(Action.DEATH);
+		temp.addAction(Action.PLAYER_ATTACK);
+		temp2.addAction(Action.PLAYER_ATTACK_MOVE);
+
+		assertEquals(1, p2.getUnits().getUnitList().size());
+
+		// test if actions were added
+		assertEquals(3, temp.getActionQueue().size());
+		assertEquals(1, temp2.getActionQueue().size());
+
+		System.out.println("Temp1: " + temp.getActionQueue());
+		System.out.println("Temp2: " + temp2.getActionQueue());
+
+		// execute actions
+		temp.performActions();
+		temp2.performActions();
+
+		// test if actions were removed
+		assertEquals(0, temp.getActionQueue().size());
+		assertEquals(0, temp2.getActionQueue().size());
+		assertEquals(0, p1.getUnits().getUnitList().size());
+		assertEquals(1, p2.getUnits().getUnitList().size());
+
 	}
 
 }

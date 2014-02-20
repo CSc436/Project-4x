@@ -23,6 +23,17 @@ public class Resources {
 		return true;
 	}
 	
+	public void receive(Resources amount) {
+		Gold += amount.Gold;
+		Wood += amount.Wood;
+		Food += amount.Food;
+		ResearchPts += amount.ResearchPts;
+	}
+	
+	public Resources scale(Resources r) {
+		return new Resources(Gold * r.Gold, Wood * r.Wood, Food * r.Food, ResearchPts * r.ResearchPts);
+	}
+	
 	public boolean have_enough_resources(Resources r) {
 		if (r.Gold > Gold || r.Wood > Wood || r.Food > Food || r.ResearchPts > ResearchPts)
 			return false;

@@ -2,8 +2,11 @@ package entities;
 
 import com.fourx.buffs.BuffStats;
 
+//int damage, float range, int armor, float health_regen, float health, float movementSpeed, float actionSpeed) {
+
 public enum BaseStatsEnum {
-	FOOTMAN(new UnitStats(5, 1, 1, .5f, 40f, 3, 1.5f));
+	FOOTMAN(new UnitStats(5, 1, 1, .5f, 40f, 3, 1.5f)), CASTLE(new UnitStats(1,
+			2, 100, 0, 1000, 0, 0));
 
 	private UnitStats stats;
 

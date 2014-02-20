@@ -71,4 +71,13 @@ public class PlayerUnits {
 	public void addUnit(Unit u) {
 		units.add(u);
 	}
+
+	public List<Unit> getSelectedUnitList() {
+		return selectedUnits;
+	}
+
+	public List<Unit> getUnitList() {
+		return units;
+	}
+
 }

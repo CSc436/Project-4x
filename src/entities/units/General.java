@@ -1,7 +1,5 @@
 package entities.units;
 
-import java.util.HashMap;
-
 import control.AIControl;
 import control.Player;
 
@@ -17,17 +15,6 @@ public class General extends Agent {
 	public General(Player p) {
 		super(p);
 		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	protected void setActions() {
-		allActions = new HashMap<String, String>();
-	}
-
-	@Override
-	public HashMap<String, String> getActions() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public String decision() {

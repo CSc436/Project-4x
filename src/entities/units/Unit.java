@@ -26,14 +26,13 @@ import entities.UnitStats;
 // settler / worker
 // healing unit
 
-public abstract class Unit extends GameObject {
+public abstract class Unit {
 
 	private Player owner;
 
-	private UnitType type = UnitType.INFANTRY;
-	private BaseStatsEnum baseStats;
-
+	protected UnitType type = UnitType.INFANTRY;
 	private UnitStats stats;
+	protected BaseStatsEnum baseStats;
 
 	private int x;
 	private int y;
@@ -43,13 +42,14 @@ public abstract class Unit extends GameObject {
 			int yco) {
 		this.baseStats = baseStats;
 		this.type = type;
-		updateStats();
 
 		owner = p;
 		p.getUnits().addUnit(this);
+		updateStats();
 		actionQueue = new PriorityQueue<Action>();
 		x = xco;
 		y = yco;
+
 	}
 
 	/**
@@ -69,8 +69,10 @@ public abstract class Unit extends GameObject {
 
 	/**
 	 * 
-	 * @param b - x coordinate of the unit.
-	 * @param c - y coordinate of the unit.
+	 * @param b
+	 *            - x coordinate of the unit.
+	 * @param c
+	 *            - y coordinate of the unit.
 	 */
 	public void setLocation(int b, int c) {
 		x = b;
@@ -79,7 +81,8 @@ public abstract class Unit extends GameObject {
 
 	/**
 	 * 
-	 * @param n - set the health of the Unit to the specified amount.
+	 * @param n
+	 *            - set the health of the Unit to the specified amount.
 	 * @return - whether the unit is still alive.
 	 */
 	public boolean setHealth(int n) {
@@ -134,25 +137,37 @@ public abstract class Unit extends GameObject {
 	 */
 	public void addAction(Action a) {
 		actionQueue.add(a);
+		getOwner().getCommandQueue().push(a, this);
 	}
 
 	/**
-	 * Logic to handle actions that the Unit may do.
+	 * Logic to handle actions that the Unit may do. TODO: add all necessary
+	 * actions
 	 */
 	public void performActions() {
 		while (!actionQueue.isEmpty()) {
 			Action a = actionQueue.poll();
 			switch (a) {
 			case PLAYER_ATTACK_MOVE:
+				System.out.println("player attack move");
+				break;
+			case PLAYER_ATTACK:
+				System.out.println("player attack");
 				break;
 			case DEATH:
 				// I DIED
-				System.out.println(x);
+				System.out.println("death at :" + x + " " + y);
 				getOwner().getUnits().removeUnit(this);
+				while(!actionQueue.isEmpty()) actionQueue.poll();
+				break;
 			default:
 				break;
 			}
 			// TODO: do stuff
 		}
+	}
+
+	public PriorityQueue<Action> getActionQueue() {
+		return actionQueue;
 	}
 }
