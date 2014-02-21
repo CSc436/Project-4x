@@ -83,6 +83,11 @@ public class GameBoardTest {
 		assertEquals(0, p1.getUnits().getUnitList().size());
 		assertEquals(1, p2.getUnits().getUnitList().size());
 
+		//
+
+		p1.addActionTo(temp, Action.DEATH);
+		temp.performActions();
+
 	}
 
 }

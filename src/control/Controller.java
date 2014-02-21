@@ -13,11 +13,6 @@ public class Controller implements Runnable {
 
 	public Controller() {
 
-		/*
-		 * players = new ArrayList<Player>(); players.add(new Player("Bob", new
-		 * Resources(500, 500, 500, 500), new PerfectCivilization()));
-		 */
-
 		map = new GameBoard(5, 5, 2);
 		players = map.getPlayerList();
 		number = new MovingNumber(0.0, 1.0);
@@ -46,11 +41,12 @@ public class Controller implements Runnable {
 	 * Get the commands from the client and add them to each player's respective action queue
 	 */
 	private void playerCommands(Player p) {
-		//TODO parse actions and add to the player's action queue
+	
 	}
 
 	/**
 	 * @param p the player whose actionQueue to pop.
+	 * 
 	 */
 	private void unitInteraction(Player p) {
 		// get command queue from the player
@@ -78,6 +74,7 @@ public class Controller implements Runnable {
 		for (ResourceBuilding building : player.getUnits()
 				.getResourceBuildings()) {
 			// TODO: building.gen
+			
 		}
 
 	}

@@ -15,6 +15,7 @@ import com.fourx.resources.Resources;
  allow other object to give unit an order
  */
 
+import entities.Action;
 import entities.PlayerUnits;
 import entities.units.Unit;
 
@@ -22,7 +23,9 @@ public class Player {
 
 	private final String name;
 
-	private PlayerUnits objects;
+	private PlayerUnits objects; // the objects that the player owns, including
+									// the currently selected units
+
 	public TechnologyTree techTree;
 	public Upgrades upgrades;
 	private Resources resources;
@@ -79,5 +82,11 @@ public class Player {
 	public CommandQueue getCommandQueue() {
 
 		return cq;
+	}
+
+	public void addActionTo(Unit u, Action a) {
+
+		cq.push(a, u);
+		u.addAction(a);
 	}
 }
