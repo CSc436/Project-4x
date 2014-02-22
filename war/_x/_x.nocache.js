@@ -1,22 +1,23 @@
 function _x(){
-  var $wnd_0 = window;
-  var $doc_0 = document;
-  sendStats('bootstrap', 'begin');
+  var $intern_14 = '', $intern_11 = ' top: -1000px;', $intern_37 = '" for "gwt:onLoadErrorFn"', $intern_35 = '" for "gwt:onPropertyErrorFn"', $intern_20 = '");', $intern_38 = '#', $intern_65 = '.cache.js', $intern_40 = '/', $intern_46 = '//', $intern_59 = '3B448A2C3E314454E5E9B74C54BDA8D3', $intern_60 = '57D598C18AC4CEF550CAE2EB8F56C7AB', $intern_64 = ':', $intern_29 = '::', $intern_77 = ':moduleBase', $intern_13 = '<!doctype html>', $intern_15 = '<html><head><\/head><body><\/body><\/html>', $intern_32 = '=', $intern_39 = '?', $intern_61 = 'AEC2F783C18C149C106B968A8065774F', $intern_34 = 'Bad handler "', $intern_62 = 'C8B0E7337F2148F4B0606E6805868BC0', $intern_12 = 'CSS1Compat', $intern_18 = 'Chrome', $intern_63 = 'D046DD99A6DF60ED93E028D75921F7CB', $intern_17 = 'DOMContentLoaded', $intern_6 = 'DUMMY', $intern_76 = 'Ignoring non-whitelisted Dev Mode URL: ', $intern_75 = '__gwtDevModeHook:_x', $intern_4 = '_x', $intern_58 = '_x.devmode.js', $intern_44 = '_x.nocache.js', $intern_28 = '_x::', $intern_45 = 'base', $intern_43 = 'baseUrl', $intern_1 = 'begin', $intern_7 = 'body', $intern_0 = 'bootstrap', $intern_42 = 'clear.cache.gif', $intern_31 = 'content', $intern_72 = 'end', $intern_19 = 'eval("', $intern_74 = 'file:', $intern_54 = 'gecko', $intern_55 = 'gecko1_8', $intern_2 = 'gwt.codesvr._x=', $intern_3 = 'gwt.codesvr=', $intern_71 = 'gwt/clean/clean.css', $intern_36 = 'gwt:onLoadErrorFn', $intern_33 = 'gwt:onPropertyErrorFn', $intern_30 = 'gwt:property', $intern_25 = 'head', $intern_69 = 'href', $intern_73 = 'http:', $intern_51 = 'ie10', $intern_53 = 'ie8', $intern_52 = 'ie9', $intern_8 = 'iframe', $intern_41 = 'img', $intern_22 = 'javascript', $intern_9 = 'javascript:""', $intern_66 = 'link', $intern_70 = 'loadExternalRefs', $intern_26 = 'meta', $intern_24 = 'moduleRequested', $intern_23 = 'moduleStartup', $intern_50 = 'msie', $intern_27 = 'name', $intern_10 = 'position:absolute; width:0; height:0; border:none; left: -1000px;', $intern_67 = 'rel', $intern_49 = 'safari', $intern_21 = 'script', $intern_57 = 'selectingPermutation', $intern_5 = 'startup', $intern_68 = 'stylesheet', $intern_16 = 'undefined', $intern_56 = 'unknown', $intern_47 = 'user.agent', $intern_48 = 'webkit';
+  var $wnd = window;
+  var $doc = document;
+  sendStats($intern_0, $intern_1);
   function isHostedMode(){
-    var query = $wnd_0.location.search;
-    return query.indexOf('gwt.codesvr._x=') != -1 || query.indexOf('gwt.codesvr=') != -1;
+    var query = $wnd.location.search;
+    return query.indexOf($intern_2) != -1 || query.indexOf($intern_3) != -1;
   }
 
   function sendStats(evtGroupString, typeString){
-    if ($wnd_0.__gwtStatsEvent) {
-      $wnd_0.__gwtStatsEvent({moduleName:'_x', sessionId:$wnd_0.__gwtStatsSessionId, subSystem:'startup', evtGroup:evtGroupString, millis:(new Date).getTime(), type:typeString});
+    if ($wnd.__gwtStatsEvent) {
+      $wnd.__gwtStatsEvent({moduleName:$intern_4, sessionId:$wnd.__gwtStatsSessionId, subSystem:$intern_5, evtGroup:evtGroupString, millis:(new Date).getTime(), type:typeString});
     }
   }
 
   _x.__sendStats = sendStats;
-  _x.__moduleName = '_x';
+  _x.__moduleName = $intern_4;
   _x.__errFn = null;
-  _x.__moduleBase = 'DUMMY';
+  _x.__moduleBase = $intern_6;
   _x.__softPermutationId = 0;
   _x.__computePropValue = null;
   _x.__getPropMap = null;
@@ -36,8 +37,8 @@ function _x(){
   }
   ;
   __propertyErrorFunction = null;
-  var activeModules = $wnd_0.__gwt_activeModules = $wnd_0.__gwt_activeModules || {};
-  activeModules['_x'] = {moduleName:'_x'};
+  var activeModules = $wnd.__gwt_activeModules = $wnd.__gwt_activeModules || {};
+  activeModules[$intern_4] = {moduleName:$intern_4};
   var frameDoc;
   function getInstallLocationDoc(){
     setupInstallLocation();
@@ -46,36 +47,36 @@ function _x(){
 
   function getInstallLocation(){
     setupInstallLocation();
-    return frameDoc.getElementsByTagName('body')[0];
+    return frameDoc.getElementsByTagName($intern_7)[0];
   }
 
   function setupInstallLocation(){
     if (frameDoc) {
       return;
     }
-    var scriptFrame = $doc_0.createElement('iframe');
-    scriptFrame.src = 'javascript:""';
-    scriptFrame.id = '_x';
-    scriptFrame.style.cssText = 'position:absolute; width:0; height:0; border:none; left: -1000px;' + ' top: -1000px;';
+    var scriptFrame = $doc.createElement($intern_8);
+    scriptFrame.src = $intern_9;
+    scriptFrame.id = $intern_4;
+    scriptFrame.style.cssText = $intern_10 + $intern_11;
     scriptFrame.tabIndex = -1;
-    $doc_0.body.appendChild(scriptFrame);
+    $doc.body.appendChild(scriptFrame);
     frameDoc = scriptFrame.contentDocument;
     if (!frameDoc) {
       frameDoc = scriptFrame.contentWindow.document;
     }
     frameDoc.open();
-    var doctype = document.compatMode == 'CSS1Compat'?'<!doctype html>':'';
-    frameDoc.write(doctype + '<html><head><\/head><body><\/body><\/html>');
+    var doctype = document.compatMode == $intern_12?$intern_13:$intern_14;
+    frameDoc.write(doctype + $intern_15);
     frameDoc.close();
   }
 
   function installScript(filename){
     function setupWaitForBodyLoad(callback){
       function isBodyLoaded(){
-        if (typeof $doc_0.readyState == 'undefined') {
-          return typeof $doc_0.body != 'undefined' && $doc_0.body != null;
+        if (typeof $doc.readyState == $intern_16) {
+          return typeof $doc.body != $intern_16 && $doc.body != null;
         }
-        return /loaded|complete/.test($doc_0.readyState);
+        return /loaded|complete/.test($doc.readyState);
       }
 
       var bodyDone = isBodyLoaded();
@@ -87,8 +88,8 @@ function _x(){
         if (!bodyDone) {
           bodyDone = true;
           callback();
-          if ($doc_0.removeEventListener) {
-            $doc_0.removeEventListener('DOMContentLoaded', onBodyDone, false);
+          if ($doc.removeEventListener) {
+            $doc.removeEventListener($intern_17, onBodyDone, false);
           }
           if (onBodyDoneTimerId) {
             clearInterval(onBodyDoneTimerId);
@@ -96,8 +97,8 @@ function _x(){
         }
       }
 
-      if ($doc_0.addEventListener) {
-        $doc_0.addEventListener('DOMContentLoaded', onBodyDone, false);
+      if ($doc.addEventListener) {
+        $doc.addEventListener($intern_17, onBodyDone, false);
       }
       var onBodyDoneTimerId = setInterval(function(){
         if (isBodyLoaded()) {
@@ -114,24 +115,24 @@ function _x(){
       var docbody = getInstallLocation();
       var doc = getInstallLocationDoc();
       var script;
-      if (navigator.userAgent.indexOf('Chrome') > -1 && window.JSON) {
+      if (navigator.userAgent.indexOf($intern_18) > -1 && window.JSON) {
         var scriptFrag = doc.createDocumentFragment();
-        scriptFrag.appendChild(doc.createTextNode('eval("'));
+        scriptFrag.appendChild(doc.createTextNode($intern_19));
         for (var i = 0; i < code_0.length; i++) {
           var c = window.JSON.stringify(code_0[i]);
           scriptFrag.appendChild(doc.createTextNode(c.substring(1, c.length - 1)));
         }
-        scriptFrag.appendChild(doc.createTextNode('");'));
-        script = doc.createElement('script');
-        script.language = 'javascript';
+        scriptFrag.appendChild(doc.createTextNode($intern_20));
+        script = doc.createElement($intern_21);
+        script.language = $intern_22;
         script.appendChild(scriptFrag);
         docbody.appendChild(script);
         removeScript(docbody, script);
       }
        else {
         for (var i = 0; i < code_0.length; i++) {
-          script = doc.createElement('script');
-          script.language = 'javascript';
+          script = doc.createElement($intern_21);
+          script.language = $intern_22;
           script.text = code_0[i];
           docbody.appendChild(script);
           removeScript(docbody, script);
@@ -146,10 +147,10 @@ function _x(){
       );
     }
     ;
-    sendStats('moduleStartup', 'moduleRequested');
-    var script_0 = $doc_0.createElement('script');
-    script_0.src = filename;
-    $doc_0.getElementsByTagName('head')[0].appendChild(script_0);
+    sendStats($intern_23, $intern_24);
+    var script = $doc.createElement($intern_21);
+    script.src = filename;
+    $doc.getElementsByTagName($intern_25)[0].appendChild(script);
   }
 
   _x.__startLoadingFragment = function(fragmentFile){
@@ -158,8 +159,8 @@ function _x(){
   ;
   _x.__installRunAsyncCode = function(code_0){
     var docbody = getInstallLocation();
-    var script = getInstallLocationDoc().createElement('script');
-    script.language = 'javascript';
+    var script = getInstallLocationDoc().createElement($intern_21);
+    script.language = $intern_22;
     script.text = code_0;
     docbody.appendChild(script);
   }
@@ -168,48 +169,48 @@ function _x(){
     var metaProps = {};
     var propertyErrorFunc;
     var onLoadErrorFunc;
-    var metas = $doc_0.getElementsByTagName('meta');
+    var metas = $doc.getElementsByTagName($intern_26);
     for (var i = 0, n = metas.length; i < n; ++i) {
-      var meta = metas[i], name_1 = meta.getAttribute('name'), content_0;
-      if (name_1) {
-        name_1 = name_1.replace('_x::', '');
-        if (name_1.indexOf('::') >= 0) {
+      var meta = metas[i], name_0 = meta.getAttribute($intern_27), content;
+      if (name_0) {
+        name_0 = name_0.replace($intern_28, $intern_14);
+        if (name_0.indexOf($intern_29) >= 0) {
           continue;
         }
-        if (name_1 == 'gwt:property') {
-          content_0 = meta.getAttribute('content');
-          if (content_0) {
-            var value_1, eq = content_0.indexOf('=');
+        if (name_0 == $intern_30) {
+          content = meta.getAttribute($intern_31);
+          if (content) {
+            var value_0, eq = content.indexOf($intern_32);
             if (eq >= 0) {
-              name_1 = content_0.substring(0, eq);
-              value_1 = content_0.substring(eq + 1);
+              name_0 = content.substring(0, eq);
+              value_0 = content.substring(eq + 1);
             }
              else {
-              name_1 = content_0;
-              value_1 = '';
+              name_0 = content;
+              value_0 = $intern_14;
             }
-            metaProps[name_1] = value_1;
+            metaProps[name_0] = value_0;
           }
         }
-         else if (name_1 == 'gwt:onPropertyErrorFn') {
-          content_0 = meta.getAttribute('content');
-          if (content_0) {
+         else if (name_0 == $intern_33) {
+          content = meta.getAttribute($intern_31);
+          if (content) {
             try {
-              propertyErrorFunc = eval(content_0);
+              propertyErrorFunc = eval(content);
             }
              catch (e) {
-              alert('Bad handler "' + content_0 + '" for "gwt:onPropertyErrorFn"');
+              alert($intern_34 + content + $intern_35);
             }
           }
         }
-         else if (name_1 == 'gwt:onLoadErrorFn') {
-          content_0 = meta.getAttribute('content');
-          if (content_0) {
+         else if (name_0 == $intern_36) {
+          content = meta.getAttribute($intern_31);
+          if (content) {
             try {
-              onLoadErrorFunc = eval(content_0);
+              onLoadErrorFunc = eval(content);
             }
              catch (e) {
-              alert('Bad handler "' + content_0 + '" for "gwt:onLoadErrorFn"');
+              alert($intern_34 + content + $intern_37);
             }
           }
         }
@@ -226,69 +227,69 @@ function _x(){
 
   function computeScriptBase(){
     function getDirectoryOfFile(path){
-      var hashIndex = path.lastIndexOf('#');
+      var hashIndex = path.lastIndexOf($intern_38);
       if (hashIndex == -1) {
         hashIndex = path.length;
       }
-      var queryIndex = path.indexOf('?');
+      var queryIndex = path.indexOf($intern_39);
       if (queryIndex == -1) {
         queryIndex = path.length;
       }
-      var slashIndex = path.lastIndexOf('/', Math.min(queryIndex, hashIndex));
-      return slashIndex >= 0?path.substring(0, slashIndex + 1):'';
+      var slashIndex = path.lastIndexOf($intern_40, Math.min(queryIndex, hashIndex));
+      return slashIndex >= 0?path.substring(0, slashIndex + 1):$intern_14;
     }
 
     function ensureAbsoluteUrl(url_0){
       if (url_0.match(/^\w+:\/\//)) {
       }
        else {
-        var img = $doc_0.createElement('img');
-        img.src = url_0 + 'clear.cache.gif';
+        var img = $doc.createElement($intern_41);
+        img.src = url_0 + $intern_42;
         url_0 = getDirectoryOfFile(img.src);
       }
       return url_0;
     }
 
     function tryMetaTag(){
-      var metaVal = __gwt_getMetaProperty('baseUrl');
+      var metaVal = __gwt_getMetaProperty($intern_43);
       if (metaVal != null) {
         return metaVal;
       }
-      return '';
+      return $intern_14;
     }
 
     function tryNocacheJsTag(){
-      var scriptTags = $doc_0.getElementsByTagName('script');
+      var scriptTags = $doc.getElementsByTagName($intern_21);
       for (var i = 0; i < scriptTags.length; ++i) {
-        if (scriptTags[i].src.indexOf('_x.nocache.js') != -1) {
+        if (scriptTags[i].src.indexOf($intern_44) != -1) {
           return getDirectoryOfFile(scriptTags[i].src);
         }
       }
-      return '';
+      return $intern_14;
     }
 
     function tryBaseTag(){
-      var baseElements = $doc_0.getElementsByTagName('base');
+      var baseElements = $doc.getElementsByTagName($intern_45);
       if (baseElements.length > 0) {
         return baseElements[baseElements.length - 1].href;
       }
-      return '';
+      return $intern_14;
     }
 
     function isLocationOk(){
-      var loc = $doc_0.location;
-      return loc.href == loc.protocol + '//' + loc.host + loc.pathname + loc.search + loc.hash;
+      var loc = $doc.location;
+      return loc.href == loc.protocol + $intern_46 + loc.host + loc.pathname + loc.search + loc.hash;
     }
 
     var tempBase = tryMetaTag();
-    if (tempBase == '') {
+    if (tempBase == $intern_14) {
       tempBase = tryNocacheJsTag();
     }
-    if (tempBase == '') {
+    if (tempBase == $intern_14) {
       tempBase = tryBaseTag();
     }
-    if (tempBase == '' && isLocationOk()) {
-      tempBase = getDirectoryOfFile($doc_0.location.href);
+    if (tempBase == $intern_14 && isLocationOk()) {
+      tempBase = getDirectoryOfFile($doc.location.href);
     }
     tempBase = ensureAbsoluteUrl(tempBase);
     return tempBase;
@@ -332,41 +333,41 @@ function _x(){
       throw null;
     }
 
-    providers['user.agent'] = function(){
+    providers[$intern_47] = function(){
       var ua = navigator.userAgent.toLowerCase();
       var makeVersion = function(result){
         return parseInt(result[1]) * 1000 + parseInt(result[2]);
       }
       ;
       if (function(){
-        return ua.indexOf('webkit') != -1;
+        return ua.indexOf($intern_48) != -1;
       }
       ())
-        return 'safari';
+        return $intern_49;
       if (function(){
-        return ua.indexOf('msie') != -1 && $doc_0.documentMode >= 10;
+        return ua.indexOf($intern_50) != -1 && $doc.documentMode >= 10;
       }
       ())
-        return 'ie10';
+        return $intern_51;
       if (function(){
-        return ua.indexOf('msie') != -1 && $doc_0.documentMode >= 9;
+        return ua.indexOf($intern_50) != -1 && $doc.documentMode >= 9;
       }
       ())
-        return 'ie9';
+        return $intern_52;
       if (function(){
-        return ua.indexOf('msie') != -1 && $doc_0.documentMode >= 8;
+        return ua.indexOf($intern_50) != -1 && $doc.documentMode >= 8;
       }
       ())
-        return 'ie8';
+        return $intern_53;
       if (function(){
-        return ua.indexOf('gecko') != -1;
+        return ua.indexOf($intern_54) != -1;
       }
       ())
-        return 'gecko1_8';
-      return 'unknown';
+        return $intern_55;
+      return $intern_56;
     }
     ;
-    values['user.agent'] = {gecko1_8:0, ie10:1, ie8:2, ie9:3, safari:4};
+    values[$intern_47] = {gecko1_8:0, ie10:1, ie8:2, ie9:3, safari:4};
     __gwt_isKnownPropertyValue = function(propName, propValue){
       return propValue in values[propName];
     }
@@ -382,20 +383,20 @@ function _x(){
     }
     ;
     _x.__computePropValue = computePropValue;
-    $wnd_0.__gwt_activeModules['_x'].bindings = _x.__getPropMap;
-    sendStats('bootstrap', 'selectingPermutation');
+    $wnd.__gwt_activeModules[$intern_4].bindings = _x.__getPropMap;
+    sendStats($intern_0, $intern_57);
     if (isHostedMode()) {
-      return computeUrlForResource('_x.devmode.js');
+      return computeUrlForResource($intern_58);
     }
     var strongName;
     try {
-      unflattenKeylistIntoAnswers(['ie9'], '7C3C0BDDD42DD678004CB113BAE92E47');
-      unflattenKeylistIntoAnswers(['safari'], '86528E2202BB468D27906AAEA96203BC');
-      unflattenKeylistIntoAnswers(['ie10'], '87507D527F2772680DBD7ADCDC6E0E88');
-      unflattenKeylistIntoAnswers(['ie8'], 'B23E925E7982FA2466F772A731A65CBC');
-      unflattenKeylistIntoAnswers(['gecko1_8'], 'F1C4F71CE6ECEE660F62BD6A106D4439');
-      strongName = answers[computePropValue('user.agent')];
-      var idx = strongName.indexOf(':');
+      unflattenKeylistIntoAnswers([$intern_52], $intern_59);
+      unflattenKeylistIntoAnswers([$intern_49], $intern_60);
+      unflattenKeylistIntoAnswers([$intern_55], $intern_61);
+      unflattenKeylistIntoAnswers([$intern_53], $intern_62);
+      unflattenKeylistIntoAnswers([$intern_51], $intern_63);
+      strongName = answers[computePropValue($intern_47)];
+      var idx = strongName.indexOf($intern_64);
       if (idx != -1) {
         softPermutationId = parseInt(strongName.substring(idx + 1), 10);
         strongName = strongName.substring(0, idx);
@@ -404,58 +405,58 @@ function _x(){
      catch (e) {
     }
     _x.__softPermutationId = softPermutationId;
-    return computeUrlForResource(strongName + '.cache.js');
+    return computeUrlForResource(strongName + $intern_65);
   }
 
   function loadExternalStylesheets(){
-    if (!$wnd_0.__gwt_stylesLoaded) {
-      $wnd_0.__gwt_stylesLoaded = {};
+    if (!$wnd.__gwt_stylesLoaded) {
+      $wnd.__gwt_stylesLoaded = {};
     }
     function installOneStylesheet(stylesheetUrl){
       if (!__gwt_stylesLoaded[stylesheetUrl]) {
-        var l = $doc_0.createElement('link');
-        l.setAttribute('rel', 'stylesheet');
-        l.setAttribute('href', computeUrlForResource(stylesheetUrl));
-        $doc_0.getElementsByTagName('head')[0].appendChild(l);
+        var l = $doc.createElement($intern_66);
+        l.setAttribute($intern_67, $intern_68);
+        l.setAttribute($intern_69, computeUrlForResource(stylesheetUrl));
+        $doc.getElementsByTagName($intern_25)[0].appendChild(l);
         __gwt_stylesLoaded[stylesheetUrl] = true;
       }
     }
 
-    sendStats('loadExternalRefs', 'begin');
-    installOneStylesheet('gwt/clean/clean.css');
-    sendStats('loadExternalRefs', 'end');
+    sendStats($intern_70, $intern_1);
+    installOneStylesheet($intern_71);
+    sendStats($intern_70, $intern_72);
   }
 
   processMetas();
   _x.__moduleBase = computeScriptBase();
-  activeModules['_x'].moduleBase = _x.__moduleBase;
-  var filename_0 = getCompiledCodeFilename();
-  if ($wnd_0) {
-    var devModePermitted = !!($wnd_0.location.protocol == 'http:' || $wnd_0.location.protocol == 'file:');
-    $wnd_0.__gwt_activeModules['_x'].canRedirect = devModePermitted;
+  activeModules[$intern_4].moduleBase = _x.__moduleBase;
+  var filename = getCompiledCodeFilename();
+  if ($wnd) {
+    var devModePermitted = !!($wnd.location.protocol == $intern_73 || $wnd.location.protocol == $intern_74);
+    $wnd.__gwt_activeModules[$intern_4].canRedirect = devModePermitted;
     if (devModePermitted) {
-      var devModeKey = '__gwtDevModeHook:_x';
-      var devModeUrl = $wnd_0.sessionStorage[devModeKey];
+      var devModeKey = $intern_75;
+      var devModeUrl = $wnd.sessionStorage[devModeKey];
       if (!/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/.*$/.test(devModeUrl)) {
         if (devModeUrl && (window.console && console.log)) {
-          console.log('Ignoring non-whitelisted Dev Mode URL: ' + devModeUrl);
+          console.log($intern_76 + devModeUrl);
         }
-        devModeUrl = '';
+        devModeUrl = $intern_14;
       }
-      if (devModeUrl && !$wnd_0[devModeKey]) {
-        $wnd_0[devModeKey] = true;
-        $wnd_0[devModeKey + ':moduleBase'] = computeScriptBase();
-        var devModeScript = $doc_0.createElement('script');
+      if (devModeUrl && !$wnd[devModeKey]) {
+        $wnd[devModeKey] = true;
+        $wnd[devModeKey + $intern_77] = computeScriptBase();
+        var devModeScript = $doc.createElement($intern_21);
         devModeScript.src = devModeUrl;
-        var head = $doc_0.getElementsByTagName('head')[0];
+        var head = $doc.getElementsByTagName($intern_25)[0];
         head.insertBefore(devModeScript, head.firstElementChild || head.children[0]);
         return false;
       }
     }
   }
   loadExternalStylesheets();
-  sendStats('bootstrap', 'end');
-  installScript(filename_0);
+  sendStats($intern_0, $intern_72);
+  installScript(filename);
   return true;
 }
 

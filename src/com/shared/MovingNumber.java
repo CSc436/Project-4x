@@ -7,6 +7,7 @@ public class MovingNumber implements Serializable {
 	public double velocity; // Movement velocity, in units per second
 	public double targetValue;
 	public int turnNumber;
+	public long lastRequestTime;
 	
 	public MovingNumber() {
 		value = 0;
@@ -50,5 +51,23 @@ public class MovingNumber implements Serializable {
 	
 	public boolean canDecrement() {
 		return targetValue > -10.0;
+	}
+	
+	public void setRequestTime(long reqTime) {
+		lastRequestTime = reqTime;
+	}
+	
+	public long getRequestTime() {
+		return lastRequestTime;
+	}
+	
+	public MovingNumber clone() {
+		MovingNumber n = new MovingNumber();
+		n.value = value;
+		n.velocity = velocity;
+		n.targetValue = targetValue;
+		n.turnNumber = turnNumber;
+		n.lastRequestTime = lastRequestTime;
+		return n;
 	}
 }

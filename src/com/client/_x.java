@@ -58,6 +58,7 @@ public class _x implements EntryPoint {
 		nameField.setText("GWT User");
 		final Label errorLabel = new Label();
 		final Label numberLabel = new Label();
+		final Label cycleTimeLabel = new Label();
 
 		// We can add style names to widgets
 		incButton.addStyleName("sendButton");
@@ -70,6 +71,7 @@ public class _x implements EntryPoint {
 		RootPanel.get("sendButtonContainer").add(decButton);
 		RootPanel.get("errorLabelContainer").add(errorLabel);
 		RootPanel.get("numberContainer").add(numberLabel);
+		RootPanel.get("cycleTimeContainer").add(cycleTimeLabel);
 
 		// Focus the cursor on the name field when the app loads
 		nameField.setFocus(true);
@@ -170,7 +172,8 @@ public class _x implements EntryPoint {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				simpleSimulator.getSimulationState(turnNumber + 1, new AsyncCallback<MovingNumber>() {
+				
+				simpleSimulator.getSimulationState(turnNumber + 1, System.currentTimeMillis(), new AsyncCallback<MovingNumber>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -179,6 +182,7 @@ public class _x implements EntryPoint {
 
 					@Override
 					public void onSuccess(MovingNumber result) {
+						cycleTimeLabel.setText("" + (System.currentTimeMillis() - result.getRequestTime()));
 						lastNumber = nextNumber;
 						nextNumber = result;
 						

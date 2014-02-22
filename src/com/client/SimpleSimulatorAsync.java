@@ -13,5 +13,5 @@ public interface SimpleSimulatorAsync {
 	
 	void startSimulation(AsyncCallback<String> callback);
 	
-	void getSimulationState(int turn, AsyncCallback<MovingNumber> callback);
+	void getSimulationState(int turn, long requestTime, AsyncCallback<MovingNumber> callback);
 }
