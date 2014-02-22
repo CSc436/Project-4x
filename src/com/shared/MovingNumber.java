@@ -1,4 +1,4 @@
-package com.server;
+package com.shared;
 
 import java.io.Serializable;
 
@@ -39,13 +39,16 @@ public class MovingNumber implements Serializable {
 			value -= velocity * timeStep / 1000.0;
 			value = value < targetValue ? targetValue : value ;
 		}
+		
+		turnNumber++;
+		System.out.println(value + " " + turnNumber);
 	}
 	
 	public boolean canIncrement() {
-		return value < 10.0;
+		return targetValue < 10.0;
 	}
 	
 	public boolean canDecrement() {
-		return value > -10.0;
+		return targetValue > -10.0;
 	}
 }

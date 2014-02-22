@@ -1,6 +1,5 @@
 package com.shared;
 
-import com.server.Model;
 
 public class IncrementRequest extends Request {
 	
@@ -8,12 +7,15 @@ public class IncrementRequest extends Request {
 		super();
 	}
 	
-	public static Request generateRequest(int scheduledTurn, int lastTurnReceived) {
-		Request r = Request.generateRequest(scheduledTurn, lastTurnReceived);
+	public static IncrementRequest generateRequest(int scheduledTurn, int lastTurnReceived) {
+		IncrementRequest r = new IncrementRequest();
+		r.setScheduledTurn(scheduledTurn);
+		r.setLastTurnReceived(lastTurnReceived);
 		
 		return r;
 	}
 	
+	@Override
 	public boolean executeOn(Model m) {
 		if(m.canIncrement()) {
 			m.increment();

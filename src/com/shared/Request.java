@@ -2,8 +2,6 @@ package com.shared;
 
 import java.io.Serializable;
 
-import com.server.Model;
-
 public class Request implements Serializable {
 	
 	private int scheduledTurn;
@@ -14,11 +12,11 @@ public class Request implements Serializable {
 		lastTurnReceived = 0;
 	}
 	
-	private void setScheduledTurn(int scheduledTurn) {
+	public void setScheduledTurn(int scheduledTurn) {
 		this.scheduledTurn = scheduledTurn;
 	}
 	
-	private void setLastTurnReceived(int lastTurnReceived) {
+	public void setLastTurnReceived(int lastTurnReceived) {
 		this.lastTurnReceived = lastTurnReceived;
 	}	
 	
