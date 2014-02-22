@@ -1,2 +1,3 @@
 # Module _x
 # RPC service class, partial path of RPC policy file
+com.client.SimpleSimulator, C5478AD55CC0594DC3A61A14EE5D6D64.gwt.rpc
