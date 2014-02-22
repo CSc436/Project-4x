@@ -11,7 +11,7 @@ import control.CommandQueue;
 import control.Player;
 import entities.BaseStatsEnum;
 
-public abstract class Agent extends Unit {
+public class Agent extends Unit {
 	private Map<String, Unit> underlings;
 	private CommandQueue cq;
 

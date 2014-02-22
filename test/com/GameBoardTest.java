@@ -14,6 +14,7 @@ import entities.PlayerUnits;
 import entities.buildings.Barracks;
 import entities.buildings.Building;
 import entities.gameboard.GameBoard;
+import entities.units.Agent;
 import entities.units.Infantry;
 import entities.units.Unit;
 
@@ -111,27 +112,27 @@ public class GameBoardTest {
 
 		// add a unit to player 2
 		Unit temp2 = new Infantry(p2, 2, 2);
-		Building bld = new Barracks(p1,1,1);
-		
+		Building bld = new Barracks(p1, 1, 1);
+		Agent a1 = new Agent(p1);
+
 		PlayerUnits pu1 = p1.getUnits();
 		PlayerUnits pu2 = p2.getUnits();
-		
+
 		assertFalse(pu1.hasUnitAt(0, 0));
 		assertTrue(pu1.hasUnitAt(1, 1));
 		assertFalse(pu1.hasUnitAt(0, 1));
-		assertFalse(pu1.hasUnitAt(2, 2));		
+		assertFalse(pu1.hasUnitAt(2, 2));
 		assertFalse(pu2.hasUnitAt(1, 1));
 		assertTrue(pu2.hasUnitAt(2, 2));
 		assertFalse(pu2.hasUnitAt(0, 1));
 		assertFalse(pu2.hasUnitAt(1, 0));
-		
+
 		assertFalse(pu1.hasBuildingAt(0, 1));
 		assertTrue(pu1.hasBuildingAt(1, 1));
 		assertFalse(pu1.hasBuildingAt(1, 0));
 		assertFalse(pu1.hasBuildingAt(0, 0));
-		
-		
-		
-		
+
+		assertEquals(1, pu1.getAgentList().size());
+
 	}
 }

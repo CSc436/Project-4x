@@ -31,11 +31,6 @@ public class PlayerUnits {
 		selectedUnits.add(unit);
 	}
 
-	// public HashMap<String, String> possibleActions() {
-	// HashMap<String, String> temp = new HashMap<String, String>();
-	//
-	// }
-
 	public void addBuilding(Building building) {
 		buildings.add(building);
 	}
@@ -74,6 +69,7 @@ public class PlayerUnits {
 
 	public void addUnit(Unit u) {
 		units.add(u);
+
 	}
 
 	public List<Unit> getSelectedUnitList() {
@@ -91,6 +87,11 @@ public class PlayerUnits {
 
 	public void removeAgent(Agent a) {
 		agents.remove(a);
+	}
+
+	public List<Agent> getAgentList() {
+
+		return agents;
 	}
 
 }

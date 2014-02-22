@@ -7,7 +7,7 @@ import com.fourx.buffs.UnitType;
 import control.Player;
 import entities.Action;
 import entities.BaseStatsEnum;
-import entities.GameObject;
+import entities.PlayerUnits;
 import entities.UnitStats;
 
 /*
@@ -44,7 +44,15 @@ public abstract class Unit {
 		this.type = type;
 
 		owner = p;
-		p.getUnits().addUnit(this);
+		System.out.println(this.getClass());
+		PlayerUnits pu = p.getUnits();
+
+		if (this instanceof Agent) {
+			pu.addAgent((Agent) this);
+		} else {
+			pu.addUnit(this);
+		}
+
 		updateStats();
 		actionQueue = new PriorityQueue<Action>();
 		x = xco;
@@ -158,7 +166,8 @@ public abstract class Unit {
 				// I DIED
 				System.out.println("death at :" + x + " " + y);
 				getOwner().getUnits().removeUnit(this);
-				while(!actionQueue.isEmpty()) actionQueue.poll();
+				while (!actionQueue.isEmpty())
+					actionQueue.poll();
 				break;
 			default:
 				break;
