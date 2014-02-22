@@ -7,7 +7,9 @@ import com.client.matrixutils.FloatMatrix;
 import com.shared.FieldVerifier;
 import com.shared.IncrementRequest;
 import com.shared.Request;
+import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
@@ -198,7 +200,7 @@ public class _x implements EntryPoint {
 				// Change content to city menu
 				return true; // Default return true
 			}
-		}
+		});
 
 		// Agent Menu Button
 		$("#agent-button").click(new Function() {
@@ -210,7 +212,7 @@ public class _x implements EntryPoint {
 				// Change content to agent menu
 				return true; // Default return true
 			}
-		}
+		});
 
 		// Sidebar close/open
 		$("#sidebar-hide").click(new Function() {
@@ -219,7 +221,7 @@ public class _x implements EntryPoint {
 				toggleSidebar(true);
 				return true; // Default return true
 			}
-		}
+		});
 	}
 	
 	private void toggleSidebar(boolean hideIfShowing) {
