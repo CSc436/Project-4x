@@ -158,83 +158,6 @@ public class _x implements EntryPoint {
 			}
 		}, KeyUpEvent.getType());
 
-		/*webGLCanvas.addKeyDownHandler(new KeyDownHandler() {
-			private long lastHit = System.currentTimeMillis();
-
-			@Override
-			public void onKeyDown(KeyDownEvent event) {
-				// TODO Auto-generated method stub
-
-				if (time - lastHit < 100)
-					return;
-
-				lastHit = time;
-
-				switch (event.getNativeKeyCode()) {
-				case KeyCodes.KEY_UP:
-				case KeyCodes.KEY_W:
-					up = true;
-					break;
-				case KeyCodes.KEY_DOWN:
-				case KeyCodes.KEY_S:
-					down = true;
-					break;
-				case KeyCodes.KEY_LEFT:
-				case KeyCodes.KEY_A:
-					left = true;
-					break;
-				case KeyCodes.KEY_RIGHT:
-				case KeyCodes.KEY_D:
-					right = true;
-					break;
-				case KeyCodes.KEY_E:
-					in = true;
-					break;
-				case KeyCodes.KEY_Q:
-					out = true;
-					break;
-				default:
-					break;
-				}
-			}
-
-		});
-		*/
-
-		/*webGLCanvas.addKeyUpHandler(new KeyUpHandler() {
-
-			@Override
-			public void onKeyUp(KeyUpEvent event) {
-				switch (event.getNativeKeyCode()) {
-				case KeyCodes.KEY_UP:
-				case KeyCodes.KEY_W:
-					up = false;
-					break;
-				case KeyCodes.KEY_DOWN:
-				case KeyCodes.KEY_S:
-					down = false;
-					break;
-				case KeyCodes.KEY_LEFT:
-				case KeyCodes.KEY_A:
-					left = false;
-					break;
-				case KeyCodes.KEY_RIGHT:
-				case KeyCodes.KEY_D:
-					right = false;
-					break;
-				case KeyCodes.KEY_E:
-					in = false;
-					break;
-				case KeyCodes.KEY_Q:
-					out = false;
-					break;
-				default:
-					break;
-				}
-			}
-
-		});*/
-
 		// Resize callback
 		Window.addResizeHandler(new ResizeHandler() {
 			@Override
@@ -448,16 +371,13 @@ public class _x implements EntryPoint {
 	private void initBuffers() {
 		vertexBuffer = glContext.createBuffer();
 		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, vertexBuffer);
-		// glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER, (NUM_TILES +
-		// 2) * 3 * 4, WebGLRenderingContext.DYNAMIC_DRAW);
+
 		glContext.bufferData(glContext.ARRAY_BUFFER, vertexData,
 				WebGLRenderingContext.DYNAMIC_DRAW);
 
 		texCoordBuffer = glContext.createBuffer();
 		glContext
 				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, texCoordBuffer);
-		// glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER, (NUM_TILES +
-		// 2) * 2 * 4, WebGLRenderingContext.DYNAMIC_DRAW);
 
 		glContext.bufferData(glContext.ARRAY_BUFFER, texCoordData,
 				WebGLRenderingContext.DYNAMIC_DRAW);
@@ -472,14 +392,18 @@ public class _x implements EntryPoint {
 
 		vertexData = Float32Array.create(NUM_TILES * 6 * 3);
 		texCoordData = Float32Array.create(NUM_TILES * 6 * 2);
+		
 		int index = 0;
 		for (int x = 0; x < GRID_WIDTH; x++)
 			for (int y = 0; y < GRID_WIDTH; y++) {
 				int val = (int) (255 * heightmap[x][y]);
-				type = (val < 84 ? LandType.Ocean : val < 100 ? LandType.Shore
-						: val < 132 ? LandType.Beach : LandType.Grass);
+				type = (val < 100 ? LandType.Water
+						: val < 132 ? LandType.Dirt 
+								: LandType.Grass);
+				
 				RenderTile.addTileToBuffer(x, y, 1.0f, index++, type,
 						glContext, vertexData, texCoordData);
+				
 				if (index % 10 == 0) {
 					float percent = (100 * index) / (float) NUM_TILES;
 					percent = ((int) (100 * percent)) / 100.0f;

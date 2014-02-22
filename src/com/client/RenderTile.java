@@ -21,31 +21,43 @@ public class RenderTile {
 		Coordinate position = new Coordinate(x, y);
 
 		float depth = 0.0f;
+		
+		float delta = 0.25f;
 
 		float startx, starty;
 		
 		switch(land){
-		case Grass:	startx = 0.0f;
-					starty = 0.0f;
-					break;
-		case Beach: startx = 0.0f;
-					starty = 0.5f;
-					break;
-		case Shore: startx = 0.5f;
-					starty = 0.0f;
-					break;
-		default:	startx = 0.5f;
-					starty = 0.5f;
+		case Grass:		startx = 0.0f;
+						starty = 0.0f;
+						break;
+		case Dirt: 		startx = 0.0f;
+						starty = delta;
+						break;
+		case Water: 	startx = delta;
+						starty = 0.0f;
+						break;
+		case Forest:	startx = delta;
+						starty = delta;
+						break;
+		case Mountain:	startx = 2 * delta;
+						starty = 0.0f;
+						break;
+		case Snow:		startx = 2 * delta;
+						starty = delta;
+						break;
+		default:		startx = 2*delta;
+						starty = 2*delta;
+						break;
 		}
 		
 		float[] texCoords = new float[] { 
 				startx, starty, 
-				startx + 0.5f, starty,
-				startx, starty + 0.5f,
+				startx + delta, starty,
+				startx, starty + delta,
 				
-				startx, starty + 0.5f,
-				startx + 0.5f, starty + 0.5f,
-				startx + 0.5f, starty
+				startx, starty + delta,
+				startx + delta, starty + delta,
+				startx + delta, starty
 		};
 		
 		texCoordBuffer.set(texCoords, index*texCoords.length);

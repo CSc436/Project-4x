@@ -12,7 +12,7 @@ public interface ClientResources extends ClientBundle{
 	@Source("river_rock.jpg")
 	ImageResource riverTexture();
 	
-	@Source("4terrains.png")
+	@Source("6terrains.png")
 	ImageResource terrainTextures();
 	
     @Source(value={"fs_red.txt"})
