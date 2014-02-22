@@ -131,5 +131,7 @@ public class GameBoardTest {
 		assertFalse(pu1.hasBuildingAt(0, 0));
 		
 		
+		
+		
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import entities.buildings.Building;
 import entities.buildings.ResourceBuilding;
+import entities.units.Agent;
 import entities.units.Unit;
 
 public class PlayerUnits {
@@ -15,12 +16,15 @@ public class PlayerUnits {
 	private List<Building> selectedBuildings;
 	private List<ResourceBuilding> resourceBuildings;
 
+	private List<Agent> agents;
+
 	public PlayerUnits() {
 		units = new ArrayList<Unit>();
 		buildings = new ArrayList<Building>();
 		selectedUnits = new ArrayList<Unit>();
 		selectedBuildings = new ArrayList<Building>();
 		resourceBuildings = new ArrayList<ResourceBuilding>();
+		agents = new ArrayList<Agent>();
 	}
 
 	public void selectUnit(Unit unit) {
@@ -78,6 +82,15 @@ public class PlayerUnits {
 
 	public List<Unit> getUnitList() {
 		return units;
+	}
+
+	public void addAgent(Agent a) {
+
+		agents.add(a);
+	}
+
+	public void removeAgent(Agent a) {
+		agents.remove(a);
 	}
 
 }
