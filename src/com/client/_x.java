@@ -41,6 +41,7 @@ import static com.google.gwt.query.client.css.CSS.*;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 
+
 public class _x implements EntryPoint {
 	private WebGLRenderingContext glContext;
 	private WebGLProgram shaderProgram;
