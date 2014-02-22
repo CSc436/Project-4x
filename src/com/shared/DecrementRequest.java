@@ -1,6 +1,5 @@
 package com.shared;
 
-import com.server.Model;
 
 public class DecrementRequest extends Request {
 	
@@ -8,12 +7,15 @@ public class DecrementRequest extends Request {
 		super();
 	}
 	
-	public static Request generateRequest(int scheduledTurn, int lastTurnReceived) {
-		Request r = Request.generateRequest(scheduledTurn, lastTurnReceived);
+	public static DecrementRequest generateRequest(int scheduledTurn, int lastTurnReceived) {
+		DecrementRequest r = new DecrementRequest();
+		r.setScheduledTurn(scheduledTurn);
+		r.setLastTurnReceived(lastTurnReceived);
 		
 		return r;
 	}
 	
+	@Override
 	public boolean executeOn(Model m) {
 		if(m.canDecrement()) {
 			m.decrement();

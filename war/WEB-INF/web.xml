@@ -8,7 +8,7 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>greetServlet</servlet-name>
-    <servlet-class>com.server.GreetingServiceImpl</servlet-class>
+    <servlet-class>com.server.SimpleSimulatorImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
