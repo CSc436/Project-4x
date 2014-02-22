@@ -25,27 +25,27 @@ public class RenderTile {
 		float startx, starty;
 		
 		switch(land){
-		case Grass:	startx = 0.0f;
-					starty = 0.0f;
+		case Grass:	startx = 0.01f;
+					starty = 0.01f;
 					break;
-		case Beach: startx = 0.0f;
-					starty = 0.5f;
+		case Beach: startx = 0.01f;
+					starty = 0.51f;
 					break;
-		case Shore: startx = 0.5f;
-					starty = 0.0f;
+		case Shore: startx = 0.51f;
+					starty = 0.01f;
 					break;
-		default:	startx = 0.5f;
-					starty = 0.5f;
+		default:	startx = 0.51f;
+					starty = 0.51f;
 		}
 		
 		float[] texCoords = new float[] { 
 				startx, starty, 
-				startx + 0.5f, starty,
-				startx, starty + 0.5f,
+				startx + 0.48f, starty,
+				startx, starty + 0.48f,
 				
-				startx, starty + 0.5f,
-				startx + 0.5f, starty + 0.5f,
-				startx + 0.5f, starty
+				startx, starty + 0.48f,
+				startx + 0.48f, starty + 0.48f,
+				startx + 0.48f, starty
 		};
 		
 		texCoordBuffer.set(texCoords, index*texCoords.length);
