@@ -2,35 +2,35 @@ package com;
 
 import java.awt.Color;
 import java.awt.Graphics;
-
 import javax.swing.*;
-
 import entities.gameboard.GameBoard;
 import entities.gameboard.Resource;
 import entities.gameboard.Terrain;
 
 public class RunGame {
 
-	// controller class!
-
 	public static void main(String[] args) {
 
-		GameBoard game = new GameBoard(800, 800, 2);
+		String h;
+		String w;
+		String pl;
+
+		h = JOptionPane.showInputDialog("Enter height");
+		w = JOptionPane.showInputDialog("Enter width");
+		pl = JOptionPane.showInputDialog("Enter player amount");
+
+		int x = Integer.parseInt(w);
+		int y = Integer.parseInt(h);
+		int p = Integer.parseInt(pl);
+
+		GameBoard game = new GameBoard(x, y, p);
 
 		JFrame frame = new JFrame("display");
 		frame.setVisible(true);
-		frame.setSize(800, 800);
+		frame.setSize(x, y);
 		JPanel test = new draw(game);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		frame.setContentPane(test);
-
-		if (args.length == 3) {
-
-		} else {
-
-			System.out.println("usage");
-		}
 
 	}
 
@@ -65,7 +65,7 @@ class draw extends JPanel {
 						g.setColor(new Color(255, 241, 212));
 					else if (game.getTileAt(r, c).getTerrainType() == Terrain.WATER)
 						g.setColor(new Color(51, 126, 255));
-					else if (game.getTileAt(r, c).getTerrainType() == Terrain.HILL)
+					else if (game.getTileAt(r, c).getTerrainType() == Terrain.FOREST)
 						g.setColor(new Color(139, 131, 120));
 					else if (game.getTileAt(r, c).getTerrainType() == Terrain.MOUNTAIN)
 						g.setColor(new Color(238, 238, 224));

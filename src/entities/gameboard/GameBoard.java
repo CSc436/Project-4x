@@ -38,7 +38,6 @@ public class GameBoard {
 	private static float goldMult = 0.002f; // 0.2% of tiles that can support
 											// gold have gold
 
-	
 	// numPlayers ==> list
 	public GameBoard(int row, int col, int numPlayers) {
 		rows = row;
@@ -162,7 +161,7 @@ public class GameBoard {
 		System.out.println("Distributing wood...");
 		int numWood = (int) (woodMult * (terrainList.get(
 				Terrain.GRASS.ordinal()).size() + terrainList.get(
-				Terrain.HILL.ordinal()).size()));
+				Terrain.FOREST.ordinal()).size()));
 		// Wood can exist in lists 2 and 3
 		while (numWood > 0) {
 			r = Math.abs(rnd.nextInt());
@@ -185,7 +184,7 @@ public class GameBoard {
 
 		System.out.println("Distributing stone...");
 		int numStone = (int) (stoneMult * (terrainList.get(
-				Terrain.HILL.ordinal()).size()
+				Terrain.FOREST.ordinal()).size()
 				+ terrainList.get(Terrain.MOUNTAIN.ordinal()).size() + terrainList
 				.get(Terrain.SNOW.ordinal()).size()));
 		// stone can exist in lists 3, 4, 5
@@ -209,8 +208,8 @@ public class GameBoard {
 		}
 
 		System.out.println("Distributing gold...");
-		int numGold = (int) (goldMult * (terrainList
-				.get(Terrain.HILL.ordinal()).size()
+		int numGold = (int) (goldMult * (terrainList.get(
+				Terrain.FOREST.ordinal()).size()
 				+ terrainList.get(Terrain.MOUNTAIN.ordinal()).size() + terrainList
 				.get(Terrain.SNOW.ordinal()).size()));
 		while (numGold > 0) {

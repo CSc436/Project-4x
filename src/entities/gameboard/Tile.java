@@ -2,7 +2,6 @@ package entities.gameboard;
 
 import control.Player;
 
-
 /**
  * 
  * @author Benjamin Deininger, Travis Strattom, and Nicholas Topping
@@ -29,22 +28,23 @@ public class Tile {
 												// tile is occupied by buliding.
 
 	// TODO add private int resource amount;
-	
+
 	// private float regenerate
 
 	/*
-	 * Tile(): 
-	 * Description: Constructor for Tile Object. Determines the terrain
+	 * Tile(): Description: Constructor for Tile Object. Determines the terrain
 	 * type based on heightMap, and assigns resource.
 	 * 
 	 * Parameters:
+	 * 
 	 * @param int resourceNum - the number of the resource, Currently 0 for
 	 * Gold, 1 for wood, 2 for food, and 3 for stone
 	 * 
 	 * @param float heightMap - the height of this specific tile, determines the
 	 * terrain type.
 	 * 
-	 * Return Value: 
+	 * Return Value:
+	 * 
 	 * @return a new Tile object.
 	 */
 	public Tile(int resourceNum, float heightMap) {
@@ -64,59 +64,59 @@ public class Tile {
 
 		// TODO add 'determine resource amount' function
 		// TODO based on resource type set resource regeneration
-		
+
 		owner = null;
 		passable = true;
 		terrain = calculateTerrainType(height);
 	}
 
 	/*
-	 * Tile(): 
-	 * Description: Constructor for Tile Object. Determines the terrain
+	 * Tile(): Description: Constructor for Tile Object. Determines the terrain
 	 * type based on heightMap, and assigns resource.
 	 * 
 	 * Parameters:
-	 * @param Resource r - the resource to assign (generally NONE for constructor)
+	 * 
+	 * @param Resource r - the resource to assign (generally NONE for
+	 * constructor)
 	 * 
 	 * @param float heightMap - the height of this specific tile, determines the
 	 * terrain type.
 	 * 
-	 * Return Value: 
+	 * Return Value:
+	 * 
 	 * @return a new Tile object.
 	 */
 	public Tile(Resource r, float heightMap) {
 		height = heightMap;
 
 		resource = r;
-		
+
 		// TODO add 'determine resource amount' function
 		// TODO based on resource type set resource regeneration
-		
+
 		owner = null;
 		passable = true;
 		terrain = calculateTerrainType(height);
 	}
-	
+
 	// TODO add 'determine resource amount' function
-	public int determineResourceAmount(Resource r)
-	{
+	public int determineResourceAmount(Resource r) {
 		return 0;
 	}
-	
+
 	// TODO add 'Generate resource' function
-	public void generateResource()
-	{
+	public void generateResource() {
 		// based on regenerate float generate new value
 		// set current value
 	}
-	
-	// TODO add 'remove resource amount' function - return int of # resources gathered
-	public int takeResources(int amount)
-	{
+
+	// TODO add 'remove resource amount' function - return int of # resources
+	// gathered
+	public int takeResources(int amount) {
 		// TODO return maximum amount that can be returned
 		return amount;
 	}
-	
+
 	/*
 	 * isOccupiedByBuilding(): Description: returns whether or not tile is
 	 * occupied by buliding
@@ -282,7 +282,7 @@ public class Tile {
 		} else if (newHeight < 140 + 5) {
 			return Terrain.GRASS;
 		} else if (newHeight < 156 + 10) {
-			return Terrain.HILL;
+			return Terrain.FOREST;
 		} else if (newHeight < 184 + 5) {
 			return Terrain.MOUNTAIN;
 		} else {
