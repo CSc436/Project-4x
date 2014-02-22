@@ -37,6 +37,7 @@ public abstract class Building extends Unit {
 		super(p, baseStats, type, xco, yco);
 		this.height = height;
 		this.width = width;
+		p.getUnits().addBuilding(this);
 	}
 
 	public void setHeight(int x) {
