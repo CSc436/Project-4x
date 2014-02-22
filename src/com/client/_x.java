@@ -83,8 +83,81 @@ public class _x implements EntryPoint {
 		WIDTH = webGLCanvas.getParent().getOffsetWidth();
 
 		glContext.viewport(0, 0, WIDTH, HEIGHT);
+		
+		RootPanel.get().addDomHandler(new KeyDownHandler() {
+			private long lastHit = System.currentTimeMillis();
 
-		webGLCanvas.addKeyDownHandler(new KeyDownHandler() {
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				// TODO Auto-generated method stub
+
+				if (time - lastHit < 100)
+					return;
+
+				lastHit = time;
+
+				switch (event.getNativeKeyCode()) {
+				case KeyCodes.KEY_UP:
+				case KeyCodes.KEY_W:
+					up = true;
+					break;
+				case KeyCodes.KEY_DOWN:
+				case KeyCodes.KEY_S:
+					down = true;
+					break;
+				case KeyCodes.KEY_LEFT:
+				case KeyCodes.KEY_A:
+					left = true;
+					break;
+				case KeyCodes.KEY_RIGHT:
+				case KeyCodes.KEY_D:
+					right = true;
+					break;
+				case KeyCodes.KEY_E:
+					in = true;
+					break;
+				case KeyCodes.KEY_Q:
+					out = true;
+					break;
+				default:
+					break;
+				}
+			}
+		}, KeyDownEvent.getType());
+		
+		RootPanel.get().addDomHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				switch (event.getNativeKeyCode()) {
+				case KeyCodes.KEY_UP:
+				case KeyCodes.KEY_W:
+					up = false;
+					break;
+				case KeyCodes.KEY_DOWN:
+				case KeyCodes.KEY_S:
+					down = false;
+					break;
+				case KeyCodes.KEY_LEFT:
+				case KeyCodes.KEY_A:
+					left = false;
+					break;
+				case KeyCodes.KEY_RIGHT:
+				case KeyCodes.KEY_D:
+					right = false;
+					break;
+				case KeyCodes.KEY_E:
+					in = false;
+					break;
+				case KeyCodes.KEY_Q:
+					out = false;
+					break;
+				default:
+					break;
+				}
+			}
+		}, KeyUpEvent.getType());
+
+		/*webGLCanvas.addKeyDownHandler(new KeyDownHandler() {
 			private long lastHit = System.currentTimeMillis();
 
 			@Override
@@ -125,8 +198,9 @@ public class _x implements EntryPoint {
 			}
 
 		});
+		*/
 
-		webGLCanvas.addKeyUpHandler(new KeyUpHandler() {
+		/*webGLCanvas.addKeyUpHandler(new KeyUpHandler() {
 
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
@@ -158,7 +232,7 @@ public class _x implements EntryPoint {
 				}
 			}
 
-		});
+		});*/
 
 		// Resize callback
 		Window.addResizeHandler(new ResizeHandler() {
@@ -187,7 +261,10 @@ public class _x implements EntryPoint {
 		$("#city-button").click(new Function() {
 			public boolean f(Event e) {
 				// Show city menu
-				$("#sidebar").animate("width:'toggle'");
+				toggleSidebar(false);
+				$("#agent-menu").hide();
+				$("#city-menu").show();
+				// Change content to city menu
 				return true; // Default return true
 			}
 		});
@@ -196,7 +273,10 @@ public class _x implements EntryPoint {
 		$("#agent-button").click(new Function() {
 			public boolean f(Event e) {
 				// Show agent menu
-				$("#sidebar").animate("width:'toggle'");
+				toggleSidebar(false);
+				$("#city-menu").hide();
+				$("#agent-menu").show();
+				// Change content to agent menu
 				return true; // Default return true
 			}
 		});
@@ -204,12 +284,26 @@ public class _x implements EntryPoint {
 		// Sidebar close/open
 		$("#sidebar-hide").click(new Function() {
 			public boolean f(Event e) {
-				// Hide agent menu
-				$("#sidebar").animate("width:'toggle'");
-
+				// Hide sidebar
+				toggleSidebar(true);
 				return true; // Default return true
 			}
 		});
+	}
+	
+	private void toggleSidebar(boolean hideIfShowing) {
+		String left = $("#sidebar").css("left");
+		if (left.equals("0px")) {
+			//Hide only if param is true
+			if (hideIfShowing) {
+				int width = $("#sidebar").outerWidth(true);
+				int closeWidth = $("#sidebar-hide").outerWidth(true);
+				$("#sidebar").animate("left:-" + (width + closeWidth));
+			}
+		} else {
+			//Show sidebar
+			$("#sidebar").animate("left:0");
+		}
 	}
 
 	private void makeCameraMatrix() {

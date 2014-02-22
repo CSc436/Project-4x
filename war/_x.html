@@ -47,7 +47,12 @@
 	</div>
 
 	<div id="sidebar">
-		Here is some sidebar text
+		<div id="agent-menu">
+			Agent menu
+		</div>
+		<div id="city-menu">
+			City menu
+		</div>
 		<div id="sidebar-hide">&lt;&lt;</div>
 	</div>
 
@@ -64,7 +69,8 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 			
-			//Prevents '#' from appending to url
+			// Prevents '#' from appending to url when
+			// clicking menu icons
 			$("#toolbar > li > a").click(function(e) {
 				e.preventDefault();
 			});
