@@ -22,11 +22,12 @@ public abstract class Building extends GameObject{
 	//garrison?
 	
 	private int maxHp;
+	protected static int maxLevel;
 	private int health;
 	private Player owner; // owner of the structure
 	private int height; // height of the structure
 	private int width; // width of the structure
-	private int level;
+	protected static int level;
 	private int x = -1;
 	private int y = -1; // dimensions on the game board
 
@@ -97,8 +98,15 @@ public abstract class Building extends GameObject{
 		return width;
 	}
 
-	public int getLevel() {
+	public static int getLevel() {
 		return level;
+	}
+	
+	protected void upgrade(){
+		if(level==maxLevel)
+			System.out.println("Your building has reached the highest level!");
+		else
+			level++;
 	}
 	/*
 	 * Holding the Queue for the units that the building is responsible for
@@ -113,4 +121,5 @@ public abstract class Building extends GameObject{
 		return buildingQ.poll();
 
 	}
+
 }
