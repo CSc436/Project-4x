@@ -1,14 +1,10 @@
 package com.client;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import com.client.matrixutils.FloatMatrix;
 import com.google.gwt.canvas.client.Canvas;
-import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -16,8 +12,9 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Image;
@@ -29,20 +26,8 @@ import com.googlecode.gwtgl.binding.WebGLRenderingContext;
 import com.googlecode.gwtgl.binding.WebGLShader;
 import com.googlecode.gwtgl.binding.WebGLTexture;
 import com.googlecode.gwtgl.binding.WebGLUniformLocation;
-import com.google.gwt.query.client.GQuery;
-import com.google.gwt.query.client.Function;
-import com.google.gwt.query.client.Selector;
-import com.google.gwt.query.client.Selectors;
 
-import static com.google.gwt.query.client.GQuery.*;
-import static com.google.gwt.query.client.css.CSS.*;
-
-/**
- * Entry point classes define <code>onModuleLoad()</code>.
- */
-
-
-public class _x implements EntryPoint {
+public class GameCanvas {
 	private WebGLRenderingContext glContext;
 	private WebGLProgram shaderProgram;
 	private WebGLTexture texture;
@@ -63,18 +48,17 @@ public class _x implements EntryPoint {
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
 
 	private ArrayList<RenderTile> tiles = new ArrayList<RenderTile>();
+	
+	private final Canvas webGLCanvas = Canvas.createIfSupported();
 
-	public void onModuleLoad() {
-		final Canvas webGLCanvas = Canvas.createIfSupported();
-
+	public GameCanvas() {
 		RootPanel.get("gwtGL").add(webGLCanvas);
-
 		glContext = (WebGLRenderingContext) webGLCanvas
 				.getContext("experimental-webgl");
+
 		if (glContext == null) {
 			Window.alert("Sorry, your browser doesn't support WebGL!");
 		}
-
 		// These lines make the viewport fullscreen
 		webGLCanvas.setCoordinateSpaceHeight(webGLCanvas.getParent()
 				.getOffsetHeight());
@@ -85,6 +69,16 @@ public class _x implements EntryPoint {
 
 		glContext.viewport(0, 0, WIDTH, HEIGHT);
 		
+		registerMapMovements();
+		registerResizeHandler();
+		makeCameraMatrix();
+		start();
+	}
+	
+	/**
+	 * Binds keys to browser window to move map around and zoom in/out
+	 */
+	private void registerMapMovements() {
 		RootPanel.get().addDomHandler(new KeyDownHandler() {
 			private long lastHit = System.currentTimeMillis();
 
@@ -125,7 +119,7 @@ public class _x implements EntryPoint {
 				}
 			}
 		}, KeyDownEvent.getType());
-		
+
 		RootPanel.get().addDomHandler(new KeyUpHandler() {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
@@ -158,83 +152,10 @@ public class _x implements EntryPoint {
 			}
 		}, KeyUpEvent.getType());
 
-		/*webGLCanvas.addKeyDownHandler(new KeyDownHandler() {
-			private long lastHit = System.currentTimeMillis();
+		
+	}
 
-			@Override
-			public void onKeyDown(KeyDownEvent event) {
-				// TODO Auto-generated method stub
-
-				if (time - lastHit < 100)
-					return;
-
-				lastHit = time;
-
-				switch (event.getNativeKeyCode()) {
-				case KeyCodes.KEY_UP:
-				case KeyCodes.KEY_W:
-					up = true;
-					break;
-				case KeyCodes.KEY_DOWN:
-				case KeyCodes.KEY_S:
-					down = true;
-					break;
-				case KeyCodes.KEY_LEFT:
-				case KeyCodes.KEY_A:
-					left = true;
-					break;
-				case KeyCodes.KEY_RIGHT:
-				case KeyCodes.KEY_D:
-					right = true;
-					break;
-				case KeyCodes.KEY_E:
-					in = true;
-					break;
-				case KeyCodes.KEY_Q:
-					out = true;
-					break;
-				default:
-					break;
-				}
-			}
-
-		});
-		*/
-
-		/*webGLCanvas.addKeyUpHandler(new KeyUpHandler() {
-
-			@Override
-			public void onKeyUp(KeyUpEvent event) {
-				switch (event.getNativeKeyCode()) {
-				case KeyCodes.KEY_UP:
-				case KeyCodes.KEY_W:
-					up = false;
-					break;
-				case KeyCodes.KEY_DOWN:
-				case KeyCodes.KEY_S:
-					down = false;
-					break;
-				case KeyCodes.KEY_LEFT:
-				case KeyCodes.KEY_A:
-					left = false;
-					break;
-				case KeyCodes.KEY_RIGHT:
-				case KeyCodes.KEY_D:
-					right = false;
-					break;
-				case KeyCodes.KEY_E:
-					in = false;
-					break;
-				case KeyCodes.KEY_Q:
-					out = false;
-					break;
-				default:
-					break;
-				}
-			}
-
-		});*/
-
+	private void registerResizeHandler() {
 		// Resize callback
 		Window.addResizeHandler(new ResizeHandler() {
 			@Override
@@ -250,61 +171,7 @@ public class _x implements EntryPoint {
 				glContext.viewport(0, 0, WIDTH, HEIGHT);
 				makeCameraMatrix();
 			}
-		});
-
-		initClickHandlers();
-		makeCameraMatrix();
-		start();
-	}
-
-	private void initClickHandlers() {
-		// City Menu Button
-		$("#city-button").click(new Function() {
-			public boolean f(Event e) {
-				// Show city menu
-				toggleSidebar(false);
-				$("#agent-menu").hide();
-				$("#city-menu").show();
-				// Change content to city menu
-				return true; // Default return true
-			}
-		});
-
-		// Agent Menu Button
-		$("#agent-button").click(new Function() {
-			public boolean f(Event e) {
-				// Show agent menu
-				toggleSidebar(false);
-				$("#city-menu").hide();
-				$("#agent-menu").show();
-				// Change content to agent menu
-				return true; // Default return true
-			}
-		});
-
-		// Sidebar close/open
-		$("#sidebar-hide").click(new Function() {
-			public boolean f(Event e) {
-				// Hide sidebar
-				toggleSidebar(true);
-				return true; // Default return true
-			}
-		});
-	}
-	
-	private void toggleSidebar(boolean hideIfShowing) {
-		String left = $("#sidebar").css("left");
-		if (left.equals("0px")) {
-			//Hide only if param is true
-			if (hideIfShowing) {
-				int width = $("#sidebar").outerWidth(true);
-				int closeWidth = $("#sidebar-hide").outerWidth(true);
-				$("#sidebar").animate("left:-" + (width + closeWidth));
-			}
-		} else {
-			//Show sidebar
-			$("#sidebar").animate("left:0");
-		}
+		});	
 	}
 
 	private void makeCameraMatrix() {
