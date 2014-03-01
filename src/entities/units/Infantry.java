@@ -1,8 +1,8 @@
 package entities.units;
 
 import control.Player;
-import entities.BaseStatsEnum;
 import entities.UnitType;
+import entities.stats.BaseStatsEnum;
 
 /*
  * Programmer:  Benjamin Deininger

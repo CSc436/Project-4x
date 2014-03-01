@@ -1,4 +1,4 @@
-package entities;
+package entities.stats;
 
 
 //int damage, float range, int armor, float health_regen, float health, float movementSpeed, float actionSpeed) {

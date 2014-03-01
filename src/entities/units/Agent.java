@@ -7,8 +7,8 @@ import java.util.Set;
 
 import control.CommandQueue;
 import control.Player;
-import entities.BaseStatsEnum;
 import entities.UnitType;
+import entities.stats.BaseStatsEnum;
 
 public class Agent extends Unit {
 	private Map<String, Unit> underlings;

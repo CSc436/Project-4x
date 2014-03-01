@@ -3,8 +3,8 @@ package entities.research;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import entities.BuffStats;
 import entities.UnitType;
+import entities.stats.BuffStats;
 
 public class Upgrades {
 	public HashMap<String, BuffStats> mapping;

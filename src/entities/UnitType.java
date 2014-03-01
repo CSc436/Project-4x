@@ -1,6 +1,7 @@
 package entities;
 
 import control.Player;
+import entities.stats.BuffStats;
 
 public enum UnitType {
 	ALL, BUILDING, INFANTRY;

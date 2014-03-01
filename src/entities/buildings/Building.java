@@ -4,8 +4,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import control.Player;
-import entities.BaseStatsEnum;
 import entities.UnitType;
+import entities.stats.BaseStatsEnum;
 import entities.units.Unit;
 
 public abstract class Building extends Unit {

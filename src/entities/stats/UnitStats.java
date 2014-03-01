@@ -1,4 +1,4 @@
-package entities;
+package entities.stats;
 
 public class UnitStats {
 	public int damage;

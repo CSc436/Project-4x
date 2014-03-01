@@ -4,10 +4,10 @@ import java.util.PriorityQueue;
 
 import control.Player;
 import entities.Action;
-import entities.BaseStatsEnum;
 import entities.PlayerUnits;
-import entities.UnitStats;
 import entities.UnitType;
+import entities.stats.BaseStatsEnum;
+import entities.stats.UnitStats;
 
 /*
  * Programmer:  Benjamin Deininger

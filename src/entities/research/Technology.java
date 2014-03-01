@@ -3,9 +3,9 @@ package entities.research;
 import java.util.ArrayList;
 
 import control.Player;
-import entities.BuffStats;
 import entities.UnitType;
 import entities.resources.Resources;
+import entities.stats.BuffStats;
 
 public abstract class Technology {
 	protected ArrayList<TechnologyEnum> requirements;

@@ -1,9 +1,9 @@
 package entities.buildings;
 
 import control.Player;
-import entities.BaseStatsEnum;
 import entities.UnitType;
 import entities.resources.Resources;
+import entities.stats.BaseStatsEnum;
 
 public abstract class ResourceBuilding extends Building{
 	
