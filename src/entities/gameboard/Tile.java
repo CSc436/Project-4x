@@ -18,6 +18,9 @@ public class Tile {
 	private boolean passable; // Boolean representing whether or not units can
 								// pass over/through a terrain tile.
 	private Resource resource; // Resource that populates this tile.
+	private int resourceAmount; // amount of resources tile has.
+	private float resourceReg; // this tile's resource regen rate.
+	
 	private float height; // Height generated from the diamondSquareGenerator in
 							// GameBoard
 	private Player owner; // The Player that contains possession of the tile,
@@ -27,9 +30,19 @@ public class Tile {
 	private boolean occupiedByBuilding = false; // keeps track of whether or not
 												// tile is occupied by buliding.
 
-	// TODO add private int resource amount;
+	// Resource Base Amounts - 'Average' amount a tile contiaining resource X will start with
+	private static final int foodBase  = 200; 
+	private static final int woodBase  = 100; 
+	private static final int stoneBase = 300; 
+	private static final int goldBase  = 500; 
+	
+	// Resource Regeneration rates - how much of resource will regenerate during each 'Tick'
+	private static final float foodReg  = 1.100f; 
+	private static final float woodReg  = 1.300f; 
+	private static final float stoneReg = 1.050f; 
+	private static final float goldReg  = 1.025f; 
+	
 
-	// private float regenerate
 
 	/*
 	 * Tile(): Description: Constructor for Tile Object. Determines the terrain
@@ -62,9 +75,9 @@ public class Tile {
 			resource = Resource.NONE;
 		}
 
-		// TODO add 'determine resource amount' function
-		// TODO based on resource type set resource regeneration
-
+		setResourceAmount(resource);
+		setResourceRegen(resource);
+		
 		owner = null;
 		passable = true;
 		terrain = calculateTerrainType(height);
@@ -82,39 +95,140 @@ public class Tile {
 	 * @param float heightMap - the height of this specific tile, determines the
 	 * terrain type.
 	 * 
-	 * Return Value:
-	 * 
+	 * Return Value: 
 	 * @return a new Tile object.
 	 */
 	public Tile(Resource r, float heightMap) {
 		height = heightMap;
 
 		resource = r;
-
-		// TODO add 'determine resource amount' function
-		// TODO based on resource type set resource regeneration
-
+		
+		setResourceAmount(resource); 
+		setResourceRegen(resource);
+		
 		owner = null;
 		passable = true;
 		terrain = calculateTerrainType(height);
 	}
-
-	// TODO add 'determine resource amount' function
-	public int determineResourceAmount(Resource r) {
-		return 0;
+	
+	/*
+	 * setResourceRegen():
+	 * Description:
+	 * Based on resource type, sets the regen rate
+	 * 
+	 * Parameters:
+	 * @param Resource r - the resource to assign 
+	 * 
+	 * Return Value:
+	 * @return void 
+	 * 
+	 * TODO add noise to regen amounts? 
+	 */
+	public void setResourceRegen(Resource r)
+	{
+		switch (r)
+		{
+			case NONE:
+				this.resourceReg = 0f;
+				break;
+			case GOLD:
+				this.resourceReg = goldReg;
+				break;
+			case STONE:
+				this.resourceReg = stoneReg;
+				break;
+			case FOOD:
+				this.resourceReg = foodReg;
+				break;
+			case WOOD:
+				this.resourceReg = woodReg; 
+				break;
+			default:
+				this.resourceReg = 0f;
+				break;
+		}
 	}
-
-	// TODO add 'Generate resource' function
-	public void generateResource() {
-		// based on regenerate float generate new value
-		// set current value
+	
+	/*
+	 * setResourceAmount():
+	 * Description:
+	 * Sets the base amount of a resource for a tile. Values based on 
+	 * constants described at top of file.
+	 * TODO in future add ability to fluctuate start vlaues. 
+	 * 
+	 * Parameters:
+	 * @param Resource r - resource this tile will contain
+	 * 
+	 * Return value:
+	 * @return the amount of resource this tile is set to. 
+	 */
+	public int setResourceAmount(Resource r)
+	{
+		// TODO add noise. fluctuate starting amounts
+		switch (r)
+		{
+			case NONE:
+				this.resourceAmount = 0;
+				break;
+			case GOLD:
+				this.resourceAmount = goldBase;
+				break;
+			case STONE:
+				this.resourceAmount = stoneBase;
+				break;
+			case FOOD:
+				this.resourceAmount= foodBase;
+				break;
+			case WOOD:
+				this.resourceAmount = woodBase; 
+				break;
+			default:
+				this.resourceAmount = 0;
+				break;
+		}
+		return this.resourceAmount; 
 	}
-
-	// TODO add 'remove resource amount' function - return int of # resources
-	// gathered
-	public int takeResources(int amount) {
-		// TODO return maximum amount that can be returned
-		return amount;
+	
+	/*
+	 * generateResource():
+	 * Description:
+	 * regenerates resource for given tile. Should be called once a 'Tick'
+	 */
+	public void generateResource()
+	{
+		this.resourceAmount *= this.resourceReg;
+	}
+	
+	/*
+	 * takeResource():
+	 * Description:
+	 * If current tile has a resource, allow player to take up to amount given. 
+	 * TODO: possibly add parameter that is resource they are trying to take? 
+	 * 
+	 * Parameters:
+	 * @param int amount - amount of resource unit/player is trying to take
+	 * 
+	 * Return value:
+	 * @return amount taken; can be 0 - amount (inclusive). 
+	 */
+	public int takeResources(int amount)
+	{
+		int res;
+		if (this.resource == Resource.NONE || this.resourceAmount == 0)
+		{
+			return 0; 
+		} else if (this.resourceAmount < amount) 
+		{
+			res = this.resourceAmount;
+			this.resourceAmount = 0;
+			this.resourceReg = 0f;
+			this.resource = Resource.NONE;
+			return res; 
+		} else
+		{
+			this.resourceAmount -= amount;
+			return amount;
+		}
 	}
 
 	/*
@@ -184,6 +298,9 @@ public class Tile {
 			return false;
 		}
 		this.resource = r;
+		setResourceAmount(this.resource);
+		setResourceRegen(this.resource);
+		
 		return true;
 	}
 

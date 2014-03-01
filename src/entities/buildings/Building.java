@@ -39,29 +39,27 @@ public abstract class Building extends Unit {
 
 	private Queue<Unit> buildingQ = new LinkedList<Unit>();
 
-	public Building(Player p, int h, int w, int hp, int lv) {
-
-		maxHp = health = hp;
-		owner = p;
-		height = h;
-		width = w;
-		level = lv;
-
-	}
-
-	// GET / SET
-	public int getHealth() {
-		return health;
-	}
-
-	public void setHealth(int hp) {
-		if (hp > maxHp)
-			health = maxHp;
-		else if (hp < 0)
-			health = 0;
-		else
-			health = hp;
-	}
+//	public Building(Player p, int h, int w, int hp, int lv) {
+//		maxHp = health = hp;
+//		owner = p;
+//		height = h;
+//		width = w;
+//		level = lv;
+//	}
+//
+//	// GET / SET
+//	public int getHealth() {
+//		return health;
+//	}
+//
+//	public void setHealth(int hp) {
+//		if (hp > maxHp)
+//			health = maxHp;
+//		else if (hp < 0)
+//			health = 0;
+//		else
+//			health = hp;
+//	}
 
 	public Building(Player p, BaseStatsEnum baseStats, UnitType type, int xco,
 			int yco, int height, int width, int idno) {
@@ -114,7 +112,5 @@ public abstract class Building extends Unit {
 
 	public Unit dequeueUnit() {
 		return buildingQ.poll();
-
 	}
-
 }

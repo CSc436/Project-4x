@@ -20,10 +20,10 @@ public class Castle extends Building {
 		super(p, BaseStatsEnum.CASTLE, UnitType.BUILDING, xco, yco, idno);
 	}
 
-	public Castle(Player p, int h, int w, int hp) {
-		super(p, h, w, hp, 1);
-		populationCap = 100; // Random number for now.
-		influenceArea = 2; // a nxn radius from the row and column of its board
-							// tile.
-	}
+//	public Castle(Player p, int h, int w, int hp) {
+//		super(p, h, w, hp, 1);
+//		populationCap = 100; // Random number for now.
+//		influenceArea = 2; // a nxn radius from the row and column of its board
+//							// tile.
+//	}
 }

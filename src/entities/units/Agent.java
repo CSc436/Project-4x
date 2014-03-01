@@ -19,5 +19,4 @@ public class Agent extends Unit {
 		underlings = new HashMap<String, Unit>();
 		cq = new CommandQueue();
 	}
-
 }
