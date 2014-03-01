@@ -12,6 +12,7 @@ public abstract class Building extends Unit {
 
 	protected int width;
 	protected int height;
+	public int id;
 
 	private Queue<Unit> buildingQ = new LinkedList<Unit>();
 
@@ -25,7 +26,8 @@ public abstract class Building extends Unit {
 		super(p, baseStats, type, xco, yco, idno);
 		this.height = height;
 		this.width = width;
-		p.getUnits().addBuilding(this);
+		id = idno;
+
 	}
 
 	public void setHeight(int x) {
@@ -42,5 +44,9 @@ public abstract class Building extends Unit {
 
 	public int getWidth() {
 		return width;
+	}
+
+	public int getId() {
+		return id;
 	}
 }

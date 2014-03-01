@@ -173,4 +173,8 @@ public abstract class Unit {
 	public PriorityQueue<Action> getActionQueue() {
 		return actionQueue;
 	}
+
+	public int getId() {
+		return id;
+	}
 }
