@@ -12,10 +12,9 @@ public class Controller implements Runnable {
 	List<Player> players;
 	public GameBoard map;
 	MovingNumber number;
-	UnitFactory ufact;
 
 	public Controller() {
-		ufact = new UnitFactory();
+
 		map = new GameBoard(5, 5, 2);
 		players = map.getPlayerList();
 		number = new MovingNumber(0.0, 1.0);
