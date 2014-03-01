@@ -19,7 +19,7 @@ public class Controller implements Runnable {
 		map = new GameBoard(5, 5, 2);
 		players = map.getPlayerList();
 		number = new MovingNumber(0.0, 1.0);
-		ufact.buildUnit(UnitType.INFANTRY, players.get(0));
+		UnitFactory.buildUnit(UnitType.INFANTRY, players.get(0));
 
 	}
 

@@ -5,7 +5,7 @@ import entities.units.Unit;
 
 public class UnitFactory {
 
-	public Unit buildUnit(UnitType u, Player p) {
+	public static Unit buildUnit(UnitType u, Player p) {
 
 		Unit result;
 
