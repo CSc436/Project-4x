@@ -2,14 +2,17 @@ package com;
 
 import java.awt.Color;
 import java.awt.Graphics;
+
 import javax.swing.*;
+
+import control.Controller;
 import entities.gameboard.GameBoard;
 import entities.gameboard.Resource;
 import entities.gameboard.Terrain;
 
-public class RunGame {
+public class RunGame extends Thread {
 
-	public static void main(String[] args) {
+	public static void main(String[] args)  {
 
 		String h;
 		String w;
@@ -32,6 +35,7 @@ public class RunGame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setContentPane(test);
 
+		
 	}
 
 }

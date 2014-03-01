@@ -1,11 +1,11 @@
-package com.fourx.civilizations;
+package entities;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import com.fourx.research.Technology;
-import com.fourx.research.TechnologyEnum;
+import entities.research.Technology;
+import entities.research.TechnologyEnum;
 
 public abstract class Civilization {
 

@@ -1,14 +1,14 @@
-package com.fourx.research.technologies;
+package entities.research;
 
-import com.fourx.buffs.UnitType;
-import com.fourx.research.Technology;
-import com.fourx.resources.Resources;
+import entities.UnitType;
+import entities.annotations.TechDisabledByDefault;
+import entities.resources.Resources;
 
-public class BuildingHealth extends Technology {
-	public BuildingHealth() {
-		// SUPER constructor takes max level of research.
+@TechDisabledByDefault
+public class DisabledTechnology extends Technology  {
+
+	public DisabledTechnology() {
 		super(3);
-
 		costs[0] = new Resources(50, 50, 50, 50);
 		costs[1] = new Resources(100, 100, 100, 100);
 		costs[2] = new Resources(150, 150, 150, 150);
@@ -26,4 +26,6 @@ public class BuildingHealth extends Technology {
 		time[2] = 180;
 		appliesTo.add(UnitType.BUILDING);
 	}
+
 }
+

@@ -1,12 +1,7 @@
 package control;
 
-import java.util.ArrayList;
 
-import com.fourx.civilizations.Civilization;
-import com.fourx.civilizations.PerfectCivilization;
-import com.fourx.research.TechnologyTree;
-import com.fourx.research.Upgrades;
-import com.fourx.resources.Resources;
+
 
 /* state
  based on state, the unit will:
@@ -15,8 +10,16 @@ import com.fourx.resources.Resources;
  allow other object to give unit an order
  */
 
+
+
+
 import entities.Action;
+import entities.Civilization;
+import entities.PerfectCivilization;
 import entities.PlayerUnits;
+import entities.research.TechnologyTree;
+import entities.research.Upgrades;
+import entities.resources.Resources;
 import entities.units.Unit;
 
 public class Player {

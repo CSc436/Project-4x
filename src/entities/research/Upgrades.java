@@ -1,10 +1,10 @@
-package com.fourx.research;
+package entities.research;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.fourx.buffs.BuffStats;
-import com.fourx.buffs.UnitType;
+import entities.BuffStats;
+import entities.UnitType;
 
 public class Upgrades {
 	public HashMap<String, BuffStats> mapping;

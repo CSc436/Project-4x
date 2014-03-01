@@ -1,9 +1,8 @@
-package com.fourx.research;
-
-import com.fourx.research.technologies.*;
+package entities.research;
 
 public enum TechnologyEnum {
-	INFANTRYDAMAGE1(InfantryDamage.class), DISABLEDTECHNOLOGY(DisabledTechnology.class);
+	INFANTRYDAMAGE1(InfantryDamage.class), DISABLEDTECHNOLOGY(
+			DisabledTechnology.class);
 
 	private Class<? extends Technology> value;
 

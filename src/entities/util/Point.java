@@ -1,4 +1,4 @@
-package com.fourx.util;
+package entities.util;
 
 /**
  * Extends the Point class in gwt but sets x and y to public.

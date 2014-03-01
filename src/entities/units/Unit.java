@@ -2,13 +2,12 @@ package entities.units;
 
 import java.util.PriorityQueue;
 
-import com.fourx.buffs.UnitType;
-
 import control.Player;
 import entities.Action;
 import entities.BaseStatsEnum;
 import entities.PlayerUnits;
 import entities.UnitStats;
+import entities.UnitType;
 
 /*
  * Programmer:  Benjamin Deininger
@@ -30,7 +29,7 @@ public abstract class Unit {
 
 	private Player owner;
 
-	protected UnitType type = UnitType.INFANTRY;
+	protected UnitType type;
 	private UnitStats stats;
 	protected BaseStatsEnum baseStats;
 
@@ -40,20 +39,14 @@ public abstract class Unit {
 
 	public Unit(Player p, BaseStatsEnum baseStats, UnitType type, int xco,
 			int yco) {
+		
 		this.baseStats = baseStats;
 		this.type = type;
 
 		owner = p;
-		System.out.println(this.getClass());
-		PlayerUnits pu = p.getUnits();
-
-		if (this instanceof Agent) {
-			pu.addAgent((Agent) this);
-		} else {
-			pu.addUnit(this);
-		}
-
+	
 		updateStats();
+	
 		actionQueue = new PriorityQueue<Action>();
 		x = xco;
 		y = yco;

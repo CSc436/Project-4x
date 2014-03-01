@@ -1,10 +1,8 @@
-package com.fourx.research.technologies;
-
-import com.fourx.buffs.UnitType;
-import com.fourx.research.Technology;
-import com.fourx.resources.Resources;
+package entities.research;
 
 import control.Player;
+import entities.UnitType;
+import entities.resources.Resources;
 
 public class InfantryDamage extends Technology {
 	public InfantryDamage() {

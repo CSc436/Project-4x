@@ -5,11 +5,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.fourx.buffs.UnitType;
-
 import control.CommandQueue;
 import control.Player;
 import entities.BaseStatsEnum;
+import entities.UnitType;
 
 public class Agent extends Unit {
 	private Map<String, Unit> underlings;

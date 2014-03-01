@@ -1,6 +1,6 @@
-package com.fourx.civilizations;
+package entities;
 
-import com.fourx.research.TechnologyEnum;
+import entities.research.TechnologyEnum;
 
 public class TestCivilization extends Civilization {
 

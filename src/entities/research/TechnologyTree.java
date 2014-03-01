@@ -1,12 +1,11 @@
-package com.fourx.research;
+package entities.research;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import com.fourx.annotations.TechDisabledByDefault;
-
 import control.Player;
+import entities.annotations.TechDisabledByDefault;
 
 public class TechnologyTree {
 	private Player p;

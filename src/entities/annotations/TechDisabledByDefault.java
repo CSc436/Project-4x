@@ -1,4 +1,4 @@
-package com.fourx.annotations;
+package entities.annotations;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

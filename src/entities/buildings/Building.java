@@ -3,10 +3,9 @@ package entities.buildings;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import com.fourx.buffs.UnitType;
-
 import control.Player;
 import entities.BaseStatsEnum;
+import entities.UnitType;
 import entities.units.Unit;
 
 public abstract class Building extends Unit {

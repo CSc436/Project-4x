@@ -1,4 +1,4 @@
-package com.fourx.civilizations;
+package entities;
 
 public class PerfectCivilization extends Civilization {
 	

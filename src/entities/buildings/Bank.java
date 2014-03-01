@@ -1,10 +1,9 @@
 package entities.buildings;
 
-import com.fourx.buffs.UnitType;
-import com.fourx.resources.Resources;
-
 import control.Player;
 import entities.BaseStatsEnum;
+import entities.UnitType;
+import entities.resources.Resources;
 
 public class Bank extends ResourceBuilding {
 	// Placeholder bank building dimensions

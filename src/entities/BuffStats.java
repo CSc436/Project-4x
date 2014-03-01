@@ -1,6 +1,5 @@
-package com.fourx.buffs;
+package entities;
 
-import entities.UnitStats;
 
 public class BuffStats extends UnitStats {
 	

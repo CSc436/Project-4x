@@ -1,9 +1,8 @@
 package entities.buildings;
 
-import com.fourx.buffs.UnitType;
-
 import control.Player;
 import entities.BaseStatsEnum;
+import entities.UnitType;
 
 public class Castle extends Building {
 

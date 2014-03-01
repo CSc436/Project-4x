@@ -1,4 +1,4 @@
-package com.fourx.buffs;
+package entities;
 
 import control.Player;
 

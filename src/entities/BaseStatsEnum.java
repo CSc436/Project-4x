@@ -1,6 +1,5 @@
 package entities;
 
-import com.fourx.buffs.BuffStats;
 
 //int damage, float range, int armor, float health_regen, float health, float movementSpeed, float actionSpeed) {
 

@@ -1,12 +1,11 @@
-package com.fourx.research;
+package entities.research;
 
 import java.util.ArrayList;
 
-import com.fourx.buffs.BuffStats;
-import com.fourx.buffs.UnitType;
-import com.fourx.resources.Resources;
-
 import control.Player;
+import entities.BuffStats;
+import entities.UnitType;
+import entities.resources.Resources;
 
 public abstract class Technology {
 	protected ArrayList<TechnologyEnum> requirements;

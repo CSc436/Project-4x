@@ -1,4 +1,4 @@
-package com.fourx.resources;
+package entities.resources;
 
 public class Resources {
 	// Tentative resource types suggested during planning

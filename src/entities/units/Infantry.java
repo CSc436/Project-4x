@@ -1,8 +1,8 @@
 package entities.units;
 
-import com.fourx.buffs.UnitType;
 import control.Player;
 import entities.BaseStatsEnum;
+import entities.UnitType;
 
 /*
  * Programmer:  Benjamin Deininger

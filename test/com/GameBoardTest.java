@@ -6,10 +6,10 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.fourx.civilizations.PerfectCivilization;
-
+import control.Controller;
 import control.Player;
 import entities.Action;
+import entities.PerfectCivilization;
 import entities.PlayerUnits;
 import entities.buildings.Barracks;
 import entities.buildings.Building;
@@ -134,5 +134,17 @@ public class GameBoardTest {
 
 		assertEquals(1, pu1.getAgentList().size());
 
+	}
+	
+	
+	
+	
+	
+	
+	@Test
+	public void testController() {
+		
+		Controller game = new Controller();
+		assertEquals(1,game.map.getPlayerList().get(0).getUnits().getUnitList().size());
 	}
 }
