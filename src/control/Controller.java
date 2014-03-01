@@ -1,10 +1,8 @@
 package control;
 
-import java.util.List;
-import java.util.Queue;
-
+import java.util.ArrayList;
 import java.util.Iterator;
-import com.server.MovingNumber;
+import java.util.Queue;
 
 import entities.buildings.Building;
 import entities.buildings.ResourceBuilding;
@@ -13,17 +11,19 @@ import entities.units.Unit;
 
 
 public class Controller implements Runnable {
-	private List<Player> players;
+	private ArrayList<Player> players;
 	private GameBoard map;
-	private MovingNumber number;
 	private PlayerCommands sharedInstructions;
 	private Queue<Command> currentInstructions;
 	private int turnWaitTime;//in ms
+	private GameState gs;
 	
 	
-	public Controller(PlayerCommands instructions) {
+	public Controller(PlayerCommands instructions, GameState gs) {
+		players = new ArrayList<Player>();
 		this.sharedInstructions = instructions;
 		turnWaitTime = 1000;
+		this.gs = gs;
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class Controller implements Runnable {
 			Iterator<Object> it = comm.getPayload().iterator();
 			switch (comm.getTarget()) {
 			case PLAYER:
-				players.add(new Player((String)it.next()));
+				players.add(new Player((String)it.next(), (Integer)it.next()));
 				break;
 			case MAP:
 				map = new GameBoard((Integer)it.next(), (Integer)it.next(), players.size());
@@ -47,11 +47,11 @@ public class Controller implements Runnable {
 				break;
 			}
 		}
-		
-		
+		gs.update(players, map);
+		//actual game execution
 		boolean gameRunning = true;
 		while (gameRunning) {
-			gameStatus();
+			gs.toString();
 			try {
 				Thread.sleep(turnWaitTime);
 			} catch (InterruptedException e) {
@@ -59,9 +59,11 @@ public class Controller implements Runnable {
 				e.printStackTrace();
 			}
 			produceResources();
+			//produceGameObjects
 			agentDecision();
 			unitInteraction();
 			gameRunning = playerCommands();
+			gs.update(players, map);
 		}
 	}
 	
@@ -92,7 +94,6 @@ public class Controller implements Runnable {
 		for (Command comm : currentInstructions) {
 			switch(comm.getAction()) {
 			case STARTUP_CREATE:
-			//	players.get(0).createUnit(0, 0);
 				break;
 			case CREATE:
 			//	players.get(0).createBuilding(3,3);

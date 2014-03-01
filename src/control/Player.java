@@ -22,6 +22,7 @@ import entities.units.Unit;
 public class Player {
 
 	private final String name;
+	private int id;
 
 	private PlayerUnits objects; // the objects that the player owns, including
 									// the currently selected units
@@ -33,15 +34,15 @@ public class Player {
 	private CommandQueue cq;
 
 	// Bare constructor
-	public Player(String name) {
-		this(name, new PerfectCivilization());
+	public Player(String name, int id) {
+		this(name, new PerfectCivilization(), id);
 	}
 
-	public Player(String alias, Civilization civ) {
-		this(alias, new Resources(0, 0, 0, 0), civ);
+	public Player(String alias, Civilization civ, int id) {
+		this(alias, new Resources(0, 0, 0, 0), civ, id);
 	}
 
-	public Player(String alias, Resources resources, Civilization civ) {
+	public Player(String alias, Resources resources, Civilization civ, int id) {
 		name = alias;
 		// civilization
 
@@ -51,16 +52,21 @@ public class Player {
 		this.resources = resources;
 
 		// units
-		objects = new PlayerUnits();
+		objects = new PlayerUnits(id);
 
 		// technology
 		upgrades = new Upgrades();
 		techTree = new TechnologyTree(this);
 		cq = new CommandQueue();
+		this.id = id;
 	}
 
 	public String getAlias() {
 		return name;
+	}
+	
+	public int getId() {
+		return id;
 	}
 
 	public PlayerUnits getUnits() {

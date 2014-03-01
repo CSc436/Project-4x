@@ -6,10 +6,12 @@ import java.util.Queue;
 import com.fourx.buffs.UnitType;
 
 import control.Player;
+import control.Tools;
 import entities.BaseStatsEnum;
+import entities.GameObject;
 import entities.units.Unit;
 
-public abstract class Building extends Unit {
+public abstract class Building extends GameObject {
 
 	// buildings will be > 1 tile
 
@@ -24,6 +26,7 @@ public abstract class Building extends Unit {
 
 	protected int width;
 	protected int height;
+	private long castleId = Tools.generateUniqueId();//this is how a building knows what 'city' it belongs to
 
 	private Queue<Unit> buildingQ = new LinkedList<Unit>();
 
@@ -34,7 +37,7 @@ public abstract class Building extends Unit {
 
 	public Building(Player p, BaseStatsEnum baseStats, UnitType type, int xco,
 			int yco, int height, int width) {
-		super(p, baseStats, type, xco, yco);
+		//super(p, baseStats, type, xco, yco);
 		this.height = height;
 		this.width = width;
 		p.getUnits().addBuilding(this);
@@ -54,5 +57,9 @@ public abstract class Building extends Unit {
 
 	public int getWidth() {
 		return width;
+	}
+	
+	public long getCastleId() {
+		return castleId;
 	}
 }

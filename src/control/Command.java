@@ -2,6 +2,7 @@ package control;
 
 import java.util.ArrayList;
 
+//if a non startup/quit command, first argument in payload must be unique player id
 public class Command {
 	private final Actions action;
 	private final Targets target;

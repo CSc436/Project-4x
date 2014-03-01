@@ -1,5 +1,7 @@
 package entities.buildings;
 
+import java.util.HashMap;
+
 import com.fourx.buffs.UnitType;
 import com.fourx.resources.Resources;
 
@@ -17,5 +19,23 @@ public class Bank extends ResourceBuilding {
 	public Bank(Player p, BaseStatsEnum baseStats, UnitType type, int xco,
 			int yco, int height, int width) {
 		super(p, baseStats, type, xco, yco, bank_Height, bank_Width, new Resources(0,bank_BaseGenAmt,0,0));
+	}
+	
+	@Override
+	public String toString() {
+		return "GameObject type: Bank; Player owner Id: " + this.getPlayerId() + "; Castle id: " + this.getCastleId() 
+				+ "; GameObject id: " + this.getId();
+	}
+
+	@Override
+	protected void setActions() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public HashMap<String, String> getActions() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
