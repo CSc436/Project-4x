@@ -4,6 +4,7 @@ import java.util.List;
 
 import control.Player;
 import entities.gameboard.GameBoard;
+import entities.units.Unit;
 
 /**
  * FourXGameModel - A server-side model which contains all game and player
@@ -23,6 +24,14 @@ public class FourXGameModel {
 	public boolean getPlayer(Integer i) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public Unit getUnit(int i) {
+		// TODO Auto-generated method stub
+		for( Player p : players ) {
+			p.getUnits().
+		}
+		return null;
 	}
 
 }

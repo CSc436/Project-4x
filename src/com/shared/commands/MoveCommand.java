@@ -22,8 +22,9 @@ public class MoveCommand extends GameCommand {
 
 	@Override
 	public boolean executeOn(FourXGameModel model) {
-		for( Integer i : unitIDs ) {
+		for( int i : unitIDs ) {
 			// Set each unit's target location to the destination
+			model.getUnit(i).setTarget(destination);
 		}
 		return false;
 	}
