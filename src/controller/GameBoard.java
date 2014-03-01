@@ -38,7 +38,23 @@ public class GameBoard {
 	private static final float goldMult  = 0.002f; 	// 0.2% of tiles that can support gold have gold
 	
 	
-	// Note: need to call a distribute resource function in order to distribute resources on map
+	/*
+	 * GameBoard():
+	 * Description:
+	 * Constructor for a game board object, requires the number of rows and columns for board
+	 * dimensions - should be equal for best terrain results - and the number of players that will
+	 * appear on the map (AI or Human). This constructor ensures that the resulting gameboard will
+	 * not be a Hoth or Waterworld. 
+	 * 
+	 * Parameters:
+	 * @param int row - number of rows the gameboard class will have
+	 * @param int col - number of columns the gameboard class will have 
+	 * @param int numPlayers - number of players that will be on the gameboard. 
+	 * 
+	 * Notes:
+	 * To complete a gameboard object, you will need to call a resource distribution method and a 
+	 * player distribution method (TODO implement a player dist method). 
+	 */
 	public GameBoard(int row, int col, int numPlayers) {
 		rows = row;
 		cols = col;
@@ -205,25 +221,99 @@ public class GameBoard {
 		return terrainList;
 	}
 	
+	/*
+	 * resourceDistStoneMountain():
+	 * Description:
+	 * Another resource distribution function, this one makes a majority of the 
+	 * Mountain terrain type stone
+	 * 
+	 * 
+	 */
+	public void resourceDistStoneMountain()
+	{
+		// TODO make all of mountain area stone, distrubite some of other resources
+	}
+
+	/*
+	 * resourceDistGoldRush():
+	 * Description:
+	 * Another resource distribution function, this one makes a majority of the snow 
+	 * and mountain terrain gold. 
+	 * 
+	 * 
+	 */
+	public void resourceDistGoldRush()
+	{
+		// TODO make all of snow/ a lot of mountain gold resources, have gold in water too?
+	}
 	
-	// -----------------------------------------------------------------------------------------
+	/*
+	 * getRows():
+	 * Description:
+	 * returns the number of rows this gameboard object has
+	 * 
+	 * Return Value:
+	 * @return an int - the number of rows
+	 */
 	public int getRows() {
 		return rows;
 	}
 
+	/*
+	 * getCols():
+	 * Description:
+	 * Returns the number of columns a gameboard object has
+	 * 
+	 * Return Value:
+	 * @return an int - the number of columns
+	 */
 	public int getCols() {
 		return cols;
 
 	}
 
+	/*
+	 * getTileAt():
+	 * Description:
+	 * Returns a Tile object at the given location. Note: this function does
+	 * NOT currently check to make sure that the coordinates are within the bounds
+	 * of the board. 
+	 * 
+	 * Parameters:
+	 * @param int x - x location of tile (0 to numRows - 1) 
+	 * @param int y - y location of tile (0 to numCols - 1)
+	 * 
+	 * Return Value:
+	 * @return Tile object at location x,y
+	 */
 	public Tile getTileAt(int x, int y) {
 		return map[x][y];
 	}
 
+	/*
+	 * getPlayerList():
+	 * Description:
+	 * Returns the list of players currently using the board.
+	 * 
+	 * Return Value:
+	 * @return ArrayList of all the Player objects using this board.
+	 */
 	public ArrayList<Player> getPlayerList() {
 		return players;
 	}
 
+	/*
+	 * placeUnitAt():
+	 * Description:
+	 * places a Unit object on the tile at the location (x,y). 
+	 * NOTE: Currently does not check to make sure that coordinates are within
+	 * the boundaries of the board. 
+	 * 
+	 * Parameters:
+	 * @param Unit u - Unit to place at the location
+	 * @param int x - x location to place unit (0 to rows - 1)
+	 * @param int y - y location to place unit (0 to cols - 1)
+	 */
 	public void placeUnitAt(Unit u, int x, int y) {
 
 		// if the tile has no owner, the unit owner becomes the tile owner
@@ -237,6 +327,16 @@ public class GameBoard {
 
 	}
 
+	/*
+	 * placeBuildingAt():
+	 * Description:
+	 * Places a building object at the location (x,y) on the map.
+	 * 
+	 * Parameters:
+	 * @param Building b - building to place on map
+	 * @param int x - x coordinate where to place building (0 to rows - 1)
+	 * @param int y - y coordinate where to place building (0 to cols - 1)
+	 */
 	public void placeBuildingAt(Building b, int x, int y) {
 
 		// the tile must be owned to place a building
@@ -271,20 +371,47 @@ public class GameBoard {
 		}
 	}
 
+	/*
+	 * removeUnit():
+	 * Description:
+	 * Removes a Unit from a Players unit list? (TODO shouldn't this be with player?)
+	 * 
+	 * Parameters:
+	 * @param Unit u - unit to remove 
+	 */
 	public void removeUnit(Unit u) {
 		Player owner = u.getOwner();
 		owner.getUnits().removeUnit(u);
 	}
 
-	// need restriction for distance
-
+	/*
+	 * moveUnit():
+	 * Description:
+	 * Moves a unit from current location to new one. 
+	 * TODO implement some sort of restriction on distance 
+	 * TODO possibly move into unit class?
+	 * NOTE: currently does not check to make sure that move is within bounds
+	 * 
+	 * Parameters:
+	 * @param Unit u - unit to move
+	 * @param int x - new x coordinate for unit
+	 * @param int y - new y coordinate for unit 
+	 */
 	public void moveUnit(Unit u, int x, int y) {
 
 		u.setLocation(x, y);
 
 	}
 
-	// precondition : the building is guaranteed to be in range
+	/*
+	 * removeBuilding():
+	 * Description:
+	 * removes a given building from the board. 
+	 * Note: Building must be within range 
+	 * 
+	 * Parameters:
+	 * @param Building b - building to remove from this gameboard. 
+	 */
 	public void removeBuilding(Building b) {
 
 		Player owner = b.getOwner();
