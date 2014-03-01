@@ -6,7 +6,7 @@
 <web-app>
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>_x.html</welcome-file>
+    <welcome-file>game.html</welcome-file>
   </welcome-file-list>
 
 </web-app>

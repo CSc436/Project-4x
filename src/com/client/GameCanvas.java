@@ -29,22 +29,28 @@ import com.googlecode.gwtgl.binding.WebGLUniformLocation;
 
 public class GameCanvas {
 	private WebGLRenderingContext glContext;
-	private WebGLProgram shaderProgram;
+	private WebGLProgram shaderProgram, agentShader;
 	private WebGLTexture texture;
 	private int vertexPositionAttribute, vertexTexCoordAttrib;
+	private int agentVertAttrib, agentTexAttrib;
 	private WebGLUniformLocation texUniform, resolutionUniform, timeUniform,
 			matrixUniform, camPosUniform;
 	private WebGLBuffer vertexBuffer, texCoordBuffer;
+	private WebGLBuffer agentVertBuffer, agentTexBuffer;
+	
 	private Float32Array vertexData, texCoordData;
+	private Float32Array agentVertData, agentTexData;
+	
 	private static int WIDTH, HEIGHT;
 	private static long startTime;
 	private float[] cameraMatrix;
 	private float camX = 0.0f, camY = -20.0f, camZ = 20.0f;
+	private float agentX = 0.0f, agentY = 0.0f, agentZ = -0.1f;
 	private boolean in = false, out = false, up = false, down = false,
 			right = false, left = false;
 	private long time;
 
-	private final int GRID_WIDTH = 32;
+	private final int GRID_WIDTH = 16;
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
 
 	private ArrayList<RenderTile> tiles = new ArrayList<RenderTile>();
@@ -211,8 +217,10 @@ public class GameCanvas {
 
 		initTexture();
 		initShaders();
-
+		agentShader();
+		
 		makeTiles();
+		makeAgent();
 		initBuffers();
 
 		startTime = System.currentTimeMillis();
@@ -222,6 +230,8 @@ public class GameCanvas {
 				time = System.currentTimeMillis();
 				updateCamera();
 				drawScene();
+				agentX = GRID_WIDTH/2.0f + (GRID_WIDTH/2.0f) * (float)Math.sin(time/5000.0);
+				agentY =  GRID_WIDTH/2.0f + (GRID_WIDTH/2.0f) * (float)Math.sin(time/5000.0);
 			}
 		};
 		t.scheduleRepeating(16);
@@ -297,6 +307,30 @@ public class GameCanvas {
 				"perspectiveMatrix");
 		camPosUniform = glContext.getUniformLocation(shaderProgram, "camPos");
 	}
+	
+	public void agentShader(){
+		WebGLShader fragmentShader = getShader(
+				WebGLRenderingContext.FRAGMENT_SHADER, ClientResources.INSTANCE
+						.fragmentShader().getText());
+		WebGLShader vertexShader = getShader(
+				WebGLRenderingContext.VERTEX_SHADER, ClientResources.INSTANCE
+						.agentVertexShader().getText());
+
+		agentShader = glContext.createProgram();
+		glContext.attachShader(agentShader, vertexShader);
+		glContext.attachShader(agentShader, fragmentShader);
+		glContext.linkProgram(agentShader);
+
+		if (!glContext.getProgramParameterb(agentShader,
+				WebGLRenderingContext.LINK_STATUS)) {
+			throw new RuntimeException("Could not initialise shaders");
+		}
+
+		agentVertAttrib = glContext.getAttribLocation(agentShader,
+				"vertexPosition");
+		agentTexAttrib = glContext.getAttribLocation(agentShader,
+				"vertexTexCoord");
+	}
 
 	private WebGLShader getShader(int type, String source) {
 		WebGLShader shader = glContext.createShader(type);
@@ -328,6 +362,73 @@ public class GameCanvas {
 
 		glContext.bufferData(glContext.ARRAY_BUFFER, texCoordData,
 				WebGLRenderingContext.DYNAMIC_DRAW);
+	}
+	
+	private void makeAgent(){
+		float[] verts = { 
+				0.0f, 0.0f, 0.0f,
+				1.0f, 0.0f, 0.0f,
+				0.0f, 1.0f, 0.0f,
+				
+				0.0f, 1.0f, 0.0f,
+				1.0f, 1.0f, 0.0f,
+				1.0f, 0.0f, 0.0f
+		};
+		
+		float[] texs = {
+				0.0f, 0.0f,
+				1.0f, 0.0f,
+				0.0f, 1.0f,
+				
+				0.0f, 1.0f,
+				1.0f, 1.0f,
+				1.0f, 0.0f
+		};
+		
+		agentVertData = Float32Array.create(verts);
+		agentTexData = Float32Array.create(texs);
+		
+		agentVertBuffer = glContext.createBuffer();
+		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, agentVertBuffer);
+
+		glContext.bufferData(glContext.ARRAY_BUFFER, agentVertData,
+				WebGLRenderingContext.DYNAMIC_DRAW);
+
+		agentTexBuffer = glContext.createBuffer();
+		glContext
+				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, agentTexBuffer);
+
+
+		glContext.bufferData(glContext.ARRAY_BUFFER, agentTexData,
+				WebGLRenderingContext.DYNAMIC_DRAW);
+	}
+	
+	private void renderAgent(){
+		glContext.useProgram(agentShader);
+
+		glContext.enableVertexAttribArray(agentVertAttrib);
+		glContext.enableVertexAttribArray(agentTexAttrib);
+
+		// vertices
+		glContext.uniformMatrix4fv(glContext.getUniformLocation(agentShader, "perspectiveMatrix"), false, cameraMatrix);
+		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, agentVertBuffer);
+		glContext.vertexAttribPointer(agentVertAttrib, 3,
+				WebGLRenderingContext.FLOAT, false, 0, 0);
+
+		// texture coordinates
+		glContext
+				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, agentTexBuffer);
+		glContext.vertexAttribPointer(agentTexAttrib, 2,
+				WebGLRenderingContext.FLOAT, false, 0, 0);
+
+		// uniforms
+		glContext.uniform3f(glContext.getUniformLocation(agentShader,  "camPos"), camX, camY, camZ);
+		
+		glContext.uniform3f(glContext.getUniformLocation(agentShader,  "agentPos"), agentX, agentY, agentZ);
+
+		// draw geometry
+		glContext.drawArrays(WebGLRenderingContext.TRIANGLES, 0, 6);
+		
 	}
 
 	private void makeTiles() {
@@ -386,7 +487,12 @@ public class GameCanvas {
 
 		// draw geometry
 		glContext.drawArrays(WebGLRenderingContext.TRIANGLES, 0, NUM_TILES * 6);
+		
+		glContext.disableVertexAttribArray(vertexPositionAttribute);
+		glContext.disableVertexAttribArray(vertexTexCoordAttrib);
 
+		renderAgent();
+		
 		glContext.flush();
 	}
 }
