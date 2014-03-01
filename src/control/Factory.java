@@ -5,7 +5,7 @@ import entities.buildings.Building;
 import entities.units.Infantry;
 import entities.units.Unit;
 
-public class UnitFactory {
+public class Factory {
 
 	static int uniqueid = 0;
 

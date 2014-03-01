@@ -9,7 +9,7 @@ import org.junit.Test;
 import control.BuildingType;
 import control.Controller;
 import control.Player;
-import control.UnitFactory;
+import control.Factory;
 import control.UnitType;
 import entities.Action;
 import entities.PerfectCivilization;
@@ -54,13 +54,13 @@ public class GameBoardTest {
 		assertEquals(0, p2.getUnits().getUnitList().size());
 
 		// add a unit to player 1
-		UnitFactory.buildUnit(UnitType.INFANTRY, p1);
+		Factory.buildUnit(UnitType.INFANTRY, p1);
 
 		assertEquals(1, p1.getUnits().getUnitList().size());
 		assertEquals(0, p2.getUnits().getUnitList().size());
 
 		// add a unit to player 2
-		UnitFactory.buildUnit(UnitType.INFANTRY, p2);
+		Factory.buildUnit(UnitType.INFANTRY, p2);
 
 	}
 
@@ -78,14 +78,14 @@ public class GameBoardTest {
 		assertEquals(0, p2.getUnits().getUnitList().size());
 
 		// add a unit to player 1
-		UnitFactory.buildUnit(UnitType.INFANTRY, p1);
+		Factory.buildUnit(UnitType.INFANTRY, p1);
 
 		assertEquals(1, p1.getUnits().getUnitList().size());
 		assertEquals(0, p2.getUnits().getUnitList().size());
 
 		// add a unit to player 2
-		UnitFactory.buildUnit(UnitType.INFANTRY, p2);
-		UnitFactory.buildStructure(BuildingType.BARRACKS, p1);
+		Factory.buildUnit(UnitType.INFANTRY, p2);
+		Factory.buildStructure(BuildingType.BARRACKS, p1);
 		// Agent a1 = new Agent(p1);
 
 		PlayerUnits pu1 = p1.getUnits();
