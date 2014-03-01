@@ -1,5 +1,7 @@
 package entities.gameboard;
 
+import com.shared.Terrain;
+
 import control.Player;
 
 /**

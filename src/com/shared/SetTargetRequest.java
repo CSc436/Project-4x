@@ -1,6 +1,5 @@
 package com.shared;
 
-import com.server.Model;
 
 public class SetTargetRequest extends Request {
 	

@@ -1,10 +1,8 @@
-package com.server;
+package com.shared;
 
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 import com.client.SimpleSimulator;
-import com.shared.FieldVerifier;
-import com.shared.Request;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**

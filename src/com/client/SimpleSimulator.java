@@ -2,7 +2,7 @@ package com.client;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.server.MovingUnit;
+import com.shared.MovingUnit;
 import com.shared.Request;
 
 /**

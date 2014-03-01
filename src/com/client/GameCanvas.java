@@ -26,8 +26,7 @@ import com.googlecode.gwtgl.binding.WebGLRenderingContext;
 import com.googlecode.gwtgl.binding.WebGLShader;
 import com.googlecode.gwtgl.binding.WebGLTexture;
 import com.googlecode.gwtgl.binding.WebGLUniformLocation;
-
-import entities.gameboard.Terrain;
+import com.shared.Terrain;
 
 public class GameCanvas {
 	private WebGLRenderingContext glContext;
@@ -57,9 +56,10 @@ public class GameCanvas {
 
 	private ArrayList<RenderTile> tiles = new ArrayList<RenderTile>();
 	
+	private final ClientModel theModel;
 	private final Canvas webGLCanvas = Canvas.createIfSupported();
 
-	public GameCanvas() {
+	public GameCanvas(ClientModel theModel) {
 		RootPanel.get("gwtGL").add(webGLCanvas);
 		glContext = (WebGLRenderingContext) webGLCanvas
 				.getContext("experimental-webgl");
@@ -76,6 +76,8 @@ public class GameCanvas {
 		WIDTH = webGLCanvas.getParent().getOffsetWidth();
 
 		glContext.viewport(0, 0, WIDTH, HEIGHT);
+		
+		this.theModel = theModel;
 		
 		registerMapMovements();
 		registerResizeHandler();
@@ -230,10 +232,13 @@ public class GameCanvas {
 			@Override
 			public void run() {
 				time = System.currentTimeMillis();
+				
+				float[] pos = theModel.getPosition(time);
+				agentX = pos[0];
+				agentY = pos[1];
+				
 				updateCamera();
 				drawScene();
-				agentX = GRID_WIDTH/2.0f + (GRID_WIDTH/2.0f) * (float)Math.sin(time/5000.0);
-				agentY =  GRID_WIDTH/2.0f + (GRID_WIDTH/2.0f) * (float)Math.sin(time/5000.0);
 			}
 		};
 		t.scheduleRepeating(16);

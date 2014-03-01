@@ -10,7 +10,9 @@ import com.google.gwt.core.client.EntryPoint;
 public class PlayGame implements EntryPoint {
 
 	public void onModuleLoad() {
-		GameCanvas canvas = new GameCanvas();
+		ClientModel theModel = new ClientModel();
+		theModel.run();
+		GameCanvas canvas = new GameCanvas(theModel);
 		Interface.init();
 	}
 }

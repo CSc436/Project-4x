@@ -1,7 +1,9 @@
 package control;
 
 import java.util.List;
-import com.server.MovingUnit;
+
+import com.shared.MovingUnit;
+
 import entities.buildings.ResourceBuilding;
 import entities.gameboard.GameBoard;
 import entities.units.Unit;

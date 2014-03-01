@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.fourx.civilizations.PerfectCivilization;
 import com.fourx.util.Point;
+import com.shared.Terrain;
 
 import control.Player;
 import entities.buildings.Building;

@@ -1,9 +1,8 @@
-package com.server;
+package com.shared;
 
 import java.io.Serializable;
 
 import com.fourx.util.Point;
-import com.fourx.util.PointDouble;
 
 public class MovingUnit implements Serializable {
 	public double velocity; // Movement velocity, in units per second

@@ -1,4 +1,4 @@
-package com.server;
+package com.shared;
 
 public class Model implements Runnable {
 	public MovingUnit unit;
