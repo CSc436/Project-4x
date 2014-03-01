@@ -1,0 +1,6 @@
+package control;
+
+public enum Targets {
+	GAMEOBJECT, PLAYER, UNIT, BUILDING, ENEMYPLAYER, ENEMYUNIT, ENEMYBUILDING, MAP;
+
+}

@@ -33,8 +33,8 @@ public class Player {
 	private CommandQueue cq;
 
 	// Bare constructor
-	public Player() {
-		this("", new PerfectCivilization());
+	public Player(String name) {
+		this(name, new PerfectCivilization());
 	}
 
 	public Player(String alias, Civilization civ) {

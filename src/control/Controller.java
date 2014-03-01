@@ -1,17 +1,14 @@
 package control;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
-import com.fourx.civilizations.PerfectCivilization;
-import com.fourx.resources.Resources;
+import java.util.Iterator;
 import com.server.MovingNumber;
 
 import entities.buildings.Building;
 import entities.buildings.ResourceBuilding;
 import entities.gameboard.GameBoard;
-import entities.units.Agent;
 import entities.units.Unit;
 
 
@@ -19,27 +16,44 @@ public class Controller implements Runnable {
 	private List<Player> players;
 	private GameBoard map;
 	private MovingNumber number;
-	private PlayerCommands instructions;
-	
+	private PlayerCommands sharedInstructions;
+	private Queue<Command> currentInstructions;
+	private int turnWaitTime;//in ms
 	
 	
 	public Controller(PlayerCommands instructions) {
-		this.instructions = instructions;
-		//put this in controller constructor
-		players = new ArrayList<Player>();
-		players.add(new Player("Bob", new Resources(500, 500, 500, 500), new PerfectCivilization()));
-		//put this in controller constructor
-		map = new GameBoard(5, 5, 2);
-		number = new MovingNumber(0.0,1.0);
+		this.sharedInstructions = instructions;
+		turnWaitTime = 1000;
 	}
 
 	@Override
 	public void run() {
+		//setup
+		currentInstructions = sharedInstructions.dump();
+		for (Command comm : currentInstructions) {
+			if (comm.getAction() != Actions.STARTUP_CREATE) {
+				System.out.println("You suck for not using startup_create");
+			}
+			Iterator<Object> it = comm.getPayload().iterator();
+			switch (comm.getTarget()) {
+			case PLAYER:
+				players.add(new Player((String)it.next()));
+				break;
+			case MAP:
+				map = new GameBoard((Integer)it.next(), (Integer)it.next(), players.size());
+				break;
+			default:
+				System.out.println("You suck for screwing up the target in the command object");
+				break;
+			}
+		}
+		
+		
 		boolean gameRunning = true;
 		while (gameRunning) {
 			gameStatus();
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(turnWaitTime);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -74,17 +88,15 @@ public class Controller implements Runnable {
 	}
 
 	private boolean playerCommands() {
-		Queue<Integer> currentInstructions = instructions.dump();
-		for (Integer i : currentInstructions) {
-			switch(i) {
-			case 1:
+		currentInstructions = sharedInstructions.dump();
+		for (Command comm : currentInstructions) {
+			switch(comm.getAction()) {
+			case STARTUP_CREATE:
 			//	players.get(0).createUnit(0, 0);
 				break;
-			case 2:
+			case CREATE:
 			//	players.get(0).createBuilding(3,3);
 				break;
-			case 3:
-				return false;
 			}
 		}
 		return true;

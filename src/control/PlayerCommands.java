@@ -5,22 +5,22 @@ import java.util.Queue;
 
 public class PlayerCommands {
 	
-	private Queue<Integer> commands;
+	private Queue<Command> commands;
 	
 	public PlayerCommands() {
-		commands = new ArrayDeque<Integer>();
+		commands = new ArrayDeque<Command>();
 	}
 	
-	public synchronized void push(Integer command) {
+	public synchronized void push(Command command) {
 		commands.add(command);
 	}
 	
-	public synchronized Integer pop() {
+	public synchronized Command pop() {
 		return commands.poll();
 	}
 	
-	public synchronized Queue<Integer> dump() {
-		Queue<Integer> temp = commands;
+	public synchronized Queue<Command> dump() {
+		Queue<Command> temp = new ArrayDeque<Command>(commands);
 		commands.clear();
 		return temp;
 	}
