@@ -4,6 +4,8 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 import com.client.SimpleSimulator;
 import com.shared.FieldVerifier;
+import com.shared.Model;
+import com.shared.MovingNumber;
 import com.shared.Request;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -20,16 +22,6 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 	ConcurrentLinkedDeque<Request> requestQueue = new ConcurrentLinkedDeque<Request>();
 
 	public Request[] sendRequest(Request input) throws IllegalArgumentException {
-		// Verify that the input is valid.
-
-		String serverInfo = getServletContext().getServerInfo();
-		String userAgent = getThreadLocalRequest().getHeader("User-Agent");
-		
-		
-
-		// Escape data from the client to avoid cross-site script vulnerabilities.
-		userAgent = escapeHtml(userAgent);
-		
 		input.executeOn(m);
 
 		return new Request[] {input};
@@ -57,7 +49,9 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public MovingNumber getSimulationState() {
+	public MovingNumber getSimulationState(int turn) {
+		while(m.getNumber().turnNumber < turn);
+		
 		return m.getNumber();
 	}
 }

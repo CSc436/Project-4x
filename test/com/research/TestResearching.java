@@ -4,14 +4,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.fourx.buffs.UnitType;
-import com.fourx.civilizations.PerfectCivilization;
-import com.fourx.civilizations.TestCivilization;
-import com.fourx.research.TechnologyEnum;
-import com.fourx.research.TechnologyTree;
-import com.fourx.resources.Resources;
-
 import control.Player;
+import entities.PerfectCivilization;
+import entities.TestCivilization;
+import entities.UnitType;
+import entities.research.TechnologyEnum;
+import entities.research.TechnologyTree;
+import entities.resources.Resources;
 
 public class TestResearching {
 

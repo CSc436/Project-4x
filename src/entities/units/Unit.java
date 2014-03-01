@@ -2,16 +2,14 @@ package entities.units;
 
 import java.util.PriorityQueue;
 
-import com.fourx.buffs.UnitType;
-
 import control.Player;
 import entities.Action;
-import entities.BaseStatsEnum;
-import entities.PlayerUnits;
-import entities.UnitStats;
+import entities.UnitType;
+import entities.stats.BaseStatsEnum;
+import entities.stats.UnitStats;
 
 /*
- * Programmer:  Benjamin Deininger
+ * 
  * 
  * Purpose:  This abstract class defines the concept of a unit.  Every unit will atleast have the following 
  * information known about itself.  
@@ -30,7 +28,7 @@ public abstract class Unit {
 
 	private Player owner;
 
-	protected UnitType type = UnitType.INFANTRY;
+	protected UnitType type;
 	private UnitStats stats;
 	protected BaseStatsEnum baseStats;
 
@@ -38,22 +36,18 @@ public abstract class Unit {
 	private int y;
 	private PriorityQueue<Action> actionQueue;
 
+	private int id;
+
 	public Unit(Player p, BaseStatsEnum baseStats, UnitType type, int xco,
-			int yco) {
+			int yco, int idno) {
+
 		this.baseStats = baseStats;
 		this.type = type;
 
 		owner = p;
-		System.out.println(this.getClass());
-		PlayerUnits pu = p.getUnits();
-
-		if (this instanceof Agent) {
-			pu.addAgent((Agent) this);
-		} else {
-			pu.addUnit(this);
-		}
-
+		id = idno;
 		updateStats();
+
 		actionQueue = new PriorityQueue<Action>();
 		x = xco;
 		y = yco;
@@ -178,5 +172,9 @@ public abstract class Unit {
 
 	public PriorityQueue<Action> getActionQueue() {
 		return actionQueue;
+	}
+
+	public int getId() {
+		return id;
 	}
 }

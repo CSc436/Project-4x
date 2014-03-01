@@ -1,13 +1,12 @@
 package entities.buildings;
 
-import com.fourx.buffs.UnitType;
-
 import control.Player;
-import entities.BaseStatsEnum;
+import entities.UnitType;
+import entities.stats.BaseStatsEnum;
 
 public class Barracks extends Building {
 
-	public Barracks(Player p, int xco, int yco) {
-		super(p, BaseStatsEnum.CASTLE, UnitType.BUILDING, xco, yco);
+	public Barracks(Player p, int xco, int yco, int idno) {
+		super(p, BaseStatsEnum.CASTLE, UnitType.BUILDING, xco, yco, idno);
 	}
 }

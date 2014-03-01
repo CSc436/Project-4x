@@ -3,12 +3,11 @@ package entities.gameboard;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.fourx.civilizations.PerfectCivilization;
-import com.fourx.util.Point;
-
 import control.Player;
+import entities.PerfectCivilization;
 import entities.buildings.Building;
 import entities.units.Unit;
+import entities.util.Point;
 
 /* 
  *  Programmer :  Ben Deininger
@@ -24,7 +23,9 @@ public class GameBoard {
 	private Tile[][] map;
 	private int rows;
 	private int cols;
-	private ArrayList<Player> players;
+
+	private ArrayList<Player> players;// MAY NOT NEED PLAYERLIST ON BOARD
+
 	private static Random rand = new Random();
 	private float averageHeight = 0f; // Stores the average height of the noise
 										// map.

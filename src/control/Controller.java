@@ -1,14 +1,16 @@
 package control;
 
 import java.util.List;
-import com.server.MovingNumber;
+
+import com.shared.MovingNumber;
+
 import entities.buildings.ResourceBuilding;
 import entities.gameboard.GameBoard;
 import entities.units.Unit;
 
 public class Controller implements Runnable {
 	List<Player> players;
-	GameBoard map;
+	public GameBoard map;
 	MovingNumber number;
 
 	public Controller() {
@@ -16,6 +18,8 @@ public class Controller implements Runnable {
 		map = new GameBoard(5, 5, 2);
 		players = map.getPlayerList();
 		number = new MovingNumber(0.0, 1.0);
+		Factory.buildUnit(UnitType.INFANTRY, players.get(0));
+
 	}
 
 	@Override
@@ -25,6 +29,7 @@ public class Controller implements Runnable {
 		while (turnNum < 20) {
 
 			for (Player player : players) {
+
 				produceResources(player);
 				unitInteraction(player);
 
@@ -33,39 +38,43 @@ public class Controller implements Runnable {
 				playerCommands(player);
 
 			}
+			turnNum++;
 		}
 
 	}
 
 	/**
-	 * Get the commands from the client and add them to each player's respective action queue
+	 * Get the commands from the client and add them to each player's respective
+	 * action queue
 	 */
 	private void playerCommands(Player p) {
-	
+
 	}
 
 	/**
-	 * @param p the player whose actionQueue to pop.
+	 * @param p
+	 *            the player whose actionQueue to pop.
 	 * 
 	 */
 	private void unitInteraction(Player p) {
 		// get command queue from the player
 		// perform unit actions for each unit on the player's commandqueue
-		
+
 		CommandQueue q = p.getCommandQueue();
 		Unit u = null;
-		while((u = q.pop()) != null) {
+		while ((u = q.pop()) != null) {
 			u.performActions();
 		}
 	}
 
 	/**
 	 * 
-	 * @param p - the player to whom each agent may add their actions to.
+	 * @param p
+	 *            - the player to whom each agent may add their actions to.
 	 */
 	private void agentDecision(Player p) {
 		// TODO Auto-generated method stub
-		// 
+		//
 
 	}
 
@@ -74,9 +83,12 @@ public class Controller implements Runnable {
 		for (ResourceBuilding building : player.getUnits()
 				.getResourceBuildings()) {
 			// TODO: building.gen
-			
+
 		}
 
 	}
 
+	public static void main(String args[]) {
+		(new Thread(new Controller())).start();
+	}
 }

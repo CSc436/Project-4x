@@ -1,16 +1,16 @@
 package entities.buildings;
 
-import com.fourx.buffs.UnitType;
-import com.fourx.resources.Resources;
-
 import control.Player;
-import entities.BaseStatsEnum;
+import entities.UnitType;
+import entities.resources.Resources;
+import entities.stats.BaseStatsEnum;
 
-public abstract class ResourceBuilding extends Building{
-	
+public abstract class ResourceBuilding extends Building {
+
 	public ResourceBuilding(Player p, BaseStatsEnum baseStats, UnitType type,
-			int xco, int yco, int height, int width, Resources resourceAmount) {
-		super(p, baseStats, type, xco, yco, height, width);
+			int xco, int yco, int height, int width, Resources resourceAmount,
+			int idno) {
+		super(p, baseStats, type, xco, yco, height, width, idno);
 		// resources
 		this.resourceAmount = resourceAmount;
 		baseResourceAmount = resourceAmount;
@@ -20,20 +20,18 @@ public abstract class ResourceBuilding extends Building{
 	protected Resources resourceAmount;
 
 	// Global resource rate modifier that affects all resource buildings
-	private static Resources globalRateModifier = new Resources(1,1,1,1);
+	private static Resources globalRateModifier = new Resources(1, 1, 1, 1);
 
-
-	
 	/* Setters and Getters */
-	public void setGlobalRateModifier(Resources newRate){
+	public void setGlobalRateModifier(Resources newRate) {
 		globalRateModifier = newRate;
 		resourceAmount = baseResourceAmount.scale(globalRateModifier);
 	}
-	
-	public Resources getGlobalRateModifier(){
+
+	public Resources getGlobalRateModifier() {
 		return globalRateModifier;
 	}
-	
+
 	public void generateResource() {
 		getOwner().getResources().receive(resourceAmount);
 	}
