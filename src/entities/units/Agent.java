@@ -14,8 +14,8 @@ public class Agent extends Unit {
 	private Map<String, Unit> underlings;
 	private CommandQueue cq;
 
-	public Agent(Player p) {
-		super(p, BaseStatsEnum.FOOTMAN, UnitType.INFANTRY, 0, 0);
+	public Agent(Player p, int idno) {
+		super(p, BaseStatsEnum.FOOTMAN, UnitType.INFANTRY, 0, 0, idno);
 		underlings = new HashMap<String, Unit>();
 		cq = new CommandQueue();
 	}

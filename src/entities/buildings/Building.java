@@ -16,13 +16,13 @@ public abstract class Building extends Unit {
 	private Queue<Unit> buildingQ = new LinkedList<Unit>();
 
 	public Building(Player p, BaseStatsEnum baseStats, UnitType type, int xco,
-			int yco) {
-		this(p, baseStats, type, xco, yco, 1, 1);
+			int yco, int idno) {
+		this(p, baseStats, type, xco, yco, 1, 1, idno);
 	}
 
 	public Building(Player p, BaseStatsEnum baseStats, UnitType type, int xco,
-			int yco, int height, int width) {
-		super(p, baseStats, type, xco, yco);
+			int yco, int height, int width, int idno) {
+		super(p, baseStats, type, xco, yco, idno);
 		this.height = height;
 		this.width = width;
 		p.getUnits().addBuilding(this);

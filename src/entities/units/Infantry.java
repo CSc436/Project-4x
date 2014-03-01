@@ -6,7 +6,7 @@ import entities.stats.BaseStatsEnum;
 
 public class Infantry extends Unit {
 
-	public Infantry(Player p, int xco, int yco) {
-		super(p, BaseStatsEnum.FOOTMAN, UnitType.INFANTRY, xco, yco);
+	public Infantry(Player p, int xco, int yco, int id) {
+		super(p, BaseStatsEnum.FOOTMAN, UnitType.INFANTRY, xco, yco, id);
 	}
 }

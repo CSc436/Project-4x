@@ -14,7 +14,8 @@ public class Bank extends ResourceBuilding {
 													// user
 
 	public Bank(Player p, BaseStatsEnum baseStats, UnitType type, int xco,
-			int yco, int height, int width) {
-		super(p, baseStats, type, xco, yco, bank_Height, bank_Width, new Resources(0,bank_BaseGenAmt,0,0));
+			int yco, int height, int width, int idno) {
+		super(p, baseStats, type, xco, yco, bank_Height, bank_Width,
+				new Resources(0, bank_BaseGenAmt, 0, 0), idno);
 	}
 }

@@ -12,8 +12,8 @@ public class General extends Agent {
 	private int range;
 	private AIControl brain;
 
-	public General(Player p) {
-		super(p);
+	public General(Player p, int idno) {
+		super(p, idno);
 		// TODO Auto-generated constructor stub
 	}
 

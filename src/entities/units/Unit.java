@@ -36,16 +36,18 @@ public abstract class Unit {
 	private int y;
 	private PriorityQueue<Action> actionQueue;
 
+	private int id;
+
 	public Unit(Player p, BaseStatsEnum baseStats, UnitType type, int xco,
-			int yco) {
-		
+			int yco, int idno) {
+
 		this.baseStats = baseStats;
 		this.type = type;
 
 		owner = p;
-	
+		id = idno;
 		updateStats();
-	
+
 		actionQueue = new PriorityQueue<Action>();
 		x = xco;
 		y = yco;

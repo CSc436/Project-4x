@@ -6,8 +6,11 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import control.BuildingType;
 import control.Controller;
 import control.Player;
+import control.UnitFactory;
+import control.UnitType;
 import entities.Action;
 import entities.PerfectCivilization;
 import entities.PlayerUnits;
@@ -51,43 +54,13 @@ public class GameBoardTest {
 		assertEquals(0, p2.getUnits().getUnitList().size());
 
 		// add a unit to player 1
-		Unit temp = new Infantry(p1, 1, 1);
+		UnitFactory.buildUnit(UnitType.INFANTRY, p1);
 
 		assertEquals(1, p1.getUnits().getUnitList().size());
 		assertEquals(0, p2.getUnits().getUnitList().size());
 
 		// add a unit to player 2
-		Unit temp2 = new Infantry(p2, 2, 2);
-
-		// add some actions
-		temp.addAction(Action.PLAYER_ATTACK);
-		temp.addAction(Action.DEATH);
-		temp.addAction(Action.PLAYER_ATTACK);
-		temp2.addAction(Action.PLAYER_ATTACK_MOVE);
-
-		assertEquals(1, p2.getUnits().getUnitList().size());
-
-		// test if actions were added
-		assertEquals(3, temp.getActionQueue().size());
-		assertEquals(1, temp2.getActionQueue().size());
-
-		System.out.println("Temp1: " + temp.getActionQueue());
-		System.out.println("Temp2: " + temp2.getActionQueue());
-
-		// execute actions
-		temp.performActions();
-		temp2.performActions();
-
-		// test if actions were removed
-		assertEquals(0, temp.getActionQueue().size());
-		assertEquals(0, temp2.getActionQueue().size());
-		assertEquals(0, p1.getUnits().getUnitList().size());
-		assertEquals(1, p2.getUnits().getUnitList().size());
-
-		// testing if the player can add an action to a unit
-
-		p1.addActionTo(temp, Action.DEATH);
-		temp.performActions();
+		UnitFactory.buildUnit(UnitType.INFANTRY, p2);
 
 	}
 
@@ -105,15 +78,15 @@ public class GameBoardTest {
 		assertEquals(0, p2.getUnits().getUnitList().size());
 
 		// add a unit to player 1
-		Unit temp = new Infantry(p1, 1, 1);
+		UnitFactory.buildUnit(UnitType.INFANTRY, p1);
 
 		assertEquals(1, p1.getUnits().getUnitList().size());
 		assertEquals(0, p2.getUnits().getUnitList().size());
 
 		// add a unit to player 2
-		Unit temp2 = new Infantry(p2, 2, 2);
-		Building bld = new Barracks(p1, 1, 1);
-		Agent a1 = new Agent(p1);
+		UnitFactory.buildUnit(UnitType.INFANTRY, p2);
+		UnitFactory.buildStructure(BuildingType.BARRACKS, p1);
+		// Agent a1 = new Agent(p1);
 
 		PlayerUnits pu1 = p1.getUnits();
 		PlayerUnits pu2 = p2.getUnits();
@@ -135,16 +108,12 @@ public class GameBoardTest {
 		assertEquals(1, pu1.getAgentList().size());
 
 	}
-	
-	
-	
-	
-	
-	
+
 	@Test
 	public void testController() {
-		
+
 		Controller game = new Controller();
-		assertEquals(1,game.map.getPlayerList().get(0).getUnits().getUnitList().size());
+		assertEquals(1, game.map.getPlayerList().get(0).getUnits()
+				.getUnitList().size());
 	}
 }
