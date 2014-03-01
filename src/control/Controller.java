@@ -1,82 +1,120 @@
 package control;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+
+import com.fourx.civilizations.PerfectCivilization;
+import com.fourx.resources.Resources;
 import com.server.MovingNumber;
+
+import entities.buildings.Building;
 import entities.buildings.ResourceBuilding;
 import entities.gameboard.GameBoard;
+import entities.units.Agent;
 import entities.units.Unit;
 
+
 public class Controller implements Runnable {
-	List<Player> players;
-	GameBoard map;
-	MovingNumber number;
-
-	public Controller() {
-
+	private List<Player> players;
+	private GameBoard map;
+	private MovingNumber number;
+	private PlayerCommands instructions;
+	
+	
+	
+	public Controller(PlayerCommands instructions) {
+		this.instructions = instructions;
+		//put this in controller constructor
+		players = new ArrayList<Player>();
+		players.add(new Player("Bob", new Resources(500, 500, 500, 500), new PerfectCivilization()));
+		//put this in controller constructor
 		map = new GameBoard(5, 5, 2);
-		players = map.getPlayerList();
-		number = new MovingNumber(0.0, 1.0);
+		number = new MovingNumber(0.0,1.0);
 	}
 
 	@Override
 	public void run() {
-		int turnNum = 0;
-		// call to timer thread
-		while (turnNum < 20) {
-
-			for (Player player : players) {
-				produceResources(player);
-				unitInteraction(player);
-
-				agentDecision(player);
-
-				playerCommands(player);
-
+		boolean gameRunning = true;
+		while (gameRunning) {
+			gameStatus();
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			produceResources();
+			agentDecision();
+			unitInteraction();
+			gameRunning = playerCommands();
+		}
+	}
+	
+	private void gameStatus() {
+		System.out.println("Game State:");
+		System.out.print("Players: ");
+		for (Player player : players) {
+			player.getAlias();
+			System.out.print(player.getAlias() + ",");
+		}
+		System.out.println();
+		for (Player player : players) {
+			System.out.println(player.getAlias()+ "'s Resources:");
+			System.out.println(player.getResources().toString());
+			System.out.println(player.getAlias() + "'s Units: ");
+			for (Unit u : player.getUnits().getUnitList()) {
+				System.out.println(u.toString());
+			}
+			System.out.println(player.getAlias() + "'s Buildings: ");
+			for (Building b : player.getUnits().getBuildings()) {
+				System.out.println(b.toString());
 			}
 		}
-
 	}
 
-	/**
-	 * Get the commands from the client and add them to each player's respective action queue
-	 */
-	private void playerCommands(Player p) {
-	
+	private boolean playerCommands() {
+		Queue<Integer> currentInstructions = instructions.dump();
+		for (Integer i : currentInstructions) {
+			switch(i) {
+			case 1:
+			//	players.get(0).createUnit(0, 0);
+				break;
+			case 2:
+			//	players.get(0).createBuilding(3,3);
+				break;
+			case 3:
+				return false;
+			}
+		}
+		return true;
 	}
 
-	/**
-	 * @param p the player whose actionQueue to pop.
-	 * 
-	 */
-	private void unitInteraction(Player p) {
-		// get command queue from the player
-		// perform unit actions for each unit on the player's commandqueue
+	private void unitInteraction() {
+		for(Player player : players) {
+	//		for (Unit unit : player.getUnitQueue()) {
+				//unit.
+		//	}
+		}
 		
-		CommandQueue q = p.getCommandQueue();
-		Unit u = null;
-		while((u = q.pop()) != null) {
-			u.performActions();
+	}
+
+	private void agentDecision() {
+		for(Player player : players) {
+	//		for (Agent agent : player.getAgents()) {
+		//		agent.makeDecision();
+	//		}
 		}
 	}
 
-	/**
-	 * 
-	 * @param p - the player to whom each agent may add their actions to.
-	 */
-	private void agentDecision(Player p) {
-		// TODO Auto-generated method stub
-		// 
-
-	}
-
-	private void produceResources(Player player) {
-
-		for (ResourceBuilding building : player.getUnits()
-				.getResourceBuildings()) {
-			// TODO: building.gen
-			
+	private void produceResources() {
+		for(Player player : players) {
+			for (ResourceBuilding building : player.getUnits().getResourceBuildings()) {
+				
+				building.generateResource();
+			}
 		}
-
 	}
-
+	
+	
 }

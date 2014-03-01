@@ -79,6 +79,10 @@ public class PlayerUnits {
 	public List<Unit> getUnitList() {
 		return units;
 	}
+	
+	public List<Building> getBuildings() {
+		return buildings;
+	}
 
 	public void addAgent(Agent a) {
 
