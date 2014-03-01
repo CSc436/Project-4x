@@ -1,18 +1,5 @@
 package control;
 
-
-
-
-/* state
- based on state, the unit will:
- continue following orders
- interrupt current orders for an active action
- allow other object to give unit an order
- */
-
-
-
-
 import entities.Action;
 import entities.Civilization;
 import entities.PerfectCivilization;
@@ -92,7 +79,5 @@ public class Player {
 		cq.push(a, u);
 		u.addAction(a);
 	}
-	
-	
-	
+
 }

@@ -11,11 +11,9 @@ import entities.units.Unit;
 public class PlayerUnits {
 	private List<Unit> units;
 	private List<Unit> selectedUnits;
-
 	private List<Building> buildings;
 	private List<Building> selectedBuildings;
 	private List<ResourceBuilding> resourceBuildings;
-
 	private List<Agent> agents;
 
 	public PlayerUnits() {

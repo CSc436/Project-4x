@@ -4,13 +4,12 @@ import java.util.PriorityQueue;
 
 import control.Player;
 import entities.Action;
-import entities.PlayerUnits;
 import entities.UnitType;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 
 /*
- * Programmer:  Benjamin Deininger
+ * 
  * 
  * Purpose:  This abstract class defines the concept of a unit.  Every unit will atleast have the following 
  * information known about itself.  

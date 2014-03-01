@@ -23,7 +23,9 @@ public class GameBoard {
 	private Tile[][] map;
 	private int rows;
 	private int cols;
-	private ArrayList<Player> players;
+
+	private ArrayList<Player> players;// MAY NOT NEED PLAYERLIST ON BOARD
+
 	private static Random rand = new Random();
 	private float averageHeight = 0f; // Stores the average height of the noise
 										// map.

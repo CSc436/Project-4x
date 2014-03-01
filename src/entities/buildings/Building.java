@@ -10,17 +10,6 @@ import entities.units.Unit;
 
 public abstract class Building extends Unit {
 
-	// buildings will be > 1 tile
-
-	// initial building types
-
-	// unit producing
-	// resource producing
-	// research options
-	// defense units
-
-	// garrison?
-
 	protected int width;
 	protected int height;
 
