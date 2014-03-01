@@ -1,7 +1,7 @@
 package control;
 
 import java.util.List;
-import com.server.MovingNumber;
+import com.server.MovingUnit;
 import entities.buildings.ResourceBuilding;
 import entities.gameboard.GameBoard;
 import entities.units.Unit;
@@ -9,13 +9,13 @@ import entities.units.Unit;
 public class Controller implements Runnable {
 	List<Player> players;
 	GameBoard map;
-	MovingNumber number;
+	MovingUnit number;
 
 	public Controller() {
 
 		map = new GameBoard(5, 5, 2);
 		players = map.getPlayerList();
-		number = new MovingNumber(0.0, 1.0);
+		number = new MovingUnit(0.0, 1.0);
 	}
 
 	@Override
