@@ -1,5 +1,5 @@
 package com.client;
 
 public enum LandType {
-	Grass, Beach, Shore, Ocean
+	Grass, Dirt, Forest, Water, Mountain, Snow
 }

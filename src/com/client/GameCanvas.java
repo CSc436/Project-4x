@@ -27,6 +27,8 @@ import com.googlecode.gwtgl.binding.WebGLShader;
 import com.googlecode.gwtgl.binding.WebGLTexture;
 import com.googlecode.gwtgl.binding.WebGLUniformLocation;
 
+import entities.gameboard.Terrain;
+
 public class GameCanvas {
 	private WebGLRenderingContext glContext;
 	private WebGLProgram shaderProgram, agentShader;
@@ -436,7 +438,7 @@ public class GameCanvas {
 
 		float[][] heightmap = DiamondSquare.DSGen(GRID_WIDTH,
 				System.currentTimeMillis(), 0.2f);
-		LandType type;
+		Terrain type;
 
 		vertexData = Float32Array.create(NUM_TILES * 6 * 3);
 		texCoordData = Float32Array.create(NUM_TILES * 6 * 2);
@@ -444,8 +446,7 @@ public class GameCanvas {
 		for (int x = 0; x < GRID_WIDTH; x++)
 			for (int y = 0; y < GRID_WIDTH; y++) {
 				int val = (int) (255 * heightmap[x][y]);
-				type = (val < 84 ? LandType.Ocean : val < 100 ? LandType.Shore
-						: val < 132 ? LandType.Beach : LandType.Grass);
+				type = (val < 100 ? Terrain.WATER : val < 132 ? Terrain.DIRT: Terrain.GRASS);
 				RenderTile.addTileToBuffer(x, y, 1.0f, index++, type,
 						glContext, vertexData, texCoordData);
 				if (index % 10 == 0) {
