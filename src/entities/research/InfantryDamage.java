@@ -1,7 +1,7 @@
 package entities.research;
 
 import control.Player;
-import entities.UnitType;
+import entities.GameObjectType;
 import entities.resources.Resources;
 
 public class InfantryDamage extends Technology {
@@ -20,7 +20,7 @@ public class InfantryDamage extends Technology {
 		time[0] = 50;
 		time[1] = 90;
 		time[2] = 180;
-		appliesTo.add(UnitType.INFANTRY);
+		appliesTo.add(GameObjectType.UNIT);
 	}
 	
 	@Override

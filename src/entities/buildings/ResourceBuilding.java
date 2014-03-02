@@ -1,20 +1,14 @@
 package entities.buildings;
 
-import control.Player;
-import entities.UnitType;
+import java.util.UUID;
+
+import control.BuildingType;
+import entities.GameObjectType;
 import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
+import entities.stats.UnitStats;
 
 public abstract class ResourceBuilding extends Building {
-
-	public ResourceBuilding(Player p, BaseStatsEnum baseStats, UnitType type,
-			int xco, int yco, int height, int width, Resources resourceAmount,
-			int idno) {
-		super(p, baseStats, type, xco, yco, height, width, idno);
-		// resources
-		this.resourceAmount = resourceAmount;
-		baseResourceAmount = resourceAmount;
-	}
 
 	protected final Resources baseResourceAmount;
 	protected Resources resourceAmount;
@@ -22,6 +16,16 @@ public abstract class ResourceBuilding extends Building {
 	// Global resource rate modifier that affects all resource buildings
 	private static Resources globalRateModifier = new Resources(1, 1, 1, 1);
 
+	public ResourceBuilding(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, 
+			GameObjectType gameObjectType, BuildingType buildingType, float xco,
+			float yco, int height, int width, Resources resourceAmount) {
+		super(id,playerId, baseStats, new_stats, 
+				gameObjectType, buildingType, xco,
+				yco, height, width);
+		baseResourceAmount = resourceAmount;
+		this.resourceAmount = resourceAmount;
+		
+	}
 	/* Setters and Getters */
 	public void setGlobalRateModifier(Resources newRate) {
 		globalRateModifier = newRate;
@@ -32,7 +36,5 @@ public abstract class ResourceBuilding extends Building {
 		return globalRateModifier;
 	}
 
-	public void generateResource() {
-		getOwner().getResources().receive(resourceAmount);
-	}
+	public abstract Resources generateResource();
 }

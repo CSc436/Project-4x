@@ -7,7 +7,7 @@ import org.junit.Test;
 import control.Player;
 import entities.PerfectCivilization;
 import entities.TestCivilization;
-import entities.UnitType;
+import entities.GameObjectType;
 import entities.research.TechnologyEnum;
 import entities.research.TechnologyTree;
 import entities.resources.Resources;
@@ -22,16 +22,16 @@ public class TestResearching {
 
 		// This research takes 50 units of time to complete.
 		assertEquals(true, p.getTechTree().research(tech));
-		assertEquals(0, p.upgrades.mapping.get(UnitType.INFANTRY.name()).damage);
+		assertEquals(0, p.upgrades.mapping.get(GameObjectType.UNIT.name()).damage);
 
 		// only after the right amount of time has passed, does this research
 		// complete.
 		p.getTechTree().researchStep(40);
 		// still needs 10 more units of time to complete.
-		assertEquals(0, p.upgrades.mapping.get(UnitType.INFANTRY.name()).damage);
+		assertEquals(0, p.upgrades.mapping.get(GameObjectType.UNIT.name()).damage);
 
 		p.getTechTree().researchStep(10);
-		assertEquals(1, p.upgrades.mapping.get(UnitType.INFANTRY.name()).damage);
+		assertEquals(1, p.upgrades.mapping.get(GameObjectType.UNIT.name()).damage);
 	}
 
 	@Test
@@ -42,12 +42,12 @@ public class TestResearching {
 
 		// First Research works
 		assertEquals(true, p.getTechTree().research(tech));
-		assertEquals(0, p.upgrades.mapping.get(UnitType.INFANTRY.name()).damage);
+		assertEquals(0, p.upgrades.mapping.get(GameObjectType.UNIT.name()).damage);
 
 		// only after the right amount of time has passed, does this research
 		// complete.
 		p.getTechTree().researchStep(50);
-		assertEquals(1, p.upgrades.mapping.get(UnitType.INFANTRY.name()).damage);
+		assertEquals(1, p.upgrades.mapping.get(GameObjectType.UNIT.name()).damage);
 
 		// Second also works
 		assertEquals(true, p.getTechTree().research(tech));
@@ -57,7 +57,7 @@ public class TestResearching {
 		assertEquals(false, p.getTechTree().research(tech));
 
 		// check damage for INFANTRY. should be 2 now
-		assertEquals(11, p.upgrades.mapping.get(UnitType.INFANTRY.name()).damage);
+		assertEquals(11, p.upgrades.mapping.get(GameObjectType.UNIT.name()).damage);
 	}
 
 	@Test
