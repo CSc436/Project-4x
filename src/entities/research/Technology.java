@@ -3,13 +3,13 @@ package entities.research;
 import java.util.ArrayList;
 
 import control.Player;
-import entities.UnitType;
+import entities.GameObjectType;
 import entities.resources.Resources;
 import entities.stats.BuffStats;
 
 public abstract class Technology {
 	protected ArrayList<TechnologyEnum> requirements;
-	protected ArrayList<UnitType> appliesTo;
+	protected ArrayList<GameObjectType> appliesTo;
 	
 	protected int current_level;
 	private int max_level;
@@ -19,7 +19,7 @@ public abstract class Technology {
 	
 	public Technology(int max_levels) {
 		requirements = new ArrayList<TechnologyEnum>();
-		appliesTo = new ArrayList<UnitType>();
+		appliesTo = new ArrayList<GameObjectType>();
 		current_level = 1;
 		
 		// Multi-level stuff
@@ -33,7 +33,7 @@ public abstract class Technology {
 	}
 	
 	public ArrayList<TechnologyEnum> getRequirements(){ return requirements; };
-	public ArrayList<UnitType> getAppliesTo(){ return appliesTo; };
+	public ArrayList<GameObjectType> getAppliesTo(){ return appliesTo; };
 	
 	public BuffStats getStats(){ return buffstats[current_level - 1]; }
 	public Resources getCost() { return costs[current_level - 1]; }

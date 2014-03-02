@@ -7,10 +7,10 @@ package entities.util;
  * 
  */
 public class Point {
-	public int x;
-	public int y;
+	public float x;
+	public float y;
 
-	public Point(int r, int c) {
+	public Point(float r, float c) {
 		x = r;
 		y = c;
 	}

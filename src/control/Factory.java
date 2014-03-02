@@ -1,44 +1,54 @@
 package control;
 
+import java.util.UUID;
+
+import entities.GameObjectType;
 import entities.buildings.Barracks;
 import entities.buildings.Building;
+import entities.stats.BaseStatsEnum;
+import entities.stats.UnitStats;
 import entities.units.Infantry;
 import entities.units.Unit;
 
 public class Factory {
 
-	static int uniqueid = 0;
+	private static synchronized UUID getId() {
+		return UUID.randomUUID();
+	}
 
-	public static Unit buildUnit(UnitType u, Player p) {
+	public static Unit buildUnit(int playerId, GameObjectType type, UnitType unitType, float xco,
+			float yco) {
 
-		Unit result;
-
-		switch (u) {
+		UUID newId = getId();
+		Unit result = null;
+		switch (unitType) {
 
 		case INFANTRY:
-			result = new Infantry(p, 1, 1, uniqueid);
-			p.getUnits().addUnit(result);
+			result = new Infantry(newId, playerId, BaseStatsEnum.INFANTRY, BaseStatsEnum.INFANTRY.getStats(), GameObjectType.UNIT,
+					UnitType.INFANTRY, xco, yco);
 		default:
-			result = new Infantry(p, 1, 1, uniqueid);
+			//result = new Infantry(p, 1, 1, uniqueid);
 		}
-		uniqueid++;
+		
 		return result;
 
 	}
 
-	public static Unit buildStructure(BuildingType b, Player p) {
 
-		Building result;
+	public static Building buildStructure(int playerId, GameObjectType gameObjectType, BuildingType buildingType,
+			float xco, float yco, int height, int width) {
+		UUID newId = getId();
+		Building result = null;
 
-		switch (b) {
+		switch (buildingType) {
 
 		case BARRACKS:
-			result = new Barracks(p, 1, 1, uniqueid);
-			p.getUnits().addBuilding(result);
+			result = new Barracks(newId, playerId, BaseStatsEnum.BARRACKS, 
+					BaseStatsEnum.BARRACKS.getStats(), GameObjectType.BUILDING, BuildingType.BARRACKS, 
+					xco, yco, height, width);
 		default:
-			result = new Barracks(p, 1, 1, uniqueid);
+			//result = new Barracks(p, 1, 1, uniqueid);
 		}
-		uniqueid++;
 		return result;
 
 	}

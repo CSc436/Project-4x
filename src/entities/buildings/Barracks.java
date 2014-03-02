@@ -1,23 +1,23 @@
 package entities.buildings;
 
-import control.Player;
-import entities.UnitType;
+import java.util.HashMap;
+import java.util.UUID;
+
+import control.BuildingType;
+import entities.GameObjectType;
 import entities.stats.BaseStatsEnum;
+import entities.stats.UnitStats;
 
 public class Barracks extends Building {
 
-	private static final int barrackHeight = 10;
-	private static final int barrackWidth = 10;
 	private static int soldierAmount = 20;
 	static int newSoldiers;
 
-	public Barracks(Player p, int h, int w, int hp, int lv) {
-		super(p, h, w, hp, 1);
-		this.maxLevel = 5;
-	}
-
-	public Barracks(Player p, int xco, int yco, int idno) {
-		super(p, BaseStatsEnum.CASTLE, UnitType.BUILDING, xco, yco, idno);
+	public Barracks(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, 
+			GameObjectType gameObjectType, BuildingType buildingType, float xco,
+			float yco, int height, int width) {
+		super(id, playerId, baseStats, new_stats, gameObjectType, buildingType, xco, yco,
+				height, width);
 	}
 
 	protected static int setSoldiers(int i) {
@@ -38,7 +38,19 @@ public class Barracks extends Building {
 	}
 
 	protected int getSoldiers() {
-		soldierAmount += Barracks.setSoldiers(Barracks.getLevel());
+		soldierAmount += Barracks.setSoldiers(0);
 		return soldierAmount;
+	}
+
+	@Override
+	protected void setActions() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public HashMap<String, String> getActions() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

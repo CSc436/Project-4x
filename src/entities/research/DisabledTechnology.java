@@ -1,6 +1,6 @@
 package entities.research;
 
-import entities.UnitType;
+import entities.GameObjectType;
 import entities.annotations.TechDisabledByDefault;
 import entities.resources.Resources;
 
@@ -24,7 +24,7 @@ public class DisabledTechnology extends Technology  {
 		time[0] = 50;
 		time[1] = 90;
 		time[2] = 180;
-		appliesTo.add(UnitType.BUILDING);
+		appliesTo.add(GameObjectType.BUILDING);
 	}
 
 }

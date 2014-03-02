@@ -1,9 +1,13 @@
 package entities.buildings;
 
-import control.Player;
-import entities.UnitType;
+import java.util.HashMap;
+import java.util.UUID;
+
+import control.BuildingType;
+import entities.GameObjectType;
 import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
+import entities.stats.UnitStats;
 
 public class Bank extends ResourceBuilding {
 	// Placeholder bank building dimensions
@@ -13,9 +17,33 @@ public class Bank extends ResourceBuilding {
 													// will generate for the
 													// user
 
-	public Bank(Player p, BaseStatsEnum baseStats, UnitType type, int xco,
-			int yco, int height, int width, int idno) {
-		super(p, baseStats, type, xco, yco, bank_Height, bank_Width,
-				new Resources(0, bank_BaseGenAmt, 0, 0), idno);
+	public Bank(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, 
+			GameObjectType gameObjectType, BuildingType buildingType, float xco,
+			float yco, int height, int width, Resources resourceAmount) {
+		super(id, playerId, baseStats, new_stats, gameObjectType, buildingType, xco, yco, height, width, resourceAmount);
+	}
+	
+	@Override
+	public String toString() {
+		return "GameObject type: Bank; Player owner Id: " + this.getPlayerId() + "; Castle id: " + this.getCastleId() 
+				+ "; GameObject id: " + this.getId();
+	}
+
+	@Override
+	protected void setActions() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public HashMap<String, String> getActions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Resources generateResource() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

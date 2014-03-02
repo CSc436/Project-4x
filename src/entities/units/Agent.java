@@ -1,14 +1,14 @@
 package entities.units;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
+import java.util.UUID;
 
 import control.CommandQueue;
-import control.Player;
-import entities.UnitType;
+import control.UnitType;
+import entities.GameObjectType;
 import entities.stats.BaseStatsEnum;
+import entities.stats.UnitStats;
 
 /**
  * 
@@ -31,12 +31,24 @@ public abstract class Agent extends Unit {
 	 * initializes underlings, and Command Queue. 
 	 * 
 	 * Parameters:
-	 * @param Player p - the player that owns this agent 
-	 * @param int idno - id number for this unit. 
 	 */
-	public Agent(Player p, int idno) {
-		super(p, BaseStatsEnum.FOOTMAN, UnitType.INFANTRY, 0, 0, idno);
+	
+	public Agent(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, GameObjectType type, UnitType unitType, float xco,
+			float yco) {
+		super(id, playerId,  baseStats, new_stats, type, unitType, xco, yco);
 		underlings = new HashMap<String, Unit>();
 		cq = new CommandQueue();
+	}
+
+	@Override
+	protected void setActions() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public HashMap<String, String> getActions() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
