@@ -41,6 +41,9 @@ public class ClientModel {
 	public float[] getPosition( long currentTime ) {
 		
 		long currTime = System.currentTimeMillis();
+		if (lastUnit == null || nextUnit == null)
+			return position;
+		
 		position[0] = (float) (lastUnit.location.x + (currTime - lastUpdateTime) * (nextUnit.location.x - lastUnit.location.x) / averageTurnInterval) ; 
 		position[1] = (float) (lastUnit.location.y + (currTime - lastUpdateTime) * (nextUnit.location.y - lastUnit.location.y) / averageTurnInterval) ;
 		
@@ -50,6 +53,25 @@ public class ClientModel {
 	
 	public void run() {
 		
+		simpleSimulator.startSimulation(new AsyncCallback<String>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void onSuccess(String result) {
+				// TODO Auto-generated method stub
+				System.out.println("Simulation started");
+				startup();
+			}
+
+		});
+		
+	}
+	
+	public void startup(){
 		Timer pollTimer = new Timer() {
 
 			@Override
@@ -106,7 +128,5 @@ public class ClientModel {
 
 		setTargetTimer.scheduleRepeating(1000);
 	}
-	
-	
 	
 }

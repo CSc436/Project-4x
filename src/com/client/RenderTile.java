@@ -24,7 +24,7 @@ public class RenderTile {
 		float depth = 0.0f;
 
 		float startx, starty;
-		float delta = 0.5f;
+		float delta = 0.25f;
 		
 		switch(land){
 		case GRASS:		startx = 0.0f;

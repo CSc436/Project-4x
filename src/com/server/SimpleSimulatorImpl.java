@@ -1,9 +1,12 @@
-package com.shared;
+package com.server;
 
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 import com.client.SimpleSimulator;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.shared.Model;
+import com.shared.MovingUnit;
+import com.shared.Request;
 
 /**
  * The server-side implementation of the RPC service.
