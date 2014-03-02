@@ -28,5 +28,14 @@ public class General extends Agent {
 	// what options each general has:
 	// rally troops, defensive position, attack, move, remove troops
 	// add troops
+	
+	/*
+	 * TODO add option to 'patrol' around a city(ies). 
+	 * TODO add option to 'explore', causing general to lead troops in random 
+	 *      unexplored direction 
+	 * TODO add option to 'invade', if enemy city is known, use A*-esque algorithm to 
+	 *      lead troops to city and invade.  
+	 * TODO add option to 'defend', send troops to ward off enemies at a city (an ally's or your own)
+	 */
 
 }

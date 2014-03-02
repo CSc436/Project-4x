@@ -17,4 +17,10 @@ public class Banker extends Agent{
 		// TODO Auto-generated constructor stub
 	}
 
+	/*
+	 * TODO add option to initiate trade, should be with an ally or city of own player
+	 * 
+	 * 
+	 */
+	
 }

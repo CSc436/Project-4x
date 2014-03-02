@@ -22,4 +22,9 @@ public class Prospector extends Agent{
 		// TODO Auto-generated constructor stub
 	}
 
+	
+	/*
+	 * TODO use an A*-esque algorithm to find path to desired resource. Once path is found (location of tile)
+	 * Send villagers to mine resource. Villagers may have to build new building etc.  
+	 */
 }
