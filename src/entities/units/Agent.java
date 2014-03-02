@@ -31,7 +31,7 @@ public abstract class Agent extends Unit {
 	 * initializes underlings, and Command Queue. 
 	 * 
 	 * Parameters:
-	 * @param Player p - the player that owns this agent TODO replace with Unique player id. 
+	 * @param Player p - the player that owns this agent 
 	 * @param int idno - id number for this unit. 
 	 */
 	public Agent(Player p, int idno) {
