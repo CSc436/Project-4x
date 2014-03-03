@@ -2,7 +2,8 @@ package com.client;
 
 import java.util.ArrayList;
 
-import com.client.matrixutils.FloatMatrix;
+import static com.google.gwt.query.client.GQuery.$;
+
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -14,7 +15,9 @@ import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.query.client.Function;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Image;
@@ -40,19 +43,22 @@ public class GameCanvas {
 	private WebGLBuffer agentVertBuffer, agentTexBuffer;
 	
 	private Float32Array vertexData, texCoordData;
+	public static int WIDTH, HEIGHT;
+	private static long startTime;
+	private Camera camera;
+//	private float[] cameraMatrix;
+//	private float camX = 0.0f, camY = -20.0f, camZ = 20.0f;
+	
 	private Float32Array agentVertData, agentTexData;
 	
-	private static int WIDTH, HEIGHT;
-	private static long startTime;
-	private float[] cameraMatrix;
-	private float camX = 0.0f, camY = -20.0f, camZ = 20.0f;
 	private float agentX = 0.0f, agentY = 0.0f, agentZ = -0.1f;
 	private boolean in = false, out = false, up = false, down = false,
-			right = false, left = false;
+			right = false, left = false, rotateLeft = false, rotateRight = false, center = false;
 	private long time;
 
-	private final int GRID_WIDTH = 16;
+	public static final int GRID_WIDTH = 64;
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
+	private final boolean debug = false;
 
 	private ArrayList<RenderTile> tiles = new ArrayList<RenderTile>();
 	
@@ -74,6 +80,7 @@ public class GameCanvas {
 				.getOffsetWidth());
 		HEIGHT = webGLCanvas.getParent().getOffsetHeight();
 		WIDTH = webGLCanvas.getParent().getOffsetWidth();
+		camera = new Camera();
 
 		glContext.viewport(0, 0, WIDTH, HEIGHT);
 		
@@ -81,7 +88,7 @@ public class GameCanvas {
 		
 		registerMapMovements();
 		registerResizeHandler();
-		makeCameraMatrix();
+		camera.makeCameraMatrix();
 		start();
 	}
 	
@@ -96,10 +103,10 @@ public class GameCanvas {
 			public void onKeyDown(KeyDownEvent event) {
 				// TODO Auto-generated method stub
 
-				if (time - lastHit < 100)
-					return;
-
-				lastHit = time;
+//				if (time - lastHit < 100)
+//					return;
+//
+//				lastHit = time;
 
 				switch (event.getNativeKeyCode()) {
 				case KeyCodes.KEY_UP:
@@ -118,14 +125,12 @@ public class GameCanvas {
 				case KeyCodes.KEY_D:
 					right = true;
 					break;
-				case KeyCodes.KEY_E:
-					in = true;
-					break;
-				case KeyCodes.KEY_Q:
-					out = true;
-					break;
-				default:
-					break;
+				case 173: out = true; break;
+				case 61: in = true; break;
+				case KeyCodes.KEY_Q: rotateLeft = true; break;
+				case KeyCodes.KEY_E: rotateRight = true; break;
+				case KeyCodes.KEY_X: center = true; break;
+				default: break;
 				}
 			}
 		}, KeyDownEvent.getType());
@@ -136,28 +141,22 @@ public class GameCanvas {
 				switch (event.getNativeKeyCode()) {
 				case KeyCodes.KEY_UP:
 				case KeyCodes.KEY_W:
-					up = false;
-					break;
+					up = false; break;
 				case KeyCodes.KEY_DOWN:
 				case KeyCodes.KEY_S:
-					down = false;
-					break;
+					down = false; break;
 				case KeyCodes.KEY_LEFT:
 				case KeyCodes.KEY_A:
-					left = false;
-					break;
+					left = false; break;
 				case KeyCodes.KEY_RIGHT:
 				case KeyCodes.KEY_D:
-					right = false;
-					break;
-				case KeyCodes.KEY_E:
-					in = false;
-					break;
-				case KeyCodes.KEY_Q:
-					out = false;
-					break;
-				default:
-					break;
+					right = false; break;
+				case 173: out = false; break;
+				case 61: in = false; break;
+				case KeyCodes.KEY_Q: rotateLeft = false; break;
+				case KeyCodes.KEY_E: rotateRight = false; break;
+				case KeyCodes.KEY_X: center = false; break;
+				default: break;
 				}
 			}
 		}, KeyUpEvent.getType());
@@ -179,38 +178,108 @@ public class GameCanvas {
 				WIDTH = webGLCanvas.getParent().getOffsetWidth();
 
 				glContext.viewport(0, 0, WIDTH, HEIGHT);
-				makeCameraMatrix();
+				camera.makeCameraMatrix();
 			}
-		});	
+		});
+
+		initClickHandlers();
+		camera.makeCameraMatrix();
+		start();
 	}
 
-	private void makeCameraMatrix() {
-		// 4.71238898
-		cameraMatrix = FloatMatrix.createCameraMatrix(0.0f,
-				3.14159f + .785398163f, 0.0f, 45,
-				(float) WIDTH / (float) HEIGHT, 0.1f, 1000000f)
-				.columnWiseData();
+	private void initClickHandlers() {
+		// City Menu Button
+		$("#city-button").click(new Function() {
+			public boolean f(Event e) {
+				// Show city menu
+				toggleSidebar(false);
+				$("#agent-menu").hide();
+				$("#city-menu").show();
+				// Change content to city menu
+				return true; // Default return true
+			}
+		});
+
+		// Agent Menu Button
+		$("#agent-button").click(new Function() {
+			public boolean f(Event e) {
+				// Show agent menu
+				toggleSidebar(false);
+				$("#city-menu").hide();
+				$("#agent-menu").show();
+				// Change content to agent menu
+				return true; // Default return true
+			}
+		});
+
+		// Sidebar close/open
+		$("#sidebar-hide").click(new Function() {
+			public boolean f(Event e) {
+				// Hide sidebar
+				toggleSidebar(true);
+				return true; // Default return true
+			}
+		});
 	}
+	
+	private void toggleSidebar(boolean hideIfShowing) {
+		String left = $("#sidebar").css("left");
+		if (left.equals("0px")) {
+			//Hide only if param is true
+			if (hideIfShowing) {
+				int width = $("#sidebar").outerWidth(true);
+				int closeWidth = $("#sidebar-hide").outerWidth(true);
+				$("#sidebar").animate("left:-" + (width + closeWidth));
+			}
+		} else {
+			//Show sidebar
+			$("#sidebar").animate("left:0");
+		}
+	}	
+	
+
+//	private void makeCameraMatrix() {
+//		// 4.71238898
+//		cameraMatrix = FloatMatrix.createCameraMatrix(0.0f,
+//				3.14159f + .785398163f, 0.0f, 45,
+//				(float) WIDTH / (float) HEIGHT, 0.1f, 1000000f)
+//				.columnWiseData();
+//	}
 
 	private void updateCamera() {
 		// TODO Auto-generated method stub
+		float camZ = camera.getZ();
 		float delta = camZ / 10.0f;
 		if (up)
-			camY += delta;
+			camera.up(delta);
+			//camY += delta;
 		if (down)
-			camY -= delta;
+			camera.down(delta);
+			//camY -= delta;
 		if (left)
-			camX += delta;
+			camera.left(delta);
+			//camX += delta;
 		if (right)
-			camX -= delta;
+			camera.right(delta);
+			//camX -= delta;
 		if (in && camZ >= 2.0) {
-			camZ -= 1.0f;
-			camY += 1.0f;
+			camera.zoomIn();
+			//camZ -= 1.0f;
+			//camY += 1.0f;
 		}
 		if (out && camZ <= 25.0f) {
-			camZ += 1.0f;
-			camY -= 1.0f;
+			camera.zoomOut();
+			//camZ += 1.0f;
+			//camY -= 1.0f;
 		}
+		if (rotateLeft)
+			camera.rotateLeft();
+		if (rotateRight)
+			camera.rotateRight();
+		if (center)
+			camera.defaultPosition();
+		if (debug) 
+			System.out.println("X: " + camera.getX() + ", Y: " + camera.getY() + ", Z: " + camera.getZ() + ", Height: " + HEIGHT + ", Width: " + WIDTH);
 	}
 
 	private void start() {
@@ -419,7 +488,7 @@ public class GameCanvas {
 		glContext.enableVertexAttribArray(agentTexAttrib);
 
 		// vertices
-		glContext.uniformMatrix4fv(glContext.getUniformLocation(agentShader, "perspectiveMatrix"), false, cameraMatrix);
+		glContext.uniformMatrix4fv(glContext.getUniformLocation(agentShader, "perspectiveMatrix"), false, camera.getCameraMatrix());
 		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, agentVertBuffer);
 		glContext.vertexAttribPointer(agentVertAttrib, 3,
 				WebGLRenderingContext.FLOAT, false, 0, 0);
@@ -431,7 +500,7 @@ public class GameCanvas {
 				WebGLRenderingContext.FLOAT, false, 0, 0);
 
 		// uniforms
-		glContext.uniform3f(glContext.getUniformLocation(agentShader,  "camPos"), camX, camY, camZ);
+		glContext.uniform3f(glContext.getUniformLocation(agentShader,  "camPos"), camera.getX(), camera.getY(), camera.getZ());
 		
 		glContext.uniform3f(glContext.getUniformLocation(agentShader,  "agentPos"), agentX, agentY, agentZ);
 
@@ -474,7 +543,7 @@ public class GameCanvas {
 		glContext.enableVertexAttribArray(vertexTexCoordAttrib);
 
 		// vertices
-		glContext.uniformMatrix4fv(matrixUniform, false, cameraMatrix);
+		glContext.uniformMatrix4fv(matrixUniform, false, camera.getCameraMatrix());
 		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, vertexBuffer);
 		glContext.vertexAttribPointer(vertexPositionAttribute, 3,
 				WebGLRenderingContext.FLOAT, false, 0, 0);
@@ -486,7 +555,7 @@ public class GameCanvas {
 				WebGLRenderingContext.FLOAT, false, 0, 0);
 
 		// uniforms
-		glContext.uniform3f(camPosUniform, camX, camY, camZ);
+		glContext.uniform3f(camPosUniform, camera.getX(), camera.getY(), camera.getZ());
 
 		// texture
 		glContext.activeTexture(WebGLRenderingContext.TEXTURE0);

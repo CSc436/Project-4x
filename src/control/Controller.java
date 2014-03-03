@@ -17,7 +17,7 @@ public class Controller implements Runnable {
 
 		map = new GameBoard(5, 5, 2);
 		players = map.getPlayerList();
-		number = new MovingUnit(0.0, 1.0);
+		//number = new MovingUnit(0.0, 1.0);
 	}
 
 	@Override

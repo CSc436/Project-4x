@@ -29,7 +29,7 @@ public class FourXGameModel {
 	public Unit getUnit(int i) {
 		// TODO Auto-generated method stub
 		for( Player p : players ) {
-			p.getUnits().
+			//p.getUnits().
 		}
 		return null;
 	}
