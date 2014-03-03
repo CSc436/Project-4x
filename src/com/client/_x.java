@@ -51,12 +51,13 @@ public class _x implements EntryPoint {
 			matrixUniform, camPosUniform;
 	private WebGLBuffer vertexBuffer, texCoordBuffer;
 	private Float32Array vertexData, texCoordData;
-	private static int WIDTH, HEIGHT;
+	public static int WIDTH, HEIGHT;
 	private static long startTime;
-	private float[] cameraMatrix;
-	private float camX = 0.0f, camY = -20.0f, camZ = 20.0f;
+	private Camera camera;
+//	private float[] cameraMatrix;
+//	private float camX = 0.0f, camY = -20.0f, camZ = 20.0f;
 	private boolean in = false, out = false, up = false, down = false,
-			right = false, left = false;
+			right = false, left = false, rotateLeft = false, rotateRight = false;
 	private long time;
 
 	private final int GRID_WIDTH = 32;
@@ -82,6 +83,7 @@ public class _x implements EntryPoint {
 				.getOffsetWidth());
 		HEIGHT = webGLCanvas.getParent().getOffsetHeight();
 		WIDTH = webGLCanvas.getParent().getOffsetWidth();
+		camera = new Camera();
 
 		glContext.viewport(0, 0, WIDTH, HEIGHT);
 		
@@ -92,10 +94,10 @@ public class _x implements EntryPoint {
 			public void onKeyDown(KeyDownEvent event) {
 				// TODO Auto-generated method stub
 
-				if (time - lastHit < 100)
-					return;
-
-				lastHit = time;
+//				if (time - lastHit < 100)
+//					return;
+//
+//				lastHit = time;
 
 				switch (event.getNativeKeyCode()) {
 				case KeyCodes.KEY_UP:
@@ -114,14 +116,11 @@ public class _x implements EntryPoint {
 				case KeyCodes.KEY_D:
 					right = true;
 					break;
-				case KeyCodes.KEY_E:
-					in = true;
-					break;
-				case KeyCodes.KEY_Q:
-					out = true;
-					break;
-				default:
-					break;
+//				case KeyCodes.KEY_NUM_PLUS: in = true; break;
+//				case KeyCodes.KEY_NUM_MINUS: out = true; break;
+				case KeyCodes.KEY_Q: rotateLeft = true; break;
+				case KeyCodes.KEY_E: rotateRight = true; break;
+				default: break;
 				}
 			}
 		}, KeyDownEvent.getType());
@@ -132,28 +131,21 @@ public class _x implements EntryPoint {
 				switch (event.getNativeKeyCode()) {
 				case KeyCodes.KEY_UP:
 				case KeyCodes.KEY_W:
-					up = false;
-					break;
+					up = false; break;
 				case KeyCodes.KEY_DOWN:
 				case KeyCodes.KEY_S:
-					down = false;
-					break;
+					down = false; break;
 				case KeyCodes.KEY_LEFT:
 				case KeyCodes.KEY_A:
-					left = false;
-					break;
+					left = false; break;
 				case KeyCodes.KEY_RIGHT:
 				case KeyCodes.KEY_D:
-					right = false;
-					break;
-				case KeyCodes.KEY_E:
-					in = false;
-					break;
-				case KeyCodes.KEY_Q:
-					out = false;
-					break;
-				default:
-					break;
+					right = false; break;
+//				case KeyCodes.KEY_NUM_PLUS: in = false; break;
+//				case KeyCodes.KEY_NUM_MINUS: out = false; break;
+				case KeyCodes.KEY_Q: rotateLeft = false; break;
+				case KeyCodes.KEY_E: rotateRight = false; break;
+				default: break;
 				}
 			}
 		}, KeyUpEvent.getType());
@@ -248,12 +240,12 @@ public class _x implements EntryPoint {
 				WIDTH = webGLCanvas.getParent().getOffsetWidth();
 
 				glContext.viewport(0, 0, WIDTH, HEIGHT);
-				makeCameraMatrix();
+				camera.makeCameraMatrix();
 			}
 		});
 
 		initClickHandlers();
-		makeCameraMatrix();
+		camera.makeCameraMatrix();
 		start();
 	}
 
@@ -307,33 +299,44 @@ public class _x implements EntryPoint {
 		}
 	}
 
-	private void makeCameraMatrix() {
-		// 4.71238898
-		cameraMatrix = FloatMatrix.createCameraMatrix(0.0f,
-				3.14159f + .785398163f, 0.0f, 45,
-				(float) WIDTH / (float) HEIGHT, 0.1f, 1000000f)
-				.columnWiseData();
-	}
+//	private void makeCameraMatrix() {
+//		// 4.71238898
+//		cameraMatrix = FloatMatrix.createCameraMatrix(0.0f,
+//				3.14159f + .785398163f, 0.0f, 45,
+//				(float) WIDTH / (float) HEIGHT, 0.1f, 1000000f)
+//				.columnWiseData();
+//	}
 
 	private void updateCamera() {
 		// TODO Auto-generated method stub
+		float camZ = camera.getZ();
 		float delta = camZ / 10.0f;
 		if (up)
-			camY += delta;
+			camera.up(delta);
+			//camY += delta;
 		if (down)
-			camY -= delta;
+			camera.down(delta);
+			//camY -= delta;
 		if (left)
-			camX += delta;
+			camera.left(delta);
+			//camX += delta;
 		if (right)
-			camX -= delta;
+			camera.right(delta);
+			//camX -= delta;
 		if (in && camZ >= 2.0) {
-			camZ -= 1.0f;
-			camY += 1.0f;
+			camera.zoomIn(1.0f);
+			//camZ -= 1.0f;
+			//camY += 1.0f;
 		}
 		if (out && camZ <= 25.0f) {
-			camZ += 1.0f;
-			camY -= 1.0f;
+			camera.zoomOut(1.0f);
+			//camZ += 1.0f;
+			//camY -= 1.0f;
 		}
+		if (rotateLeft)
+			camera.rotateLeft();
+		if (rotateRight)
+			camera.rotateRight();
 	}
 
 	private void start() {
@@ -498,7 +501,7 @@ public class _x implements EntryPoint {
 		glContext.enableVertexAttribArray(vertexTexCoordAttrib);
 
 		// vertices
-		glContext.uniformMatrix4fv(matrixUniform, false, cameraMatrix);
+		glContext.uniformMatrix4fv(matrixUniform, false, camera.getCameraMatrix());
 		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, vertexBuffer);
 		glContext.vertexAttribPointer(vertexPositionAttribute, 3,
 				WebGLRenderingContext.FLOAT, false, 0, 0);
@@ -510,7 +513,7 @@ public class _x implements EntryPoint {
 				WebGLRenderingContext.FLOAT, false, 0, 0);
 
 		// uniforms
-		glContext.uniform3f(camPosUniform, camX, camY, camZ);
+		glContext.uniform3f(camPosUniform, camera.getX(), camera.getY(), camera.getZ());
 
 		// texture
 		glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
