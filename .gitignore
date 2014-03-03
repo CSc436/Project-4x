@@ -1,1 +1,9 @@
 /test-classes
+.classpath
+.project
+
+#This may need to be un-ignored.
+.settings/
+
+#Everyone will have to compile their own WAR
+war/
