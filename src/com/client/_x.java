@@ -57,11 +57,12 @@ public class _x implements EntryPoint {
 //	private float[] cameraMatrix;
 //	private float camX = 0.0f, camY = -20.0f, camZ = 20.0f;
 	private boolean in = false, out = false, up = false, down = false,
-			right = false, left = false, rotateLeft = false, rotateRight = false, center = true;
+			right = false, left = false, rotateLeft = false, rotateRight = false, center = false;
 	private long time;
 
-	private final int GRID_WIDTH = 32;
+	public static final int GRID_WIDTH = 64;
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
+	private final boolean debug = false;
 
 	private ArrayList<RenderTile> tiles = new ArrayList<RenderTile>();
 
@@ -341,6 +342,8 @@ public class _x implements EntryPoint {
 			camera.rotateRight();
 		if (center)
 			camera.defaultPosition();
+		if (debug) 
+			System.out.println("X: " + camera.getX() + ", Y: " + camera.getY() + ", Z: " + camera.getZ() + ", Height: " + HEIGHT + ", Width: " + WIDTH);
 	}
 
 	private void start() {

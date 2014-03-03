@@ -4,7 +4,7 @@ import com.client.matrixutils.FloatMatrix;
 
 public class Camera {
 	private float[] cameraMatrix;
-	private float camX = 0.0f, camY = -20.0f, camZ = 20.0f;
+	private float camX = _x.GRID_WIDTH/2 * -1, camY = _x.GRID_WIDTH * -1, camZ = 20.0f;
 	private boolean in = false, out = false, up = false, down = false,
 			right = false, left = false, rotateLeft = false, rotateRight = false;
 	
@@ -81,8 +81,8 @@ public class Camera {
 
 	public void defaultPosition() {
 		// TODO Auto-generated method stub
-		camX = 0.0f;
-		camY = -20.0f;
+		camX = _x.GRID_WIDTH/2 * -1;
+		camY = _x.GRID_WIDTH * -1; 
 		camZ = 20.0f;
 	}
 }
