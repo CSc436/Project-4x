@@ -2,7 +2,8 @@ package com.client;
 
 import java.util.ArrayList;
 
-import com.client.matrixutils.FloatMatrix;
+import static com.google.gwt.query.client.GQuery.$;
+
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -14,7 +15,9 @@ import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.query.client.Function;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Image;
@@ -85,7 +88,7 @@ public class GameCanvas {
 		
 		registerMapMovements();
 		registerResizeHandler();
-		makeCameraMatrix();
+		camera.makeCameraMatrix();
 		start();
 	}
 	
@@ -485,7 +488,7 @@ public class GameCanvas {
 		glContext.enableVertexAttribArray(agentTexAttrib);
 
 		// vertices
-		glContext.uniformMatrix4fv(glContext.getUniformLocation(agentShader, "perspectiveMatrix"), false, cameraMatrix);
+		glContext.uniformMatrix4fv(glContext.getUniformLocation(agentShader, "perspectiveMatrix"), false, camera.getCameraMatrix());
 		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, agentVertBuffer);
 		glContext.vertexAttribPointer(agentVertAttrib, 3,
 				WebGLRenderingContext.FLOAT, false, 0, 0);
@@ -497,7 +500,7 @@ public class GameCanvas {
 				WebGLRenderingContext.FLOAT, false, 0, 0);
 
 		// uniforms
-		glContext.uniform3f(glContext.getUniformLocation(agentShader,  "camPos"), camX, camY, camZ);
+		glContext.uniform3f(glContext.getUniformLocation(agentShader,  "camPos"), camera.getX(), camera.getY(), camera.getZ());
 		
 		glContext.uniform3f(glContext.getUniformLocation(agentShader,  "agentPos"), agentX, agentY, agentZ);
 
