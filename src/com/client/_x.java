@@ -116,11 +116,11 @@ public class _x implements EntryPoint {
 				case KeyCodes.KEY_D:
 					right = true;
 					break;
-//				case KeyCodes.KEY_NUM_PLUS: in = true; break;
-//				case KeyCodes.KEY_NUM_MINUS: out = true; break;
+				case 173: out = true; break;
+				case 61: in = true; break;
 				case KeyCodes.KEY_Q: rotateLeft = true; break;
 				case KeyCodes.KEY_E: rotateRight = true; break;
-				default: break;
+				default: System.out.println(event.getNativeKeyCode()); break;
 				}
 			}
 		}, KeyDownEvent.getType());
@@ -141,8 +141,8 @@ public class _x implements EntryPoint {
 				case KeyCodes.KEY_RIGHT:
 				case KeyCodes.KEY_D:
 					right = false; break;
-//				case KeyCodes.KEY_NUM_PLUS: in = false; break;
-//				case KeyCodes.KEY_NUM_MINUS: out = false; break;
+				case 173: out = false; break;
+				case 61: in = false; break;
 				case KeyCodes.KEY_Q: rotateLeft = false; break;
 				case KeyCodes.KEY_E: rotateRight = false; break;
 				default: break;
@@ -324,12 +324,12 @@ public class _x implements EntryPoint {
 			camera.right(delta);
 			//camX -= delta;
 		if (in && camZ >= 2.0) {
-			camera.zoomIn(1.0f);
+			camera.zoomIn();
 			//camZ -= 1.0f;
 			//camY += 1.0f;
 		}
 		if (out && camZ <= 25.0f) {
-			camera.zoomOut(1.0f);
+			camera.zoomOut();
 			//camZ += 1.0f;
 			//camY -= 1.0f;
 		}

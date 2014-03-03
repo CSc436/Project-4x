@@ -57,13 +57,13 @@ public class Camera {
 		camX -= delta;
 	}
 
-	public void zoomIn(float f) {
+	public void zoomIn() {
 		// TODO Auto-generated method stub
 		camZ -= 1.0f;
 		camY += 1.0f;
 	}
 
-	public void zoomOut(float f) {
+	public void zoomOut() {
 		// TODO Auto-generated method stub
 		camZ += 1.0f;
 		camY -= 1.0f;
