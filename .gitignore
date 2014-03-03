@@ -6,4 +6,4 @@
 .settings/
 
 #Everyone will have to compile their own WAR
-war/
+#war/
