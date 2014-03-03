@@ -146,6 +146,7 @@ public abstract class Unit implements Locatable {
 	 */
 	public void addAction(Action a) {
 		actionQueue.add(a);
+		//TODO: This line will be modified by Ben so the action is sorted into the correct place.
 		getOwner().getCommandQueue().push(a, this);
 	}
 
