@@ -7,6 +7,7 @@ import com.fourx.buffs.UnitType;
 import control.Player;
 import entities.Action;
 import entities.BaseStatsEnum;
+import entities.Locatable;
 import entities.PlayerUnits;
 import entities.UnitStats;
 
@@ -26,7 +27,7 @@ import entities.UnitStats;
 // settler / worker
 // healing unit
 
-public abstract class Unit {
+public abstract class Unit implements Locatable {
 
 	private Player owner;
 
