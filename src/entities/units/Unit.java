@@ -7,6 +7,7 @@ import com.fourx.buffs.UnitType;
 import control.Player;
 import entities.Action;
 import entities.BaseStatsEnum;
+import entities.Locatable;
 import entities.PlayerUnits;
 import entities.UnitStats;
 
@@ -26,7 +27,7 @@ import entities.UnitStats;
 // settler / worker
 // healing unit
 
-public abstract class Unit {
+public abstract class Unit implements Locatable {
 
 	private Player owner;
 
@@ -145,6 +146,7 @@ public abstract class Unit {
 	 */
 	public void addAction(Action a) {
 		actionQueue.add(a);
+		//TODO: This line will be modified by Ben so the action is sorted into the correct place.
 		getOwner().getCommandQueue().push(a, this);
 	}
 
