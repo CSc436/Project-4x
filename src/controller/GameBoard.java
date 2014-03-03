@@ -286,22 +286,7 @@ public class GameBoard {
 	}
 
 
-	/*
-	 * placeUnitAt():
-	 * Description:
-	 * places a Unit object on the tile at the location (x,y). 
-	 * NOTE: Currently does not check to make sure that coordinates are within
-	 * the boundaries of the board. 
-	 * 
-	 * Parameters:
-	 * @param Unit u - Unit to place at the location
-	 * @param int x - x location to place unit (0 to rows - 1)
-	 * @param int y - y location to place unit (0 to cols - 1)
-	 */
-	public void placeUnitAt(Unit u, int x, int y) {
-		// set the unit's coodinates
-		u.setLocation(x, y);
-	}
+
 
 	/*
 	 * placeBuildingAt():
@@ -335,8 +320,6 @@ public class GameBoard {
 						map[r][c].setIsOccupiedByBuilding(true);
 					}
 				}
-
-				b.setLocation(x, y);
 			} else {
 				System.err.println("The building does not fit on the map");
 			}

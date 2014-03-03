@@ -33,8 +33,6 @@ public class GameBoardTest {
 		Unit temp2 = fact.buildUnit(1, UnitType.INFANTRY, 5, 5);
 		Building b = fact.buildBuilding(1, BuildingType.BARRACKS, 6, 6, 3, 3);
 
-		game.placeUnitAt(temp, 0, 0);
-		game.placeUnitAt(temp2, 5, 5);
 		game.placeBuildingAt(b, 6, 6);
 		
 		juan.getGameObjects().getUnits().put(temp.getId(), temp);
