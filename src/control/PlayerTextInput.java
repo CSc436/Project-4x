@@ -35,7 +35,6 @@ public class PlayerTextInput implements Runnable {
 		System.out.println("How big should the map be? Give height and width. ex:5 5");
 		payload.add(keyboard.nextInt());
 		payload.add(keyboard.nextInt());
-		payload.add(numPlayers);//this should not be needed
 		instructions.push(new Command(Actions.STARTUP_CREATE, Targets.MAP, payload));
 		payload.clear();
 		

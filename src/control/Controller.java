@@ -40,7 +40,7 @@ public class Controller implements Runnable {
 				players.add(new Player((String)it.next(), (Integer)it.next()));
 				break;
 			case MAP:
-				map = new GameBoard((Integer)it.next(), (Integer)it.next(), players.size());
+				map = new GameBoard((Integer)it.next(), (Integer)it.next());
 				break;
 			default:
 				System.out.println("You suck for screwing up the target in the command object");

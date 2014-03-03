@@ -25,14 +25,14 @@ public class Player {
 
 	// Bare constructor
 	public Player(String name, int id) {
-		this(name, new PerfectCivilization(), id);
+		this(name, id, new PerfectCivilization());
 	}
 
-	public Player(String alias, Civilization civ, int id) {
-		this(alias, new Resources(0, 0, 0, 0), civ, id);
+	public Player(String alias, int id, Civilization civ) {
+		this(alias, id, civ, new Resources(0, 0, 0, 0));
 	}
 
-	public Player(String alias, Resources resources, Civilization civ, int id) {
+	public Player(String alias, int id, Civilization civ, Resources resources) {
 		name = alias;
 		// civilization
 
@@ -83,7 +83,7 @@ public class Player {
 	public void addActionTo(Unit u, Action a) {
 
 		cq.push(a, u);
-		u.addAction(a);
+//		u.addAction(a);
 	}
 
 }
