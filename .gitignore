@@ -1,9 +1,17 @@
 /test-classes
-.classpath
-.project
 
-#This may need to be un-ignored.
+*.pydevproject
+.metadata
+.gradle
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
 .settings/
+.loadpath
 
 #Everyone will have to compile their own WAR
 #war/
