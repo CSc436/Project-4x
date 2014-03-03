@@ -57,7 +57,7 @@ public class _x implements EntryPoint {
 //	private float[] cameraMatrix;
 //	private float camX = 0.0f, camY = -20.0f, camZ = 20.0f;
 	private boolean in = false, out = false, up = false, down = false,
-			right = false, left = false, rotateLeft = false, rotateRight = false;
+			right = false, left = false, rotateLeft = false, rotateRight = false, center = true;
 	private long time;
 
 	private final int GRID_WIDTH = 32;
@@ -120,7 +120,8 @@ public class _x implements EntryPoint {
 				case 61: in = true; break;
 				case KeyCodes.KEY_Q: rotateLeft = true; break;
 				case KeyCodes.KEY_E: rotateRight = true; break;
-				default: System.out.println(event.getNativeKeyCode()); break;
+				case KeyCodes.KEY_X: center = true; break;
+				default: break;
 				}
 			}
 		}, KeyDownEvent.getType());
@@ -145,6 +146,7 @@ public class _x implements EntryPoint {
 				case 61: in = false; break;
 				case KeyCodes.KEY_Q: rotateLeft = false; break;
 				case KeyCodes.KEY_E: rotateRight = false; break;
+				case KeyCodes.KEY_X: center = false; break;
 				default: break;
 				}
 			}
@@ -337,6 +339,8 @@ public class _x implements EntryPoint {
 			camera.rotateLeft();
 		if (rotateRight)
 			camera.rotateRight();
+		if (center)
+			camera.defaultPosition();
 	}
 
 	private void start() {

@@ -78,4 +78,11 @@ public class Camera {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public void defaultPosition() {
+		// TODO Auto-generated method stub
+		camX = 0.0f;
+		camY = -20.0f;
+		camZ = 20.0f;
+	}
 }
