@@ -1,14 +1,15 @@
 #sidebar {
 	position: fixed;
 	bottom: 0;
-	left: -388px;
+	left: -397px;
 	top: 50px;
 	width: 350px;
-	background-color: rgba(51, 51, 51, 0.8);
-	border: 1px white solid;
+	/*background-color: rgba(51, 51, 51, 0.8);*/
+	background-image: url('assets/Panels/panel_sidebar.png');
+	background-size: 100% 100%;
 	border-left: none;
 	color: white;
-	padding: 5px;
+	padding: 10px;
 	margin: 0;
 	z-index: 999;
 	/*display: none;*/
@@ -30,4 +31,25 @@
 
 #sidebar-hide:hover {
 	background-color: rgba(255, 255, 255, 0.4);
+}
+
+.sidebar-menu {
+	display: none;
+	opacity: 1.0;
+}
+
+.sidebar-btn {
+	font-family: 'MedievalSharp', cursive !important;
+	cursor: pointer;
+}
+
+.btn-red {
+	background-image: url('assets/Buttons/button_pressed.png');
+	background-size: 100% 100%;
+	color: white;
+}
+
+.btn-red:hover {
+	background-image: url('assets/Buttons/button_unpressed.png');
+	background-size: 100% 100%;
 }

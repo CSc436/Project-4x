@@ -16,3 +16,11 @@ body,html {
 	top: 0;
 	left: 0;
 }
+
+.full-size {
+	width: 100%;
+}
+
+.half-size {
+	width: 50%;
+}

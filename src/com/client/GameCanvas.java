@@ -1,5 +1,6 @@
 package com.client;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import static com.google.gwt.query.client.GQuery.$;
@@ -151,8 +152,8 @@ public class GameCanvas {
 				case KeyCodes.KEY_RIGHT:
 				case KeyCodes.KEY_D:
 					right = false; break;
-				case 173: out = false; break;
-				case 61: in = false; break;
+				case KeyEvent.VK_MINUS: out = false; break;
+				case KeyEvent.VK_PLUS: in = false; break;
 				case KeyCodes.KEY_Q: rotateLeft = false; break;
 				case KeyCodes.KEY_E: rotateRight = false; break;
 				case KeyCodes.KEY_X: center = false; break;

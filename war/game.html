@@ -40,18 +40,29 @@
 	<div id="toolbar-div">
 		<span id="banner">4X GAME</span>
 		<ul id="toolbar">
-			<li><a href="#" id="agent-button" title="Agents"><img src="assets/AgentsIcon.png" /></a></li>
-			<li><a href="#" id="city-button" title="Cities"><img src="assets/CitiesIcon.png" /></a></li>
+			<li><a href="#" id="agent-button" title="Agents"><img
+					src="assets/Icons/AgentsIcon.png" /></a></li>
+			<li><a href="#" id="city-button" title="Cities"><img
+					src="assets/Icons/CitiesIcon.png" /></a></li>
+			<li><a href="#" id="diplomacy-button" title="Diplomacy"><img
+					src="assets/Icons/DiplomacyIcon.png" /></a></li>
+			<li><a href="#" id="economies-button" title="Economies"><img
+					src="assets/Icons/EconomyIcon.ico" /></a></li>
 		</ul>
 	</div>
 
 	<div id="sidebar">
-		<div id="agent-menu">
-			Agent menu
+		<div id="agent-menu" class="sidebar-menu">
+			<div>
+				<button type="button" class="sidebar-btn btn-red half-size">Click me</button>
+			</div>
+			<div>
+				<button type="button" class="sidebar-btn btn-red full-size">Click me</button>
+			</div>
 		</div>
-		<div id="city-menu">
-			City menu
-		</div>
+		<div id="city-menu" class="sidebar-menu">City menu</div>
+		<div id="diplomacy-menu" class="sidebar-menu">Diplomacy menu</div>
+		<div id="economies-menu" class="sidebar-menu">Economies menu</div>
 		<div id="sidebar-hide">&lt;&lt;</div>
 	</div>
 
@@ -64,7 +75,7 @@
 
 	<script
 		src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-		
+
 	<script type="text/javascript">
 		$(document).ready(function() {
 			
