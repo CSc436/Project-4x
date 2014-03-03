@@ -12,10 +12,13 @@ public interface ClientResources extends ClientBundle{
 	@Source("river_rock.jpg")
 	ImageResource riverTexture();
 	
-	@Source("4terrains.png")
+	@Source("6terrains.png")
 	ImageResource terrainTextures();
 	
-    @Source(value={"fs_red.txt"})
+	@Source("32pxterrains.png")
+	ImageResource textureAtlas();
+	
+    @Source(value={"simple_colors.fs"})
     TextResource fragmentShader();
     
     @Source(value={"texture-shader.txt"})
@@ -28,7 +31,7 @@ public interface ClientResources extends ClientBundle{
     TextResource redShader();
     
     @Source(value={"vs_simple.txt"})
-    TextResource simpleVertexShader();
+    TextResource agentVertexShader();
     
     @Source(value={"simple_colors.vs"})
     TextResource simpleColorsVS();

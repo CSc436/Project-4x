@@ -4,9 +4,18 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
+  <servlet>
+  	<servlet-name>SimpleSimulator</servlet-name>
+  	<servlet-class>com.server.SimpleSimulatorImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>SimpleSimulator</servlet-name>
+  	<url-pattern>/game/simple_sim</url-pattern>
+  </servlet-mapping>
+
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>_x.html</welcome-file>
+    <welcome-file>game.html</welcome-file>
   </welcome-file-list>
-
 </web-app>

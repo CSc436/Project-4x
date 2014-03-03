@@ -5,6 +5,7 @@ import java.util.Arrays;
 import com.googlecode.gwtgl.array.Float32Array;
 import com.googlecode.gwtgl.binding.WebGLBuffer;
 import com.googlecode.gwtgl.binding.WebGLRenderingContext;
+import com.shared.Terrain;
 
 public class RenderTile {
 	public Coordinate position;
@@ -17,35 +18,46 @@ public class RenderTile {
 	private WebGLRenderingContext gl;
 	private Float32Array vertexBuffer, texCoordBuffer;
 	
-	public static void addTileToBuffer(float x, float y, float size, int index, LandType land, WebGLRenderingContext gl, Float32Array vertexBuffer, Float32Array texCoordBuffer){
+	public static void addTileToBuffer(float x, float y, float size, int index, Terrain land, WebGLRenderingContext gl, Float32Array vertexBuffer, Float32Array texCoordBuffer){
 		Coordinate position = new Coordinate(x, y);
 
 		float depth = 0.0f;
 
 		float startx, starty;
+		float delta = 0.25f;
 		
 		switch(land){
-		case Grass:	startx = 0.01f;
-					starty = 0.01f;
-					break;
-		case Beach: startx = 0.01f;
-					starty = 0.51f;
-					break;
-		case Shore: startx = 0.51f;
-					starty = 0.01f;
-					break;
-		default:	startx = 0.51f;
-					starty = 0.51f;
+		case GRASS:		startx = 0.0f;
+						starty = 0.0f;
+						break;
+		case DIRT: 		startx = 0.0f;
+						starty = delta;
+						break;
+		case WATER: 	startx = delta;
+						starty = 0.0f;
+						break;
+		case FOREST:	startx = delta;
+						starty = delta;
+						break;
+		case MOUNTAIN:	startx = 2 * delta;
+						starty = 0.0f;
+						break;
+		case SNOW:		startx = 2 * delta;
+						starty = delta;
+						break;
+		default:		startx = 2*delta;
+						starty = 2*delta;
+						break;
 		}
 		
 		float[] texCoords = new float[] { 
 				startx, starty, 
-				startx + 0.48f, starty,
-				startx, starty + 0.48f,
+				startx + delta, starty,
+				startx, starty + delta,
 				
-				startx, starty + 0.48f,
-				startx + 0.48f, starty + 0.48f,
-				startx + 0.48f, starty
+				startx, starty + delta,
+				startx + delta, starty + delta,
+				startx + delta, starty
 		};
 		
 		texCoordBuffer.set(texCoords, index*texCoords.length);

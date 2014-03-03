@@ -1,0 +1,33 @@
+#sidebar {
+	position: fixed;
+	bottom: 0;
+	left: -388px;
+	top: 50px;
+	width: 350px;
+	background-color: rgba(51, 51, 51, 0.8);
+	border: 1px white solid;
+	border-left: none;
+	color: white;
+	padding: 5px;
+	margin: 0;
+	z-index: 999;
+	/*display: none;*/
+}
+
+#sidebar-hide {
+	position: absolute;
+	top: 45%; /*Not correct*/
+	left: 100%;
+	padding: 5px;
+	cursor: pointer;
+	float: right;
+	margin-right: -32px;
+	width: 15px;
+	height: 30px;
+	border: 1px white solid;
+	background-color: rgba(51, 51, 51, 0.8);
+}
+
+#sidebar-hide:hover {
+	background-color: rgba(255, 255, 255, 0.4);
+}
