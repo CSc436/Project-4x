@@ -1,26 +1,463 @@
-function game(){var bb='',$=' top: -1000px;',yb='" for "gwt:onLoadErrorFn"',wb='" for "gwt:onPropertyErrorFn"',hb='");',zb='#',Wb='.cache.js',Bb='/',Hb='//',Vb=':',qb='::',gc=':moduleBase',ab='<!doctype html>',cb='<html><head><\/head><body><\/body><\/html>',tb='=',Ab='?',vb='Bad handler "',_='CSS1Compat',fb='Chrome',eb='DOMContentLoaded',V='DUMMY',Ub="GWT module 'game' may need to be (re)compiled",fc='Ignoring non-whitelisted Dev Mode URL: ',ec='__gwtDevModeHook:game',Gb='base',Eb='baseUrl',Q='begin',W='body',P='bootstrap',Db='clear.cache.gif',sb='content',bc='end',gb='eval("',dc='file:',T='game',Tb='game.devmode.js',Fb='game.nocache.js',pb='game::',Pb='gecko',Qb='gecko1_8',R='gwt.codesvr.game=',S='gwt.codesvr=',ac='gwt/clean/clean.css',xb='gwt:onLoadErrorFn',ub='gwt:onPropertyErrorFn',rb='gwt:property',mb='head',$b='href',cc='http:',Mb='ie10',Ob='ie8',Nb='ie9',X='iframe',Cb='img',jb='javascript',Y='javascript:""',Xb='link',_b='loadExternalRefs',nb='meta',lb='moduleRequested',kb='moduleStartup',Lb='msie',ob='name',Z='position:absolute; width:0; height:0; border:none; left: -1000px;',Yb='rel',Kb='safari',ib='script',Sb='selectingPermutation',U='startup',Zb='stylesheet',db='undefined',Rb='unknown',Ib='user.agent',Jb='webkit';var o=window;var p=document;r(P,Q);function q(){var a=o.location.search;return a.indexOf(R)!=-1||a.indexOf(S)!=-1}
-function r(a,b){if(o.__gwtStatsEvent){o.__gwtStatsEvent({moduleName:T,sessionId:o.__gwtStatsSessionId,subSystem:U,evtGroup:a,millis:(new Date).getTime(),type:b})}}
-game.__sendStats=r;game.__moduleName=T;game.__errFn=null;game.__moduleBase=V;game.__softPermutationId=0;game.__computePropValue=null;game.__getPropMap=null;game.__gwtInstallCode=function(){};game.__gwtStartLoadingFragment=function(){return null};var s=function(){return false};var t=function(){return null};__propertyErrorFunction=null;var u=o.__gwt_activeModules=o.__gwt_activeModules||{};u[T]={moduleName:T};var v;function w(){B();return v}
-function A(){B();return v.getElementsByTagName(W)[0]}
-function B(){if(v){return}var a=p.createElement(X);a.src=Y;a.id=T;a.style.cssText=Z+$;a.tabIndex=-1;p.body.appendChild(a);v=a.contentDocument;if(!v){v=a.contentWindow.document}v.open();var b=document.compatMode==_?ab:bb;v.write(b+cb);v.close()}
-function C(k){function l(a){function b(){if(typeof p.readyState==db){return typeof p.body!=db&&p.body!=null}return /loaded|complete/.test(p.readyState)}
-var c=b();if(c){a();return}function d(){if(!c){c=true;a();if(p.removeEventListener){p.removeEventListener(eb,d,false)}if(e){clearInterval(e)}}}
-if(p.addEventListener){p.addEventListener(eb,d,false)}var e=setInterval(function(){if(b()){d()}},50)}
-function m(c){function d(a,b){a.removeChild(b)}
-var e=A();var f=w();var g;if(navigator.userAgent.indexOf(fb)>-1&&window.JSON){var h=f.createDocumentFragment();h.appendChild(f.createTextNode(gb));for(var i=0;i<c.length;i++){var j=window.JSON.stringify(c[i]);h.appendChild(f.createTextNode(j.substring(1,j.length-1)))}h.appendChild(f.createTextNode(hb));g=f.createElement(ib);g.language=jb;g.appendChild(h);e.appendChild(g);d(e,g)}else{for(var i=0;i<c.length;i++){g=f.createElement(ib);g.language=jb;g.text=c[i];e.appendChild(g);d(e,g)}}}
-game.onScriptDownloaded=function(a){l(function(){m(a)})};r(kb,lb);var n=p.createElement(ib);n.src=k;p.getElementsByTagName(mb)[0].appendChild(n)}
-game.__startLoadingFragment=function(a){return G(a)};game.__installRunAsyncCode=function(a){var b=A();var c=w().createElement(ib);c.language=jb;c.text=a;b.appendChild(c);b.removeChild(c)};function D(){var c={};var d;var e;var f=p.getElementsByTagName(nb);for(var g=0,h=f.length;g<h;++g){var i=f[g],j=i.getAttribute(ob),k;if(j){j=j.replace(pb,bb);if(j.indexOf(qb)>=0){continue}if(j==rb){k=i.getAttribute(sb);if(k){var l,m=k.indexOf(tb);if(m>=0){j=k.substring(0,m);l=k.substring(m+1)}else{j=k;l=bb}c[j]=l}}else if(j==ub){k=i.getAttribute(sb);if(k){try{d=eval(k)}catch(a){alert(vb+k+wb)}}}else if(j==xb){k=i.getAttribute(sb);if(k){try{e=eval(k)}catch(a){alert(vb+k+yb)}}}}}t=function(a){var b=c[a];return b==null?null:b};__propertyErrorFunction=d;game.__errFn=e}
-function F(){function e(a){var b=a.lastIndexOf(zb);if(b==-1){b=a.length}var c=a.indexOf(Ab);if(c==-1){c=a.length}var d=a.lastIndexOf(Bb,Math.min(c,b));return d>=0?a.substring(0,d+1):bb}
-function f(a){if(a.match(/^\w+:\/\//)){}else{var b=p.createElement(Cb);b.src=a+Db;a=e(b.src)}return a}
-function g(){var a=t(Eb);if(a!=null){return a}return bb}
-function h(){var a=p.getElementsByTagName(ib);for(var b=0;b<a.length;++b){if(a[b].src.indexOf(Fb)!=-1){return e(a[b].src)}}return bb}
-function i(){var a=p.getElementsByTagName(Gb);if(a.length>0){return a[a.length-1].href}return bb}
-function j(){var a=p.location;return a.href==a.protocol+Hb+a.host+a.pathname+a.search+a.hash}
-var k=g();if(k==bb){k=h()}if(k==bb){k=i()}if(k==bb&&j()){k=e(p.location.href)}k=f(k);return k}
-function G(a){if(a.match(/^\//)){return a}if(a.match(/^[a-zA-Z]+:\/\//)){return a}return game.__moduleBase+a}
-function H(){var f=[];var g;var h=[];var i=[];function j(a){var b=i[a](),c=h[a];if(b in c){return b}var d=[];for(var e in c){d[c[e]]=e}if(__propertyErrorFunc){__propertyErrorFunc(a,d,b)}throw null}
-i[Ib]=function(){var b=navigator.userAgent.toLowerCase();var c=function(a){return parseInt(a[1])*1000+parseInt(a[2])};if(function(){return b.indexOf(Jb)!=-1}())return Kb;if(function(){return b.indexOf(Lb)!=-1&&p.documentMode>=10}())return Mb;if(function(){return b.indexOf(Lb)!=-1&&p.documentMode>=9}())return Nb;if(function(){return b.indexOf(Lb)!=-1&&p.documentMode>=8}())return Ob;if(function(){return b.indexOf(Pb)!=-1}())return Qb;return Rb};h[Ib]={gecko1_8:0,ie10:1,ie8:2,ie9:3,safari:4};s=function(a,b){return b in h[a]};game.__getPropMap=function(){var a={};for(var b in h){if(h.hasOwnProperty(b)){a[b]=j(b)}}return a};game.__computePropValue=j;o.__gwt_activeModules[T].bindings=game.__getPropMap;r(P,Sb);if(q()){return G(Tb)}var k;try{alert(Ub);return;var l=k.indexOf(Vb);if(l!=-1){g=parseInt(k.substring(l+1),10);k=k.substring(0,l)}}catch(a){}game.__softPermutationId=g;return G(k+Wb)}
-function I(){if(!o.__gwt_stylesLoaded){o.__gwt_stylesLoaded={}}function c(a){if(!__gwt_stylesLoaded[a]){var b=p.createElement(Xb);b.setAttribute(Yb,Zb);b.setAttribute($b,G(a));p.getElementsByTagName(mb)[0].appendChild(b);__gwt_stylesLoaded[a]=true}}
-r(_b,Q);c(ac);r(_b,bc)}
-D();game.__moduleBase=F();u[T].moduleBase=game.__moduleBase;var J=H();if(o){var K=!!(o.location.protocol==cc||o.location.protocol==dc);o.__gwt_activeModules[T].canRedirect=K;if(K){var L=ec;var M=o.sessionStorage[L];if(!/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/.*$/.test(M)){if(M&&(window.console&&console.log)){console.log(fc+M)}M=bb}if(M&&!o[L]){o[L]=true;o[L+gc]=F();var N=p.createElement(ib);N.src=M;var O=p.getElementsByTagName(mb)[0];O.insertBefore(N,O.firstElementChild||O.children[0]);return false}}}I();r(P,bc);C(J);return true}
-game.succeeded=game();
+function game(){
+  var $intern_14 = '', $intern_11 = ' top: -1000px;', $intern_37 = '" for "gwt:onLoadErrorFn"', $intern_35 = '" for "gwt:onPropertyErrorFn"', $intern_20 = '");', $intern_38 = '#', $intern_65 = '.cache.js', $intern_40 = '/', $intern_46 = '//', $intern_59 = '9B37E32CFC834D050B606985B21FA885', $intern_64 = ':', $intern_29 = '::', $intern_77 = ':moduleBase', $intern_13 = '<!doctype html>', $intern_15 = '<html><head><\/head><body><\/body><\/html>', $intern_32 = '=', $intern_39 = '?', $intern_60 = 'B38844A6B2069E9AAD5754F4D75DA5CD', $intern_34 = 'Bad handler "', $intern_12 = 'CSS1Compat', $intern_18 = 'Chrome', $intern_17 = 'DOMContentLoaded', $intern_6 = 'DUMMY', $intern_61 = 'E6E9C52FC54E8A7A1D62E6C9A926493E', $intern_62 = 'F401BBE819ED42A8F76ABEC61834E50F', $intern_63 = 'FB1B04FD75CEDE0D26D92159A6C093D8', $intern_76 = 'Ignoring non-whitelisted Dev Mode URL: ', $intern_75 = '__gwtDevModeHook:game', $intern_45 = 'base', $intern_43 = 'baseUrl', $intern_1 = 'begin', $intern_7 = 'body', $intern_0 = 'bootstrap', $intern_42 = 'clear.cache.gif', $intern_31 = 'content', $intern_72 = 'end', $intern_19 = 'eval("', $intern_74 = 'file:', $intern_4 = 'game', $intern_58 = 'game.devmode.js', $intern_44 = 'game.nocache.js', $intern_28 = 'game::', $intern_54 = 'gecko', $intern_55 = 'gecko1_8', $intern_2 = 'gwt.codesvr.game=', $intern_3 = 'gwt.codesvr=', $intern_71 = 'gwt/clean/clean.css', $intern_36 = 'gwt:onLoadErrorFn', $intern_33 = 'gwt:onPropertyErrorFn', $intern_30 = 'gwt:property', $intern_25 = 'head', $intern_69 = 'href', $intern_73 = 'http:', $intern_51 = 'ie10', $intern_53 = 'ie8', $intern_52 = 'ie9', $intern_8 = 'iframe', $intern_41 = 'img', $intern_22 = 'javascript', $intern_9 = 'javascript:""', $intern_66 = 'link', $intern_70 = 'loadExternalRefs', $intern_26 = 'meta', $intern_24 = 'moduleRequested', $intern_23 = 'moduleStartup', $intern_50 = 'msie', $intern_27 = 'name', $intern_10 = 'position:absolute; width:0; height:0; border:none; left: -1000px;', $intern_67 = 'rel', $intern_49 = 'safari', $intern_21 = 'script', $intern_57 = 'selectingPermutation', $intern_5 = 'startup', $intern_68 = 'stylesheet', $intern_16 = 'undefined', $intern_56 = 'unknown', $intern_47 = 'user.agent', $intern_48 = 'webkit';
+  var $wnd = window;
+  var $doc = document;
+  sendStats($intern_0, $intern_1);
+  function isHostedMode(){
+    var query = $wnd.location.search;
+    return query.indexOf($intern_2) != -1 || query.indexOf($intern_3) != -1;
+  }
+
+  function sendStats(evtGroupString, typeString){
+    if ($wnd.__gwtStatsEvent) {
+      $wnd.__gwtStatsEvent({moduleName:$intern_4, sessionId:$wnd.__gwtStatsSessionId, subSystem:$intern_5, evtGroup:evtGroupString, millis:(new Date).getTime(), type:typeString});
+    }
+  }
+
+  game.__sendStats = sendStats;
+  game.__moduleName = $intern_4;
+  game.__errFn = null;
+  game.__moduleBase = $intern_6;
+  game.__softPermutationId = 0;
+  game.__computePropValue = null;
+  game.__getPropMap = null;
+  game.__gwtInstallCode = function(){
+  }
+  ;
+  game.__gwtStartLoadingFragment = function(){
+    return null;
+  }
+  ;
+  var __gwt_isKnownPropertyValue = function(){
+    return false;
+  }
+  ;
+  var __gwt_getMetaProperty = function(){
+    return null;
+  }
+  ;
+  __propertyErrorFunction = null;
+  var activeModules = $wnd.__gwt_activeModules = $wnd.__gwt_activeModules || {};
+  activeModules[$intern_4] = {moduleName:$intern_4};
+  var frameDoc;
+  function getInstallLocationDoc(){
+    setupInstallLocation();
+    return frameDoc;
+  }
+
+  function getInstallLocation(){
+    setupInstallLocation();
+    return frameDoc.getElementsByTagName($intern_7)[0];
+  }
+
+  function setupInstallLocation(){
+    if (frameDoc) {
+      return;
+    }
+    var scriptFrame = $doc.createElement($intern_8);
+    scriptFrame.src = $intern_9;
+    scriptFrame.id = $intern_4;
+    scriptFrame.style.cssText = $intern_10 + $intern_11;
+    scriptFrame.tabIndex = -1;
+    $doc.body.appendChild(scriptFrame);
+    frameDoc = scriptFrame.contentDocument;
+    if (!frameDoc) {
+      frameDoc = scriptFrame.contentWindow.document;
+    }
+    frameDoc.open();
+    var doctype = document.compatMode == $intern_12?$intern_13:$intern_14;
+    frameDoc.write(doctype + $intern_15);
+    frameDoc.close();
+  }
+
+  function installScript(filename){
+    function setupWaitForBodyLoad(callback){
+      function isBodyLoaded(){
+        if (typeof $doc.readyState == $intern_16) {
+          return typeof $doc.body != $intern_16 && $doc.body != null;
+        }
+        return /loaded|complete/.test($doc.readyState);
+      }
+
+      var bodyDone = isBodyLoaded();
+      if (bodyDone) {
+        callback();
+        return;
+      }
+      function onBodyDone(){
+        if (!bodyDone) {
+          bodyDone = true;
+          callback();
+          if ($doc.removeEventListener) {
+            $doc.removeEventListener($intern_17, onBodyDone, false);
+          }
+          if (onBodyDoneTimerId) {
+            clearInterval(onBodyDoneTimerId);
+          }
+        }
+      }
+
+      if ($doc.addEventListener) {
+        $doc.addEventListener($intern_17, onBodyDone, false);
+      }
+      var onBodyDoneTimerId = setInterval(function(){
+        if (isBodyLoaded()) {
+          onBodyDone();
+        }
+      }
+      , 50);
+    }
+
+    function installCode(code_0){
+      function removeScript(body_0, element){
+      }
+
+      var docbody = getInstallLocation();
+      var doc = getInstallLocationDoc();
+      var script;
+      if (navigator.userAgent.indexOf($intern_18) > -1 && window.JSON) {
+        var scriptFrag = doc.createDocumentFragment();
+        scriptFrag.appendChild(doc.createTextNode($intern_19));
+        for (var i = 0; i < code_0.length; i++) {
+          var c = window.JSON.stringify(code_0[i]);
+          scriptFrag.appendChild(doc.createTextNode(c.substring(1, c.length - 1)));
+        }
+        scriptFrag.appendChild(doc.createTextNode($intern_20));
+        script = doc.createElement($intern_21);
+        script.language = $intern_22;
+        script.appendChild(scriptFrag);
+        docbody.appendChild(script);
+        removeScript(docbody, script);
+      }
+       else {
+        for (var i = 0; i < code_0.length; i++) {
+          script = doc.createElement($intern_21);
+          script.language = $intern_22;
+          script.text = code_0[i];
+          docbody.appendChild(script);
+          removeScript(docbody, script);
+        }
+      }
+    }
+
+    game.onScriptDownloaded = function(code_0){
+      setupWaitForBodyLoad(function(){
+        installCode(code_0);
+      }
+      );
+    }
+    ;
+    sendStats($intern_23, $intern_24);
+    var script = $doc.createElement($intern_21);
+    script.src = filename;
+    $doc.getElementsByTagName($intern_25)[0].appendChild(script);
+  }
+
+  game.__startLoadingFragment = function(fragmentFile){
+    return computeUrlForResource(fragmentFile);
+  }
+  ;
+  game.__installRunAsyncCode = function(code_0){
+    var docbody = getInstallLocation();
+    var script = getInstallLocationDoc().createElement($intern_21);
+    script.language = $intern_22;
+    script.text = code_0;
+    docbody.appendChild(script);
+  }
+  ;
+  function processMetas(){
+    var metaProps = {};
+    var propertyErrorFunc;
+    var onLoadErrorFunc;
+    var metas = $doc.getElementsByTagName($intern_26);
+    for (var i = 0, n = metas.length; i < n; ++i) {
+      var meta = metas[i], name_0 = meta.getAttribute($intern_27), content;
+      if (name_0) {
+        name_0 = name_0.replace($intern_28, $intern_14);
+        if (name_0.indexOf($intern_29) >= 0) {
+          continue;
+        }
+        if (name_0 == $intern_30) {
+          content = meta.getAttribute($intern_31);
+          if (content) {
+            var value_0, eq = content.indexOf($intern_32);
+            if (eq >= 0) {
+              name_0 = content.substring(0, eq);
+              value_0 = content.substring(eq + 1);
+            }
+             else {
+              name_0 = content;
+              value_0 = $intern_14;
+            }
+            metaProps[name_0] = value_0;
+          }
+        }
+         else if (name_0 == $intern_33) {
+          content = meta.getAttribute($intern_31);
+          if (content) {
+            try {
+              propertyErrorFunc = eval(content);
+            }
+             catch (e) {
+              alert($intern_34 + content + $intern_35);
+            }
+          }
+        }
+         else if (name_0 == $intern_36) {
+          content = meta.getAttribute($intern_31);
+          if (content) {
+            try {
+              onLoadErrorFunc = eval(content);
+            }
+             catch (e) {
+              alert($intern_34 + content + $intern_37);
+            }
+          }
+        }
+      }
+    }
+    __gwt_getMetaProperty = function(name_0){
+      var value_0 = metaProps[name_0];
+      return value_0 == null?null:value_0;
+    }
+    ;
+    __propertyErrorFunction = propertyErrorFunc;
+    game.__errFn = onLoadErrorFunc;
+  }
+
+  function computeScriptBase(){
+    function getDirectoryOfFile(path){
+      var hashIndex = path.lastIndexOf($intern_38);
+      if (hashIndex == -1) {
+        hashIndex = path.length;
+      }
+      var queryIndex = path.indexOf($intern_39);
+      if (queryIndex == -1) {
+        queryIndex = path.length;
+      }
+      var slashIndex = path.lastIndexOf($intern_40, Math.min(queryIndex, hashIndex));
+      return slashIndex >= 0?path.substring(0, slashIndex + 1):$intern_14;
+    }
+
+    function ensureAbsoluteUrl(url_0){
+      if (url_0.match(/^\w+:\/\//)) {
+      }
+       else {
+        var img = $doc.createElement($intern_41);
+        img.src = url_0 + $intern_42;
+        url_0 = getDirectoryOfFile(img.src);
+      }
+      return url_0;
+    }
+
+    function tryMetaTag(){
+      var metaVal = __gwt_getMetaProperty($intern_43);
+      if (metaVal != null) {
+        return metaVal;
+      }
+      return $intern_14;
+    }
+
+    function tryNocacheJsTag(){
+      var scriptTags = $doc.getElementsByTagName($intern_21);
+      for (var i = 0; i < scriptTags.length; ++i) {
+        if (scriptTags[i].src.indexOf($intern_44) != -1) {
+          return getDirectoryOfFile(scriptTags[i].src);
+        }
+      }
+      return $intern_14;
+    }
+
+    function tryBaseTag(){
+      var baseElements = $doc.getElementsByTagName($intern_45);
+      if (baseElements.length > 0) {
+        return baseElements[baseElements.length - 1].href;
+      }
+      return $intern_14;
+    }
+
+    function isLocationOk(){
+      var loc = $doc.location;
+      return loc.href == loc.protocol + $intern_46 + loc.host + loc.pathname + loc.search + loc.hash;
+    }
+
+    var tempBase = tryMetaTag();
+    if (tempBase == $intern_14) {
+      tempBase = tryNocacheJsTag();
+    }
+    if (tempBase == $intern_14) {
+      tempBase = tryBaseTag();
+    }
+    if (tempBase == $intern_14 && isLocationOk()) {
+      tempBase = getDirectoryOfFile($doc.location.href);
+    }
+    tempBase = ensureAbsoluteUrl(tempBase);
+    return tempBase;
+  }
+
+  function computeUrlForResource(resource){
+    if (resource.match(/^\//)) {
+      return resource;
+    }
+    if (resource.match(/^[a-zA-Z]+:\/\//)) {
+      return resource;
+    }
+    return game.__moduleBase + resource;
+  }
+
+  function getCompiledCodeFilename(){
+    var answers = [];
+    var softPermutationId;
+    function unflattenKeylistIntoAnswers(propValArray, value_0){
+      var answer = answers;
+      for (var i = 0, n = propValArray.length - 1; i < n; ++i) {
+        answer = answer[propValArray[i]] || (answer[propValArray[i]] = []);
+      }
+      answer[propValArray[n]] = value_0;
+    }
+
+    var values = [];
+    var providers = [];
+    function computePropValue(propName){
+      var value_0 = providers[propName](), allowedValuesMap = values[propName];
+      if (value_0 in allowedValuesMap) {
+        return value_0;
+      }
+      var allowedValuesList = [];
+      for (var k in allowedValuesMap) {
+        allowedValuesList[allowedValuesMap[k]] = k;
+      }
+      if (__propertyErrorFunc) {
+        __propertyErrorFunc(propName, allowedValuesList, value_0);
+      }
+      throw null;
+    }
+
+    providers[$intern_47] = function(){
+      var ua = navigator.userAgent.toLowerCase();
+      var makeVersion = function(result){
+        return parseInt(result[1]) * 1000 + parseInt(result[2]);
+      }
+      ;
+      if (function(){
+        return ua.indexOf($intern_48) != -1;
+      }
+      ())
+        return $intern_49;
+      if (function(){
+        return ua.indexOf($intern_50) != -1 && $doc.documentMode >= 10;
+      }
+      ())
+        return $intern_51;
+      if (function(){
+        return ua.indexOf($intern_50) != -1 && $doc.documentMode >= 9;
+      }
+      ())
+        return $intern_52;
+      if (function(){
+        return ua.indexOf($intern_50) != -1 && $doc.documentMode >= 8;
+      }
+      ())
+        return $intern_53;
+      if (function(){
+        return ua.indexOf($intern_54) != -1;
+      }
+      ())
+        return $intern_55;
+      return $intern_56;
+    }
+    ;
+    values[$intern_47] = {gecko1_8:0, ie10:1, ie8:2, ie9:3, safari:4};
+    __gwt_isKnownPropertyValue = function(propName, propValue){
+      return propValue in values[propName];
+    }
+    ;
+    game.__getPropMap = function(){
+      var result = {};
+      for (var key in values) {
+        if (values.hasOwnProperty(key)) {
+          result[key] = computePropValue(key);
+        }
+      }
+      return result;
+    }
+    ;
+    game.__computePropValue = computePropValue;
+    $wnd.__gwt_activeModules[$intern_4].bindings = game.__getPropMap;
+    sendStats($intern_0, $intern_57);
+    if (isHostedMode()) {
+      return computeUrlForResource($intern_58);
+    }
+    var strongName;
+    try {
+      unflattenKeylistIntoAnswers([$intern_52], $intern_59);
+      unflattenKeylistIntoAnswers([$intern_53], $intern_60);
+      unflattenKeylistIntoAnswers([$intern_51], $intern_61);
+      unflattenKeylistIntoAnswers([$intern_55], $intern_62);
+      unflattenKeylistIntoAnswers([$intern_49], $intern_63);
+      strongName = answers[computePropValue($intern_47)];
+      var idx = strongName.indexOf($intern_64);
+      if (idx != -1) {
+        softPermutationId = parseInt(strongName.substring(idx + 1), 10);
+        strongName = strongName.substring(0, idx);
+      }
+    }
+     catch (e) {
+    }
+    game.__softPermutationId = softPermutationId;
+    return computeUrlForResource(strongName + $intern_65);
+  }
+
+  function loadExternalStylesheets(){
+    if (!$wnd.__gwt_stylesLoaded) {
+      $wnd.__gwt_stylesLoaded = {};
+    }
+    function installOneStylesheet(stylesheetUrl){
+      if (!__gwt_stylesLoaded[stylesheetUrl]) {
+        var l = $doc.createElement($intern_66);
+        l.setAttribute($intern_67, $intern_68);
+        l.setAttribute($intern_69, computeUrlForResource(stylesheetUrl));
+        $doc.getElementsByTagName($intern_25)[0].appendChild(l);
+        __gwt_stylesLoaded[stylesheetUrl] = true;
+      }
+    }
+
+    sendStats($intern_70, $intern_1);
+    installOneStylesheet($intern_71);
+    sendStats($intern_70, $intern_72);
+  }
+
+  processMetas();
+  game.__moduleBase = computeScriptBase();
+  activeModules[$intern_4].moduleBase = game.__moduleBase;
+  var filename = getCompiledCodeFilename();
+  if ($wnd) {
+    var devModePermitted = !!($wnd.location.protocol == $intern_73 || $wnd.location.protocol == $intern_74);
+    $wnd.__gwt_activeModules[$intern_4].canRedirect = devModePermitted;
+    if (devModePermitted) {
+      var devModeKey = $intern_75;
+      var devModeUrl = $wnd.sessionStorage[devModeKey];
+      if (!/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/.*$/.test(devModeUrl)) {
+        if (devModeUrl && (window.console && console.log)) {
+          console.log($intern_76 + devModeUrl);
+        }
+        devModeUrl = $intern_14;
+      }
+      if (devModeUrl && !$wnd[devModeKey]) {
+        $wnd[devModeKey] = true;
+        $wnd[devModeKey + $intern_77] = computeScriptBase();
+        var devModeScript = $doc.createElement($intern_21);
+        devModeScript.src = devModeUrl;
+        var head = $doc.getElementsByTagName($intern_25)[0];
+        head.insertBefore(devModeScript, head.firstElementChild || head.children[0]);
+        return false;
+      }
+    }
+  }
+  loadExternalStylesheets();
+  sendStats($intern_0, $intern_72);
+  installScript(filename);
+  return true;
+}
+
+game.succeeded = game();

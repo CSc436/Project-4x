@@ -113,7 +113,7 @@ public class ClientModel {
 
 		};
 
-		setTargetTimer.scheduleRepeating(1000);
+		setTargetTimer.scheduleRepeating(2000);
 	}
 	
 }

@@ -53,7 +53,8 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 
 	@Override
 	public String startSimulation() {
-		modelThread.start();
+		if(!modelThread.isAlive())
+			modelThread.start();
 		return null;
 	}
 
