@@ -22,7 +22,7 @@ public class GameState {
 
 	public String getPlayerSelectables(int id) {
 		Player temp = players.get(id-1);
-		return temp.getUnits().toString();//Need to change to gameobject
+		return temp.getGameObjects().toString();//Need to change to gameobject
 	}
 
 	

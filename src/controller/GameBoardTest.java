@@ -1,13 +1,15 @@
 package controller;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import control.BuildingType;
+import control.Factory;
 import control.Player;
-import entities.PerfectCivilization;
-import entities.buildings.Barracks;
+import control.UnitType;
 import entities.buildings.Building;
-import entities.units.Infantry;
 import entities.units.Unit;
 
 public class GameBoardTest {
@@ -15,7 +17,7 @@ public class GameBoardTest {
 	@Test
 	public void testBoard() {
 
-		GameBoard game = new GameBoard(20, 20, 2);
+		GameBoard game = new GameBoard(20, 20);
 		assertEquals(20, game.getRows());
 		assertEquals(20, game.getCols());
 
@@ -24,34 +26,37 @@ public class GameBoardTest {
 	@Test
 	public void testTile() {
 
-		GameBoard game = new GameBoard(20, 20, 2);
-		Player juan = new Player("juan", new PerfectCivilization());
+		GameBoard game = new GameBoard(20, 20);
+		Factory fact = new Factory();
+		Player juan = new Player("juan", 1);
+		Unit temp = fact.buildUnit(1, UnitType.INFANTRY, 0, 0);
+		Unit temp2 = fact.buildUnit(1, UnitType.INFANTRY, 5, 5);
+		Building b = fact.buildBuilding(1, BuildingType.BARRACKS, 6, 6, 3, 3);
 
-		Unit temp = new Infantry(juan, -1, -1, 0);
-		Unit temp2 = new Infantry(juan, -1, -1, 1);
-		Building b = new Barracks(juan, 4, 4, 100);
+		game.placeUnitAt(temp, 0, 0);
+		game.placeUnitAt(temp2, 5, 5);
+		game.placeBuildingAt(b, 6, 6);
+		
+		juan.getGameObjects().getUnits().put(temp.getId(), temp);
+		juan.getGameObjects().getUnits().put(temp2.getId(), temp2);
+		juan.getGameObjects().getBuildings().put(b.getId(), b);
 
-		game.placeUnitAt(temp, 15, 15);
-		game.placeBuildingAt(b, 15, 15);
-		//
-
-		assertFalse(juan.getUnits().hasUnitAt(0, 0));
-		assertFalse(juan.getUnits().hasUnitAt(1, 1));
-		assertTrue(juan.getUnits().hasUnitAt(15, 15));
-		// assertTrue(game.getTileAt(0, 0).);
+		assertEquals(1, juan.getGameObjects().getBuildings().size());
+		assertEquals(2, juan.getGameObjects().getUnits().size());
 
 		// need to test
 		assertFalse(game.getTileAt(15, 14).isOccupiedByBuilding());
-		assertTrue(game.getTileAt(15, 15).isOccupiedByBuilding());
-		assertTrue(game.getTileAt(18, 15).isOccupiedByBuilding());
-		assertFalse(game.getTileAt(14, 19).isOccupiedByBuilding());
+		assertTrue(game.getTileAt(6, 6).isOccupiedByBuilding());
+		assertTrue(game.getTileAt(7, 7).isOccupiedByBuilding());
+		assertTrue(game.getTileAt(8, 7).isOccupiedByBuilding());
 
 		game.removeBuilding(b);
+		juan.getGameObjects().removeBuilding(b.getId());
 
 		assertFalse(game.getTileAt(15, 14).isOccupiedByBuilding());
-		assertFalse(game.getTileAt(15, 15).isOccupiedByBuilding());
-		assertFalse(game.getTileAt(18, 15).isOccupiedByBuilding());
-		assertFalse(game.getTileAt(14, 19).isOccupiedByBuilding());
+		assertFalse(game.getTileAt(6, 6).isOccupiedByBuilding());
+		assertFalse(game.getTileAt(7, 7).isOccupiedByBuilding());
+		assertFalse(game.getTileAt(8, 7).isOccupiedByBuilding());
 
 	}
 

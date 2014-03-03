@@ -24,6 +24,7 @@ public abstract class GameObject {
 		this.id = id;
 		this.playerId = playerId;
 		this.baseStats = baseStats;
+		stats = baseStats.getStats();
 		updateStats(baseStats, new_stats);
 		this.type = type;
 		position = new Point(xco, yco);

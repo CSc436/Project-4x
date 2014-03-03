@@ -59,7 +59,7 @@ public class Player {
 		return id;
 	}
 
-	public PlayerUnits getUnits() {
+	public PlayerUnits getGameObjects() {
 		return objects;
 	}
 

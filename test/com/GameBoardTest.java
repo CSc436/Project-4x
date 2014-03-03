@@ -50,14 +50,14 @@ public class GameBoardTest {
 		Player p2 = game.getPlayerList().get(1);
 
 		// no units should be added to this game yet
-		assertEquals(0, p1.getUnits().getUnitList().size());
-		assertEquals(0, p2.getUnits().getUnitList().size());
+		assertEquals(0, p1.getGameObjects().getUnitList().size());
+		assertEquals(0, p2.getGameObjects().getUnitList().size());
 
 		// add a unit to player 1
 		Factory.buildUnit(UnitType.INFANTRY, p1);
 
-		assertEquals(1, p1.getUnits().getUnitList().size());
-		assertEquals(0, p2.getUnits().getUnitList().size());
+		assertEquals(1, p1.getGameObjects().getUnitList().size());
+		assertEquals(0, p2.getGameObjects().getUnitList().size());
 
 		// add a unit to player 2
 		Factory.buildUnit(UnitType.INFANTRY, p2);
@@ -74,22 +74,22 @@ public class GameBoardTest {
 		Player p2 = game.getPlayerList().get(1);
 
 		// no units should be added to this game yet
-		assertEquals(0, p1.getUnits().getUnitList().size());
-		assertEquals(0, p2.getUnits().getUnitList().size());
+		assertEquals(0, p1.getGameObjects().getUnitList().size());
+		assertEquals(0, p2.getGameObjects().getUnitList().size());
 
 		// add a unit to player 1
 		Factory.buildUnit(UnitType.INFANTRY, p1);
 
-		assertEquals(1, p1.getUnits().getUnitList().size());
-		assertEquals(0, p2.getUnits().getUnitList().size());
+		assertEquals(1, p1.getGameObjects().getUnitList().size());
+		assertEquals(0, p2.getGameObjects().getUnitList().size());
 
 		// add a unit to player 2
 		Factory.buildUnit(UnitType.INFANTRY, p2);
 		Factory.buildStructure(BuildingType.BARRACKS, p1);
 		// Agent a1 = new Agent(p1);
 
-		PlayerUnits pu1 = p1.getUnits();
-		PlayerUnits pu2 = p2.getUnits();
+		PlayerUnits pu1 = p1.getGameObjects();
+		PlayerUnits pu2 = p2.getGameObjects();
 
 		assertFalse(pu1.hasUnitAt(0, 0));
 		assertTrue(pu1.hasUnitAt(1, 1));
@@ -113,7 +113,7 @@ public class GameBoardTest {
 	public void testController() {
 
 		Controller game = new Controller();
-		assertEquals(1, game.map.getPlayerList().get(0).getUnits()
+		assertEquals(1, game.map.getPlayerList().get(0).getGameObjects()
 				.getUnitList().size());
 	}
 }

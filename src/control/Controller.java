@@ -80,11 +80,11 @@ public class Controller implements Runnable {
 			System.out.println(player.getAlias()+ "'s Resources:");
 			System.out.println(player.getResources().toString());
 			System.out.println(player.getAlias() + "'s Units: ");
-			for (Unit u : player.getUnits().getUnits().values()) {
+			for (Unit u : player.getGameObjects().getUnits().values()) {
 				System.out.println(u.toString());
 			}
 			System.out.println(player.getAlias() + "'s Buildings: ");
-			for (Building b : player.getUnits().getBuildings().values()) {
+			for (Building b : player.getGameObjects().getBuildings().values()) {
 				System.out.println(b.toString());
 			}
 		}
@@ -123,7 +123,7 @@ public class Controller implements Runnable {
 
 	private void produceResources() {
 		for(Player player : players) {
-			for (ResourceBuilding building : player.getUnits().getResourceBuildings().values()) {
+			for (ResourceBuilding building : player.getGameObjects().getResourceBuildings().values()) {
 				
 				building.generateResource();
 			}

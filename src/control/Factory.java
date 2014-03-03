@@ -16,7 +16,7 @@ public class Factory {
 		return UUID.randomUUID();
 	}
 
-	public static Unit buildUnit(int playerId, GameObjectType type, UnitType unitType, float xco,
+	public static Unit buildUnit(int playerId, UnitType unitType, float xco,
 			float yco) {
 
 		UUID newId = getId();
@@ -35,7 +35,7 @@ public class Factory {
 	}
 
 
-	public static Building buildStructure(int playerId, GameObjectType gameObjectType, BuildingType buildingType,
+	public static Building buildBuilding(int playerId, BuildingType buildingType,
 			float xco, float yco, int height, int width) {
 		UUID newId = getId();
 		Building result = null;

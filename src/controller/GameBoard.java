@@ -1,17 +1,13 @@
 package controller;
-import java.awt.Color;
-import java.awt.Point;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Random;
 
-import control.Player;
 import entities.buildings.Building;
 import entities.gameboard.Resource;
 import entities.gameboard.Terrain;
 import entities.gameboard.Tile;
-import entities.units.Infantry;
 import entities.units.Unit;
+import entities.util.Point;
 
 /* 
  *  Programmer :  Ben Deininger
@@ -27,7 +23,6 @@ public class GameBoard {
 	private Tile[][] map;
 	private int rows;
 	private int cols;
-	private ArrayList<Player> players;
 	private static Random rand = new Random();
 	private float averageHeight = 0f; // Stores the average height of the noise
 										// map.
@@ -55,7 +50,7 @@ public class GameBoard {
 	 * To complete a gameboard object, you will need to call a resource distribution method and a 
 	 * player distribution method (TODO implement a player dist method). 
 	 */
-	public GameBoard(int row, int col, int numPlayers) {
+	public GameBoard(int row, int col) {
 		rows = row;
 		cols = col;
 		map = new Tile[row][col];
@@ -213,7 +208,7 @@ public class GameBoard {
 					break;
 				}
 				temp = terrainList.get(rp).get(rpp % terrainList.get(rp).size());
-				map[temp.x][temp.y].setResource(res);
+				map[Math.round(temp.x)][Math.round(temp.y)].setResource(res);
 				terrainList.get(rp).remove(rpp % terrainList.get(rp).size());
 				numRes--;
 			} while(rnd.nextBoolean());
@@ -290,17 +285,6 @@ public class GameBoard {
 		return map[x][y];
 	}
 
-	/*
-	 * getPlayerList():
-	 * Description:
-	 * Returns the list of players currently using the board.
-	 * 
-	 * Return Value:
-	 * @return ArrayList of all the Player objects using this board.
-	 */
-	public ArrayList<Player> getPlayerList() {
-		return players;
-	}
 
 	/*
 	 * placeUnitAt():
@@ -315,16 +299,8 @@ public class GameBoard {
 	 * @param int y - y location to place unit (0 to cols - 1)
 	 */
 	public void placeUnitAt(Unit u, int x, int y) {
-
-		// if the tile has no owner, the unit owner becomes the tile owner
-
-		if (!map[x][y].hasOwner()) {
-			map[x][y].setOwner(u.getOwner());
-		}
-
 		// set the unit's coodinates
 		u.setLocation(x, y);
-
 	}
 
 	/*
@@ -340,7 +316,6 @@ public class GameBoard {
 	public void placeBuildingAt(Building b, int x, int y) {
 
 		// the tile must be owned to place a building
-		if (b.getOwner().equals(map[x][y].getOwner())) {
 
 			// calculate the distance to the the bottom right corner
 			int dc = (cols - (x + b.getWidth() - 1));
@@ -365,10 +340,6 @@ public class GameBoard {
 			} else {
 				System.err.println("The building does not fit on the map");
 			}
-		} else {
-			System.err
-					.println("The owner of the building does not own the tile");
-		}
 	}
 
 	/*
@@ -380,8 +351,7 @@ public class GameBoard {
 	 * @param Unit u - unit to remove 
 	 */
 	public void removeUnit(Unit u) {
-		Player owner = u.getOwner();
-		owner.getUnits().removeUnit(u);
+		//remove from gameboard
 	}
 
 	/*
@@ -413,10 +383,10 @@ public class GameBoard {
 	 * @param Building b - building to remove from this gameboard. 
 	 */
 	public void removeBuilding(Building b) {
-
-		Player owner = b.getOwner();
-		int x = b.getX();
-		int y = b.getY();
+		
+		Point pos = b.getPosition();
+		int x = Math.round(pos.x);
+		int y = Math.round(pos.y);
 
 		int height = b.getHeight();
 		int width = b.getWidth();
@@ -427,9 +397,6 @@ public class GameBoard {
 				map[r][c].setIsOccupiedByBuilding(false);
 			}
 		}
-
-		owner.getUnits().removeBuilding(b);
-
 	}
 
 	/*
