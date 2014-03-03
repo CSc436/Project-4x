@@ -1,5 +1,6 @@
 package com.shared;
 
+
 public class Model implements Runnable {
 	public MovingUnit unit;
 	public boolean isBlack;
@@ -17,7 +18,10 @@ public class Model implements Runnable {
 			
 			simulateFrame();
 			
+			//System.out.println(unit.location.x + " " + unit.location.y);
+			
 			while(System.currentTimeMillis() < startTime + timeStep);
+			lastEndTime = lastEndTime + timeStep;
 		}
 		
 	}

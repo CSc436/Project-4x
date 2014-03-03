@@ -28,11 +28,13 @@ public class ClientModel {
 		simpleSimulator.sendRequest(r,
 				new AsyncCallback<Request[]>() {
 					public void onFailure(Throwable caught) {
-
+						System.out.println("Target request failed");
 					}
 
 					public void onSuccess(Request[] result) {
-
+						double x = ((SetTargetRequest) result[0]).x;
+						double y = ((SetTargetRequest) result[0]).y;
+						System.out.println("New target set: " + x + " " + y);
 					}
 				});
 		
@@ -40,12 +42,11 @@ public class ClientModel {
 	
 	public float[] getPosition( long currentTime ) {
 		
-		long currTime = System.currentTimeMillis();
 		if (lastUnit == null || nextUnit == null)
 			return position;
 		
-		position[0] = (float) (lastUnit.location.x + (currTime - lastUpdateTime) * (nextUnit.location.x - lastUnit.location.x) / averageTurnInterval) ; 
-		position[1] = (float) (lastUnit.location.y + (currTime - lastUpdateTime) * (nextUnit.location.y - lastUnit.location.y) / averageTurnInterval) ;
+		position[0] = (float) (lastUnit.location.x + (currentTime - lastUpdateTime) * (nextUnit.location.x - lastUnit.location.x) / averageTurnInterval) ; 
+		position[1] = (float) (lastUnit.location.y + (currentTime - lastUpdateTime) * (nextUnit.location.y - lastUnit.location.y) / averageTurnInterval) ;
 		
 		return position;
 		
@@ -58,6 +59,7 @@ public class ClientModel {
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
+				System.out.println("Simulation failed to start");
 			}
 
 			@Override
@@ -89,9 +91,8 @@ public class ClientModel {
 					public void onSuccess(MovingUnit result) {
 						lastUnit = nextUnit;
 						nextUnit = result;
-
-						long currTime = System.currentTimeMillis();
-						lastUpdateTime = currTime;
+						
+						lastUpdateTime = System.currentTimeMillis();
 
 					}
 
@@ -102,26 +103,12 @@ public class ClientModel {
 
 		pollTimer.scheduleRepeating(averageTurnInterval);
 		
-		/*
-		Timer renderTimer = new Timer() {
-
-			@Override
-			public void run() {
-				currUnit.location.x = lastUnit.location.x + (System.currentTimeMillis() - lastUpdateTime) * (nextUnit.location.x - lastUnit.location.x) / averageTurnInterval ; 
-				currUnit.location.y = lastUnit.location.y + (System.currentTimeMillis() - lastUpdateTime) * (nextUnit.location.y - lastUnit.location.y) / averageTurnInterval ;
-			}
-
-		};
-
-		renderTimer.scheduleRepeating(33);
-		*/
-		
 		Timer setTargetTimer = new Timer() {
 
 			@Override
 			public void run() {
 
-				setTarget( -10 + 20*Math.random(), -10 + 20*Math.random() );
+				setTarget( 16*Math.random(), 16*Math.random() );
 			}
 
 		};

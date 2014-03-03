@@ -8,9 +8,13 @@ import com.shared.Request;
 /**
  * The client-side stub for the RPC service.
  */
-@RemoteServiceRelativePath("greet")
+@RemoteServiceRelativePath("simple_sim")
 public interface SimpleSimulator extends RemoteService {
+	
 	Request[] sendRequest(Request input) throws IllegalArgumentException;
+	
 	String startSimulation();
+	
 	MovingUnit getSimulationState();
+	
 }

@@ -11,7 +11,7 @@
   
   <servlet-mapping>
   	<servlet-name>SimpleSimulator</servlet-name>
-  	<url-pattern>/4x/simple_sim</url-pattern>
+  	<url-pattern>/game/simple_sim</url-pattern>
   </servlet-mapping>
 
   <!-- Default page to serve -->

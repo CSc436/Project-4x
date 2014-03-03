@@ -237,6 +237,8 @@ public class GameCanvas {
 				agentX = pos[0];
 				agentY = pos[1];
 				
+				//System.out.println(agentX + " " + agentY);
+				
 				updateCamera();
 				drawScene();
 			}

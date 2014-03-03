@@ -1,14 +1,15 @@
 package com.shared;
 
 
+
 public class SetTargetRequest extends Request {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4338389460462282941L;
-	double x;
-	double y;
+	public double x;
+	public double y;
 	
 	public SetTargetRequest() {
 		super();

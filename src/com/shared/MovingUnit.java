@@ -53,7 +53,7 @@ public class MovingUnit implements Serializable {
 			location.x = location.x > targetLocation.x ? targetLocation.x : location.x ;
 		}
 		if(targetLocation.x < location.x) {
-			location.x -= xVelocity * timeStep / 1000.0;
+			location.x += xVelocity * timeStep / 1000.0;
 			location.x = location.x < targetLocation.x ? targetLocation.x : location.x ;
 		}
 		if(targetLocation.y > location.y) {
@@ -61,7 +61,7 @@ public class MovingUnit implements Serializable {
 			location.y = location.y > targetLocation.y ? targetLocation.y : location.y ;
 		}
 		if(targetLocation.y < location.y) {
-			location.y -= yVelocity * timeStep / 1000.0;
+			location.y += yVelocity * timeStep / 1000.0;
 			location.y = location.y < targetLocation.y ? targetLocation.y : location.y ;
 		}
 	}
