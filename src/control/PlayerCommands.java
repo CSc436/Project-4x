@@ -22,6 +22,9 @@ public class PlayerCommands {
 	}
 	
 	public synchronized Queue<Command> dump() {
+		System.out.println("Migrate to Ben Whitely's hashing thing.");
+		//TODO: Migrate to Ben Whitely's hashing thing.
+		
 		Queue<Command> temp = new ArrayDeque<Command>(commands);
 		commands.clear();
 		return temp;
