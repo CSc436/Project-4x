@@ -27,7 +27,7 @@ import entities.UnitStats;
 // settler / worker
 // healing unit
 
-public abstract class Unit extends GameObject implements Locatable {
+public abstract class Unit extends GameObject  {
 	
 	private UnitType unitType;
 

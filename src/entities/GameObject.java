@@ -8,7 +8,7 @@ import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 import entities.util.Point;
 
-public abstract class GameObject {
+public abstract class GameObject implements Locatable {
 	private final UUID id;
 	private final int playerId;
 	protected HashMap<String, String> allActions;
@@ -57,6 +57,14 @@ public abstract class GameObject {
 
 	public Point getPosition() {
 		return position;
+	}
+	
+	public float getX() {
+		return getPosition().x;
+	}
+	
+	public float getY() {
+		return getPosition().y;
 	}
 
 	/**
