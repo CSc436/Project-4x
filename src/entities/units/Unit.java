@@ -3,12 +3,13 @@ package entities.units;
 import java.util.PriorityQueue;
 import java.util.UUID;
 
-import control.UnitType;
+import com.fourx.buffs.UnitType;
+
 import entities.Action;
+import entities.BaseStatsEnum;
 import entities.GameObject;
-import entities.GameObjectType;
-import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
+import entities.Locatable;
+import entities.UnitStats;
 
 /*
  * 
@@ -26,7 +27,7 @@ import entities.stats.UnitStats;
 // settler / worker
 // healing unit
 
-public abstract class Unit extends GameObject{
+public abstract class Unit extends GameObject implements Locatable {
 	
 	private UnitType unitType;
 
