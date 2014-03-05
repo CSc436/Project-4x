@@ -5,6 +5,8 @@ import com.client.matrixutils.FloatMatrix;
 public class Camera {
 	private float[] cameraMatrix;
 	private float camX = GameCanvas.GRID_WIDTH/2 * -1, camY = GameCanvas.GRID_WIDTH * -1, camZ = 20.0f;
+	private float yaw = 0.0f, pitch = 225.0f, roll = 0.0f;
+	private static float DELTA_ROTATE = 0.5f;
 	
 	public Camera() {
 		makeCameraMatrix();
@@ -13,8 +15,8 @@ public class Camera {
 	public void makeCameraMatrix() {
 		// 4.71238898
 		//.785398163
-		cameraMatrix = FloatMatrix.createCameraMatrix(0.0f,
-				3.14159f +  .785398163f, 0.0f, 45,
+		cameraMatrix = FloatMatrix.createCameraMatrix((float)Math.toRadians(yaw),
+				(float)Math.toRadians(pitch), (float)Math.toRadians(roll), 45,
 				GameCanvas.WIDTH / GameCanvas.HEIGHT, 0.1f, 1000000f)
 				.columnWiseData();
 	}
@@ -69,12 +71,12 @@ public class Camera {
 
 	public void rotateLeft() {
 		// TODO Auto-generated method stub
-		
+		roll += DELTA_ROTATE;
 	}
 
 	public void rotateRight() {
 		// TODO Auto-generated method stub
-		
+		roll -= DELTA_ROTATE;
 	}
 
 	public void defaultPosition() {
