@@ -22,6 +22,7 @@ public class Camera {
 	}
 	
 	public float[] getCameraMatrix() {
+		makeCameraMatrix(); // update the camera matrix
 		return cameraMatrix;
 	}
 	
@@ -39,22 +40,34 @@ public class Camera {
 
 	public void up(float delta) {
 		// TODO Auto-generated method stub
-		camY += delta;
+		camX -= delta * Math.sin(yaw * Math.PI / 180.0);
+	    camX -= delta * Math.sin(roll * Math.PI / 180.0);
+	    camY += delta * Math.cos(pitch * Math.PI / 180.0);
+	    camY += delta * Math.cos(roll * Math.PI / 180.0);
 	}
 
 	public void down(float delta) {
 		// TODO Auto-generated method stub
-		camY -= delta;
+		camX += delta * Math.sin(yaw * Math.PI / 180.0);
+	    camX += delta * Math.sin(roll * Math.PI / 180.0);
+	    camY -= delta * Math.cos(pitch * Math.PI / 180.0);
+	    camY -= delta * Math.cos(roll * Math.PI / 180.0);
 	}
 
 	public void left(float delta) {
 		// TODO Auto-generated method stub
-		camX += delta;
+		camX -= delta * Math.cos(yaw * Math.PI / 180.0);
+	    camX -= delta * Math.cos(roll * Math.PI / 180.0);
+	    camY += delta * Math.sin(pitch * Math.PI / 180.0);
+	    camY += delta * Math.sin(roll * Math.PI / 180.0);
 	}
 
 	public void right(float delta) {
 		// TODO Auto-generated method stub
-		camX -= delta;
+		camX -= delta * Math.cos(yaw * Math.PI / 180.0);
+	    camX -= delta * Math.cos(roll * Math.PI / 180.0);
+	    camY += delta * Math.sin(pitch * Math.PI / 180.0);
+	    camY += delta * Math.sin(roll * Math.PI / 180.0);
 	}
 
 	public void zoomIn() {
@@ -71,12 +84,12 @@ public class Camera {
 
 	public void rotateLeft() {
 		// TODO Auto-generated method stub
-		roll += DELTA_ROTATE;
+		yaw -= DELTA_ROTATE;
 	}
 
 	public void rotateRight() {
 		// TODO Auto-generated method stub
-		roll -= DELTA_ROTATE;
+		yaw += DELTA_ROTATE;
 	}
 
 	public void defaultPosition() {

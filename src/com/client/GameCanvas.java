@@ -280,7 +280,7 @@ public class GameCanvas {
 		if (center)
 			camera.defaultPosition();
 		if (debug) 
-			System.out.println("X: " + camera.getX() + ", Y: " + camera.getY() + ", Z: " + camera.getZ() + ", Height: " + HEIGHT + ", Width: " + WIDTH);
+			Console.log("X: " + camera.getX() + ", Y: " + camera.getY() + ", Z: " + camera.getZ());
 	}
 
 	private void start() {
