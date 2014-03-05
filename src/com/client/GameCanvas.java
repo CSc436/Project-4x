@@ -59,7 +59,7 @@ public class GameCanvas {
 
 	public static final int GRID_WIDTH = 64;
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
-	private final boolean debug = false;
+	private final boolean debug = true;
 
 	private ArrayList<RenderTile> tiles = new ArrayList<RenderTile>();
 	
@@ -126,12 +126,12 @@ public class GameCanvas {
 				case KeyCodes.KEY_D:
 					right = true;
 					break;
-				case 173: out = true; break;
-				case 61: in = true; break;
+				case KeyEvent.VK_MINUS: out = true; break;
+				case KeyEvent.VK_PLUS: in = true; break;
 				case KeyCodes.KEY_Q: rotateLeft = true; break;
 				case KeyCodes.KEY_E: rotateRight = true; break;
 				case KeyCodes.KEY_X: center = true; break;
-				default: break;
+				default: if (debug) Console.log("" + event.getNativeKeyCode()); break;
 				}
 			}
 		}, KeyDownEvent.getType());
