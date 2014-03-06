@@ -57,7 +57,7 @@ public class GameCanvas {
 			right = false, left = false, rotateLeft = false, rotateRight = false, center = false;
 	private long time;
 
-	public static final int GRID_WIDTH = 64;
+	public static final int GRID_WIDTH = 16;
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
 	private final boolean debug = false;
 
@@ -185,7 +185,7 @@ public class GameCanvas {
 
 		initClickHandlers();
 		camera.makeCameraMatrix();
-		start();
+		//start();
 	}
 
 	private void initClickHandlers() {
@@ -296,6 +296,12 @@ public class GameCanvas {
 		makeTiles();
 		makeAgent();
 		initBuffers();
+		
+		final Shader normalShader = new Shader(glContext,ClientResources.INSTANCE
+				.simpleMeshVS().getText(),ClientResources.INSTANCE
+				.normalsMeshFS().getText());
+		
+		final Mesh barrel = OBJImporter.objToMesh(ClientResources.INSTANCE.barrelOBJ().getText(), glContext);
 
 		startTime = System.currentTimeMillis();
 		Timer t = new Timer() {
@@ -311,6 +317,12 @@ public class GameCanvas {
 				
 				updateCamera();
 				drawScene();
+				
+				barrel.render(glContext, normalShader, camera);
+				barrel.posX = agentX;
+				barrel.posY = agentY;
+				barrel.posZ = agentZ;
+				barrel.rotX = barrel.rotX + 0.01f;
 			}
 		};
 		t.scheduleRepeating(16);
