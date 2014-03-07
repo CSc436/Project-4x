@@ -279,8 +279,8 @@ public class GameCanvas {
 			camera.rotateRight();
 		if (center)
 			camera.defaultPosition();
-		if (debug) 
-			Console.log("X: " + camera.getX() + ", Y: " + camera.getY() + ", Z: " + camera.getZ());
+//		if (debug) 
+//			Console.log("X: " + camera.getX() + ", Y: " + camera.getY() + ", Z: " + camera.getZ());
 	}
 
 	private void start() {

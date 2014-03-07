@@ -1,6 +1,7 @@
 package com.client;
 
 import com.client.matrixutils.FloatMatrix;
+import com.client.utils.Vector3;
 
 public class Camera {
 	private float[] cameraMatrix;
@@ -40,10 +41,9 @@ public class Camera {
 
 	public void up(float delta) {
 		// TODO Auto-generated method stub
-		camX -= delta * Math.sin(yaw * Math.PI / 180.0);
-	    camX -= delta * Math.sin(roll * Math.PI / 180.0);
-	    camY += delta * Math.cos(pitch * Math.PI / 180.0);
-	    camY += delta * Math.cos(roll * Math.PI / 180.0);
+		Vector3 lookAt = getNormalLookAtVector();
+		camX += lookAt.x;
+		camY += lookAt.y;
 	}
 
 	public void down(float delta) {
@@ -97,5 +97,11 @@ public class Camera {
 		camX = GameCanvas.GRID_WIDTH/2 * -1;
 		camY = GameCanvas.GRID_WIDTH * -1; 
 		camZ = 20.0f;
+	}
+	
+	public Vector3 getNormalLookAtVector() {
+		Vector3 vect = new Vector3(cameraMatrix[8], cameraMatrix[9], 0);
+		vect.normalize();
+		return vect;
 	}
 }
