@@ -1,11 +1,43 @@
 package entities.stats;
 
 
-//int damage, float range, int armor, float health_regen, float health, float movementSpeed, float actionSpeed) {
 
 public enum BaseStatsEnum {
-	INFANTRY(new UnitStats(5, 1, 1, .5f, 40f, 3, 1.5f)), BARRACKS(new UnitStats(1,
-			2, 100, 0, 1000, 0, 0));
+
+	/* Each enumeration contains a UnitsStats object, which defines the stats for the each type of unit
+	 * UnitsStats(damage,range,armor,health_regen,health,movementSpeed,actionSpeed)
+	 *  */
+	
+	BARRACKS(new UnitStats(1, 2, 100, 0, 1000, 0, 0)),
+
+	INFANTRY(new UnitStats(4, 1, 2, .5f, 40f, 3, 1.5f)),
+
+	MILITIA(new UnitStats(1, 1, 0, .2f, 20f, 2, 1.0f)),
+
+	SKIRMISHER(new UnitStats(2, 1, 1, .1f, 10f, 2, 1.7f)),
+
+	ARCHER(new UnitStats(2, 4, 0, 0, 20f, 3, 1.0f)),
+
+	KNIGHT(new UnitStats(5, 1, 3, .5f, 50f, 6, 2.0f)),
+
+	RANGED_CALVARY(new UnitStats(4, 5, 2, .4f, 30f, 6, 2.0f)),
+
+	TRANSPORT(new UnitStats(0, 0, 2, .2f, 100, 4, 1.0f)),
+	
+	CATAPULT(new UnitStats(6, 8, 1, 0, 20f, 1, 1.0f)),
+
+	BATTERING_RAM(new UnitStats(6, 1, 1, 0, 20f, 1, 1.0f)),
+	
+	RIFLEMAN(new UnitStats(8, 4, 2, .4f, 50f, 4, 2.0f)),
+	
+	DRAGOON(new UnitStats(7, 2, 2, .4f, 40f, 6, 2.0f)),
+	
+	CANNON(new UnitStats(10, 5, 2, 0, 30f, 1, 2.0f)),
+	
+	MEDIC(new UnitStats(-2, 5, 2, 0, 10f, 2, 2.0f)),
+	
+	TRADE_CART(new UnitStats(0, 1, 1, .4f, 40f, 4, 1.0f));
+	
 
 	private UnitStats stats;
 

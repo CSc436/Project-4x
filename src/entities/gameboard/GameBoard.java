@@ -1,11 +1,8 @@
-package controller;
+package entities.gameboard;
 import java.util.ArrayList;
 import java.util.Random;
 
 import entities.buildings.Building;
-import entities.gameboard.Resource;
-import entities.gameboard.Terrain;
-import entities.gameboard.Tile;
 import entities.units.Unit;
 import entities.util.Point;
 

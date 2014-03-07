@@ -1,11 +1,8 @@
-package controller;
+package entities.gameboard;
 import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.*;
-
-import entities.gameboard.Resource;
-import entities.gameboard.Terrain;
 
 public class RunGame {
 

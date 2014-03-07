@@ -18,8 +18,8 @@ import entities.buildings.Barracks;
 import entities.buildings.Building;
 import entities.gameboard.GameBoard;
 import entities.units.Agent;
-import entities.units.Infantry;
 import entities.units.Unit;
+import entities.units.pawns.Infantry;
 
 public class GameBoardTest {
 

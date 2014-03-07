@@ -2,14 +2,12 @@ package entities.units;
 
 import java.util.PriorityQueue;
 import java.util.UUID;
-
-import com.fourx.buffs.UnitType;
-
+import control.UnitType;
 import entities.Action;
-import entities.BaseStatsEnum;
+import entities.stats.BaseStatsEnum;
 import entities.GameObject;
-import entities.Locatable;
-import entities.UnitStats;
+import entities.GameObjectType;
+import entities.stats.UnitStats;
 
 /*
  * 
@@ -18,26 +16,20 @@ import entities.UnitStats;
  * information known about itself.  
  */
 
-// infantry
-// calvary
-// ranged
-// water?
-// transport?
-// trade cart
-// settler / worker
-// healing unit
 
-public abstract class Unit extends GameObject  {
-	
+
+public abstract class Unit extends GameObject {
+
 	private UnitType unitType;
 
-	public Unit(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, GameObjectType type, UnitType unitType, float xco,
-			float yco) {
-		super(id, playerId,  baseStats, new_stats, type, xco, yco);
+	public Unit(UUID id, int playerId, BaseStatsEnum baseStats,
+			UnitStats new_stats, GameObjectType type, UnitType unitType,
+			float xco, float yco) {
+		super(id, playerId, baseStats, new_stats, type, xco, yco);
 		this.unitType = unitType;
 	}
 
-	//not sure if needed
+	// not sure if needed
 	public void performActions() {
 		while (!actionQueue.isEmpty()) {
 			Action a = actionQueue.poll();
@@ -50,8 +42,9 @@ public abstract class Unit extends GameObject  {
 				break;
 			case DEATH:
 				// I DIED
-				System.out.println("death at :" + position.x + " " + position.y);
-				//getOwner().getUnits().removeUnit(this);
+				System.out
+						.println("death at :" + position.x + " " + position.y);
+				// getOwner().getUnits().removeUnit(this);
 				while (!actionQueue.isEmpty())
 					actionQueue.poll();
 				break;
