@@ -7,6 +7,7 @@ import java.util.Queue;
 import entities.buildings.Building;
 import entities.buildings.ResourceBuilding;
 import entities.gameboard.GameBoard;
+import entities.gameboard.Tile;
 import entities.units.Unit;
 
 public class Controller implements Runnable {
@@ -106,11 +107,24 @@ public class Controller implements Runnable {
 			case CREATE:
 				comm.getTarget();
 				break;
+				
+				// TODO add case MOVE, with playerID, selected units, and location to move too.
 			}
 		}
 		return true;
 	}
 
+	/* TODO implement - or move somewhere better. 
+	 * pathFinding()
+	 * Description:
+	 * General pathfinding algorithm for units, somehow need to view the map. 
+	 * uses A*. 
+	 */
+	public Queue<Tile> pathFinding()
+	{
+		return null;
+	}
+	
 	private void unitInteraction() {
 		for (Player player : players) {
 			// for (Unit unit : player.getUnitQueue()) {

@@ -16,8 +16,7 @@ public class TestResearching {
 
 	@Test
 	public void researchTime() {
-		Player p = new Player("BOB", new Resources(9999, 9999, 9999, 9999),
-				new PerfectCivilization());
+		Player p = new Player("BOB", 0,  new PerfectCivilization(), new Resources(9999, 9999, 9999, 9999));
 		String tech = TechnologyEnum.INFANTRYDAMAGE1.name();
 
 		// This research takes 50 units of time to complete.
@@ -36,8 +35,7 @@ public class TestResearching {
 
 	@Test
 	public void researchCosts() {
-		Player p = new Player("BOB", new Resources(250, 250, 250, 250),
-				new PerfectCivilization());
+		Player p = new Player("BOB", 0, new PerfectCivilization(), new Resources(250, 250, 250, 250));
 		String tech = TechnologyEnum.INFANTRYDAMAGE1.name();
 
 		// First Research works
@@ -63,8 +61,7 @@ public class TestResearching {
 	@Test
 	public void civilizationResearch() {
 		// TestCivilization can only research INFANTRYDAMAGE1 once.
-		Player p = new Player("BOB", new Resources(9999, 9999, 9999, 9999),
-				new TestCivilization());
+		Player p = new Player("BOB", 0, new TestCivilization(), new Resources(9999, 9999, 9999, 9999));
 		String tech = TechnologyEnum.INFANTRYDAMAGE1.name();
 
 		assertEquals(1, p.techTree.getResearchLevel(tech));
@@ -81,8 +78,7 @@ public class TestResearching {
 	@Test
 	public void testDisabledTechs() {
 		// Test that it is disabled by default.
-		Player p = new Player("BOB", new Resources(9999, 9999, 9999, 9999),
-				new PerfectCivilization());
+		Player p = new Player("BOB", 0, new PerfectCivilization(), new Resources(9999, 9999, 9999, 9999));
 		String tech = TechnologyEnum.DISABLEDTECHNOLOGY.name();
 
 		assertEquals(false, p.techTree.research(tech));
@@ -90,7 +86,7 @@ public class TestResearching {
 		// Test that when enabled, it can be researched.
 		TestCivilization civ = new TestCivilization();
 		civ.addResearch(tech, 3);
-		Player x = new Player("BOB", new Resources(9999, 9999, 9999, 9999), civ);
+		Player x = new Player("JIM", 1, civ, new Resources(9999, 9999, 9999, 9999));
 
 		assertEquals(true, x.techTree.research(tech));
 	}

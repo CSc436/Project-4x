@@ -36,5 +36,8 @@ public abstract class ResourceBuilding extends Building {
 		return globalRateModifier;
 	}
 
-	public abstract void generateResource();
+	public final Resources generateResource()
+	{
+		return resourceAmount; 
+	}
 }

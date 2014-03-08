@@ -28,7 +28,8 @@ public class GameBoard {
 	private static final float woodMult  = 0.20f; 	// 5% of tiles that can support wood have wood
 	private static final float stoneMult = 0.050f; 	// 5% of tiles that can support stone have stone
 	private static final float goldMult  = 0.002f; 	// 0.2% of tiles that can support gold have gold
-	
+	 // TODO for tiles add a coordinate (upper left and right). 
+
 	
 	/*
 	 * GameBoard():
