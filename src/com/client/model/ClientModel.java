@@ -1,0 +1,181 @@
+package com.client.model;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+import com.client.SimpleSimulator;
+import com.client.SimpleSimulatorAsync;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.shared.MovingUnit;
+import com.shared.Request;
+import com.shared.SetTargetRequest;
+
+public class ClientModel {
+	
+	private int turnNumber = -1;
+	float[] position = { 0.0F, 0.0F };
+	private long lastUpdateTime;
+	private final SimpleSimulatorAsync simpleSimulator;
+	private MovingUnit lastUnit;
+	private MovingUnit nextUnit = new MovingUnit(0.0, 0.0, 3.0);
+	private int averageTurnInterval = 200;
+	private boolean readyForNext = true;
+	private int cycleTime = 100;
+	
+	private Queue<Request> requestQueue = new LinkedList<Request>();
+	
+	public ClientModel() {
+		simpleSimulator = GWT.create(SimpleSimulator.class);
+	}
+	
+	public void setTarget( double x, double y ) {
+		
+		Request r = new SetTargetRequest(x,y);
+		
+		requestQueue.add(r);
+		
+		nextUnit.setTarget(x, y);
+		
+		/*
+		simpleSimulator.sendRequest(r,
+				new AsyncCallback<Request[]>() {
+					public void onFailure(Throwable caught) {
+						System.out.println("Target request failed");
+					}
+
+					public void onSuccess(Request[] result) {
+						double x = ((SetTargetRequest) result[0]).x;
+						double y = ((SetTargetRequest) result[0]).y;
+						System.out.println("New target set: " + x + " " + y);
+					}
+				});
+		 */
+		
+	}
+	
+	public float[] getPosition( long currentTime ) {
+		
+		if (lastUnit == null || nextUnit == null)
+			return position;
+		// Interpolation System
+		/*
+		position[0] = (float) (lastUnit.location.x + (currentTime - lastUpdateTime) * (nextUnit.location.x - lastUnit.location.x) / averageTurnInterval) ; 
+		position[1] = (float) (lastUnit.location.y + (currentTime - lastUpdateTime) * (nextUnit.location.y - lastUnit.location.y) / averageTurnInterval) ;
+		*/
+		
+		// Dead-Reckoning System
+		double[] positionDouble = nextUnit.deadReckonPosition( currentTime - lastUpdateTime );
+		position[0] = (float) positionDouble[0];
+		position[1] = (float) positionDouble[1];
+		
+		System.out.println("Client >>> " + position[0] + " " + position[1]);
+		
+		return position;
+		
+	}
+	
+	public void run() {
+		
+		simpleSimulator.startSimulation(new AsyncCallback<String>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				System.out.println("Simulation failed to start");
+			}
+
+			@Override
+			public void onSuccess(String result) {
+				// TODO Auto-generated method stub
+				System.out.println("Simulation started");
+				startup();
+			}
+
+		});
+		
+	}
+	
+	public void startup(){
+		readyForNext = true;
+		
+		Timer pollTimer = new Timer() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				
+				final long startTime = System.currentTimeMillis();
+				
+				if(!readyForNext) {
+					System.out.println("Not ready for next simulation state");
+					return;
+				}
+				
+				readyForNext = false;
+				System.out.println("Requesting simulation state...");
+				
+				Queue<Request> tempQueue = requestQueue;
+				requestQueue = new LinkedList<Request>();
+				
+				simpleSimulator.sendRequests( tempQueue, new AsyncCallback<MovingUnit>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						System.out.println("    Unable to receive simulation state");
+						readyForNext = true;
+					}
+
+					@Override
+					public void onSuccess(MovingUnit result) {
+						
+						lastUnit = nextUnit;
+						nextUnit = result;
+						
+						long currTime = System.currentTimeMillis();
+						cycleTime = (int) (currTime - lastUpdateTime);
+						lastUpdateTime = currTime;
+						System.out.println("    Simulation state received! Cycle time: " + cycleTime + " ms");
+						readyForNext = true;
+					}
+
+				});
+			}
+
+		};
+
+		pollTimer.scheduleRepeating(30);
+		
+		Timer setTargetTimer = new Timer() {
+
+			@Override
+			public void run() {
+
+				setTarget( 16*Math.random(), 16*Math.random() );
+			}
+
+		};
+
+		setTargetTimer.scheduleRepeating(2000);
+	}
+	
+	public void confirmReceipt() {
+		simpleSimulator.confirmReceipt(turnNumber + 1, new AsyncCallback<String>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				System.out.println("    Receipt failed, retrying...");
+			}
+
+			@Override
+			public void onSuccess(String result) {
+				System.out.println("    Receipt success!");
+				turnNumber++;
+				readyForNext = true;
+			}
+
+		});
+	}
+	
+}

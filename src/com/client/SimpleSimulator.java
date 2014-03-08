@@ -1,5 +1,7 @@
 package com.client;
 
+import java.util.Queue;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.shared.MovingUnit;
@@ -13,8 +15,12 @@ public interface SimpleSimulator extends RemoteService {
 	
 	Request[] sendRequest(Request input) throws IllegalArgumentException;
 	
+	MovingUnit sendRequests( Queue<Request> requestQueue );
+	
 	String startSimulation();
 	
-	MovingUnit getSimulationState();
+	MovingUnit getSimulationState( int turnNumber );
+	
+	String confirmReceipt( int turnNumber ); 
 	
 }

@@ -1,5 +1,6 @@
 package com.client;
 
+import com.client.model.ClientModel;
 import com.google.gwt.core.client.EntryPoint;
 
 /**

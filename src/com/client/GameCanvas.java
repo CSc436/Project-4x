@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import static com.google.gwt.query.client.GQuery.$;
 
+import com.client.model.ClientModel;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -57,7 +58,7 @@ public class GameCanvas {
 			right = false, left = false, rotateLeft = false, rotateRight = false, center = false;
 	private long time;
 
-	public static final int GRID_WIDTH = 64;
+	public static final int GRID_WIDTH = 16;
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
 	private final boolean debug = false;
 
@@ -185,7 +186,7 @@ public class GameCanvas {
 
 		initClickHandlers();
 		camera.makeCameraMatrix();
-		start();
+		//start();
 	}
 
 	private void initClickHandlers() {
@@ -303,7 +304,7 @@ public class GameCanvas {
 			public void run() {
 				time = System.currentTimeMillis();
 				
-				float[] pos = theModel.getPosition(time);
+				float[] pos = theModel.getPosition(System.currentTimeMillis());
 				agentX = pos[0];
 				agentY = pos[1];
 				

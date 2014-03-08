@@ -1,5 +1,6 @@
 package com.server;
 
+import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 import com.client.SimpleSimulator;
@@ -35,6 +36,15 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 
 		return new Request[] {input};
 	}
+	
+	public MovingUnit sendRequests( Queue<Request> requestQueue ) {
+		while( !requestQueue.isEmpty() ) {
+			Request r = requestQueue.remove();
+			r.executeOn(m);
+		}
+		m.simulateFrame();
+		return m.getUnit();
+	}
 
 	/**
 	 * Escape an html string. Escaping data received from the client helps to
@@ -53,13 +63,23 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 
 	@Override
 	public String startSimulation() {
+		/*
 		if(!modelThread.isAlive())
 			modelThread.start();
+		*/
+		return null;
+	}
+	
+	// Confirm that the most recent simulation state was received, prevents
+	@Override
+	public String confirmReceipt( int turnNumber ) {
+		m.continueSimulation();
 		return null;
 	}
 
 	@Override
-	public MovingUnit getSimulationState() {
+	public MovingUnit getSimulationState( int turnNumber ) {
+		//while(m.turnNumber != turnNumber);
 		return m.getUnit();
 	}
 }
