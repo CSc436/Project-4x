@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Queue;
 
+import controller.GameBoard;
 import entities.buildings.Building;
 import entities.buildings.ResourceBuilding;
-import entities.gameboard.GameBoard;
 import entities.units.Unit;
 
 
