@@ -6,7 +6,7 @@ import java.util.Queue;
 
 import entities.buildings.Building;
 import entities.buildings.ResourceBuilding;
-import entities.gameboard.GameBoard;
+import controller.GameBoard;
 import entities.units.Unit;
 
 

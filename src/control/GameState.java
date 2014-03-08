@@ -2,7 +2,7 @@ package control;
 
 import java.util.ArrayList;
 
-import entities.gameboard.GameBoard;
+import controller.GameBoard;
 
 public class GameState {
 	private ArrayList<Player> players;
