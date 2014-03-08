@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import control.CommandQueue;
-import control.UnitType;
 import entities.GameObjectType;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;

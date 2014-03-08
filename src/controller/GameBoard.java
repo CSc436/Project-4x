@@ -1,8 +1,6 @@
 package controller;
-import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Random;
 
 import control.Player;
@@ -10,8 +8,8 @@ import entities.buildings.Building;
 import entities.gameboard.Resource;
 import entities.gameboard.Terrain;
 import entities.gameboard.Tile;
-import entities.units.Infantry;
 import entities.units.Unit;
+import entities.util.*;
 
 /* 
  *  Programmer :  Ben Deininger
@@ -240,7 +238,7 @@ public class GameBoard {
 	public void placeBuildingAt(Building b, int x, int y) {
 
 		// the tile must be owned to place a building
-		if (b.getOwner().equals(map[x][y].getOwner())) {
+		if (b.getOwner() == (map[x][y].getOwner())) {
 
 			// calculate the distance to the the bottom right corner
 			int dc = (cols - (x + b.getWidth() - 1));
@@ -272,8 +270,13 @@ public class GameBoard {
 	}
 
 	public void removeUnit(Unit u) {
-		Player owner = u.getOwner();
-		owner.getUnits().removeUnit(u);
+		int pid = u.getOwner();
+		for(Player owner: getPlayerList()){
+			if (pid == owner.getId()){
+				owner.getUnits().removeUnit(u.getId());
+				break;
+			}
+		}
 	}
 
 	// need restriction for distance
@@ -287,10 +290,9 @@ public class GameBoard {
 	// precondition : the building is guaranteed to be in range
 	public void removeBuilding(Building b) {
 
-		Player owner = b.getOwner();
-		int x = b.getX();
-		int y = b.getY();
-
+		int pid = b.getOwner();
+		int x = (int)b.getPosition().x;
+		int y = (int)b.getPosition().y;
 		int height = b.getHeight();
 		int width = b.getWidth();
 
@@ -300,8 +302,13 @@ public class GameBoard {
 				map[r][c].setIsOccupiedByBuilding(false);
 			}
 		}
-
-		owner.getUnits().removeBuilding(b);
+		for(Player owner: getPlayerList()){
+			if (pid == owner.getId()){
+				owner.getUnits().removeBuilding(b.getId());
+				break;
+			}
+		}
+			
 
 	}
 

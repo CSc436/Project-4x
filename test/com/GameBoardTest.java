@@ -6,20 +6,20 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import control.BuildingType;
 import control.Controller;
 import control.Player;
 import control.Factory;
-import control.UnitType;
 import entities.Action;
 import entities.PerfectCivilization;
 import entities.PlayerUnits;
 import entities.buildings.Barracks;
 import entities.buildings.Building;
+import entities.buildings.BuildingType;
 import entities.gameboard.GameBoard;
 import entities.units.Agent;
 import entities.units.Infantry;
 import entities.units.Unit;
+import entities.units.UnitType;
 
 public class GameBoardTest {
 

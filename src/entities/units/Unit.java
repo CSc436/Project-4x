@@ -3,7 +3,6 @@ package entities.units;
 import java.util.PriorityQueue;
 import java.util.UUID;
 
-import control.UnitType;
 import entities.Action;
 import entities.GameObject;
 import entities.GameObjectType;

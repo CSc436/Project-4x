@@ -23,8 +23,9 @@ public class Tile {
 	
 	private float height; // Height generated from the diamondSquareGenerator in
 							// GameBoard
-	private Player owner; // The Player that contains possession of the tile,
+	private int owner; // The Player that contains possession of the tile,
 							// though mostly it will not have an ownder
+					  // Changed player from object to ID
 	private Terrain terrain; // The type of terrain for this tile, based upne
 								// height.
 	private boolean occupiedByBuilding = false; // keeps track of whether or not
@@ -78,7 +79,7 @@ public class Tile {
 		setResourceAmount(resource);
 		setResourceRegen(resource);
 		
-		owner = null;
+		owner = -1; // not a player
 		passable = true;
 		terrain = calculateTerrainType(height);
 	}
@@ -106,7 +107,7 @@ public class Tile {
 		setResourceAmount(resource); 
 		setResourceRegen(resource);
 		
-		owner = null;
+		owner = -1;  // not a player
 		passable = true;
 		terrain = calculateTerrainType(height);
 	}
@@ -329,14 +330,14 @@ public class Tile {
 	 * 
 	 * @return boolean value; true if successfully set player, false if not
 	 */
-	public boolean setOwner(Player p) {
-		if (p == null) {
-			owner = p;
+	public boolean setOwner(int pid) {
+		if (pid < 0) {
+			owner = pid;
 			return true;
-		} else if (owner != null && !owner.equals(p)) {
+		} else if (owner >= 0 && owner != pid) {
 			return false; // currently has an owner, that is not p.
 		} else {
-			owner = p; // tile is null, XOR owner == p.
+			owner = pid; // tile is null, XOR owner == p.
 			return true;
 		}
 
@@ -349,7 +350,7 @@ public class Tile {
 	 * 
 	 * @return Player object that is the current owner (may be null)
 	 */
-	public Player getOwner() {
+	public int getOwner() {
 
 		return owner;
 	}
@@ -364,10 +365,7 @@ public class Tile {
 	 * does.
 	 */
 	public boolean hasOwner() {
-		if (owner == null)
-			return false;
-		else
-			return true;
+		return owner >= 0;  // assuming players can have only positive ids
 	}
 
 	/*

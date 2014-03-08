@@ -3,7 +3,6 @@ package entities.units;
 import java.util.HashMap;
 import java.util.UUID;
 
-import control.UnitType;
 import entities.GameObjectType;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
