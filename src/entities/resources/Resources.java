@@ -23,6 +23,16 @@ public class Resources {
 		return true;
 	}
 
+	public boolean spend(Resources r) {
+		if (!have_enough_resources(r.Gold, r.Food, r.Wood, r.ResearchPts))
+			return false;
+		Gold -= r.Gold;
+		Wood -= r.Wood;
+		Food -= r.Food;
+		ResearchPts -= r.ResearchPts;
+		return true;
+	}
+
 	public void receive(int gold, int wood, int food, int rp) {
 		Gold += gold;
 		Wood += wood;

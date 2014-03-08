@@ -23,6 +23,10 @@ public class GameBoardTest {
 		GameState gs = new GameState();
 		ArrayList<Object> c = new ArrayList<Object>();
 		Controller cont = new Controller(pc, gs);
+		Thread t = new Thread(cont);
+	
+//		cont.run();
+
 
 		c.add("PLAYER X");
 		c.add(0);
@@ -39,6 +43,13 @@ public class GameBoardTest {
 		c.add(200);
 		c.add(200);
 		pc.push(new Command(Actions.STARTUP_CREATE, Targets.MAP, c));
+		t.start();
 
+		try {
+			t.join();
+		} catch (InterruptedException e) {
+			System.out.println("EXITING");
+			e.printStackTrace();
+		}
 	}
 }

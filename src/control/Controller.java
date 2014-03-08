@@ -28,8 +28,9 @@ public class Controller implements Runnable {
 	public void run() {
 		System.out.println("Setup : ");
 		currentInstructions = sharedInstructions.dump();
-		System.out.println(currentInstructions.peek().getTarget());
+
 		for (Command comm : currentInstructions) {
+			System.out.println(comm.getTarget());
 			if (comm.getAction() != Actions.STARTUP_CREATE) {
 				System.out.println("You suck for not using startup_create");
 			}
@@ -48,7 +49,7 @@ public class Controller implements Runnable {
 			}
 			// turnNum++;
 		}
-		
+
 		gs.update(players, map);
 		gameStatus();
 		// actual game execution
@@ -66,6 +67,7 @@ public class Controller implements Runnable {
 			agentDecision();
 			unitInteraction();
 			gameRunning = playerCommands();
+			System.out.println("STILL RUNNING: " + gameRunning);
 			gs.update(players, map);
 		}
 	}
@@ -98,12 +100,11 @@ public class Controller implements Runnable {
 	private boolean playerCommands() {
 		currentInstructions = sharedInstructions.dump();
 		for (Command comm : currentInstructions) {
+			System.out.println(comm.getAction());
 			switch (comm.getAction()) {
-			case STARTUP_CREATE:
-		
-				break;
+
 			case CREATE:
-				// players.get(0).createBuilding(3,3);
+				comm.getTarget();
 				break;
 			}
 		}

@@ -19,6 +19,7 @@ public class CommandQueue {
 	}
 
 	public Unit pop() {
+		
 		return units.poll();
 	}
 

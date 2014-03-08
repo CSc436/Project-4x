@@ -48,9 +48,15 @@ public enum BaseStatsEnum {
 	TOWN_HALL(new UnitStats(0, 2, 100, 0, 1000, 0, 0));
 
 	private UnitStats stats;
+	private int baseCreationTime;
 
 	private BaseStatsEnum(UnitStats stats) {
+		this(stats, 100);
+	}
+
+	private BaseStatsEnum(UnitStats stats, int creationTime) {
 		this.stats = stats;
+		this.baseCreationTime = creationTime;
 	}
 
 	public UnitStats getStats() {
@@ -72,5 +78,9 @@ public enum BaseStatsEnum {
 		s.health = s.max_health * (current_health / current_max);
 
 		return s;
+	}
+
+	public int getCreationTime() {
+		return baseCreationTime;
 	}
 }

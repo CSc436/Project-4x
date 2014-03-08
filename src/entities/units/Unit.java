@@ -16,17 +16,17 @@ import entities.stats.UnitStats;
  * information known about itself.  
  */
 
-
-
 public abstract class Unit extends GameObject {
 
 	private UnitType unitType;
+	private int creationTime;
 
 	public Unit(UUID id, int playerId, BaseStatsEnum baseStats,
 			UnitStats new_stats, GameObjectType type, UnitType unitType,
 			float xco, float yco) {
 		super(id, playerId, baseStats, new_stats, type, xco, yco);
 		this.unitType = unitType;
+		this.creationTime = baseStats.getCreationTime();
 	}
 
 	// not sure if needed
@@ -57,5 +57,9 @@ public abstract class Unit extends GameObject {
 
 	public PriorityQueue<Action> getActionQueue() {
 		return actionQueue;
+	}
+
+	public int getCreationTime() {
+		return this.baseStats.getCreationTime();
 	}
 }
