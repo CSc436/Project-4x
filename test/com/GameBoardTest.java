@@ -22,9 +22,7 @@ public class GameBoardTest {
 		PlayerCommands pc = new PlayerCommands();
 		GameState gs = new GameState();
 		ArrayList<Object> c = new ArrayList<Object>();
-		Thread thread = new Thread(new Controller(pc, gs), "New Thread");
-		thread.start();
-
+		Controller cont = new Controller(pc, gs);
 
 		c.add("PLAYER X");
 		c.add(0);
@@ -41,11 +39,6 @@ public class GameBoardTest {
 		c.add(200);
 		c.add(200);
 		pc.push(new Command(Actions.STARTUP_CREATE, Targets.MAP, c));
-		
-		//Controller cont = new Controller(pc, gs);
-
-
-		// System.out.println("Asshole");
 
 	}
 }
