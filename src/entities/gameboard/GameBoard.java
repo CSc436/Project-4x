@@ -64,14 +64,14 @@ public class GameBoard {
 
 		// create tiles
 		// needs optimization!
-		System.out.println("Building Board...");
+		System.out.println("\nBuilding Board...");
 		startTime = System.currentTimeMillis();
 
 		// create a random number generator
 		// Random rand = new Random();
 		// rand.setSeed(16);
 
-		System.out.println("\nAverage Height: " + this.averageHeight);
+		System.out.println("Average Height: " + this.averageHeight);
 
 		float heightAdjust = 0.0f;
 		// Determine adjustment for height
@@ -90,7 +90,7 @@ public class GameBoard {
 																// the terain.
 																// (hopefully)
 		}
-		System.out.println("Height Adjust: " + heightAdjust + "\n");
+		System.out.println("Height Adjust: " + heightAdjust);
 
 		for (int c = 0; c < cols; c++) {
 			for (int r = 0; r < rows; r++) {
@@ -109,7 +109,7 @@ public class GameBoard {
 		// attempt to distribute near resources.
 
 		endTime = System.currentTimeMillis();
-		System.out.println("Total execution time: " + (endTime - startTime));
+		System.out.println("Total execution time: " + (endTime - startTime) + "\n");
 
 	}
 

@@ -13,7 +13,7 @@ public class PlayerCommands {
 	
 	public synchronized void push(Command command) {
 		commands.add(command);
-		System.out.println("Migrate to Ben Whitely's hashing thing.");
+		//System.out.println("Migrate to Ben Whitely's hashing thing.");
 		//TODO: Migrate to Ben Whitely's hashing thing.
 	}
 	
@@ -22,7 +22,7 @@ public class PlayerCommands {
 	}
 	
 	public synchronized Queue<Command> dump() {
-		System.out.println("Migrate to Ben Whitely's hashing thing.");
+		//System.out.println("Migrate to Ben Whitely's hashing thing.");
 		//TODO: Migrate to Ben Whitely's hashing thing.
 		
 		Queue<Command> temp = new ArrayDeque<Command>(commands);
