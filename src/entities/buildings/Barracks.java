@@ -9,7 +9,7 @@ import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 
 public class Barracks extends Building {
-
+	//Lloyd: should be using factory
 	private static int soldierAmount = 20;
 	static int newSoldiers;
 

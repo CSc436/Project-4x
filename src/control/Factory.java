@@ -14,6 +14,7 @@ public class Factory {
 
 	private static synchronized UUID getId() {
 		return UUID.randomUUID();
+		//TODO: Are we sure this is unique? -Lloyd
 	}
 
 	public static Unit buildUnit(int playerId, UnitType unitType, float xco,

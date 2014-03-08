@@ -3,10 +3,11 @@ package com;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
-import control.Controller;
-import entities.gameboard.GameBoard;
+import controller.GameBoard;
 import entities.gameboard.Resource;
 import entities.gameboard.Terrain;
 
@@ -20,13 +21,11 @@ public class RunGame extends Thread {
 
 		h = JOptionPane.showInputDialog("Enter height");
 		w = JOptionPane.showInputDialog("Enter width");
-		pl = JOptionPane.showInputDialog("Enter player amount");
 
 		int x = Integer.parseInt(w);
 		int y = Integer.parseInt(h);
-		int p = Integer.parseInt(pl);
 
-		GameBoard game = new GameBoard(x, y, p);
+		GameBoard game = new GameBoard(x, y);
 
 		JFrame frame = new JFrame("display");
 		frame.setVisible(true);

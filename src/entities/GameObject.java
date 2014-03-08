@@ -34,7 +34,7 @@ public abstract class GameObject implements Locatable {
 	
 	protected abstract void setActions();//might get rid 
 	
-	public abstract HashMap<String, String> getActions();//might get rid of
+	public abstract HashMap<String, String> getActions();
 	
 	public UUID getId() {
 		return id;
@@ -65,6 +65,14 @@ public abstract class GameObject implements Locatable {
 	
 	public float getY() {
 		return getPosition().y;
+	}
+	
+	public int getTileX() {
+		return (int) Math.floor(getPosition().x);
+	}
+	
+	public int getTileY() {
+		return (int) Math.floor(getPosition().y);
 	}
 
 	/**
@@ -127,6 +135,12 @@ public abstract class GameObject implements Locatable {
 
 	public int getOwner() {
 		return playerId;
+	}
+	
+	@Override
+	public String toString() {
+		String result = "Type: " + type.name() + " ID: " + getId().toString() + "\n";		
+		return result;
 	}
 
 //	/**

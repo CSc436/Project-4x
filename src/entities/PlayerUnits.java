@@ -27,7 +27,7 @@ public class PlayerUnits {
 		agents = new HashMap<UUID, Agent>();
 	}
 
-	public Map<UUID, GameObject> getGameObjects() {
+	public Map<UUID, GameObject> getAll() {
 		return gameObjects;
 	}
 	
@@ -97,7 +97,7 @@ public class PlayerUnits {
 	
 	@Override
 	public String toString() {
-		String returnStr = "Player " + playerId + "'s gameObjects:\n";
+		String returnStr = "";
 		for (UUID id : gameObjects.keySet()) {
 			returnStr += gameObjects.get(id).toString();//responsibility of leaf class to write out one line toString
 		}

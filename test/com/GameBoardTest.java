@@ -4,21 +4,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 import org.junit.Test;
 
 import control.BuildingType;
-import control.Controller;
-import control.Player;
 import control.Factory;
+import control.Player;
 import control.UnitType;
-import entities.Action;
-import entities.PerfectCivilization;
-import entities.PlayerUnits;
-import entities.buildings.Barracks;
+import controller.GameBoard;
 import entities.buildings.Building;
-import entities.gameboard.GameBoard;
-import entities.units.Agent;
-import entities.units.Infantry;
 import entities.units.Unit;
 
 public class GameBoardTest {
@@ -26,7 +22,7 @@ public class GameBoardTest {
 	@Test
 	public void testBoard() {
 
-		GameBoard game = new GameBoard(20, 20, 2);
+		GameBoard game = new GameBoard(20, 20);
 		assertEquals(20, game.getRows());
 		assertEquals(20, game.getCols());
 
@@ -35,8 +31,8 @@ public class GameBoardTest {
 	@Test
 	public void testTile() {
 
-		GameBoard game = new GameBoard(20, 20, 2);
-		Player juan = new Player("juan", new PerfectCivilization());
+		GameBoard game = new GameBoard(20, 20);
+		Player juan = new Player("juan", 1);
 
 	}
 
@@ -44,23 +40,31 @@ public class GameBoardTest {
 	public void testAction() {
 
 		// create a 200x200 board with 2 players
-		GameBoard game = new GameBoard(200, 200, 2);
+		GameBoard game = new GameBoard(200, 200);
 		// get the player references
-		Player p1 = game.getPlayerList().get(0);
-		Player p2 = game.getPlayerList().get(1);
-
+		Player p1 = new Player("juan", 1);
+		Player p2 = new Player("lucas", 2);
+		
 		// no units should be added to this game yet
-		assertEquals(0, p1.getGameObjects().getUnitList().size());
-		assertEquals(0, p2.getGameObjects().getUnitList().size());
+		assertEquals(0, p1.getGameObjects().getUnits().size());
+		assertEquals(0, p2.getGameObjects().getUnits().size());
 
 		// add a unit to player 1
-		Factory.buildUnit(UnitType.INFANTRY, p1);
-
-		assertEquals(1, p1.getGameObjects().getUnitList().size());
-		assertEquals(0, p2.getGameObjects().getUnitList().size());
+		Unit temp = Factory.buildUnit(1, UnitType.INFANTRY, 0, 0);
+		assertEquals(1, temp.getPlayerId());
+		
+		p1.getGameObjects().getUnits().put(temp.getId(), temp);
+		assertEquals(1, p1.getGameObjects().getUnits().size());
+		assertEquals(0, p2.getGameObjects().getUnits().size());
 
 		// add a unit to player 2
-		Factory.buildUnit(UnitType.INFANTRY, p2);
+		temp = Factory.buildUnit(2, UnitType.INFANTRY, 0, 0);
+		assertEquals(2, temp.getPlayerId());
+
+		p2.getGameObjects().getUnits().put(temp.getId(), temp);
+		assertEquals(1, p1.getGameObjects().getUnits().size());
+		assertEquals(1, p2.getGameObjects().getUnits().size());
+		
 
 	}
 
@@ -68,52 +72,47 @@ public class GameBoardTest {
 	public void testPlayerUnits() {
 
 		// create a 200x200 board with 2 players
-		GameBoard game = new GameBoard(200, 200, 2);
+		GameBoard game = new GameBoard(200, 200);
 		// get the player references
-		Player p1 = game.getPlayerList().get(0);
-		Player p2 = game.getPlayerList().get(1);
+		Factory fact = new Factory();
+		Player p1 = new Player("juan", 1);
+		Player p2 = new Player("lucas", 2);
 
 		// no units should be added to this game yet
-		assertEquals(0, p1.getGameObjects().getUnitList().size());
-		assertEquals(0, p2.getGameObjects().getUnitList().size());
+		assertEquals(0, p1.getGameObjects().getUnits().size());
+		assertEquals(0, p2.getGameObjects().getUnits().size());
 
 		// add a unit to player 1
-		Factory.buildUnit(UnitType.INFANTRY, p1);
-
-		assertEquals(1, p1.getGameObjects().getUnitList().size());
-		assertEquals(0, p2.getGameObjects().getUnitList().size());
+		Unit temp = Factory.buildUnit(1, UnitType.INFANTRY, 0, 0);
+		p1.getGameObjects().getUnits().put(temp.getId(), temp);
+		game.addUnitAt(temp, temp.getTileX(), temp.getTileY());
+		
+		assertEquals(1, temp.getPlayerId());
+		assertEquals(temp.getId(), game.getUnitsAt(0, 0).get(temp.getId()).getId());
+		assertEquals(1, p1.getGameObjects().getUnits().size());
+		assertEquals(0, p2.getGameObjects().getUnits().size());
 
 		// add a unit to player 2
-		Factory.buildUnit(UnitType.INFANTRY, p2);
-		Factory.buildStructure(BuildingType.BARRACKS, p1);
-		// Agent a1 = new Agent(p1);
+		temp = Factory.buildUnit(2, UnitType.INFANTRY, 0, 0);
+		game.addUnitAt(temp, temp.getTileX(), temp.getTileY());
+		assertEquals(2, temp.getPlayerId());
+		p2.getGameObjects().getUnits().put(temp.getId(), temp);
+		
+		HashMap<UUID, Unit> unitsAtLoc = game.getUnitsAt(0, 0);
+		assertEquals(temp.getId(), unitsAtLoc.get(temp.getId()).getId());
+		assertEquals(2, unitsAtLoc.size());
+		assertEquals(1, p1.getGameObjects().getUnits().size());
+		assertEquals(1, p2.getGameObjects().getUnits().size());
+		
+		Building building = Factory.buildBuilding(2, BuildingType.BARRACKS, 6, 6, 3, 3);
+		game.placeBuildingAt(building, 6, 6);
+		
+		//Lloyd: Not sure if check for unit at location is necessary
+		
+		assertFalse(game.getTileAt(0, 1).isOccupiedByBuilding());
+		assertTrue(game.getTileAt(7, 8).isOccupiedByBuilding());
 
-		PlayerUnits pu1 = p1.getGameObjects();
-		PlayerUnits pu2 = p2.getGameObjects();
+//		assertEquals(1, pu1.getAgentList().size());
 
-		assertFalse(pu1.hasUnitAt(0, 0));
-		assertTrue(pu1.hasUnitAt(1, 1));
-		assertFalse(pu1.hasUnitAt(0, 1));
-		assertFalse(pu1.hasUnitAt(2, 2));
-		assertFalse(pu2.hasUnitAt(1, 1));
-		assertTrue(pu2.hasUnitAt(2, 2));
-		assertFalse(pu2.hasUnitAt(0, 1));
-		assertFalse(pu2.hasUnitAt(1, 0));
-
-		assertFalse(pu1.hasBuildingAt(0, 1));
-		assertTrue(pu1.hasBuildingAt(1, 1));
-		assertFalse(pu1.hasBuildingAt(1, 0));
-		assertFalse(pu1.hasBuildingAt(0, 0));
-
-		assertEquals(1, pu1.getAgentList().size());
-
-	}
-
-	@Test
-	public void testController() {
-
-		Controller game = new Controller();
-		assertEquals(1, game.map.getPlayerList().get(0).getGameObjects()
-				.getUnitList().size());
 	}
 }

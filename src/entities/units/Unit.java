@@ -3,13 +3,12 @@ package entities.units;
 import java.util.PriorityQueue;
 import java.util.UUID;
 
-import com.fourx.buffs.UnitType;
-
+import control.UnitType;
 import entities.Action;
-import entities.BaseStatsEnum;
 import entities.GameObject;
-import entities.Locatable;
-import entities.UnitStats;
+import entities.GameObjectType;
+import entities.stats.BaseStatsEnum;
+import entities.stats.UnitStats;
 
 /*
  * 

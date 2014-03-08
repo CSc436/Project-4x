@@ -1,6 +1,8 @@
 package controller;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
+import java.util.UUID;
 
 import entities.buildings.Building;
 import entities.gameboard.Resource;
@@ -333,10 +335,15 @@ public class GameBoard {
 	 * Parameters:
 	 * @param Unit u - unit to remove 
 	 */
-	public void removeUnit(Unit u) {
-		//remove from gameboard
+	public Unit removeUnit(UUID unitId, int x, int y) {
+		Tile temp = getTileAt(x, y);
+		return temp.removeUnit(unitId);
 	}
-
+	
+	public void addUnitAt(Unit u, int x, int y) {
+		getTileAt(x,y).addUnit(u);
+	}
+	
 	/*
 	 * moveUnit():
 	 * Description:
@@ -351,9 +358,13 @@ public class GameBoard {
 	 * @param int y - new y coordinate for unit 
 	 */
 	public void moveUnit(Unit u, int x, int y) {
-
+		getTileAt(u.getTileX(), u.getTileY()).removeUnit(u.getId());
 		u.setLocation(x, y);
-
+		getTileAt(x, y).addUnit(u);
+	}
+	
+	public HashMap<UUID, Unit> getUnitsAt(int x, int y) {
+		return getTileAt(x, y).getUnits();
 	}
 
 	/*
@@ -367,12 +378,8 @@ public class GameBoard {
 	 */
 	public void removeBuilding(Building b) {
 		
-		Point pos = b.getPosition();
-		int x = Math.round(pos.x);
-		int y = Math.round(pos.y);
-
-		int height = b.getHeight();
-		int width = b.getWidth();
+		int x = b.getTileX();
+		int y = b.getTileY();
 
 		for (int r = x; r < (x + b.getHeight()); r++) {
 

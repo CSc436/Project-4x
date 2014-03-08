@@ -62,6 +62,10 @@ public class Player {
 	public PlayerUnits getGameObjects() {
 		return objects;
 	}
+	
+	public void setResources(Resources resources) {
+		this.resources = resources;
+	}
 
 	public Resources getResources() {
 		return resources;
@@ -84,6 +88,17 @@ public class Player {
 
 		cq.push(a, u);
 //		u.addAction(a);
+	}
+	
+	@Override
+	public String toString() {
+		String result = "";
+		result += getAlias() + "\n";
+		result += "Resources:\n";
+		result += getResources().toString();
+		result += "GameObjects:\n";
+		result += getGameObjects().toString();
+		return "";
 	}
 
 }

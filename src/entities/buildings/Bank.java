@@ -10,6 +10,7 @@ import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 
 public class Bank extends ResourceBuilding {
+	
 	// Placeholder bank building dimensions
 	private static final int bank_Height = 4;
 	private static final int bank_Width = 4;
@@ -19,8 +20,8 @@ public class Bank extends ResourceBuilding {
 
 	public Bank(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, 
 			GameObjectType gameObjectType, BuildingType buildingType, float xco,
-			float yco, int height, int width, Resources resourceAmount) {
-		super(id, playerId, baseStats, new_stats, gameObjectType, buildingType, xco, yco, height, width, resourceAmount);
+			float yco, int height, int width, Resources resources) {
+		super(id, playerId, baseStats, new_stats, gameObjectType, buildingType, xco, yco, height, width, resources);
 	}
 	
 	@Override
@@ -41,9 +42,8 @@ public class Bank extends ResourceBuilding {
 		return null;
 	}
 
-	@Override
 	public Resources generateResource() {
-		// TODO Auto-generated method stub
+		//TODO: return needed resources
 		return null;
 	}
 }

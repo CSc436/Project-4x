@@ -1,6 +1,9 @@
 package entities.gameboard;
 
-import control.Player;
+import java.util.HashMap;
+import java.util.UUID;
+
+import entities.units.Unit;
 
 /**
  * 
@@ -23,12 +26,13 @@ public class Tile {
 	
 	private float height; // Height generated from the diamondSquareGenerator in
 							// GameBoard
-	private Player owner; // The Player that contains possession of the tile,
+	private int owner; // The Player that contains possession of the tile,
 							// though mostly it will not have an ownder
 	private Terrain terrain; // The type of terrain for this tile, based upne
 								// height.
 	private boolean occupiedByBuilding = false; // keeps track of whether or not
 												// tile is occupied by buliding.
+	private HashMap<UUID, Unit> unitsOnTile;
 
 	// Resource Base Amounts - 'Average' amount a tile contiaining resource X will start with
 	private static final int foodBase  = 200; 
@@ -78,9 +82,10 @@ public class Tile {
 		setResourceAmount(resource);
 		setResourceRegen(resource);
 		
-		owner = null;
+		owner = -1;
 		passable = true;
 		terrain = calculateTerrainType(height);
+		unitsOnTile = new HashMap<UUID, Unit>();
 	}
 
 	/*
@@ -106,9 +111,10 @@ public class Tile {
 		setResourceAmount(resource); 
 		setResourceRegen(resource);
 		
-		owner = null;
+		owner = -1;
 		passable = true;
 		terrain = calculateTerrainType(height);
+		unitsOnTile = new HashMap<UUID, Unit>();
 	}
 	
 	/*
@@ -329,11 +335,11 @@ public class Tile {
 	 * 
 	 * @return boolean value; true if successfully set player, false if not
 	 */
-	public boolean setOwner(Player p) {
-		if (p == null) {
+	public boolean setOwner(int p) {
+		if (p == -1) {
 			owner = p;
 			return true;
-		} else if (owner != null && !owner.equals(p)) {
+		} else if (owner != -1 && owner != p) {
 			return false; // currently has an owner, that is not p.
 		} else {
 			owner = p; // tile is null, XOR owner == p.
@@ -349,7 +355,7 @@ public class Tile {
 	 * 
 	 * @return Player object that is the current owner (may be null)
 	 */
-	public Player getOwner() {
+	public int getOwner() {
 
 		return owner;
 	}
@@ -364,7 +370,7 @@ public class Tile {
 	 * does.
 	 */
 	public boolean hasOwner() {
-		if (owner == null)
+		if (owner == -1)
 			return false;
 		else
 			return true;
@@ -420,5 +426,20 @@ public class Tile {
 
 	public void setIsOccupiedByBuilding(boolean t) {
 		occupiedByBuilding = t;
+	}
+	
+	public void addUnit(Unit u) {
+		unitsOnTile.put(u.getId(), u);
+	}
+	
+	public Unit removeUnit(UUID unitId) {
+		if (unitsOnTile.containsKey(unitId))
+			return unitsOnTile.remove(unitId);
+		else
+			return null;
+	}
+	
+	public HashMap<UUID, Unit> getUnits() {
+		return unitsOnTile;
 	}
 }
