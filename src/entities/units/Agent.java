@@ -21,7 +21,7 @@ import entities.stats.UnitStats;
  * 
  */
 public abstract class Agent extends Unit {
-	private Map<String, Unit> underlings; // TODO possibly replace Unit or String with their unique ID's (UUID?)
+	private Map<UUID, Unit> underlings; // TODO possibly replace Unit or String with their unique ID's (UUID?)
 	private CommandQueue cq; // list of current commnands to issue.
 
 	/*
@@ -36,7 +36,7 @@ public abstract class Agent extends Unit {
 	public Agent(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, GameObjectType type, UnitType unitType, float xco,
 			float yco) {
 		super(id, playerId,  baseStats, new_stats, type, unitType, xco, yco);
-		underlings = new HashMap<String, Unit>();
+		underlings = new HashMap<UUID, Unit>();
 		cq = new CommandQueue();
 	}
 

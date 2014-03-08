@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Queue;
 
+import controller.GameBoard;
 import entities.buildings.Building;
 import entities.buildings.ResourceBuilding;
-import entities.gameboard.GameBoard;
+import entities.resources.Resources;
 import entities.units.Unit;
 
 
@@ -16,14 +17,12 @@ public class Controller implements Runnable {
 	private PlayerCommands sharedInstructions;
 	private Queue<Command> currentInstructions;
 	private int turnWaitTime;//in ms
-	private GameState gs;
 	
 	
-	public Controller(PlayerCommands instructions, GameState gs) {
+	public Controller(PlayerCommands instructions) {
 		players = new ArrayList<Player>();
 		this.sharedInstructions = instructions;
 		turnWaitTime = 1000;
-		this.gs = gs;
 	}
 
 	@Override
@@ -48,11 +47,12 @@ public class Controller implements Runnable {
 			}
 //			turnNum++;
 		}
-		gs.update(players, map);
+		players.get(0).setResources(new Resources(500, 500, 500, 500));
+		
 		//actual game execution
 		boolean gameRunning = true;
 		while (gameRunning) {
-			gs.toString();
+			
 			try {
 				Thread.sleep(turnWaitTime);
 			} catch (InterruptedException e) {
@@ -64,30 +64,28 @@ public class Controller implements Runnable {
 			agentDecision();
 			unitInteraction();
 			gameRunning = playerCommands();
-			gs.update(players, map);
 		}
 	}
-	
+	//Lloyd: not needed
 	private void gameStatus() {
 		System.out.println("Game State:");
 		System.out.print("Players: ");
 		for (Player player : players) {
-			player.getAlias();
-			System.out.print(player.getAlias() + ",");
+			player.toString();
 		}
 		System.out.println();
-		for (Player player : players) {
-			System.out.println(player.getAlias()+ "'s Resources:");
-			System.out.println(player.getResources().toString());
-			System.out.println(player.getAlias() + "'s Units: ");
-			for (Unit u : player.getGameObjects().getUnits().values()) {
-				System.out.println(u.toString());
-			}
-			System.out.println(player.getAlias() + "'s Buildings: ");
-			for (Building b : player.getGameObjects().getBuildings().values()) {
-				System.out.println(b.toString());
-			}
-		}
+//		for (Player player : players) {
+//			System.out.println(player.getAlias()+ "'s Resources:");
+//			System.out.println(player.getResources().toString());
+//			System.out.println(player.getAlias() + "'s Units: ");
+//			for (Unit u : player.getGameObjects().getUnits().values()) {
+//				System.out.println(u.toString());
+//			}
+//			System.out.println(player.getAlias() + "'s Buildings: ");
+//			for (Building b : player.getGameObjects().getBuildings().values()) {
+//				System.out.println(b.toString());
+//			}
+//		}
 	}
 
 	private boolean playerCommands() {
@@ -124,9 +122,13 @@ public class Controller implements Runnable {
 	private void produceResources() {
 		for(Player player : players) {
 			for (ResourceBuilding building : player.getGameObjects().getResourceBuildings().values()) {
-				
-				building.generateResource();
+				//Lloyd: send action to building to generate resources
+			//	building.generateResource();
 			}
 		}
 	}	
+	
+	public Player getPlayer(int id) {
+		return players.get(id-1);
+	}
 }

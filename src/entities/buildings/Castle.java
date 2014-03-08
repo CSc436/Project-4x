@@ -5,11 +5,11 @@ import java.util.UUID;
 
 import control.BuildingType;
 import entities.GameObjectType;
+import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 
-public class Castle extends Building {
-
+public class Castle extends ResourceBuilding {
 	// main hub
 
 	private int populationCap;
@@ -17,10 +17,10 @@ public class Castle extends Building {
 
 	public Castle(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, 
 			GameObjectType gameObjectType, BuildingType buildingType, float xco,
-			float yco, int height, int width, int populationCap, int influenceArea) {
+			float yco, int height, int width, int populationCap, int influenceArea, Resources baseResourceAmount) {
 		super(id, playerId, baseStats, new_stats, 
 				gameObjectType, buildingType, xco,
-				yco, height, width);
+				yco, height, width, baseResourceAmount);
 		this.populationCap = populationCap;
 		this.influenceArea = influenceArea;
 	}
@@ -33,6 +33,12 @@ public class Castle extends Building {
 
 	@Override
 	public HashMap<String, String> getActions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Resources generateResource() {
 		// TODO Auto-generated method stub
 		return null;
 	}

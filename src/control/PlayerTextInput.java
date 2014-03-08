@@ -2,16 +2,18 @@ package control;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.UUID;
+
+import entities.GameObject;
 
 //might break this into two threads. one for input, one for update
 public class PlayerTextInput implements Runnable {
 	private PlayerCommands instructions;
 	private ArrayList<Object> payload;
-	private GameState gs;
+	Controller controller;
 	public PlayerTextInput(PlayerCommands instructions) {
 		this.instructions = instructions;
 		payload = new ArrayList<Object>();
-		gs = new GameState();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -40,21 +42,21 @@ public class PlayerTextInput implements Runnable {
 		
 		//start controller in here
 		System.out.println("Let's start!");
-		Thread controller = new Thread(new Controller(instructions, gs));
-		controller.start();
-		
-		
+		controller = new Controller(instructions);
+		Thread t = new Thread(controller);
+		t.start();		
 		
 		while(result != -1) {
 			System.out.println("Which player is entering commands?");
 			int player = keyboard.nextInt();
 			System.out.println("What would you like to do?");
-			System.out.println("1. select gameobject\n2. build building\n-1. quit");
+			System.out.println("1. gameobject interaction\n2. build gameobject\n" + 
+					"3. show game status\n-1. quit");
 			result = keyboard.nextInt();
 			
 			switch (result) {
 			case 1:
-				gameObjectSelection(player, keyboard);
+				gameObjectInteraction(player, keyboard);
 				break;
 			}
 			//instructions.push(result);
@@ -63,10 +65,14 @@ public class PlayerTextInput implements Runnable {
 		System.out.println("text input thread ended");
 	}
 
-	private void gameObjectSelection(int player, Scanner keyboard) {
+	private void gameObjectInteraction(int playerId, Scanner keyboard) {
 		System.out.println("Which gameObject would you like to select?");
-		System.out.println(gs.getPlayerSelectables(player));
-		long choice = keyboard.nextLong();//will need to input id
+		Player player = controller.getPlayer(playerId);
+		System.out.println(player.toString());
+		UUID id = UUID.fromString(keyboard.next());
+		GameObject go = player.getGameObjects().getAll().get(id);
+		go.getActions();
+		//show available actions
+		
 	}
-
 }
