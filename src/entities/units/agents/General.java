@@ -1,7 +1,8 @@
-package entities.units;
+package entities.units.agents;
 
 import control.AIControl;
 import control.Player;
+import entities.units.Agent;
 
 //queueing of commands for controller, controller checks queue each
 //time segment, decides how many commands to execute. New commands

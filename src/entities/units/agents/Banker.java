@@ -1,6 +1,7 @@
-package entities.units;
+package entities.units.agents;
 
 import control.Player;
+import entities.units.Agent;
 
 /**
  * 

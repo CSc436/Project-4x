@@ -10,6 +10,7 @@ import entities.stats.UnitStats;
 import entities.units.Unit;
 import entities.units.pawns.Archer;
 import entities.units.pawns.Battering_Ram;
+import entities.units.pawns.Cannon;
 import entities.units.pawns.Catapult;
 import entities.units.pawns.Dragoon;
 import entities.units.pawns.Infantry;
@@ -68,7 +69,8 @@ public class Factory {
 					BaseStatsEnum.CATAPULT.getStats(), GameObjectType.UNIT,
 					UnitType.CATAPULT, xco, yco);
 		case BATTERING_RAM:
-			result = new Battering_Ram(newId, playerId, BaseStatsEnum.BATTERING_RAM,
+			result = new Battering_Ram(newId, playerId,
+					BaseStatsEnum.BATTERING_RAM,
 					BaseStatsEnum.BATTERING_RAM.getStats(),
 					GameObjectType.UNIT, UnitType.BATTERING_RAM, xco, yco);
 		case RIFLEMAN:
@@ -115,7 +117,19 @@ public class Factory {
 			result = new Barracks(newId, playerId, BaseStatsEnum.BARRACKS,
 					BaseStatsEnum.BARRACKS.getStats(), GameObjectType.BUILDING,
 					BuildingType.BARRACKS, xco, yco, height, width);
+
+		case BANK:
+			result = new Barracks(newId, playerId, BaseStatsEnum.BANK,
+					BaseStatsEnum.BANK.getStats(), GameObjectType.BUILDING,
+					BuildingType.BANK, xco, yco, height, width);
+
+		case TOWN_HALL:
+			result = new Barracks(newId, playerId, BaseStatsEnum.TOWN_HALL,
+					BaseStatsEnum.TOWN_HALL.getStats(),
+					GameObjectType.BUILDING, BuildingType.TOWN_HALL, xco, yco,
+					height, width);
 		default:
+
 			// result = new Barracks(p, 1, 1, uniqueid);
 		}
 		return result;

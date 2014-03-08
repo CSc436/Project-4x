@@ -13,34 +13,36 @@ public class Resources {
 		ResearchPts = startingRPts;
 	}
 
-
-	public boolean spend(Resources cost) {
-		if (!have_enough_resources(cost)) return false;
-		Gold -= cost.Gold;
-		Wood -= cost.Wood;
-		Food -= cost.Food;
-		ResearchPts -= cost.ResearchPts;
+	public boolean spend(int gold, int wood, int food, int rp) {
+		if (!have_enough_resources(gold, wood, food, rp))
+			return false;
+		Gold -= gold;
+		Wood -= wood;
+		Food -= food;
+		ResearchPts -= rp;
 		return true;
 	}
-	
-	public void receive(Resources amount) {
-		Gold += amount.Gold;
-		Wood += amount.Wood;
-		Food += amount.Food;
-		ResearchPts += amount.ResearchPts;
+
+	public void receive(int gold, int wood, int food, int rp) {
+		Gold += gold;
+		Wood += wood;
+		Food += food;
+		ResearchPts += rp;
 	}
-	
+
 	public Resources scale(Resources r) {
-		return new Resources(Gold * r.Gold, Wood * r.Wood, Food * r.Food, ResearchPts * r.ResearchPts);
+		return new Resources(Gold * r.Gold, Wood * r.Wood, Food * r.Food,
+				ResearchPts * r.ResearchPts);
 	}
-	
-	public boolean have_enough_resources(Resources r) {
-		if (r.Gold > Gold || r.Wood > Wood || r.Food > Food || r.ResearchPts > ResearchPts)
+
+	public boolean have_enough_resources(int gold, int wood, int food, int rp) {
+		if (gold > Gold || wood > Wood || food > Food || rp > ResearchPts)
 			return false;
 		return true;
 	}
-	
+
 	public String toString() {
-		return "Gold: "+Gold + "\nWood: "+ Wood + "\nFood: " + Food + "\nResearch: "+ ResearchPts;
+		return "Gold: " + Gold + "\nWood: " + Wood + "\nFood: " + Food
+				+ "\nResearch: " + ResearchPts;
 	}
 }

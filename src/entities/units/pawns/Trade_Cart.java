@@ -5,11 +5,14 @@ import java.util.UUID;
 
 import control.UnitType;
 import entities.GameObjectType;
+import entities.buildings.Town_Hall;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 import entities.units.Unit;
 
 public class Trade_Cart extends Unit{
+	
+	Town_Hall tradingCity;
 
 	public Trade_Cart(UUID id, int playerId, BaseStatsEnum baseStats,
 			UnitStats new_stats, GameObjectType type, UnitType unitType,
@@ -28,6 +31,14 @@ public class Trade_Cart extends Unit{
 	public HashMap<String, String> getActions() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public void setTradingCity(Town_Hall x) {
+		tradingCity = x;
+	}
+	
+	public Town_Hall getTradingCity() {
+		return tradingCity;
 	}
 
 }

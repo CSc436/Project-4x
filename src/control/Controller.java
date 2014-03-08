@@ -126,6 +126,7 @@ public class Controller implements Runnable {
 			for (ResourceBuilding building : player.getGameObjects().getResourceBuildings().values()) {
 				
 				building.generateResource();
+				
 			}
 		}
 	}	
