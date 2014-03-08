@@ -48,6 +48,14 @@ public class MovingUnit implements Serializable {
 		double timeSeconds = timeSinceUpdate / 1000.0;
 		PhysicsVector tempTargetVelocity = targetPosition.sub(position).normalize(maxVelocity);
 		PhysicsVector tempVelocity = velocity.setToTarget(tempTargetVelocity, accel * timeSeconds);
+		
+		double distance = position.sub(targetPosition).magnitude();
+		double velMag = tempVelocity.magnitude();
+		if( distance <= velMag * velMag / (2 * accel) ) {
+			tempTargetVelocity = tempVelocity.normalize(Math.sqrt(2 * distance * accel));
+			tempVelocity = tempVelocity.setToTarget(tempTargetVelocity, accel * timeSeconds);
+		}
+		
 		PhysicsVector tempPosition = position.add(tempVelocity.multiply(timeSeconds));
 		
 		double[] positionArray = new double[2];

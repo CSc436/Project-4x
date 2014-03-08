@@ -7,13 +7,15 @@ import java.util.Queue;
 public class Model implements Runnable {
 	public MovingUnit unit;
 	public boolean isBlack;
-	public int timeStep = 100; // Number of milliseconds per simulation step
+	public int timeStep = 200; // Number of milliseconds per simulation step
 	public int turnNumber;
 	public boolean continueSimulation = true;
 	private long lastTime = System.currentTimeMillis();
 	private Queue<Integer> runningAvgQueue = new LinkedList<Integer>();
 	private int movingAverage = timeStep;
 	private int numTimesSaved = 3; // Keep track of the last n cycle times to compute moving average
+	private Queue<Request> requestQueue = new LinkedList<Request>();
+	private boolean stop = false;
 	
 	public Model() {
 		unit = new MovingUnit( 0.0, 0.0, 3.0 );
@@ -23,26 +25,25 @@ public class Model implements Runnable {
 	}
 	
 	public void run() {
-		/*
-		turnNumber = -1; // Last fully completed turn
-		long lastEndTime = System.currentTimeMillis();
-		while(true) {
-			long startTime = lastEndTime;
-
-			
-			while( System.currentTimeMillis() < startTime + timeStep || !continueSimulation );
-			
-			continueSimulation = true;
-			turnNumber++;
-			
-			lastEndTime = lastEndTime + timeStep;
-			System.out.println("Turn " + turnNumber + " finished");
-		}
-		*/
 		lastTime = System.currentTimeMillis();
+		stop = false;
+		while(!stop) {
+			simulateFrame();
+		}
 	}
 	
 	public void simulateFrame() {
+		Queue<Request> frameRequestQueue = requestQueue;
+		requestQueue = new LinkedList<Request>();
+		
+		while(!frameRequestQueue.isEmpty()) {
+			Request r = frameRequestQueue.remove();
+			r.executeOn(this);
+		}
+		
+		unit.simulateTimeStep( movingAverage );
+		//System.out.println("Server >>> "  + unit.position.getX() + " " + unit.position.getY());
+		
 		// Wait for minimum time to elapse, if required
 		long currTime;
 		do {
@@ -50,8 +51,6 @@ public class Model implements Runnable {
 		} while( currTime < lastTime + timeStep );
 		
 		updateRunningAverage( (int) (currTime - lastTime) );
-		unit.simulateTimeStep( movingAverage );
-		System.out.println("Server >>> "  + unit.position.getX() + " " + unit.position.getY());
 		lastTime = currTime;
 		turnNumber++;
 	}
@@ -76,6 +75,14 @@ public class Model implements Runnable {
 	
 	public void continueSimulation() {
 		continueSimulation = true;
+	}
+	
+	public void queueRequest( Request r ) {
+		requestQueue.add(r);
+	}
+	
+	public void stop() {
+		stop = true;
 	}
 	
 }

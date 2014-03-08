@@ -17,7 +17,11 @@ public interface SimpleSimulatorAsync {
 	
 	void startSimulation(AsyncCallback<String> callback);
 	
-	void getSimulationState(int turnNumber, AsyncCallback<MovingUnit> callback);
+	void getSimulationState(int playerNumber, AsyncCallback<MovingUnit> callback);
 	
 	void confirmReceipt(int turnNumber, AsyncCallback<String> callback);
+	
+	void joinSimulation(AsyncCallback<Integer> callback);
+	
+	void exitGame(int playerNumber, AsyncCallback<Integer> callback);
 }

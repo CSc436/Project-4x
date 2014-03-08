@@ -7,6 +7,8 @@ import com.client.SimpleSimulator;
 import com.client.SimpleSimulatorAsync;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.ClosingEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.shared.MovingUnit;
 import com.shared.Request;
@@ -15,6 +17,7 @@ import com.shared.SetTargetRequest;
 public class ClientModel {
 	
 	private int turnNumber = -1;
+	private int playerNumber = -1;
 	float[] position = { 0.0F, 0.0F };
 	private long lastUpdateTime;
 	private final SimpleSimulatorAsync simpleSimulator;
@@ -27,18 +30,26 @@ public class ClientModel {
 	private Queue<Request> requestQueue = new LinkedList<Request>();
 	
 	public ClientModel() {
+		
 		simpleSimulator = GWT.create(SimpleSimulator.class);
+		/*
+		Window.addWindowClosingHandler(new Window.ClosingHandler() {
+			
+			@Override
+			public void onWindowClosing(ClosingEvent event) {
+				simpleSimulator.exitGame(playerNumber, null);
+				
+			}
+		});
+		*/
 	}
 	
 	public void setTarget( double x, double y ) {
 		
 		Request r = new SetTargetRequest(x,y);
 		
-		requestQueue.add(r);
+		//requestQueue.add(r);
 		
-		nextUnit.setTarget(x, y);
-		
-		/*
 		simpleSimulator.sendRequest(r,
 				new AsyncCallback<Request[]>() {
 					public void onFailure(Throwable caught) {
@@ -48,10 +59,11 @@ public class ClientModel {
 					public void onSuccess(Request[] result) {
 						double x = ((SetTargetRequest) result[0]).x;
 						double y = ((SetTargetRequest) result[0]).y;
+						nextUnit.setTarget(x, y);
 						System.out.println("New target set: " + x + " " + y);
 					}
 				});
-		 */
+		 
 		
 	}
 	
@@ -70,7 +82,7 @@ public class ClientModel {
 		position[0] = (float) positionDouble[0];
 		position[1] = (float) positionDouble[1];
 		
-		System.out.println("Client >>> " + position[0] + " " + position[1]);
+		//System.out.println("Client >>> " + position[0] + " " + position[1]);
 		
 		return position;
 		
@@ -78,18 +90,19 @@ public class ClientModel {
 	
 	public void run() {
 		
-		simpleSimulator.startSimulation(new AsyncCallback<String>() {
+		simpleSimulator.joinSimulation(new AsyncCallback<Integer>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
-				System.out.println("Simulation failed to start");
+				System.out.println("Failed to join simulation");
 			}
 
 			@Override
-			public void onSuccess(String result) {
+			public void onSuccess(Integer playerNum) {
 				// TODO Auto-generated method stub
-				System.out.println("Simulation started");
+				System.out.println("Joined game");
+				playerNumber = playerNum;
 				startup();
 			}
 
@@ -119,7 +132,7 @@ public class ClientModel {
 				Queue<Request> tempQueue = requestQueue;
 				requestQueue = new LinkedList<Request>();
 				
-				simpleSimulator.sendRequests( tempQueue, new AsyncCallback<MovingUnit>() {
+				simpleSimulator.getSimulationState( playerNumber, new AsyncCallback<MovingUnit>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -145,7 +158,7 @@ public class ClientModel {
 
 		};
 
-		pollTimer.scheduleRepeating(30);
+		pollTimer.scheduleRepeating(50);
 		
 		Timer setTargetTimer = new Timer() {
 
