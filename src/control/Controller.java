@@ -8,6 +8,7 @@ import java.util.Queue;
 import entities.buildings.Building;
 import entities.buildings.ResourceBuilding;
 import entities.gameboard.GameBoard;
+import entities.gameboard.Tile;
 import entities.units.Unit;
 import entities.util.Point;
 
@@ -130,6 +131,15 @@ public class Controller implements Runnable {
 			}
 		}
 		return true;
+	}
+
+	/*
+	 * TODO implement - or move somewhere better. pathFinding() Description:
+	 * General pathfinding algorithm for units, somehow need to view the map.
+	 * uses A*.
+	 */
+	public Queue<Tile> pathFinding() {
+		return null;
 	}
 
 	private void unitInteraction() {

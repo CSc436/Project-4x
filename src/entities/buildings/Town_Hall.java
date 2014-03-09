@@ -33,12 +33,6 @@ public class Town_Hall extends ResourceBuilding {
 	}
 
 	@Override
-	public void generateResource() {
-		this.resourceAmount.receive(100,0,0,0);
-
-	}
-
-	@Override
 	protected void setActions() {
 		// TODO Auto-generated method stub
 

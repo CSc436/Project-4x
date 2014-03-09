@@ -26,7 +26,7 @@ public class RunGame extends Thread {
 		int y = Integer.parseInt(h);
 		int p = Integer.parseInt(pl);
 
-		GameBoard game = new GameBoard(x, y, p);
+		GameBoard game = new GameBoard(x, y);
 
 		JFrame frame = new JFrame("display");
 		frame.setVisible(true);

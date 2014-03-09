@@ -19,7 +19,8 @@ public class Prospector extends Agent{
 
 	
 	public Prospector(Player p, int idno) {
-		super(p, idno);
+		super(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, GameObjectType type, UnitType unitType, float xco,
+				float yco);
 		// TODO Auto-generated constructor stub
 	}
 

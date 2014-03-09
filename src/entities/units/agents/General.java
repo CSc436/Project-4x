@@ -1,5 +1,7 @@
 package entities.units.agents;
 
+import java.util.UUID;
+
 import control.AIControl;
 import control.Player;
 import entities.units.Agent;
@@ -13,8 +15,9 @@ public class General extends Agent {
 	private int range;
 	private AIControl brain;
 
-	public General(Player p, int idno) {
-		super(p, idno);
+	public General(UUID id, int playerId, int idno) {
+		super( id, playerId, BaseStatsEnum baseStats, UnitStats new_stats, GameObjectType type, UnitType unitType, float xco,
+				float yco);
 		// TODO Auto-generated constructor stub
 	}
 
