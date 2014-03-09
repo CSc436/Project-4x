@@ -5,6 +5,7 @@ import java.util.UUID;
 import control.AIControl;
 import control.Player;
 import entities.units.Agent;
+import entities.gameboard.GameBoard;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 import entities.GameObjectType;
@@ -53,5 +54,10 @@ public class General extends Agent {
 	 *      lead troops to city and invade.  
 	 * TODO add option to 'defend', send troops to ward off enemies at a city (an ally's or your own)
 	 */
+	
+	public void update(Player p, GameBoard gb)
+	{
+		// TODO implements
+	}
 
 }
