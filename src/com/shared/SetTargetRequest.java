@@ -24,7 +24,7 @@ public class SetTargetRequest extends Request {
 		this.y = y;
 	}
 	
-	public boolean executeOn(Model m) {
+	public boolean executeOn(MovingUnitModel m) {
 		m.setTarget(x, y);
 		return true;
 	}

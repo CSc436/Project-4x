@@ -8,8 +8,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import com.client.SimpleSimulator;
 import com.google.gwt.dev.util.collect.HashMap;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.shared.Model;
-import com.shared.MovingUnit;
+import com.shared.MovingUnitModel;
 import com.shared.Request;
 
 /**
@@ -19,8 +18,7 @@ import com.shared.Request;
 public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 		SimpleSimulator {
 	
-	Model m = new Model();
-	Thread modelThread = new Thread(m);
+	ModelController m = new ModelController();
 	int currentTurn;
 	boolean debug = false;
 	
@@ -44,7 +42,7 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 		return new Request[] {input};
 	}
 	
-	public MovingUnit sendRequests( Queue<Request> requestQueue ) {
+	public MovingUnitModel sendRequests( Queue<Request> requestQueue ) {
 		/*
 		while( !requestQueue.isEmpty() ) {
 			Request r = requestQueue.remove();
@@ -73,8 +71,8 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 	@Override
 	public String startSimulation() {
 		
-		if(!modelThread.isAlive())
-			modelThread.start();
+		if(!m.isRunning)
+			m.run();
 		
 		return null;
 	}
@@ -104,7 +102,7 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public MovingUnit getSimulationState( int playerNumber, int lastTurnReceived ) {
+	public MovingUnitModel getSimulationState( int playerNumber, int lastTurnReceived ) {
 		while(!m.sendingGame()) {
 			//System.out.println("    Client already up to date");
 			try {
@@ -118,8 +116,7 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 	}
 	
 	public Integer joinSimulation() {
-		if(!modelThread.isAlive())
-			modelThread.start();
+		if(!m.isRunning) m.run();
 		playerTable.put(nextPlayerSlot, true);
 		return nextPlayerSlot++;
 	}

@@ -10,7 +10,8 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.ClosingEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.shared.MovingUnit;
+import com.google.gwt.user.client.rpc.impl.Serializer;
+import com.shared.MovingUnitModel;
 import com.shared.Request;
 import com.shared.SetTargetRequest;
 
@@ -21,8 +22,8 @@ public class ClientModel {
 	float[] position = { 0.0F, 0.0F };
 	private long lastUpdateTime;
 	private final SimpleSimulatorAsync simpleSimulator;
-	private MovingUnit lastUnit;
-	private MovingUnit nextUnit = new MovingUnit(0.0, 0.0, 3.0);
+	private MovingUnitModel lastUnit;
+	private MovingUnitModel nextUnit = new MovingUnitModel(0.0, 0.0, 3.0);
 	private int averageTurnInterval = 200;
 	private boolean readyForNext = true;
 	private int cycleTime = 100;
@@ -32,7 +33,7 @@ public class ClientModel {
 	public ClientModel() {
 		
 		simpleSimulator = GWT.create(SimpleSimulator.class);
-		/*
+		
 		Window.addWindowClosingHandler(new Window.ClosingHandler() {
 			
 			@Override
@@ -41,7 +42,7 @@ public class ClientModel {
 				
 			}
 		});
-		*/
+		
 	}
 	
 	public void setTarget( double x, double y ) {
@@ -132,7 +133,7 @@ public class ClientModel {
 				Queue<Request> tempQueue = requestQueue;
 				requestQueue = new LinkedList<Request>();
 				
-				simpleSimulator.getSimulationState( playerNumber, turnNumber, new AsyncCallback<MovingUnit>() {
+				simpleSimulator.getSimulationState( playerNumber, turnNumber, new AsyncCallback<MovingUnitModel>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -141,7 +142,9 @@ public class ClientModel {
 					}
 
 					@Override
-					public void onSuccess(MovingUnit result) {
+					public void onSuccess(MovingUnitModel result) {
+						
+						
 						
 						lastUnit = nextUnit;
 						nextUnit = result;
@@ -159,7 +162,7 @@ public class ClientModel {
 
 		};
 
-		pollTimer.scheduleRepeating(100);
+		pollTimer.scheduleRepeating(20);
 		
 		Timer setTargetTimer = new Timer() {
 

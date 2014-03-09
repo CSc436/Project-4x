@@ -1,11 +1,15 @@
-package com.shared;
+package com.server;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import com.shared.MovingUnitModel;
+import com.shared.Request;
 
-public class Model implements Runnable {
-	public MovingUnit unit;
+public class ModelController implements Runnable {
+	public MovingUnitModel unit;
 	public boolean isBlack;
 	public int timeStep = 200; // Number of milliseconds per simulation step
 	public int turnNumber = 0;
@@ -17,51 +21,55 @@ public class Model implements Runnable {
 	private Queue<Request> requestQueue = new LinkedList<Request>();
 	private boolean stop = false;
 	private boolean sendGame = false;
+	public boolean isRunning;
 	
-	public Model() {
-		unit = new MovingUnit( 0.0, 0.0, 3.0 );
+	public ModelController() {
+		unit = new MovingUnitModel( 0.0, 0.0, 3.0 );
 		isBlack = false;
 		for(int i = 0; i < numTimesSaved; i++)
 			runningAvgQueue.add(timeStep);
 	}
 	
 	public void run() {
+		isRunning = true;
 		lastTime = System.currentTimeMillis();
 		stop = false;
-		while(!stop) {
-			simulateFrame();
-		}
+		
+		Timer timer = new Timer();
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run() {
+				simulateFrame();
+			}
+		};
+
+		timer.scheduleAtFixedRate(task, 0, 10);
+
 	}
 	
 	public void simulateFrame() {
+		
+		long currTime = System.currentTimeMillis();
+		//if( !continueSimulation ) return;
+		if( currTime < lastTime + timeStep || !continueSimulation ) return;
+		
+		continueSimulation = false;
+		updateRunningAverage( (int) (currTime - lastTime) );
+		lastTime = currTime;
+		
 		Queue<Request> frameRequestQueue = requestQueue;
 		requestQueue = new LinkedList<Request>();
 		
 		while(!frameRequestQueue.isEmpty()) {
 			Request r = frameRequestQueue.remove();
-			r.executeOn(this);
+			r.executeOn(this.unit);
 		}
 		
 		unit.simulateTimeStep( movingAverage );
 		//System.out.println("Server >>> "  + unit.position.getX() + " " + unit.position.getY());
 		turnNumber++;
 		sendGame = true; // Game updated, ready to update clients
-		// Wait for minimum time to elapse and wait for clients to confirm receipt of game state
-		long currTime;
-		do {
-			currTime = System.currentTimeMillis();
-			//System.out.println(">>> Waiting for clients...");
-			System.out.println( (currTime < lastTime + timeStep) + " " + !continueSimulation );
-			
-			while( System.currentTimeMillis() < currTime + 30) {
-				continue;
-			}
-			
-		} while( currTime < lastTime + timeStep || !continueSimulation );
 		
-		continueSimulation = false;
-		updateRunningAverage( (int) (currTime - lastTime) );
-		lastTime = currTime;
 	}
 
 	private void updateRunningAverage(int newTime) {
@@ -78,7 +86,7 @@ public class Model implements Runnable {
 		unit.setTarget(x, y);
 	}
 	
-	public MovingUnit getUnit() {
+	public MovingUnitModel getUnit() {
 		return unit;
 	}
 	

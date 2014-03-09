@@ -2,7 +2,7 @@ package control;
 
 import java.util.List;
 
-import com.shared.MovingUnit;
+import com.shared.MovingUnitModel;
 
 import entities.buildings.ResourceBuilding;
 import entities.gameboard.GameBoard;
@@ -11,7 +11,7 @@ import entities.units.Unit;
 public class Controller implements Runnable {
 	List<Player> players;
 	GameBoard map;
-	MovingUnit number;
+	MovingUnitModel number;
 
 	public Controller() {
 

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.fourx.util.Point;
 
-public class MovingUnit implements Serializable {
+public class MovingUnitModel implements Serializable {
 	public double maxVelocity; // Movement velocity, in units per second
 	public PhysicsVector position;
 	public PhysicsVector targetPosition;
@@ -13,18 +13,18 @@ public class MovingUnit implements Serializable {
 	public double accel = 3.0; // Maximum velocity change allowable, in units per second per second
 	public int turnNumber;
 	
-	public MovingUnit() {
+	public MovingUnitModel() {
 		position = new PhysicsVector(0,0);
 		targetPosition = new PhysicsVector(0,0);
 		maxVelocity = 1;
 		turnNumber = 0;
 	}
 	
-	public MovingUnit(double x, double y, double vel) {
+	public MovingUnitModel(double x, double y, double vel) {
 		position = new PhysicsVector(x,y);
 		targetPosition = new PhysicsVector(x,y);
-		maxVelocity = vel;
-		accel = vel;
+		maxVelocity = 10;
+		accel = 10;
 		turnNumber = 0;
 	}
 	
