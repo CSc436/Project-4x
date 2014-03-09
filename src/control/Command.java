@@ -7,25 +7,41 @@ public class Command {
 	private final Actions action;
 	private final Targets target;
 	private final ArrayList<Object> payload;
+
 	public Command(Actions action, Targets target, ArrayList<Object> payload) {
 		this.action = action;
 		this.target = target;
 		this.payload = new ArrayList<Object>(payload);
 	}
-	
+
 	public boolean validateCommand() {
 		return true;
 	}
-	
+
 	public Actions getAction() {
 		return action;
 	}
-	
+
 	public Targets getTarget() {
 		return target;
 	}
-	
+
 	public ArrayList<Object> getPayload() {
 		return payload;
+	}
+
+	public String toString() {
+		String result;
+
+		result = "action : " + action + "\n";
+		result += "target : " + target + "\n";
+		result += "payload :\n";
+
+		for (int x = 0; x < payload.size(); x++) {
+			result += payload.get(x) + "\n";
+		}
+
+		return result;
+
 	}
 }

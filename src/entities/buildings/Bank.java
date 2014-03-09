@@ -57,9 +57,4 @@ public class Bank extends ResourceBuilding {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public void generateResource() {
-		// TODO Auto-generated method stub
-	}
 }

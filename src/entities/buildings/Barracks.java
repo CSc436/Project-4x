@@ -10,8 +10,7 @@ import entities.stats.UnitStats;
 
 public class Barracks extends Building {
 
-	private static int soldierAmount = 20;
-	static int newSoldiers;
+
 
 	public Barracks(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, 
 			GameObjectType gameObjectType, BuildingType buildingType, float xco,
@@ -37,10 +36,6 @@ public class Barracks extends Building {
 		}
 	}
 
-	protected int getSoldiers() {
-		soldierAmount += Barracks.setSoldiers(0);
-		return soldierAmount;
-	}
 
 	@Override
 	protected void setActions() {

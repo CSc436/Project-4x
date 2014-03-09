@@ -14,31 +14,23 @@ import entities.units.Unit;
 
 public abstract class Building extends GameObject {
 
-	// buildings will be > 1 tile
-
-	// initial building types
-
-	// unit producing
-	// resource producing
-	// research options
-	// defense units
-
-	// garrison?
-
 	private int height; // height of the structure
 	private int width; // width of the structure
-	private long castleId = Tools.generateUniqueId();//this is how a building knows what 'city' it belongs to
+	private long castleId = Tools.generateUniqueId();// this is how a building
+														// knows what 'city' it
+														// belongs to
 	private BuildingType buildingType;
 	private Queue<Unit> buildingQ = new LinkedList<Unit>();
 
-	public Building(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, 
-			GameObjectType gameObjectType, BuildingType buildingType, float xco,
-			float yco, int height, int width) {
+	public Building(UUID id, int playerId, BaseStatsEnum baseStats,
+			UnitStats new_stats, GameObjectType gameObjectType,
+			BuildingType buildingType, float xco, float yco, int height,
+			int width) {
 		super(id, playerId, baseStats, new_stats, gameObjectType, xco, yco);
 		this.buildingType = buildingType;
 		this.height = height;
 		this.width = width;
-		//super(p, baseStats, type, xco, yco);
+		// super(p, baseStats, type, xco, yco);
 		this.height = height;
 		this.width = width;
 
@@ -51,7 +43,7 @@ public abstract class Building extends GameObject {
 	public int getWidth() {
 		return width;
 	}
-	
+
 	/*
 	 * Holding the Queue for the units that the building is responsible for
 	 * producing. It can add units to its queue or remove finished units from
@@ -68,4 +60,6 @@ public abstract class Building extends GameObject {
 	public long getCastleId() {
 		return castleId;
 	}
+
+
 }

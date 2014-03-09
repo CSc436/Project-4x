@@ -1,8 +1,14 @@
 package entities.units.agents;
 
+import java.util.UUID;
+
 import control.AIControl;
 import control.Player;
 import entities.units.Agent;
+import entities.stats.BaseStatsEnum;
+import entities.stats.UnitStats;
+import entities.GameObjectType;
+import control.UnitType;
 
 //queueing of commands for controller, controller checks queue each
 //time segment, decides how many commands to execute. New commands
@@ -12,12 +18,43 @@ public class General extends Agent {
 
 	private int range;
 	private AIControl brain;
-
-	public General(Player p, int idno) {
-		super(p, idno);
+	int prestige;
+	/**
+	 * General():
+	 * @param id       - unique id for this General object
+	 * @param playerId - id of player that owns this general
+	 * @param UnitStasts stats - stats this unit should currently have. 
+	 * @param xco  - initial x coordinate on gameboard of general object. 
+	 * @param yco  - initial y coordinate on gameboard of genera object. 
+	 */
+	public General(UUID id, int playerId, UnitStats new_stats, float xco, float yco) {
+		super( id, playerId, BaseStatsEnum.GENERAL, new_stats, GameObjectType.UNIT, UnitType.GENERAL,  xco,
+				 yco);
 		// TODO Auto-generated constructor stub
 	}
 
+	public void addPrestige(int i){
+		prestige+=i;
+	}
+	
+	public int getPrestige(){
+		if(prestige<100)
+			return 1;
+		else if (prestige>1000)
+			return 3;
+		else return 2;
+	}
+	
+	public String acceptCommandByPrestige(int i){
+		switch(i){
+		case(0):return "nothing";
+		case(1):return "no";
+		case(2):return "maybe no";
+		case(3):return "yes";
+		default:return "nothing";
+		}
+	}
+	
 	public String decision() {
 		return "NO";
 	}

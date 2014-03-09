@@ -39,6 +39,11 @@ public enum BaseStatsEnum {
 
 	TRADE_CART(new UnitStats(0, 1, 1, .4f, 40f, 4, 1.0f)),
 
+	// AGENTS 
+	GENERAL(new UnitStats(9, 1, 3, 60f, 10, 6, 3.0f)),
+	
+	PROSPECTOR(new UnitStats(1, 1, 2, .5f, 6, 6, 3.0f)), 
+	
 	// BUILDINGS
 
 	BARRACKS(new UnitStats(0, 2, 100, 0, 1000, 0, 0)),
@@ -48,9 +53,15 @@ public enum BaseStatsEnum {
 	TOWN_HALL(new UnitStats(0, 2, 100, 0, 1000, 0, 0));
 
 	private UnitStats stats;
+	private int baseCreationTime;
 
 	private BaseStatsEnum(UnitStats stats) {
+		this(stats, 100);
+	}
+
+	private BaseStatsEnum(UnitStats stats, int creationTime) {
 		this.stats = stats;
+		this.baseCreationTime = creationTime;
 	}
 
 	public UnitStats getStats() {
@@ -72,5 +83,9 @@ public enum BaseStatsEnum {
 		s.health = s.max_health * (current_health / current_max);
 
 		return s;
+	}
+
+	public int getCreationTime() {
+		return baseCreationTime;
 	}
 }

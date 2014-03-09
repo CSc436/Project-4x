@@ -1,7 +1,13 @@
 package entities.units.agents;
 
+import java.util.UUID;
+
 import control.Player;
 import entities.units.Agent;
+import entities.stats.BaseStatsEnum;
+import entities.stats.UnitStats;
+import entities.GameObjectType;
+import control.UnitType;
 
 /**
  * 
@@ -18,8 +24,17 @@ import entities.units.Agent;
 public class Prospector extends Agent{
 
 	
-	public Prospector(Player p, int idno) {
-		super(p, idno);
+	/**
+	 * General():
+	 * @param id       - unique id for this Prospector object
+	 * @param playerId - id of player that owns this general
+	 * @param UnitStasts stats - stats this unit should currently have. 
+	 * @param xco  - initial x coordinate on gameboard of Prospector object. 
+	 * @param yco  - initial y coordinate on gameboard of Prospector object. 
+	 */
+	public Prospector(UUID id, int playerid, UnitStats stats, float xco, float yco) {
+		super(id,  playerid, BaseStatsEnum.PROSPECTOR, stats, GameObjectType.UNIT, UnitType.PROSPECTOR, xco,
+			 yco);
 		// TODO Auto-generated constructor stub
 	}
 

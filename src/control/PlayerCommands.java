@@ -18,14 +18,19 @@ public class PlayerCommands {
 	}
 	
 	public synchronized Command pop() {
-		return commands.poll();
+		Command x = commands.poll();
+		
+		System.out.println(x.toString());
+		return x;
 	}
 	
 	public synchronized Queue<Command> dump() {
 		//System.out.println("Migrate to Ben Whitely's hashing thing.");
 		//TODO: Migrate to Ben Whitely's hashing thing.
 		
-		Queue<Command> temp = new ArrayDeque<Command>(commands);
+		System.out.println("Dumping commands: " + commands.size());
+		Queue<Command> temp = new ArrayDeque<Command>();
+		temp.addAll(commands);
 		commands.clear();
 		return temp;
 	}

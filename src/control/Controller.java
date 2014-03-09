@@ -2,12 +2,15 @@ package control;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Queue;
 
 import entities.buildings.Building;
 import entities.buildings.ResourceBuilding;
 import entities.gameboard.GameBoard;
+import entities.gameboard.Tile;
 import entities.units.Unit;
+import entities.util.Point;
 
 public class Controller implements Runnable {
 	private ArrayList<Player> players;
@@ -28,8 +31,9 @@ public class Controller implements Runnable {
 	public void run() {
 		System.out.println("Setup : ");
 		currentInstructions = sharedInstructions.dump();
-		System.out.println(currentInstructions.peek().getTarget());
+
 		for (Command comm : currentInstructions) {
+			System.out.println(comm.getTarget());
 			if (comm.getAction() != Actions.STARTUP_CREATE) {
 				System.out.println("You suck for not using startup_create");
 			}
@@ -48,7 +52,7 @@ public class Controller implements Runnable {
 			}
 			// turnNum++;
 		}
-		
+
 		gs.update(players, map);
 		gameStatus();
 		// actual game execution
@@ -66,6 +70,11 @@ public class Controller implements Runnable {
 			agentDecision();
 			unitInteraction();
 			gameRunning = playerCommands();
+			System.out.println("STILL RUNNING: " + gameRunning);
+			System.out
+					.println("STILL RUNNING: "
+							+ players.get(0).getGameObjects().getBuildings()
+									.toString());
 			gs.update(players, map);
 		}
 	}
@@ -98,16 +107,39 @@ public class Controller implements Runnable {
 	private boolean playerCommands() {
 		currentInstructions = sharedInstructions.dump();
 		for (Command comm : currentInstructions) {
+
 			switch (comm.getAction()) {
-			case STARTUP_CREATE:
-		
+
+			case CREATE_BUILDING:
+
+				List<Object> payload = comm.getPayload();
+
+				int playerid = (int) payload.get(0);
+				BuildingType type = (BuildingType) payload.get(1);
+				Point bp = (Point) payload.get(2);
+
+				Building b = Factory.buildBuilding(playerid, type, bp.x, bp.y);
+
+				System.out.println("Create " + type + " at :" + "(" + bp.x
+						+ "," + bp.y + ") for playerId : " + playerid);
 				break;
-			case CREATE:
-				// players.get(0).createBuilding(3,3);
+
+			case CREATE_UNIT:
+
 				break;
+
 			}
 		}
 		return true;
+	}
+
+	/*
+	 * TODO implement - or move somewhere better. pathFinding() Description:
+	 * General pathfinding algorithm for units, somehow need to view the map.
+	 * uses A*.
+	 */
+	public Queue<Tile> pathFinding() {
+		return null;
 	}
 
 	private void unitInteraction() {

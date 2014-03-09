@@ -5,5 +5,5 @@ public interface Locatable {
 	public float getX();
 	public float getY();
 	
-	public int getOwner();
+	public int getPlayerID();
 }
