@@ -1,6 +1,7 @@
 package entities.gameboard;
 
 import control.Player;
+import entities.buildings.Building;
 
 /**
  * 
@@ -29,6 +30,11 @@ public class Tile {
 								// height.
 	private boolean occupiedByBuilding = false; // keeps track of whether or not
 												// tile is occupied by buliding.
+	
+	private float xco; // xcoordinate of upper left hand corner of tile
+	private float yco; // y coordinate of upper left hand corner of tile 
+	
+	private Building buildingRef = null;
 
 	// Resource Base Amounts - 'Average' amount a tile contiaining resource X will start with
 	private static final int foodBase  = 200; 
@@ -44,7 +50,7 @@ public class Tile {
 	
 
 
-	/*
+	/**
 	 * Tile(): Description: Constructor for Tile Object. Determines the terrain
 	 * type based on heightMap, and assigns resource.
 	 * 
@@ -55,12 +61,15 @@ public class Tile {
 	 * 
 	 * @param float heightMap - the height of this specific tile, determines the
 	 * terrain type.
+	 * @param float xco - xcoordinate of upper left hand corner of tile 
+	 * @param float yco - y coordinate of upper left hand corener of tile
 	 * 
 	 * Return Value:
 	 * 
 	 * @return a new Tile object.
 	 */
-	public Tile(int resourceNum, float heightMap) {
+	public Tile(int resourceNum, float heightMap, float xco, float yco)  
+	{
 		height = heightMap;
 
 		if (resourceNum == 0) {
@@ -75,6 +84,9 @@ public class Tile {
 			resource = Resource.NONE;
 		}
 
+		this.xco = xco; 
+		this.yco = yco;
+		
 		setResourceAmount(resource);
 		setResourceRegen(resource);
 		
@@ -94,11 +106,13 @@ public class Tile {
 	 * 
 	 * @param float heightMap - the height of this specific tile, determines the
 	 * terrain type.
+	 * @param float xco - xcoordinate of upper left hand corner
+	 * @param float yco - ycoordinate of upper left hand corner
 	 * 
 	 * Return Value: 
 	 * @return a new Tile object.
 	 */
-	public Tile(Resource r, float heightMap) {
+	public Tile(Resource r, float heightMap, float xco, float yco) {
 		height = heightMap;
 
 		resource = r;
@@ -418,7 +432,79 @@ public class Tile {
 		return terrain;
 	}
 
+	// DEPRECATED, use setBuildingRef
 	public void setIsOccupiedByBuilding(boolean t) {
 		occupiedByBuilding = t;
+	}
+	
+	/**
+	 * setBuildingRef():
+	 * Description
+	 * Sets the new building reference for this tile (allows tile to see what building is on it) 
+	 * Will also change the value of occupiedByBuilding.
+	 * This function will fail if there is currently a building on the tile (will return false to indicate so)
+	 * 
+	 * Parameters:
+	 * @param nb - new building reference
+	 * 
+	 * Return Value:
+	 * @return True if buildingReference successfully changed, false if not. 
+	 */
+	public boolean setBuilding(Building nb)
+	{
+		// cannot setBuilding to null, use remove building to do so
+		if (nb == null)
+		{
+			return false;
+		} else if (buildingRef == null)
+		{
+			buildingRef = nb; 
+			occupiedByBuilding = true; 
+			return true;
+		} else
+		{
+			return false; // building already occupies this tile
+		}
+	}
+	
+	/**
+	 * @summary - return the current building occupying tile
+	 * @return buildingRef
+	 */
+	public Building getBuilding()
+	{
+		return buildingRef;
+	}
+	
+	/**
+	 * removeBuilding():
+	 * Description:
+	 * removes the current building reference (changes occupiedByBuilding to reflect this)
+	 * 
+	 * Return Value:
+	 * @return True if building was removed (buildingRef was not null before calling), false if not
+	 */
+	public boolean removeBuilding()
+	{
+		// cannot remove a building that doesn't exist
+		if (buildingRef == null)
+		{
+			return false;
+		} else // building exists, remove it from this tile
+		{
+			buildingRef = null;
+			occupiedByBuilding = false; 
+			return true;
+		}
+	}
+	
+	public float getXCoordinate()
+	{
+		return xco;
+	}
+	
+	public float getYCoordinate()
+	{
+		return yco;
 	}
 }

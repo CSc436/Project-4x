@@ -93,10 +93,10 @@ public class GameBoard {
 		}
 		System.out.println("Height Adjust: " + heightAdjust);
 
-		for (int c = 0; c < cols; c++) {
-			for (int r = 0; r < rows; r++) {
+		for (int r = 0; r < rows; r++) {
+			for (int c = 0; c < cols; c++) {
 				float height = noisemap[r][c];
-				map[r][c] = new Tile(Resource.NONE, height + heightAdjust); // Use the adjusted height to create the tile
+				map[r][c] = new Tile(Resource.NONE, height + heightAdjust, (float)r, (float)c); // Use the adjusted height to create the tile
 			}
 		}
 
@@ -372,9 +372,9 @@ public class GameBoard {
 		int height = b.getHeight();
 		int width = b.getWidth();
 
-		for (int r = x; r < (x + b.getHeight()); r++) {
+		for (int r = x; r < (x + height); r++) {
 
-			for (int c = y; c < (y + b.getWidth()); c++) {
+			for (int c = y; c < (y + width); c++) {
 				map[r][c].setIsOccupiedByBuilding(false);
 			}
 		}

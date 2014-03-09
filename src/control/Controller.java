@@ -137,6 +137,8 @@ public class Controller implements Runnable {
 	 * TODO implement - or move somewhere better. pathFinding() Description:
 	 * General pathfinding algorithm for units, somehow need to view the map.
 	 * uses A*.
+	 * 
+	 * since in controller both have access to map and to 
 	 */
 	public Queue<Tile> pathFinding() {
 		return null;
