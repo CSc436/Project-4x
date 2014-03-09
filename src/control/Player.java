@@ -28,7 +28,7 @@ public class Player {
 	private CommandQueue cq;
 
 	private HashMap<UUID, Unit> selectedUnits;
-	private Building selectedBuilding;
+	private HashMap<UUID, Building> selectedBuildings;
 
 	// Bare constructor
 	public Player(String name, int id) {
@@ -50,6 +50,9 @@ public class Player {
 
 		// units
 		objects = new PlayerUnits(id);
+		selectedUnits = new HashMap<UUID, Unit>();
+		selectedBuildings = new HashMap<UUID, Building>();
+		
 
 		// technology
 		upgrades = new Upgrades();
@@ -97,18 +100,21 @@ public class Player {
 		return objects.getBuildings().get(buildingId);
 	}
 
-	public void selectUnits() {
+	public void selectUnit(Unit u) {
 
+		selectedUnits.put(u.getId(), u);
 	}
 
 	public void selectBuilding(Building b) {
 
-		this.selectedBuilding = b;
+		selectedBuildings.put(b.getId(), b);
 
 	}
 
-	public Building getSelectedBuilding() {
-		return selectedBuilding;
+	public void deselectBuilding(Building b) {
+
+		selectedBuildings.remove(b);
+
 	}
 
 	public void addBuilding(Building b) {
@@ -117,7 +123,26 @@ public class Player {
 	}
 
 	public void deselect() {
-		selectedBuilding = null;
+		selectedBuildings = new HashMap<UUID, Building>();
 		selectedUnits = new HashMap<UUID, Unit>();
+	}
+
+	// !needs a test
+	public boolean hasSelectedEligibleBuilding() {
+
+		if (!selectedBuildings.isEmpty()) {
+			Object[] temp = selectedBuildings.values().toArray();
+		
+			for (int i = 0; i < temp.length; i++) {
+				Building b = (Building) temp[i];
+				System.out.println(b.getBuildingType());
+				if (b.getBuildingType() == BuildingType.BARRACKS)
+					return true;
+
+			}
+			return false;
+		} else {
+			return false;
+		}
 	}
 }

@@ -152,15 +152,21 @@ public class Controller implements Runnable {
 			case CREATE_UNIT:
 
 				payload = comm.getPayload();
-
 				playerid = (int) payload.get(0);
-				UnitType ut = (UnitType) payload.get(1);
-				bp = (Point) payload.get(2);
 
-				Unit u = Factory.buildUnit(playerid, ut, bp.x, bp.y);
+				if (players.get(playerid).hasSelectedEligibleBuilding()) {
 
-				System.out.println("Create " + ut + " at :" + "(" + bp.x + ","
-						+ bp.y + ") for playerId : " + playerid);
+					UnitType ut = (UnitType) payload.get(1);
+					bp = (Point) payload.get(2);
+
+					Unit u = Factory.buildUnit(playerid, ut, bp.x, bp.y);
+
+					System.out.println("Create " + ut + " at :" + "(" + bp.x
+							+ "," + bp.y + ") for playerId : " + playerid);
+
+				} else {
+					System.out.println("No building selected to create unit!");
+				}
 
 				// TODO : Place created unit in a building
 				// TODO : Need selected unit implemented
@@ -190,6 +196,7 @@ public class Controller implements Runnable {
 
 			case DESELECT:
 
+				// this is currently deselect all, needs deselect target
 				payload = comm.getPayload();
 				playerid = (int) payload.get(0);
 				players.get(playerid).deselect();

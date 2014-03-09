@@ -61,12 +61,7 @@ public class GameBoardTest {
 		c.add(BuildingType.BARRACKS);
 		c.add(new Point(new Float(1.0), new Float(1.0)));
 		pc.push(new Command(Actions.CREATE_BUILDING, Targets.BUILDING, c));
-
-		/*
-		 * c = new ArrayList<Object>(); c.add(UnitType.INFANTRY);
-		 * 
-		 * pc.push(new Command(Actions.CREATE, Targets.UNIT, c));
-		 */
+		
 
 		try {
 			Thread.sleep(2000);
