@@ -1,12 +1,9 @@
 package entities.units;
 
 import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.UUID;
-
 import control.UnitType;
 import entities.Action;
-import entities.gameboard.Tile;
 import entities.stats.BaseStatsEnum;
 import entities.GameObject;
 import entities.GameObjectType;
@@ -21,7 +18,6 @@ import entities.stats.UnitStats;
 
 // TODO add A* path finding, use diagonals to make nice looking paths
 // returns a queue/list of tiles that it needs to go to, at each turn pop one off and move player there. 
-
 
 public abstract class Unit extends GameObject {
 
@@ -69,5 +65,5 @@ public abstract class Unit extends GameObject {
 	public int getCreationTime() {
 		return this.baseStats.getCreationTime();
 	}
-	
+
 }

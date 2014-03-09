@@ -61,5 +61,18 @@ public abstract class Building extends GameObject {
 		return castleId;
 	}
 
+	public boolean productionQueueEmpty() {
+
+		return buildingQ.isEmpty();
+	}
+
+	public void advanceUnitProduction(int timestep) {
+		// add timestep to each unit
+
+	}
+
+	public Unit getProducedUnit() {
+		return buildingQ.poll();
+	}
 
 }
