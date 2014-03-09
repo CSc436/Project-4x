@@ -1,11 +1,8 @@
-package controller;
+package entities.gameboard;
 import java.util.ArrayList;
 import java.util.Random;
 
 import entities.buildings.Building;
-import entities.gameboard.Resource;
-import entities.gameboard.Terrain;
-import entities.gameboard.Tile;
 import entities.units.Unit;
 import entities.util.Point;
 
@@ -31,7 +28,8 @@ public class GameBoard {
 	private static final float woodMult  = 0.20f; 	// 5% of tiles that can support wood have wood
 	private static final float stoneMult = 0.050f; 	// 5% of tiles that can support stone have stone
 	private static final float goldMult  = 0.002f; 	// 0.2% of tiles that can support gold have gold
-	
+	 // TODO for tiles add a coordinate (upper left and right). 
+
 	
 	/*
 	 * GameBoard():
@@ -67,14 +65,14 @@ public class GameBoard {
 
 		// create tiles
 		// needs optimization!
-		System.out.println("Building Board...");
+		System.out.println("\nBuilding Board...");
 		startTime = System.currentTimeMillis();
 
 		// create a random number generator
 		// Random rand = new Random();
 		// rand.setSeed(16);
 
-		System.out.println("\nAverage Height: " + this.averageHeight);
+		System.out.println("Average Height: " + this.averageHeight);
 
 		float heightAdjust = 0.0f;
 		// Determine adjustment for height
@@ -93,12 +91,12 @@ public class GameBoard {
 																// the terain.
 																// (hopefully)
 		}
-		System.out.println("Height Adjust: " + heightAdjust + "\n");
+		System.out.println("Height Adjust: " + heightAdjust);
 
-		for (int c = 0; c < cols; c++) {
-			for (int r = 0; r < rows; r++) {
+		for (int r = 0; r < rows; r++) {
+			for (int c = 0; c < cols; c++) {
 				float height = noisemap[r][c];
-				map[r][c] = new Tile(Resource.NONE, height + heightAdjust); // Use the adjusted height to create the tile
+				map[r][c] = new Tile(Resource.NONE, height + heightAdjust, (float)r, (float)c); // Use the adjusted height to create the tile
 			}
 		}
 
@@ -112,7 +110,7 @@ public class GameBoard {
 		// attempt to distribute near resources.
 
 		endTime = System.currentTimeMillis();
-		System.out.println("Total execution time: " + (endTime - startTime));
+		System.out.println("Total execution time: " + (endTime - startTime) + "\n");
 
 	}
 
@@ -374,9 +372,9 @@ public class GameBoard {
 		int height = b.getHeight();
 		int width = b.getWidth();
 
-		for (int r = x; r < (x + b.getHeight()); r++) {
+		for (int r = x; r < (x + height); r++) {
 
-			for (int c = y; c < (y + b.getWidth()); c++) {
+			for (int c = y; c < (y + width); c++) {
 				map[r][c].setIsOccupiedByBuilding(false);
 			}
 		}

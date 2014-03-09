@@ -1,24 +1,28 @@
 package control;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Queue;
+import java.util.UUID;
 
-import controller.GameBoard;
+import entities.gameboard.GameBoard;
 import entities.buildings.Building;
 import entities.buildings.ResourceBuilding;
+import entities.gameboard.Tile;
 import entities.units.Unit;
-
+import entities.util.Point;
 
 public class Controller implements Runnable {
 	private ArrayList<Player> players;
 	private GameBoard map;
 	private PlayerCommands sharedInstructions;
 	private Queue<Command> currentInstructions;
-	private int turnWaitTime;//in ms
+	private int turnWaitTime;// in ms
 	private GameState gs;
-	
-	
+
 	public Controller(PlayerCommands instructions, GameState gs) {
 		players = new ArrayList<Player>();
 		this.sharedInstructions = instructions;
@@ -28,31 +32,36 @@ public class Controller implements Runnable {
 
 	@Override
 	public void run() {
-		//setup
+		System.out.println("Setup : ");
 		currentInstructions = sharedInstructions.dump();
+
 		for (Command comm : currentInstructions) {
+			System.out.println(comm.getTarget());
 			if (comm.getAction() != Actions.STARTUP_CREATE) {
 				System.out.println("You suck for not using startup_create");
 			}
 			Iterator<Object> it = comm.getPayload().iterator();
 			switch (comm.getTarget()) {
 			case PLAYER:
-				players.add(new Player((String)it.next(), (Integer)it.next()));
+				players.add(new Player((String) it.next(), (Integer) it.next()));
 				break;
 			case MAP:
-				map = new GameBoard((Integer)it.next(), (Integer)it.next());
+				map = new GameBoard((Integer) it.next(), (Integer) it.next());
 				break;
 			default:
-				System.out.println("You suck for screwing up the target in the command object");
+				System.out
+						.println("You suck for screwing up the target in the command object");
 				break;
 			}
-//			turnNum++;
+			// turnNum++;
 		}
+
 		gs.update(players, map);
-		//actual game execution
+		gameStatus();
+		// actual game execution
 		boolean gameRunning = true;
 		while (gameRunning) {
-			gs.toString();
+			// gs.toString();
 			try {
 				Thread.sleep(turnWaitTime);
 			} catch (InterruptedException e) {
@@ -60,14 +69,41 @@ public class Controller implements Runnable {
 				e.printStackTrace();
 			}
 			produceResources();
-			//produceGameObjects
+			// produceGameObjects
 			agentDecision();
 			unitInteraction();
+			// When the timer on a unit in the production queue hits 0, add the
+			// unit to the player's unit list.
+			
+			// TODO: change timestep to what we really want
+			checkBuildingProductionQueue(10);
+
 			gameRunning = playerCommands();
+			System.out.println("STILL RUNNING: " + gameRunning);
+			System.out
+					.println("STILL RUNNING: "
+							+ players.get(0).getGameObjects().getBuildings()
+									.toString());
 			gs.update(players, map);
 		}
 	}
-	
+
+	private void checkBuildingProductionQueue(int timestep) {
+		for (Player p : players) {
+			Map<UUID, Building> bs = p.getGameObjects().getBuildings();
+			Collection<Building> buildings = bs.values();
+			for (Building b : buildings) {
+				if (b.productionQueueEmpty())
+					continue;
+				b.advanceUnitProduction(timestep);
+				Unit u = b.getProducedUnit();
+				if (u != null) {
+					p.getGameObjects().getUnits().put(u.getId(), u);
+				}
+			}
+		}
+	}
+
 	private void gameStatus() {
 		System.out.println("Game State:");
 		System.out.print("Players: ");
@@ -76,8 +112,9 @@ public class Controller implements Runnable {
 			System.out.print(player.getAlias() + ",");
 		}
 		System.out.println();
+		System.out.println();
 		for (Player player : players) {
-			System.out.println(player.getAlias()+ "'s Resources:");
+			System.out.println(player.getAlias() + "'s Resources:");
 			System.out.println(player.getResources().toString());
 			System.out.println(player.getAlias() + "'s Units: ");
 			for (Unit u : player.getGameObjects().getUnits().values()) {
@@ -87,46 +124,77 @@ public class Controller implements Runnable {
 			for (Building b : player.getGameObjects().getBuildings().values()) {
 				System.out.println(b.toString());
 			}
+			System.out.println();
 		}
+
 	}
 
 	private boolean playerCommands() {
 		currentInstructions = sharedInstructions.dump();
 		for (Command comm : currentInstructions) {
-			switch(comm.getAction()) {
-			case STARTUP_CREATE:
+
+			switch (comm.getAction()) {
+
+			case CREATE_BUILDING:
+
+				List<Object> payload = comm.getPayload();
+
+				int playerid = (int) payload.get(0);
+				BuildingType type = (BuildingType) payload.get(1);
+				Point bp = (Point) payload.get(2);
+
+				Building b = Factory.buildBuilding(playerid, type, bp.x, bp.y);
+
+				System.out.println("Create " + type + " at :" + "(" + bp.x
+						+ "," + bp.y + ") for playerId : " + playerid);
 				break;
-			case CREATE:
-			//	players.get(0).createBuilding(3,3);
+
+			case CREATE_UNIT:
+
 				break;
+
 			}
 		}
 		return true;
 	}
 
+	/*
+	 * TODO implement - or move somewhere better. pathFinding() Description:
+	 * General pathfinding algorithm for units, somehow need to view the map.
+	 * uses A*.
+	 * 
+	 * since in controller both have access to map and to 
+	 */
+	public Queue<Tile> pathFinding() {
+		return null;
+	}
+
 	private void unitInteraction() {
-		for(Player player : players) {
-	//		for (Unit unit : player.getUnitQueue()) {
-				//unit.
-		//	}
+		for (Player player : players) {
+			// for (Unit unit : player.getUnitQueue()) {
+			// unit.
+			// }
 		}
-		
+
 	}
 
 	private void agentDecision() {
-		for(Player player : players) {
-	//		for (Agent agent : player.getAgents()) {
-		//		agent.makeDecision();
-	//		}
+		for (Player player : players) {
+			// for (Agent agent : player.getAgents()) {
+			// agent.makeDecision();
+			// }
 		}
 	}
 
 	private void produceResources() {
-		for(Player player : players) {
-			for (ResourceBuilding building : player.getGameObjects().getResourceBuildings().values()) {
-				
+		for (Player player : players) {
+			for (ResourceBuilding building : player.getGameObjects()
+					.getResourceBuildings().values()) {
+
 				building.generateResource();
+
 			}
 		}
-	}	
+	}
+
 }

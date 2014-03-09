@@ -1,4 +1,4 @@
-package controller;
+package entities.gameboard;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -31,7 +31,7 @@ public class GameBoardTest {
 		Player juan = new Player("juan", 1);
 		Unit temp = fact.buildUnit(1, UnitType.INFANTRY, 0, 0);
 		Unit temp2 = fact.buildUnit(1, UnitType.INFANTRY, 5, 5);
-		Building b = fact.buildBuilding(1, BuildingType.BARRACKS, 6, 6, 3, 3);
+		Building b = fact.buildBuilding(1, BuildingType.BARRACKS, 6, 6);
 
 		game.placeBuildingAt(b, 6, 6);
 		

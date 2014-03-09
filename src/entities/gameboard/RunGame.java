@@ -1,11 +1,8 @@
-package controller;
+package entities.gameboard;
 import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.*;
-
-import entities.gameboard.Resource;
-import entities.gameboard.Terrain;
 
 public class RunGame {
 
@@ -13,7 +10,7 @@ public class RunGame {
 
 	public static void main(String[] args) {
 
-		GameBoard game = new GameBoard(800, 800, 2);
+		GameBoard game = new GameBoard(800, 800);
 		game.resourceDistNatural();
 
 		JFrame frame = new JFrame("display");

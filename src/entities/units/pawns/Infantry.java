@@ -1,4 +1,4 @@
-package entities.units;
+package entities.units.pawns;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -7,6 +7,7 @@ import control.UnitType;
 import entities.GameObjectType;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
+import entities.units.Unit;
 
 public class Infantry extends Unit {
 
