@@ -74,7 +74,7 @@ public class Controller implements Runnable {
 			unitInteraction();
 			// When the timer on a unit in the production queue hits 0, add the
 			// unit to the player's unit list.
-			checkBuildingProductionQueue();
+			checkBuildingProductionQueue(10);
 
 			gameRunning = playerCommands();
 			System.out.println("STILL RUNNING: " + gameRunning);
@@ -96,7 +96,8 @@ public class Controller implements Runnable {
 				b.advanceUnitProduction(timestep);
 				Unit u = b.getProducedUnit();
 				if (u != null) {
-					p.getGameObjects().getUnits().add(b.getProducedUnit());
+					p.getGameObjects().getUnits()
+							.put(u.getId(), b.getProducedUnit());
 				}
 			}
 		}
@@ -145,10 +146,26 @@ public class Controller implements Runnable {
 
 				System.out.println("Create " + type + " at :" + "(" + bp.x
 						+ "," + bp.y + ") for playerId : " + playerid);
+
+				map.placeBuildingAt(b, (int) Math.round(bp.x),
+						(int) Math.round(bp.y));
 				break;
 
 			case CREATE_UNIT:
 
+				payload = comm.getPayload();
+
+				playerid = (int) payload.get(0);
+				UnitType ut = (UnitType) payload.get(1);
+				bp = (Point) payload.get(2);
+
+				Unit u = Factory.buildUnit(playerid, ut, bp.x, bp.y);
+
+				System.out.println("Create " + ut + " at :" + "(" + bp.x + ","
+						+ bp.y + ") for playerId : " + playerid);
+
+				// TODO : Place created unit in a building
+				// TODO : Need selected unit implemented
 				break;
 
 			}
@@ -161,7 +178,7 @@ public class Controller implements Runnable {
 	 * General pathfinding algorithm for units, somehow need to view the map.
 	 * uses A*.
 	 * 
-	 * since in controller both have access to map and to 
+	 * since in controller both have access to map and to
 	 */
 	public Queue<Tile> pathFinding() {
 		return null;
@@ -193,6 +210,12 @@ public class Controller implements Runnable {
 
 			}
 		}
+	}
+
+	// for testing
+	public GameBoard getGameBoard() {
+
+		return map;
 	}
 
 }

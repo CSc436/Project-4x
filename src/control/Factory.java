@@ -146,6 +146,9 @@ public class Factory {
 
 			// result = new Barracks(p, 1, 1, uniqueid);
 		}
+		
+		
+		
 		return result;
 
 	}

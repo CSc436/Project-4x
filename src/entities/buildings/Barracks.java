@@ -19,23 +19,6 @@ public class Barracks extends Building {
 				height, width);
 	}
 
-	protected static int setSoldiers(int i) {
-		switch (i) {
-		case (1):
-			return 50;
-		case (2):
-			return 80;
-		case (3):
-			return 100;
-		case (4):
-			return 150;
-		case (5):
-			return 200;
-		default:
-			return 0;
-		}
-	}
-
 
 	@Override
 	protected void setActions() {
