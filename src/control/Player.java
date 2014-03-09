@@ -1,5 +1,8 @@
 package control;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 import entities.Action;
 import entities.Civilization;
 import entities.PerfectCivilization;
@@ -23,6 +26,9 @@ public class Player {
 	private Resources resources;
 	private Civilization civ;
 	private CommandQueue cq;
+
+	private HashMap<UUID, Unit> selectedUnits;
+	private Building selectedBuilding;
 
 	// Bare constructor
 	public Player(String name, int id) {
@@ -89,5 +95,19 @@ public class Player {
 
 	public Building getBuilding(int buildingId) {
 		return objects.getBuildings().get(buildingId);
+	}
+
+	public void selectUnits() {
+
+	}
+
+	public void selectBuilding(Building b) {
+
+		this.selectedBuilding = b;
+
+	}
+
+	public Building getSelectedBuilding() {
+		return selectedBuilding;
 	}
 }

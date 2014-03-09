@@ -168,6 +168,27 @@ public class Controller implements Runnable {
 				// TODO : Need selected unit implemented
 				break;
 
+			case SELECT:
+
+				payload = comm.getPayload();
+				playerid = (int) payload.get(0);
+
+				// if the action target is a building
+				if (payload.get(1) instanceof Building) {
+
+					b = (Building) payload.get(1);
+					bp = b.getPosition();
+
+					players.get(playerid).selectBuilding(b);
+
+					System.out.println("Selected " + b.getBuildingType()
+							+ " at :" + "(" + bp.x + "," + bp.y
+							+ ") for playerId : " + playerid);
+					// else the action's target is a unit
+				} else {
+
+				}
+
 			}
 		}
 		return true;

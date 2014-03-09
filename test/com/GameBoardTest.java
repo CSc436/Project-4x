@@ -17,6 +17,7 @@ import control.GameState;
 import control.PlayerCommands;
 import control.Targets;
 import control.UnitType;
+import entities.buildings.Building;
 import entities.gameboard.GameBoard;
 import entities.util.Point;
 
@@ -79,15 +80,24 @@ public class GameBoardTest {
 		assertEquals(200,game.getRows());
 		//assertTrue(game.getTileAt(1, 1).isOccupiedByBuilding());
 		assertTrue(game.getTileAt(1, 1).isOccupiedByBuilding());
+
+		
+		Building ts = gs.getPlayers().get(0).getGameObjects().getBuildings();
 		
 		
 		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
 		
 		
 		
-		
-		
-		
+		c = new ArrayList<Object>();
+		c.add(0);
+		c.add(ts);
+		pc.push(new Command(Actions.SELECT, Targets.BUILDING, c));
 		
 		
 		
