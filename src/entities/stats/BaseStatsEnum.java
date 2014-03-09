@@ -39,6 +39,11 @@ public enum BaseStatsEnum {
 
 	TRADE_CART(new UnitStats(0, 1, 1, .4f, 40f, 4, 1.0f)),
 
+	// AGENTS 
+	GENERAL(new UnitStats(9, 1, 3, 60f, 10, 6, 3.0f)),
+	
+	PROSPECTOR(new UnitStats(1, 1, 2, .5f, 6, 6, 3.0f)), 
+	
 	// BUILDINGS
 
 	BARRACKS(new UnitStats(0, 2, 100, 0, 1000, 0, 0)),

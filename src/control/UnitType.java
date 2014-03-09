@@ -2,6 +2,7 @@ package control;
 
 // merge with other unittype
 public enum UnitType {
+	// BASE UNITS
 	MILITIA,
 
 	INFANTRY,
@@ -28,5 +29,10 @@ public enum UnitType {
 
 	MEDIC,
 
-	TRADE_CART
+	TRADE_CART,
+	
+	// AGENTS
+	GENERAL,
+	
+	PROSPECTOR
 }
