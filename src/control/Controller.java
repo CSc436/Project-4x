@@ -78,10 +78,6 @@ public class Controller implements Runnable {
 
 			gameRunning = playerCommands();
 			System.out.println("STILL RUNNING: " + gameRunning);
-			System.out
-					.println("STILL RUNNING: "
-							+ players.get(0).getGameObjects().getBuildings()
-									.toString());
 			gs.update(players, map);
 		}
 	}
@@ -149,6 +145,8 @@ public class Controller implements Runnable {
 
 				map.placeBuildingAt(b, (int) Math.round(bp.x),
 						(int) Math.round(bp.y));
+
+				players.get(playerid).addBuilding(b);
 				break;
 
 			case CREATE_UNIT:
@@ -174,7 +172,7 @@ public class Controller implements Runnable {
 				playerid = (int) payload.get(0);
 
 				// if the action target is a building
-				if (payload.get(1) instanceof Building) {
+				if (comm.getTarget() == Targets.BUILDING) {
 
 					b = (Building) payload.get(1);
 					bp = b.getPosition();
@@ -184,10 +182,19 @@ public class Controller implements Runnable {
 					System.out.println("Selected " + b.getBuildingType()
 							+ " at :" + "(" + bp.x + "," + bp.y
 							+ ") for playerId : " + playerid);
-					// else the action's target is a unit
+
 				} else {
+					// else the action's target is a unit
 
 				}
+
+			case DESELECT:
+
+				payload = comm.getPayload();
+				playerid = (int) payload.get(0);
+				players.get(playerid).deselect();
+
+				System.out.println("Deselected for player :" + playerid);
 
 			}
 		}

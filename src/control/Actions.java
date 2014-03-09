@@ -8,6 +8,7 @@ public enum Actions {
 	MOVE, // telling units to move somewhere on map
 	ATTACK, // telling units to attack something
 	SELECT, // choose unit/building to be initiator of next action
+	DESELECT, // delect anything selected
 	SELL, // sell buildings for some gold value
 	DESTROY, // get rid of unit
 	QUIT, // start shutdown sequence of game

@@ -110,4 +110,14 @@ public class Player {
 	public Building getSelectedBuilding() {
 		return selectedBuilding;
 	}
+
+	public void addBuilding(Building b) {
+		objects.addBuilding(b);
+
+	}
+
+	public void deselect() {
+		selectedBuilding = null;
+		selectedUnits = new HashMap<UUID, Unit>();
+	}
 }
