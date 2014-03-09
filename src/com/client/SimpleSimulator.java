@@ -19,9 +19,9 @@ public interface SimpleSimulator extends RemoteService {
 	
 	String startSimulation();
 	
-	MovingUnit getSimulationState( int playerNumber );
+	MovingUnit getSimulationState( int playerNumber, int lastTurnReceived );
 	
-	String confirmReceipt( int turnNumber ); 
+	String confirmReceipt( int playerNumber, int turnNumber ); 
 	
 	Integer joinSimulation();
 	

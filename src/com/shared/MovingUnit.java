@@ -41,6 +41,7 @@ public class MovingUnit implements Serializable {
 		}
 		
 		position = position.add(velocity.multiply(timeSeconds));
+		turnNumber++;
 	}
 	
 	public double[] deadReckonPosition( long timeSinceUpdate ) {

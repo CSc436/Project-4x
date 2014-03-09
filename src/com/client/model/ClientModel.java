@@ -132,7 +132,7 @@ public class ClientModel {
 				Queue<Request> tempQueue = requestQueue;
 				requestQueue = new LinkedList<Request>();
 				
-				simpleSimulator.getSimulationState( playerNumber, new AsyncCallback<MovingUnit>() {
+				simpleSimulator.getSimulationState( playerNumber, turnNumber, new AsyncCallback<MovingUnit>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -149,8 +149,9 @@ public class ClientModel {
 						long currTime = System.currentTimeMillis();
 						cycleTime = (int) (currTime - lastUpdateTime);
 						lastUpdateTime = currTime;
+						turnNumber = result.turnNumber;
 						System.out.println("    Simulation state received! Cycle time: " + cycleTime + " ms");
-						readyForNext = true;
+						confirmReceipt();
 					}
 
 				});
@@ -158,7 +159,7 @@ public class ClientModel {
 
 		};
 
-		pollTimer.scheduleRepeating(50);
+		pollTimer.scheduleRepeating(100);
 		
 		Timer setTargetTimer = new Timer() {
 
@@ -174,7 +175,7 @@ public class ClientModel {
 	}
 	
 	public void confirmReceipt() {
-		simpleSimulator.confirmReceipt(turnNumber + 1, new AsyncCallback<String>() {
+		simpleSimulator.confirmReceipt(playerNumber, turnNumber, new AsyncCallback<String>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -184,7 +185,6 @@ public class ClientModel {
 			@Override
 			public void onSuccess(String result) {
 				System.out.println("    Receipt success!");
-				turnNumber++;
 				readyForNext = true;
 			}
 

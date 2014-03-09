@@ -8,7 +8,7 @@ public class Model implements Runnable {
 	public MovingUnit unit;
 	public boolean isBlack;
 	public int timeStep = 200; // Number of milliseconds per simulation step
-	public int turnNumber;
+	public int turnNumber = 0;
 	public boolean continueSimulation = true;
 	private long lastTime = System.currentTimeMillis();
 	private Queue<Integer> runningAvgQueue = new LinkedList<Integer>();
@@ -16,6 +16,7 @@ public class Model implements Runnable {
 	private int numTimesSaved = 3; // Keep track of the last n cycle times to compute moving average
 	private Queue<Request> requestQueue = new LinkedList<Request>();
 	private boolean stop = false;
+	private boolean sendGame = false;
 	
 	public Model() {
 		unit = new MovingUnit( 0.0, 0.0, 3.0 );
@@ -43,16 +44,24 @@ public class Model implements Runnable {
 		
 		unit.simulateTimeStep( movingAverage );
 		//System.out.println("Server >>> "  + unit.position.getX() + " " + unit.position.getY());
-		
-		// Wait for minimum time to elapse, if required
+		turnNumber++;
+		sendGame = true; // Game updated, ready to update clients
+		// Wait for minimum time to elapse and wait for clients to confirm receipt of game state
 		long currTime;
 		do {
 			currTime = System.currentTimeMillis();
-		} while( currTime < lastTime + timeStep );
+			//System.out.println(">>> Waiting for clients...");
+			System.out.println( (currTime < lastTime + timeStep) + " " + !continueSimulation );
+			
+			while( System.currentTimeMillis() < currTime + 30) {
+				continue;
+			}
+			
+		} while( currTime < lastTime + timeStep || !continueSimulation );
 		
+		continueSimulation = false;
 		updateRunningAverage( (int) (currTime - lastTime) );
 		lastTime = currTime;
-		turnNumber++;
 	}
 
 	private void updateRunningAverage(int newTime) {
@@ -74,7 +83,9 @@ public class Model implements Runnable {
 	}
 	
 	public void continueSimulation() {
+		System.out.println(">>> Continuing simulation, turn " + turnNumber + " complete.");
 		continueSimulation = true;
+		sendGame = false;
 	}
 	
 	public void queueRequest( Request r ) {
@@ -83,6 +94,10 @@ public class Model implements Runnable {
 	
 	public void stop() {
 		stop = true;
+	}
+	
+	public boolean sendingGame() {
+		return sendGame;
 	}
 	
 }
