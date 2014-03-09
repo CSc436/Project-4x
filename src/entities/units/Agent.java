@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import control.CommandQueue;
+import control.Player;
 import control.UnitType;
 import entities.GameObjectType;
 import entities.stats.BaseStatsEnum;
@@ -23,7 +24,7 @@ import entities.stats.UnitStats;
 public abstract class Agent extends Unit {
 	private Map<String, Unit> underlings; // TODO possibly replace Unit or String with their unique ID's (UUID?)
 	private CommandQueue cq; // list of current commnands to issue.
-
+	private int prestige = 0;
 	/*
 	 * Agent():
 	 * Description:
@@ -40,6 +41,38 @@ public abstract class Agent extends Unit {
 		cq = new CommandQueue();
 	}
 
+	public void setPrestige(){
+		prestige+=80;
+	}
+	
+	public String getPrestige(){
+		if(prestige<100)
+			return "hatred";
+		else if (prestige>1000)
+			return "honored";
+		else return "neutral";
+	}
+	
+	public String acceptCommand(int i){
+		switch(i){
+		case(0):return "nothing";
+		case(1):return "no";
+		case(2):return "maybe no";
+		case(3):return "yes";
+		default:return "nothing";
+		}
+	}
+	
+	public void actionByPrestige(){
+		switch(this.getPrestige()){
+		case("hatred"):acceptCommand(1);
+		case("neutral"):acceptCommand(2);
+		case("honored"):acceptCommand(3);
+		default:acceptCommand(0);
+		}
+	}
+	
+	
 	@Override
 	protected void setActions() {
 		// TODO Auto-generated method stub

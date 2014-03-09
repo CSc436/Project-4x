@@ -2,7 +2,11 @@ package entities.resources;
 
 public class Resources {
 	// Tentative resource types suggested during planning
-	private int Gold, Wood, Food, Stone, ResearchPts;
+	public int Gold;
+	private int Wood;
+	private int Food;
+	private int Stone;
+	private int ResearchPts;
 
 	public Resources(int startingGold, int startingWood, int startingFood,
 			int startingRPts) {

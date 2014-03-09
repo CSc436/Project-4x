@@ -19,7 +19,7 @@ public class Player {
 
 	public TechnologyTree techTree;
 	public Upgrades upgrades;
-	private Resources resources;
+	public static Resources resources;
 	private Civilization civ;
 	private CommandQueue cq;
 
@@ -63,7 +63,7 @@ public class Player {
 		return objects;
 	}
 
-	public Resources getResources() {
+	public static Resources getResources() {
 		return resources;
 	}
 
