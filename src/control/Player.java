@@ -4,6 +4,7 @@ import entities.Action;
 import entities.Civilization;
 import entities.PerfectCivilization;
 import entities.PlayerUnits;
+import entities.buildings.Building;
 import entities.research.TechnologyTree;
 import entities.research.Upgrades;
 import entities.resources.Resources;
@@ -54,7 +55,7 @@ public class Player {
 	public String getAlias() {
 		return name;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -83,7 +84,10 @@ public class Player {
 	public void addActionTo(Unit u, Action a) {
 
 		cq.push(a, u);
-//		u.addAction(a);
+		// u.addAction(a);
 	}
 
+	public Building getBuilding(int buildingId) {
+		return objects.getBuildings().get(buildingId);
+	}
 }

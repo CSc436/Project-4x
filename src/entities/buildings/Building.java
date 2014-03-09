@@ -60,4 +60,6 @@ public abstract class Building extends GameObject {
 	public long getCastleId() {
 		return castleId;
 	}
+
+
 }

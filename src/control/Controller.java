@@ -2,12 +2,14 @@ package control;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Queue;
 
 import entities.buildings.Building;
 import entities.buildings.ResourceBuilding;
 import entities.gameboard.GameBoard;
 import entities.units.Unit;
+import entities.util.Point;
 
 public class Controller implements Runnable {
 	private ArrayList<Player> players;
@@ -68,6 +70,10 @@ public class Controller implements Runnable {
 			unitInteraction();
 			gameRunning = playerCommands();
 			System.out.println("STILL RUNNING: " + gameRunning);
+			System.out
+					.println("STILL RUNNING: "
+							+ players.get(0).getGameObjects().getBuildings()
+									.toString());
 			gs.update(players, map);
 		}
 	}
@@ -100,12 +106,27 @@ public class Controller implements Runnable {
 	private boolean playerCommands() {
 		currentInstructions = sharedInstructions.dump();
 		for (Command comm : currentInstructions) {
-			System.out.println(comm.getAction());
+
 			switch (comm.getAction()) {
 
-			case CREATE:
-				comm.getTarget();
+			case CREATE_BUILDING:
+
+				List<Object> payload = comm.getPayload();
+
+				int playerid = (int) payload.get(0);
+				BuildingType type = (BuildingType) payload.get(1);
+				Point bp = (Point) payload.get(2);
+
+				Building b = Factory.buildBuilding(playerid, type, bp.x, bp.y);
+
+				System.out.println("Create " + type + " at :" + "(" + bp.x
+						+ "," + bp.y + ") for playerId : " + playerid);
 				break;
+
+			case CREATE_UNIT:
+
+				break;
+
 			}
 		}
 		return true;
