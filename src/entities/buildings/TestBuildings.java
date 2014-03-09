@@ -29,6 +29,13 @@ public class TestBuildings {
 			bk.withdraw(11000);
 			assertEquals(p.resources.Gold,12000);
 			assertEquals(bk.gold,88000);
+			assertEquals(bk.withdraw(100000),false);
+			assertEquals(p.resources.Gold,12000);
+			bk.deposit(5000);
+			assertEquals(p.resources.Gold,7000);
+			assertEquals(bk.deposit(50000),false);
+			assertEquals(p.resources.Gold,7000);
+			
 	}
 
 }

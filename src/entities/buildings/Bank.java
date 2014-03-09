@@ -30,14 +30,20 @@ public class Bank extends ResourceBuilding {
 				+ "; GameObject id: " + this.getId();
 	}
 
-	public void withdraw(int gold) {
+	public boolean withdraw(int gold) {
+		if(this.gold<gold)
+			return false;
 		Player.resources.Gold+=gold;
 		this.gold-=gold;
+		return true;
 	}
 		
-	public void deposit(int gold) {
+	public boolean deposit(int gold) {
+		if(Player.resources.Gold<gold)
+			return false;
 		Player.resources.Gold-=gold;
 		this.gold+=gold;
+		return true;
 	}
 	
 	@Override
