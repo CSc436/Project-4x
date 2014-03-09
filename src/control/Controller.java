@@ -1,9 +1,12 @@
 package control;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
+import java.util.UUID;
 
 import entities.buildings.Building;
 import entities.buildings.ResourceBuilding;
@@ -69,6 +72,10 @@ public class Controller implements Runnable {
 			// produceGameObjects
 			agentDecision();
 			unitInteraction();
+			// When the timer on a unit in the production queue hits 0, add the
+			// unit to the player's unit list.
+			checkBuildingProductionQueue();
+
 			gameRunning = playerCommands();
 			System.out.println("STILL RUNNING: " + gameRunning);
 			System.out
@@ -76,6 +83,22 @@ public class Controller implements Runnable {
 							+ players.get(0).getGameObjects().getBuildings()
 									.toString());
 			gs.update(players, map);
+		}
+	}
+
+	private void checkBuildingProductionQueue(int timestep) {
+		for (Player p : players) {
+			Map<UUID, Building> bs = p.getGameObjects().getBuildings();
+			Collection<Building> buildings = bs.values();
+			for (Building b : buildings) {
+				if (b.productionQueueEmpty())
+					continue;
+				b.advanceUnitProduction(timestep);
+				Unit u = b.getProducedUnit();
+				if (u != null) {
+					p.getGameObjects().getUnits().add(b.getProducedUnit());
+				}
+			}
 		}
 	}
 
