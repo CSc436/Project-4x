@@ -39,33 +39,44 @@ public class Camera {
 
 	public void up(float delta) {
 		// TODO Auto-generated method stub
-		Vector3 lookAt = getNormalLookAtVector();
-		camX += lookAt.x;
-		camY -= lookAt.y;
+		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 0);
+		temp.normalize();
+		camX += temp.x;
+		camY += temp.y;
 	}
 
 	public void down(float delta) {
 		// TODO Auto-generated method stub
-		Vector3 lookAt = getNormalLookAtVector();
-		camX += lookAt.x;
-		camY += lookAt.y;
+		Vector3 temp = new Vector3((float)Math.tan(Math.toRadians(yaw)) * getSign(yaw) , -getSign(yaw), 0);
+		temp.normalize();
+		camX += temp.x;
+		camY += temp.y;
 	}
 
 	public void left(float delta) {
 		// TODO Auto-generated method stub
-		Vector3 lookAt = getNormalLookAtVector();
-		lookAt.left();
-		camX += lookAt.x;
-		camY += lookAt.y;
+		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 0);
+		temp.right(); // the map starts off backwards...
+		temp.normalize();
+		camX += temp.x;
+		camY += temp.y;
 		
 	}
 
 	public void right(float delta) {
 		// TODO Auto-generated method stub
-		Vector3 lookAt = getNormalLookAtVector();
-		lookAt.right();
-		camX += lookAt.x;
-		camY += lookAt.y;
+		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 0);
+		temp.left();
+		temp.normalize();
+		camX += temp.x;
+		camY += temp.y;
+	}
+
+	private float getSign(float yaw) {
+		// TODO Auto-generated method stub
+		yaw = (float) Math.cos(Math.toRadians(yaw));
+		float toRet = yaw >= 0 ? 1 : -1;
+		return toRet;
 	}
 
 	public void zoomIn() {
@@ -97,9 +108,10 @@ public class Camera {
 		camZ = 20.0f;
 	}
 	
-	public Vector3 getNormalLookAtVector() {
-		Vector3 vect = new Vector3(cameraMatrix[8], cameraMatrix[9], 0);
-		vect.normalize();
-		return vect;
-	}
+// This doesn't work	
+//	public Vector3 getNormalLookAtVector() {
+//		Vector3 vect = new Vector3(cameraMatrix[8], cameraMatrix[9], 0);
+//		vect.normalize();
+//		return vect;
+//	}
 }
