@@ -108,7 +108,7 @@ public class GameCanvas {
 //					return;
 //
 //				lastHit = time;
-
+				if (debug) Console.log("Pressed: " + event.getNativeKeyCode());
 				switch (event.getNativeKeyCode()) {
 				case KeyCodes.KEY_UP:
 				case KeyCodes.KEY_W:
@@ -131,7 +131,7 @@ public class GameCanvas {
 				case KeyCodes.KEY_Q: rotateLeft = true; break;
 				case KeyCodes.KEY_E: rotateRight = true; break;
 				case KeyCodes.KEY_X: center = true; break;
-				default: if (debug) Console.log("" + event.getNativeKeyCode()); break;
+				default: if (debug) Console.log("Unrecognized: " + event.getNativeKeyCode()); break;
 				}
 			}
 		}, KeyDownEvent.getType());

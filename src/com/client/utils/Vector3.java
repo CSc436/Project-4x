@@ -27,4 +27,16 @@ public class Vector3 {
 	public void mult(Vector3 vector) {
 		
 	}
+	
+	public void left() {
+		float temp = x;
+		x = -y;
+		y = temp;
+	}
+	
+	public void right() {
+		float temp = x;
+		x = y;
+		y = -temp;
+	}
 }

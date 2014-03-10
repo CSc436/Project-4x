@@ -14,8 +14,6 @@ public class Camera {
 	}
 	
 	public void makeCameraMatrix() {
-		// 4.71238898
-		//.785398163
 		cameraMatrix = FloatMatrix.createCameraMatrix((float)Math.toRadians(yaw),
 				(float)Math.toRadians(pitch), (float)Math.toRadians(roll), 45,
 				GameCanvas.WIDTH / GameCanvas.HEIGHT, 0.1f, 1000000f)
@@ -43,31 +41,31 @@ public class Camera {
 		// TODO Auto-generated method stub
 		Vector3 lookAt = getNormalLookAtVector();
 		camX += lookAt.x;
-		camY += lookAt.y;
+		camY -= lookAt.y;
 	}
 
 	public void down(float delta) {
 		// TODO Auto-generated method stub
-		camX += delta * Math.sin(yaw * Math.PI / 180.0);
-	    camX += delta * Math.sin(roll * Math.PI / 180.0);
-	    camY -= delta * Math.cos(pitch * Math.PI / 180.0);
-	    camY -= delta * Math.cos(roll * Math.PI / 180.0);
+		Vector3 lookAt = getNormalLookAtVector();
+		camX += lookAt.x;
+		camY += lookAt.y;
 	}
 
 	public void left(float delta) {
 		// TODO Auto-generated method stub
-		camX -= delta * Math.cos(yaw * Math.PI / 180.0);
-	    camX -= delta * Math.cos(roll * Math.PI / 180.0);
-	    camY += delta * Math.sin(pitch * Math.PI / 180.0);
-	    camY += delta * Math.sin(roll * Math.PI / 180.0);
+		Vector3 lookAt = getNormalLookAtVector();
+		lookAt.left();
+		camX += lookAt.x;
+		camY += lookAt.y;
+		
 	}
 
 	public void right(float delta) {
 		// TODO Auto-generated method stub
-		camX -= delta * Math.cos(yaw * Math.PI / 180.0);
-	    camX -= delta * Math.cos(roll * Math.PI / 180.0);
-	    camY += delta * Math.sin(pitch * Math.PI / 180.0);
-	    camY += delta * Math.sin(roll * Math.PI / 180.0);
+		Vector3 lookAt = getNormalLookAtVector();
+		lookAt.right();
+		camX += lookAt.x;
+		camY += lookAt.y;
 	}
 
 	public void zoomIn() {
