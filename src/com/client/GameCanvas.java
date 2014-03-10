@@ -14,6 +14,8 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.query.client.Function;
@@ -33,6 +35,7 @@ import com.googlecode.gwtgl.binding.WebGLUniformLocation;
 import com.shared.Terrain;
 
 public class GameCanvas {
+	private GameCanvas thisCanvas;
 	private WebGLRenderingContext glContext;
 	private WebGLProgram shaderProgram, agentShader;
 	private WebGLTexture texture;
@@ -65,8 +68,12 @@ public class GameCanvas {
 	
 	private final ClientModel theModel;
 	private final Canvas webGLCanvas = Canvas.createIfSupported();
+	
+	private ClickSelector objectSelector;
 
 	public GameCanvas(ClientModel theModel) {
+		thisCanvas = this;
+		
 		RootPanel.get("gwtGL").add(webGLCanvas);
 		glContext = (WebGLRenderingContext) webGLCanvas
 				.getContext("experimental-webgl");
@@ -74,6 +81,8 @@ public class GameCanvas {
 		if (glContext == null) {
 			Window.alert("Sorry, your browser doesn't support WebGL!");
 		}
+		
+		
 		// These lines make the viewport fullscreen
 		webGLCanvas.setCoordinateSpaceHeight(webGLCanvas.getParent()
 				.getOffsetHeight());
@@ -84,6 +93,8 @@ public class GameCanvas {
 		camera = new Camera();
 
 		glContext.viewport(0, 0, WIDTH, HEIGHT);
+		
+		objectSelector = new ClickSelector(glContext, this);
 		
 		this.theModel = theModel;
 		
@@ -162,7 +173,15 @@ public class GameCanvas {
 			}
 		}, KeyUpEvent.getType());
 
-		
+		RootPanel.get().addDomHandler(new MouseDownHandler() {
+
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				System.out.println("MOUSEDOWN!");
+				objectSelector.pick(event.getClientX(), event.getClientY());
+			}
+	
+		}, MouseDownEvent.getType());
 	}
 
 	private void registerResizeHandler() {
@@ -327,7 +346,109 @@ public class GameCanvas {
 		};
 		t.scheduleRepeating(16);
 	}
-
+//
+//	private WebGLFramebuffer minimapFrameBuffer;
+//	private WebGLRenderbuffer minimapRenderBuffer;
+//	private WebGLTexture minimapTexture;
+//	private final int MAPWIDTH = 512;
+//	private final int MAPHEIGHT = 512;
+//	
+//	private void initRealTimeMinimap() {
+//		minimapFrameBuffer = glContext.createFramebuffer();
+//		glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, minimapFrameBuffer);
+//		minimapRenderBuffer = glContext.createRenderbuffer();
+//				
+//		initMinimapTexture();
+//		
+//		glContext.bindRenderbuffer(glContext.RENDERBUFFER, minimapRenderBuffer);
+//	    glContext.renderbufferStorage(glContext.RENDERBUFFER, WebGLRenderingContext.DEPTH_COMPONENT16,
+//	    		MAPWIDTH, MAPHEIGHT);
+//	    
+//	    glContext.framebufferTexture2D(WebGLRenderingContext.FRAMEBUFFER,
+//	    		WebGLRenderingContext.COLOR_ATTACHMENT0, WebGLRenderingContext.TEXTURE_2D,
+//	    		minimapTexture, 0);
+//	    glContext.framebufferRenderbuffer(WebGLRenderingContext.FRAMEBUFFER,
+//	    		WebGLRenderingContext.DEPTH_ATTACHMENT, WebGLRenderingContext.RENDERBUFFER,
+//	    		minimapRenderBuffer);
+//	    
+//	    // Reset to defaults
+//	    glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, null);
+//	    glContext.bindRenderbuffer(WebGLRenderingContext.RENDERBUFFER, null);
+//	    glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, null);
+//
+//	}
+//	
+//	private void renderRealTimeMinimap() {
+//		// Set the current framebuffer to the minimap buffer
+//		glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, minimapFrameBuffer);    
+//	    
+//		// START Render the scene
+//		glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
+//	    glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, minimapTexture);
+//	    
+//	    
+//		// Override the camera matrix with a new matrix in
+//		// which the camera is looking down on the map.
+//		float[] tempMatrix = FloatMatrix.createCameraMatrix(0.0f,
+//				3.14159f + .785398163f, 0.0f, 1,
+//				(float) WIDTH/ (float) HEIGHT, 0.1f, 1000000f)
+//				.columnWiseData();
+//
+//		// These values were tested by hand and picked because
+//		// they looked about right.
+//		float camX = -16.f + 50.f;
+//		float camZ = 3000.0f - 16.0f + 35.0f;
+//		float camY = -3000.0f;
+//		// Draw the minimap
+//		drawScene();
+//		glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, null);
+//		drawScene();
+//		// Restore the old camera matrix
+//		cameraMatrix = tempMatrix;
+//		// Restore the old camera position
+//		camX = tempX;
+//		camY = tempY;
+//		camZ = tempZ;
+//	    //gl.uniform1i(shaderProgram.samplerUniform, 0);
+//	    
+//	    // END Render the scene
+//		glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
+//	    glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
+//	    
+//	    // Reset to the default framebuffer
+//	    glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, null);
+//	}
+//	
+//	private void initMinimapTexture() {
+//		minimapTexture = glContext.createTexture();
+//
+//		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, minimapTexture);
+//		
+//		glContext.texImage2D(WebGLRenderingContext.TEXTURE_2D, 0,
+//				WebGLRenderingContext.RGBA, MAPWIDTH, MAPHEIGHT, 0, WebGLRenderingContext.RGBA,
+//				WebGLRenderingContext.UNSIGNED_BYTE, null);
+//		
+//		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
+//				WebGLRenderingContext.TEXTURE_MAG_FILTER,
+//				WebGLRenderingContext.NEAREST);
+//		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
+//				WebGLRenderingContext.TEXTURE_MIN_FILTER,
+//				WebGLRenderingContext.NEAREST);
+//		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
+//				WebGLRenderingContext.TEXTURE_WRAP_S,
+//				WebGLRenderingContext.CLAMP_TO_EDGE);
+//		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
+//				WebGLRenderingContext.TEXTURE_WRAP_T,
+//				WebGLRenderingContext.CLAMP_TO_EDGE);
+//		glContext.generateMipmap(WebGLRenderingContext.TEXTURE_2D);
+//		
+//	      glContext.texImage2D(WebGLRenderingContext.TEXTURE_2D, 0, WebGLRenderingContext.RGBA, MAPWIDTH, MAPHEIGHT, 0,
+//	    		  WebGLRenderingContext.RGBA, WebGLRenderingContext.UNSIGNED_BYTE, null);
+//
+////		glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
+////		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, minimapTexture);
+//	}
+	
 	private void initTexture() {
 		texture = glContext.createTexture();
 
@@ -546,7 +667,7 @@ public class GameCanvas {
 			}
 	}
 
-	private void drawScene() {
+	public void drawScene() {
 		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT
 				| WebGLRenderingContext.DEPTH_BUFFER_BIT);
 
