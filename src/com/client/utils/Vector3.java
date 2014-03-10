@@ -39,4 +39,9 @@ public class Vector3 {
 		x = y;
 		y = -temp;
 	}
+	
+	public String toString() {
+		return "[" + x + ", " + y + ", " + z + "]";
+	}
+	}
 }

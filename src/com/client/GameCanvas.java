@@ -126,8 +126,8 @@ public class GameCanvas {
 				case KeyCodes.KEY_D:
 					right = true;
 					break;
-				case KeyEvent.VK_MINUS: out = true; break;
-				case KeyEvent.VK_PLUS: in = true; break;
+				//case KeyEvent.VK_MINUS: out = true; break;
+				//case KeyEvent.VK_PLUS: in = true; break;
 				case KeyCodes.KEY_Q: rotateLeft = true; break;
 				case KeyCodes.KEY_E: rotateRight = true; break;
 				case KeyCodes.KEY_X: center = true; break;
@@ -152,8 +152,8 @@ public class GameCanvas {
 				case KeyCodes.KEY_RIGHT:
 				case KeyCodes.KEY_D:
 					right = false; break;
-				case KeyEvent.VK_MINUS: out = false; break;
-				case KeyEvent.VK_PLUS: in = false; break;
+				//case KeyEvent.VK_MINUS: out = false; break;
+				//case KeyEvent.VK_PLUS: in = false; break;
 				case KeyCodes.KEY_Q: rotateLeft = false; break;
 				case KeyCodes.KEY_E: rotateRight = false; break;
 				case KeyCodes.KEY_X: center = false; break;
