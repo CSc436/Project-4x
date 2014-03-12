@@ -1,6 +1,7 @@
 package entities.gameboard;
 
 import control.Player;
+import entities.buildings.Building;
 
 /**
  * 
@@ -20,7 +21,7 @@ public class Tile {
 	private Resource resource; // Resource that populates this tile.
 	private int resourceAmount; // amount of resources tile has.
 	private float resourceReg; // this tile's resource regen rate.
-	
+
 	private float height; // Height generated from the diamondSquareGenerator in
 							// GameBoard
 	private Player owner; // The Player that contains possession of the tile,
@@ -30,37 +31,44 @@ public class Tile {
 	private boolean occupiedByBuilding = false; // keeps track of whether or not
 												// tile is occupied by buliding.
 
-	// Resource Base Amounts - 'Average' amount a tile contiaining resource X will start with
-	private static final int foodBase  = 200; 
-	private static final int woodBase  = 100; 
-	private static final int stoneBase = 300; 
-	private static final int goldBase  = 500; 
-	
-	// Resource Regeneration rates - how much of resource will regenerate during each 'Tick'
-	private static final float foodReg  = 1.100f; 
-	private static final float woodReg  = 1.300f; 
-	private static final float stoneReg = 1.050f; 
-	private static final float goldReg  = 1.025f; 
-	
+	private float xco; // xcoordinate of upper left hand corner of tile
+	private float yco; // y coordinate of upper left hand corner of tile
 
+	private Building buildingRef = null;
 
-	/*
+	// Resource Base Amounts - 'Average' amount a tile contiaining resource X
+	// will start with
+	private static final int foodBase = 200;
+	private static final int woodBase = 100;
+	private static final int stoneBase = 300;
+	private static final int goldBase = 500;
+
+	// Resource Regeneration rates - how much of resource will regenerate during
+	// each 'Tick'
+	private static final float foodReg = 1.100f;
+	private static final float woodReg = 1.300f;
+	private static final float stoneReg = 1.050f;
+	private static final float goldReg = 1.025f;
+
+	/**
 	 * Tile(): Description: Constructor for Tile Object. Determines the terrain
 	 * type based on heightMap, and assigns resource.
 	 * 
 	 * Parameters:
 	 * 
 	 * @param int resourceNum - the number of the resource, Currently 0 for
-	 * Gold, 1 for wood, 2 for food, and 3 for stone
+	 *        Gold, 1 for wood, 2 for food, and 3 for stone
 	 * 
 	 * @param float heightMap - the height of this specific tile, determines the
-	 * terrain type.
+	 *        terrain type.
+	 * @param float xco - xcoordinate of upper left hand corner of tile
+	 * @param float yco - y coordinate of upper left hand corener of tile
 	 * 
-	 * Return Value:
+	 *        Return Value:
 	 * 
 	 * @return a new Tile object.
 	 */
-	public Tile(int resourceNum, float heightMap) {
+	public Tile(int resourceNum, float heightMap, float xco, float yco) {
 		height = heightMap;
 
 		if (resourceNum == 0) {
@@ -75,9 +83,12 @@ public class Tile {
 			resource = Resource.NONE;
 		}
 
+		this.xco = xco;
+		this.yco = yco;
+
 		setResourceAmount(resource);
 		setResourceRegen(resource);
-		
+
 		owner = null;
 		passable = true;
 		terrain = calculateTerrainType(height);
@@ -95,137 +106,134 @@ public class Tile {
 	 * @param float heightMap - the height of this specific tile, determines the
 	 * terrain type.
 	 * 
-	 * Return Value: 
+	 * @param float xco - xcoordinate of upper left hand corner
+	 * 
+	 * @param float yco - ycoordinate of upper left hand corner
+	 * 
+	 * Return Value:
+	 * 
 	 * @return a new Tile object.
 	 */
-	public Tile(Resource r, float heightMap) {
+	public Tile(Resource r, float heightMap, float xco, float yco) {
 		height = heightMap;
 
 		resource = r;
-		
-		setResourceAmount(resource); 
+
+		setResourceAmount(resource);
 		setResourceRegen(resource);
-		
+
 		owner = null;
 		passable = true;
 		terrain = calculateTerrainType(height);
 	}
-	
+
 	/*
-	 * setResourceRegen():
-	 * Description:
-	 * Based on resource type, sets the regen rate
+	 * setResourceRegen(): Description: Based on resource type, sets the regen
+	 * rate
 	 * 
 	 * Parameters:
-	 * @param Resource r - the resource to assign 
+	 * 
+	 * @param Resource r - the resource to assign
 	 * 
 	 * Return Value:
-	 * @return void 
 	 * 
-	 * TODO add noise to regen amounts? 
+	 * @return void
+	 * 
+	 * TODO add noise to regen amounts?
 	 */
-	public void setResourceRegen(Resource r)
-	{
-		switch (r)
-		{
-			case NONE:
-				this.resourceReg = 0f;
-				break;
-			case GOLD:
-				this.resourceReg = goldReg;
-				break;
-			case STONE:
-				this.resourceReg = stoneReg;
-				break;
-			case FOOD:
-				this.resourceReg = foodReg;
-				break;
-			case WOOD:
-				this.resourceReg = woodReg; 
-				break;
-			default:
-				this.resourceReg = 0f;
-				break;
+	public void setResourceRegen(Resource r) {
+		switch (r) {
+		case NONE:
+			this.resourceReg = 0f;
+			break;
+		case GOLD:
+			this.resourceReg = goldReg;
+			break;
+		case STONE:
+			this.resourceReg = stoneReg;
+			break;
+		case FOOD:
+			this.resourceReg = foodReg;
+			break;
+		case WOOD:
+			this.resourceReg = woodReg;
+			break;
+		default:
+			this.resourceReg = 0f;
+			break;
 		}
 	}
-	
+
 	/*
-	 * setResourceAmount():
-	 * Description:
-	 * Sets the base amount of a resource for a tile. Values based on 
-	 * constants described at top of file.
-	 * TODO in future add ability to fluctuate start vlaues. 
+	 * setResourceAmount(): Description: Sets the base amount of a resource for
+	 * a tile. Values based on constants described at top of file. TODO in
+	 * future add ability to fluctuate start vlaues.
 	 * 
 	 * Parameters:
+	 * 
 	 * @param Resource r - resource this tile will contain
 	 * 
 	 * Return value:
-	 * @return the amount of resource this tile is set to. 
+	 * 
+	 * @return the amount of resource this tile is set to.
 	 */
-	public int setResourceAmount(Resource r)
-	{
+	public int setResourceAmount(Resource r) {
 		// TODO add noise. fluctuate starting amounts
-		switch (r)
-		{
-			case NONE:
-				this.resourceAmount = 0;
-				break;
-			case GOLD:
-				this.resourceAmount = goldBase;
-				break;
-			case STONE:
-				this.resourceAmount = stoneBase;
-				break;
-			case FOOD:
-				this.resourceAmount= foodBase;
-				break;
-			case WOOD:
-				this.resourceAmount = woodBase; 
-				break;
-			default:
-				this.resourceAmount = 0;
-				break;
+		switch (r) {
+		case NONE:
+			this.resourceAmount = 0;
+			break;
+		case GOLD:
+			this.resourceAmount = goldBase;
+			break;
+		case STONE:
+			this.resourceAmount = stoneBase;
+			break;
+		case FOOD:
+			this.resourceAmount = foodBase;
+			break;
+		case WOOD:
+			this.resourceAmount = woodBase;
+			break;
+		default:
+			this.resourceAmount = 0;
+			break;
 		}
-		return this.resourceAmount; 
+		return this.resourceAmount;
 	}
-	
+
 	/*
-	 * generateResource():
-	 * Description:
-	 * regenerates resource for given tile. Should be called once a 'Tick'
+	 * generateResource(): Description: regenerates resource for given tile.
+	 * Should be called once a 'Tick'
 	 */
-	public void generateResource()
-	{
+	public void generateResource() {
 		this.resourceAmount *= this.resourceReg;
 	}
-	
+
 	/*
-	 * takeResource():
-	 * Description:
-	 * If current tile has a resource, allow player to take up to amount given. 
-	 * TODO: possibly add parameter that is resource they are trying to take? 
+	 * takeResource(): Description: If current tile has a resource, allow player
+	 * to take up to amount given. TODO: possibly add parameter that is resource
+	 * they are trying to take?
 	 * 
 	 * Parameters:
+	 * 
 	 * @param int amount - amount of resource unit/player is trying to take
 	 * 
 	 * Return value:
-	 * @return amount taken; can be 0 - amount (inclusive). 
+	 * 
+	 * @return amount taken; can be 0 - amount (inclusive).
 	 */
-	public int takeResources(int amount)
-	{
+	public int takeResources(int amount) {
 		int res;
-		if (this.resource == Resource.NONE || this.resourceAmount == 0)
-		{
-			return 0; 
-		} else if (this.resourceAmount < amount) 
-		{
+		if (this.resource == Resource.NONE || this.resourceAmount == 0) {
+			return 0;
+		} else if (this.resourceAmount < amount) {
 			res = this.resourceAmount;
 			this.resourceAmount = 0;
 			this.resourceReg = 0f;
 			this.resource = Resource.NONE;
-			return res; 
-		} else
-		{
+			return res;
+		} else {
 			this.resourceAmount -= amount;
 			return amount;
 		}
@@ -300,7 +308,7 @@ public class Tile {
 		this.resource = r;
 		setResourceAmount(this.resource);
 		setResourceRegen(this.resource);
-		
+
 		return true;
 	}
 
@@ -418,7 +426,73 @@ public class Tile {
 		return terrain;
 	}
 
-	public void setIsOccupiedByBuilding(boolean t) {
-		occupiedByBuilding = t;
+	/**
+	 * setBuildingRef(): Description Sets the new building reference for this
+	 * tile (allows tile to see what building is on it) Will also change the
+	 * value of occupiedByBuilding. This function will fail if there is
+	 * currently a building on the tile (will return false to indicate so)
+	 * 
+	 * Parameters:
+	 * 
+	 * @param nb
+	 *            - new building reference
+	 * 
+	 *            Return Value:
+	 * @return True if buildingReference successfully changed, false if not.
+	 */
+	public boolean setBuilding(Building nb) {
+		// cannot setBuilding to null, use remove building to do so
+		if (nb == null) {
+			return false;
+		} else if (buildingRef == null) {
+			buildingRef = nb;
+			occupiedByBuilding = true;
+			return true;
+		} else {
+			return false; // building already occupies this tile
+		}
+	}
+
+	/**
+	 * @summary - return the current building occupying tile
+	 * @return buildingRef
+	 */
+	public Building getBuilding() {
+		return buildingRef;
+	}
+
+	/**
+	 * removeBuilding(): Description: removes the current building reference
+	 * (changes occupiedByBuilding to reflect this)
+	 * 
+	 * Return Value:
+	 * 
+	 * @return True if building was removed (buildingRef was not null before
+	 *         calling), false if not
+	 */
+	public boolean removeBuilding() {
+		// cannot remove a building that doesn't exist
+		if (buildingRef == null) {
+			return false;
+		} else // building exists, remove it from this tile
+		{
+			buildingRef = null;
+			occupiedByBuilding = false;
+			return true;
+		}
+	}
+
+	public float getXCoordinate() {
+		return xco;
+	}
+
+	public float getYCoordinate() {
+		return yco;
+	}
+
+	// not deprecated. needed for setting occupied tiles back to false when the
+	// building is removed
+	public void setIsOccupiedByBuilding(boolean b) {
+		occupiedByBuilding = false;
 	}
 }

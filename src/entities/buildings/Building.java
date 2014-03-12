@@ -75,4 +75,9 @@ public abstract class Building extends GameObject {
 		return buildingQ.poll();
 	}
 
+	public BuildingType getBuildingType() {
+
+		return buildingType;
+	}
+
 }

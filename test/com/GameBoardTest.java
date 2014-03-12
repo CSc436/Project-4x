@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 import org.junit.Test;
 
@@ -17,6 +18,8 @@ import control.GameState;
 import control.PlayerCommands;
 import control.Targets;
 import control.UnitType;
+import entities.buildings.Building;
+import entities.gameboard.GameBoard;
 import entities.util.Point;
 
 public class GameBoardTest {
@@ -48,23 +51,57 @@ public class GameBoardTest {
 		pc.push(new Command(Actions.STARTUP_CREATE, Targets.MAP, c));
 		t.start();
 		try {
-			Thread.sleep(100);
+			Thread.sleep(1000);
 		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
 		c = new ArrayList<Object>();
 		c.add(0);
 		c.add(BuildingType.BARRACKS);
-		c.add(new Point(1, 1));
+		c.add(new Point(new Float(1.0), new Float(1.0)));
 		pc.push(new Command(Actions.CREATE_BUILDING, Targets.BUILDING, c));
+		
 
-		/*
-		 * c = new ArrayList<Object>(); c.add(UnitType.INFANTRY);
-		 * 
-		 * pc.push(new Command(Actions.CREATE, Targets.UNIT, c));
-		 */
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+
+		// ---------------- assertions
+
+		GameBoard game = cont.getGameBoard();
+		assertEquals(200, game.getCols());
+		assertEquals(200, game.getRows());
+		// assertTrue(game.getTileAt(1, 1).isOccupiedByBuilding());
+		assertTrue(game.getTileAt(1, 1).isOccupiedByBuilding());
+
+		// Building ts = gs.getPlayers().get(0).getGameObjects().getBuildings();
+		Object[] temp = gs.getPlayers().get(0).getGameObjects().getBuildings()
+				.values().toArray();
+		Building ts = (Building) temp[0];
+
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+
+		c = new ArrayList<Object>();
+		c.add(0);
+		c.add(ts);
+		pc.push(new Command(Actions.SELECT, Targets.BUILDING, c));
+
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+
+		c = new ArrayList<Object>();
+		c.add(0);
+		pc.push(new Command(Actions.DESELECT, Targets.BUILDING, c));
 
 		try {
 

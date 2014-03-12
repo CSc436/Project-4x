@@ -115,7 +115,7 @@ public class Factory {
 			break;
 		// result = new Infantry(p, 1, 1, uniqueid);
 		}
-		
+
 		return result;
 
 	}
@@ -131,21 +131,26 @@ public class Factory {
 			result = new Barracks(newId, playerId, BaseStatsEnum.BARRACKS,
 					BaseStatsEnum.BARRACKS.getStats(), GameObjectType.BUILDING,
 					BuildingType.BARRACKS, xco, yco, 2, 4);
+			break;
 
 		case BANK:
 			result = new Barracks(newId, playerId, BaseStatsEnum.BANK,
 					BaseStatsEnum.BANK.getStats(), GameObjectType.BUILDING,
 					BuildingType.BANK, xco, yco, 2, 2);
+			break;
 
 		case TOWN_HALL:
 			result = new Barracks(newId, playerId, BaseStatsEnum.TOWN_HALL,
 					BaseStatsEnum.TOWN_HALL.getStats(),
 					GameObjectType.BUILDING, BuildingType.TOWN_HALL, xco, yco,
 					4, 4);
+			break;
 		default:
+			break;
 
-			// result = new Barracks(p, 1, 1, uniqueid);
+		// result = new Barracks(p, 1, 1, uniqueid);
 		}
+
 		return result;
 
 	}

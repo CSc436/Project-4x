@@ -1,4 +1,5 @@
 package entities.gameboard;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -24,29 +25,35 @@ public class GameBoard {
 	private float averageHeight = 0f; // Stores the average height of the noise
 										// map.
 
-	private static final float foodMult  = 0.050f;  	// 5% of tiles that can support food have food
-	private static final float woodMult  = 0.20f; 	// 5% of tiles that can support wood have wood
-	private static final float stoneMult = 0.050f; 	// 5% of tiles that can support stone have stone
-	private static final float goldMult  = 0.002f; 	// 0.2% of tiles that can support gold have gold
-	 // TODO for tiles add a coordinate (upper left and right). 
+	private static final float foodMult = 0.050f; // 5% of tiles that can
+													// support food have food
+	private static final float woodMult = 0.20f; // 5% of tiles that can support
+													// wood have wood
+	private static final float stoneMult = 0.050f; // 5% of tiles that can
+													// support stone have stone
+	private static final float goldMult = 0.002f; // 0.2% of tiles that can
+													// support gold have gold
 
-	
+	// TODO for tiles add a coordinate (upper left and right).
+
 	/*
-	 * GameBoard():
-	 * Description:
-	 * Constructor for a game board object, requires the number of rows and columns for board
-	 * dimensions - should be equal for best terrain results - and the number of players that will
-	 * appear on the map (AI or Human). This constructor ensures that the resulting gameboard will
-	 * not be a Hoth or Waterworld. 
+	 * GameBoard(): Description: Constructor for a game board object, requires
+	 * the number of rows and columns for board dimensions - should be equal for
+	 * best terrain results - and the number of players that will appear on the
+	 * map (AI or Human). This constructor ensures that the resulting gameboard
+	 * will not be a Hoth or Waterworld.
 	 * 
 	 * Parameters:
-	 * @param int row - number of rows the gameboard class will have
-	 * @param int col - number of columns the gameboard class will have 
-	 * @param int numPlayers - number of players that will be on the gameboard. 
 	 * 
-	 * Notes:
-	 * To complete a gameboard object, you will need to call a resource distribution method and a 
-	 * player distribution method (TODO implement a player dist method). 
+	 * @param int row - number of rows the gameboard class will have
+	 * 
+	 * @param int col - number of columns the gameboard class will have
+	 * 
+	 * @param int numPlayers - number of players that will be on the gameboard.
+	 * 
+	 * Notes: To complete a gameboard object, you will need to call a resource
+	 * distribution method and a player distribution method (TODO implement a
+	 * player dist method).
 	 */
 	public GameBoard(int row, int col) {
 		rows = row;
@@ -93,14 +100,15 @@ public class GameBoard {
 		}
 		System.out.println("Height Adjust: " + heightAdjust);
 
-		for (int c = 0; c < cols; c++) {
-			for (int r = 0; r < rows; r++) {
+		for (int r = 0; r < rows; r++) {
+			for (int c = 0; c < cols; c++) {
 				float height = noisemap[r][c];
-				map[r][c] = new Tile(Resource.NONE, height + heightAdjust); // Use the adjusted height to create the tile
+				map[r][c] = new Tile(Resource.NONE, height + heightAdjust,
+						(float) r, (float) c); // Use the adjusted height to
+												// create the tile
 			}
 		}
 
-		
 		// TODO distribute players
 		// Based on num players
 		// 1 - place player roughly in center
@@ -110,142 +118,142 @@ public class GameBoard {
 		// attempt to distribute near resources.
 
 		endTime = System.currentTimeMillis();
-		System.out.println("Total execution time: " + (endTime - startTime) + "\n");
+		System.out.println("Total execution time: " + (endTime - startTime)
+				+ "\n");
 
 	}
 
-	
 	/*
-	 * resourceDistNatural():
-	 * Description:
-	 * Default resource distribution, uses constants at top of file. 
-	 * Allocates tile types into a variety of linkedlists, attempts to perform
-	 * 'realistic' resource distribution 
+	 * resourceDistNatural(): Description: Default resource distribution, uses
+	 * constants at top of file. Allocates tile types into a variety of
+	 * linkedlists, attempts to perform 'realistic' resource distribution
 	 */
-	public void resourceDistNatural()
-	{
+	public void resourceDistNatural() {
 		ArrayList<ArrayList<Point>> terrainList = new ArrayList<ArrayList<Point>>();
-		// Init lists for terain types 
-		for (int i = 0; i < 6; i++)
-		{
+		// Init lists for terain types
+		for (int i = 0; i < 6; i++) {
 			terrainList.add(new ArrayList<Point>());
 		}
-		
-		// Add different tiles to lists. 
-		for (int i = 0; i < map.length; i++)
-		{
-			for (int j = 0; j < map[i].length; j++)
-			{
-				terrainList.get(map[i][j].getTerrainType().ordinal()).add(new Point(i, j));				
+
+		// Add different tiles to lists.
+		for (int i = 0; i < map.length; i++) {
+			for (int j = 0; j < map[i].length; j++) {
+				terrainList.get(map[i][j].getTerrainType().ordinal()).add(
+						new Point(i, j));
 			}
 		}
-	
+
 		System.out.println("Distributing resources in Natural Fashion...");
 		System.out.println("Distributing food...");
-		int numFood = (int) (foodMult * (terrainList.get(Terrain.WATER.ordinal()).size() +
-				                         terrainList.get(Terrain.DIRT.ordinal()).size() +
-				                         terrainList.get(Terrain.GRASS.ordinal()).size()));
+		int numFood = (int) (foodMult * (terrainList.get(
+				Terrain.WATER.ordinal()).size()
+				+ terrainList.get(Terrain.DIRT.ordinal()).size() + terrainList
+				.get(Terrain.GRASS.ordinal()).size()));
 		// food can exist in lists 0,1,2
-		terrainList = resourceDistNaturalHelp(terrainList, numFood, Resource.FOOD, 0, 3); 
-		
+		terrainList = resourceDistNaturalHelp(terrainList, numFood,
+				Resource.FOOD, 0, 3);
+
 		System.out.println("Distributing wood...");
-		int numWood = (int) (woodMult * (terrainList.get(Terrain.GRASS.ordinal()).size() +
-                                         terrainList.get(Terrain.FOREST.ordinal()).size()));
-		terrainList = resourceDistNaturalHelp(terrainList, numWood, Resource.WOOD, 2, 2); 
+		int numWood = (int) (woodMult * (terrainList.get(
+				Terrain.GRASS.ordinal()).size() + terrainList.get(
+				Terrain.FOREST.ordinal()).size()));
+		terrainList = resourceDistNaturalHelp(terrainList, numWood,
+				Resource.WOOD, 2, 2);
 		// Wood can exist in lists 2 and 3
-		
+
 		System.out.println("Distributing stone...");
-		int numStone = (int) (stoneMult * (terrainList.get(Terrain.FOREST.ordinal()).size() +
-                                           terrainList.get(Terrain.MOUNTAIN.ordinal()).size() + 
-                                           terrainList.get(Terrain.SNOW.ordinal()).size()));
-		terrainList = resourceDistNaturalHelp(terrainList, numStone, Resource.STONE, 3, 3); 
-		
+		int numStone = (int) (stoneMult * (terrainList.get(
+				Terrain.FOREST.ordinal()).size()
+				+ terrainList.get(Terrain.MOUNTAIN.ordinal()).size() + terrainList
+				.get(Terrain.SNOW.ordinal()).size()));
+		terrainList = resourceDistNaturalHelp(terrainList, numStone,
+				Resource.STONE, 3, 3);
+
 		System.out.println("Distributing gold...");
-		int numGold = (int) (goldMult * (terrainList.get(Terrain.FOREST.ordinal()).size() +
-                                         terrainList.get(Terrain.MOUNTAIN.ordinal()).size() + 
-                                         terrainList.get(Terrain.SNOW.ordinal()).size()));
-		terrainList = resourceDistNaturalHelp(terrainList, numGold, Resource.GOLD, 3, 3); 
+		int numGold = (int) (goldMult * (terrainList.get(
+				Terrain.FOREST.ordinal()).size()
+				+ terrainList.get(Terrain.MOUNTAIN.ordinal()).size() + terrainList
+				.get(Terrain.SNOW.ordinal()).size()));
+		terrainList = resourceDistNaturalHelp(terrainList, numGold,
+				Resource.GOLD, 3, 3);
 	}
-	
+
 	/*
-	 * resourceDistNaturalHelp():
-	 * Description:
-	 * Distributes one given resource. 
+	 * resourceDistNaturalHelp(): Description: Distributes one given resource.
 	 * 
 	 * Parameters:
-	 * @param terrainList - list of available terrain tiles that can have resources
+	 * 
+	 * @param terrainList - list of available terrain tiles that can have
+	 * resources
+	 * 
 	 * @param numRes - number of specific resource to distribute
-	 * @param res - resource to distribute 
-	 * @param offset - offset in terrainList, first list this resource can appear in 
-	 * @param numLists - number of lists this resource can appear in. 
+	 * 
+	 * @param res - resource to distribute
+	 * 
+	 * @param offset - offset in terrainList, first list this resource can
+	 * appear in
+	 * 
+	 * @param numLists - number of lists this resource can appear in.
 	 * 
 	 * Return Value:
+	 * 
 	 * @retrun the altered terrainList
 	 */
-	private ArrayList<ArrayList<Point>> resourceDistNaturalHelp(ArrayList<ArrayList<Point>> terrainList, int numRes, Resource res, int offset, int numLists)
-	{
+	private ArrayList<ArrayList<Point>> resourceDistNaturalHelp(
+			ArrayList<ArrayList<Point>> terrainList, int numRes, Resource res,
+			int offset, int numLists) {
 		if (terrainList.size() == 0)
 			return terrainList;
-		
-		Point temp; 
+
+		Point temp;
 		Random rnd = new Random();
-		int r, rp, rpp; 
-		while (numRes > 0)
-		{
-			r   = Math.abs(rnd.nextInt());
-			rp  = offset + r % numLists;
-			if (terrainList.get(rp).size() == 0)
-			{
+		int r, rp, rpp;
+		while (numRes > 0) {
+			r = Math.abs(rnd.nextInt());
+			rp = offset + r % numLists;
+			if (terrainList.get(rp).size() == 0) {
 				continue;
 			}
 			rpp = r % terrainList.get(rp).size();
-			do
-			{
-				if (terrainList.get(rp).size() == 0)
-				{
+			do {
+				if (terrainList.get(rp).size() == 0) {
 					break;
 				}
-				temp = terrainList.get(rp).get(rpp % terrainList.get(rp).size());
+				temp = terrainList.get(rp)
+						.get(rpp % terrainList.get(rp).size());
 				map[Math.round(temp.x)][Math.round(temp.y)].setResource(res);
 				terrainList.get(rp).remove(rpp % terrainList.get(rp).size());
 				numRes--;
-			} while(rnd.nextBoolean());
+			} while (rnd.nextBoolean());
 		}
 		return terrainList;
 	}
-	
+
 	/*
-	 * resourceDistStoneMountain():
-	 * Description:
-	 * Another resource distribution function, this one makes a majority of the 
-	 * Mountain terrain type stone
-	 * 
-	 * 
+	 * resourceDistStoneMountain(): Description: Another resource distribution
+	 * function, this one makes a majority of the Mountain terrain type stone
 	 */
-	public void resourceDistStoneMountain()
-	{
-		// TODO make all of mountain area stone, distrubite some of other resources
+	public void resourceDistStoneMountain() {
+		// TODO make all of mountain area stone, distrubite some of other
+		// resources
 	}
 
 	/*
-	 * resourceDistGoldRush():
-	 * Description:
-	 * Another resource distribution function, this one makes a majority of the snow 
-	 * and mountain terrain gold. 
-	 * 
-	 * 
+	 * resourceDistGoldRush(): Description: Another resource distribution
+	 * function, this one makes a majority of the snow and mountain terrain
+	 * gold.
 	 */
-	public void resourceDistGoldRush()
-	{
-		// TODO make all of snow/ a lot of mountain gold resources, have gold in water too?
+	public void resourceDistGoldRush() {
+		// TODO make all of snow/ a lot of mountain gold resources, have gold in
+		// water too?
 	}
-	
+
 	/*
-	 * getRows():
-	 * Description:
-	 * returns the number of rows this gameboard object has
+	 * getRows(): Description: returns the number of rows this gameboard object
+	 * has
 	 * 
 	 * Return Value:
+	 * 
 	 * @return an int - the number of rows
 	 */
 	public int getRows() {
@@ -253,11 +261,11 @@ public class GameBoard {
 	}
 
 	/*
-	 * getCols():
-	 * Description:
-	 * Returns the number of columns a gameboard object has
+	 * getCols(): Description: Returns the number of columns a gameboard object
+	 * has
 	 * 
 	 * Return Value:
+	 * 
 	 * @return an int - the number of columns
 	 */
 	public int getCols() {
@@ -266,87 +274,90 @@ public class GameBoard {
 	}
 
 	/*
-	 * getTileAt():
-	 * Description:
-	 * Returns a Tile object at the given location. Note: this function does
-	 * NOT currently check to make sure that the coordinates are within the bounds
-	 * of the board. 
+	 * getTileAt(): Description: Returns a Tile object at the given location.
+	 * Note: this function does NOT currently check to make sure that the
+	 * coordinates are within the bounds of the board.
 	 * 
 	 * Parameters:
-	 * @param int x - x location of tile (0 to numRows - 1) 
+	 * 
+	 * @param int x - x location of tile (0 to numRows - 1)
+	 * 
 	 * @param int y - y location of tile (0 to numCols - 1)
 	 * 
 	 * Return Value:
+	 * 
 	 * @return Tile object at location x,y
 	 */
 	public Tile getTileAt(int x, int y) {
 		return map[x][y];
 	}
 
-
-
-
 	/*
-	 * placeBuildingAt():
-	 * Description:
-	 * Places a building object at the location (x,y) on the map.
+	 * placeBuildingAt(): Description: Places a building object at the location
+	 * (x,y) on the map.
 	 * 
 	 * Parameters:
+	 * 
 	 * @param Building b - building to place on map
+	 * 
 	 * @param int x - x coordinate where to place building (0 to rows - 1)
+	 * 
 	 * @param int y - y coordinate where to place building (0 to cols - 1)
 	 */
+
+	// TODO: check if occupied
 	public void placeBuildingAt(Building b, int x, int y) {
 
 		// the tile must be owned to place a building
 
-			// calculate the distance to the the bottom right corner
-			int dc = (cols - (x + b.getWidth() - 1));
-			int dr = (rows - (y + b.getHeight() - 1));
+		// calculate the distance to the the bottom right corner
+		int dc = (cols - (x + b.getWidth() - 1));
+		int dr = (rows - (y + b.getHeight() - 1));
 
-			// if the placement of the building does not go off the map
-			if (dc > 0 && dr > 0) {
+		// if the placement of the building does not go off the map
+		if (dc > 0 && dr > 0) {
 
-				// TODO: update how buildings are placed on the gameboard.
-//				map[x][y].getOwner().addBuilding(b);
+			// TODO: update how buildings are placed on the gameboard.
+			// map[x][y].getOwner().addBuilding(b);
 
-				// set the area of the rectangle to be occupied by a building
+			// set the area of the rectangle to be occupied by a building
 
-				for (int r = x; r < (x + b.getHeight()); r++) {
+			for (int r = x; r < (x + b.getHeight()); r++) {
 
-					for (int c = y; c < (y + b.getWidth()); c++) {
-						map[r][c].setIsOccupiedByBuilding(true);
-					}
+				for (int c = y; c < (y + b.getWidth()); c++) {
+					map[r][c].setBuilding(b);
 				}
-			} else {
-				System.err.println("The building does not fit on the map");
 			}
+		} else {
+			System.err.println("The building does not fit on the map");
+		}
 	}
 
 	/*
-	 * removeUnit():
-	 * Description:
-	 * Removes a Unit from a Players unit list? (TODO shouldn't this be with player?)
+	 * removeUnit(): Description: Removes a Unit from a Players unit list? (TODO
+	 * shouldn't this be with player?)
 	 * 
 	 * Parameters:
-	 * @param Unit u - unit to remove 
+	 * 
+	 * @param Unit u - unit to remove
 	 */
 	public void removeUnit(Unit u) {
-		//remove from gameboard
+		// remove from gameboard
 	}
 
 	/*
-	 * moveUnit():
-	 * Description:
-	 * Moves a unit from current location to new one. 
-	 * TODO implement some sort of restriction on distance 
-	 * TODO possibly move into unit class?
-	 * NOTE: currently does not check to make sure that move is within bounds
+	 * moveUnit(): Description: Moves a unit from current location to new one.
+	 * TODO implement some sort of restriction on distance TODO possibly move
+	 * into unit class? NOTE: currently does not check to make sure that move is
+	 * within bounds
 	 * 
 	 * Parameters:
+	 * 
 	 * @param Unit u - unit to move
+	 * 
 	 * @param int x - new x coordinate for unit
-	 * @param int y - new y coordinate for unit 
+	 * 
+	 * @param int y - new y coordinate for unit
 	 */
 	public void moveUnit(Unit u, int x, int y) {
 
@@ -355,26 +366,27 @@ public class GameBoard {
 	}
 
 	/*
-	 * removeBuilding():
-	 * Description:
-	 * removes a given building from the board. 
-	 * Note: Building must be within range 
+	 * removeBuilding(): Description: removes a given building from the board
+	 * and sets the tiles that were occupied by the building to vacant. Note:
+	 * Building must be within range
 	 * 
 	 * Parameters:
-	 * @param Building b - building to remove from this gameboard. 
+	 * 
+	 * @param Building b - building to remove from this gameboard.
 	 */
 	public void removeBuilding(Building b) {
-		
+
 		Point pos = b.getPosition();
 		int x = Math.round(pos.x);
 		int y = Math.round(pos.y);
+		map[x][y].removeBuilding();
 
 		int height = b.getHeight();
 		int width = b.getWidth();
 
-		for (int r = x; r < (x + b.getHeight()); r++) {
+		for (int r = x; r < (x + height); r++) {
 
-			for (int c = y; c < (y + b.getWidth()); c++) {
+			for (int c = y; c < (y + width); c++) {
 				map[r][c].setIsOccupiedByBuilding(false);
 			}
 		}

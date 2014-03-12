@@ -74,14 +74,10 @@ public class Controller implements Runnable {
 			unitInteraction();
 			// When the timer on a unit in the production queue hits 0, add the
 			// unit to the player's unit list.
-			checkBuildingProductionQueue();
+			checkBuildingProductionQueue(10);
 
 			gameRunning = playerCommands();
 			System.out.println("STILL RUNNING: " + gameRunning);
-			System.out
-					.println("STILL RUNNING: "
-							+ players.get(0).getGameObjects().getBuildings()
-									.toString());
 			gs.update(players, map);
 		}
 	}
@@ -96,7 +92,8 @@ public class Controller implements Runnable {
 				b.advanceUnitProduction(timestep);
 				Unit u = b.getProducedUnit();
 				if (u != null) {
-					p.getGameObjects().getUnits().add(b.getProducedUnit());
+					p.getGameObjects().getUnits()
+							.put(u.getId(), b.getProducedUnit());
 				}
 			}
 		}
@@ -145,11 +142,66 @@ public class Controller implements Runnable {
 
 				System.out.println("Create " + type + " at :" + "(" + bp.x
 						+ "," + bp.y + ") for playerId : " + playerid);
+
+				map.placeBuildingAt(b, (int) Math.round(bp.x),
+						(int) Math.round(bp.y));
+
+				players.get(playerid).addBuilding(b);
 				break;
 
 			case CREATE_UNIT:
 
+				payload = comm.getPayload();
+				playerid = (int) payload.get(0);
+
+				if (players.get(playerid).hasSelectedEligibleBuilding()) {
+
+					UnitType ut = (UnitType) payload.get(1);
+					bp = (Point) payload.get(2);
+
+					Unit u = Factory.buildUnit(playerid, ut, bp.x, bp.y);
+
+					System.out.println("Create " + ut + " at :" + "(" + bp.x
+							+ "," + bp.y + ") for playerId : " + playerid);
+
+				} else {
+					System.out.println("No building selected to create unit!");
+				}
+
+				// TODO : Place created unit in a building
+				// TODO : Need selected unit implemented
 				break;
+
+			case SELECT:
+
+				payload = comm.getPayload();
+				playerid = (int) payload.get(0);
+
+				// if the action target is a building
+				if (comm.getTarget() == Targets.BUILDING) {
+
+					b = (Building) payload.get(1);
+					bp = b.getPosition();
+
+					players.get(playerid).selectBuilding(b);
+
+					System.out.println("Selected " + b.getBuildingType()
+							+ " at :" + "(" + bp.x + "," + bp.y
+							+ ") for playerId : " + playerid);
+
+				} else {
+					// else the action's target is a unit
+
+				}
+
+			case DESELECT:
+
+				// this is currently deselect all, needs deselect target
+				payload = comm.getPayload();
+				playerid = (int) payload.get(0);
+				players.get(playerid).deselect();
+
+				System.out.println("Deselected for player :" + playerid);
 
 			}
 		}
@@ -160,6 +212,8 @@ public class Controller implements Runnable {
 	 * TODO implement - or move somewhere better. pathFinding() Description:
 	 * General pathfinding algorithm for units, somehow need to view the map.
 	 * uses A*.
+	 * 
+	 * since in controller both have access to map and to
 	 */
 	public Queue<Tile> pathFinding() {
 		return null;
@@ -191,6 +245,12 @@ public class Controller implements Runnable {
 
 			}
 		}
+	}
+
+	// for testing
+	public GameBoard getGameBoard() {
+
+		return map;
 	}
 
 }

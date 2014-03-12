@@ -1,5 +1,8 @@
 package control;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 import entities.Action;
 import entities.Civilization;
 import entities.PerfectCivilization;
@@ -24,6 +27,9 @@ public class Player {
 	private Civilization civ;
 	private CommandQueue cq;
 
+	private HashMap<UUID, Unit> selectedUnits;
+	private HashMap<UUID, Building> selectedBuildings;
+
 	// Bare constructor
 	public Player(String name, int id) {
 		this(name, id, new PerfectCivilization());
@@ -44,6 +50,9 @@ public class Player {
 
 		// units
 		objects = new PlayerUnits(id);
+		selectedUnits = new HashMap<UUID, Unit>();
+		selectedBuildings = new HashMap<UUID, Building>();
+		
 
 		// technology
 		upgrades = new Upgrades();
@@ -89,5 +98,51 @@ public class Player {
 
 	public Building getBuilding(int buildingId) {
 		return objects.getBuildings().get(buildingId);
+	}
+
+	public void selectUnit(Unit u) {
+
+		selectedUnits.put(u.getId(), u);
+	}
+
+	public void selectBuilding(Building b) {
+
+		selectedBuildings.put(b.getId(), b);
+
+	}
+
+	public void deselectBuilding(Building b) {
+
+		selectedBuildings.remove(b);
+
+	}
+
+	public void addBuilding(Building b) {
+		objects.addBuilding(b);
+
+	}
+
+	public void deselect() {
+		selectedBuildings = new HashMap<UUID, Building>();
+		selectedUnits = new HashMap<UUID, Unit>();
+	}
+
+	// !needs a test
+	public boolean hasSelectedEligibleBuilding() {
+
+		if (!selectedBuildings.isEmpty()) {
+			Object[] temp = selectedBuildings.values().toArray();
+		
+			for (int i = 0; i < temp.length; i++) {
+				Building b = (Building) temp[i];
+				System.out.println(b.getBuildingType());
+				if (b.getBuildingType() == BuildingType.BARRACKS)
+					return true;
+
+			}
+			return false;
+		} else {
+			return false;
+		}
 	}
 }
