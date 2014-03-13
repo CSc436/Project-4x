@@ -48,6 +48,12 @@ public interface ClientResources extends ClientBundle{
     @Source(value={"normals_mesh.fs"})
     TextResource normalsMeshFS();
     
+    @Source(value={"id.fs"})
+    TextResource idFS();
+    
+    @Source(value={"selected.fs"})
+    TextResource selectedFS();
+    
     // OBJ definitions
     @Source(value={"barrel.obj"})
     TextResource barrelOBJ();

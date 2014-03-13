@@ -15,7 +15,7 @@ public class Mesh //implements Renderable {
 	private WebGLBuffer texcoordBuffer;
 	private WebGLBuffer normalBuffer;
 	private WebGLBuffer triangleBuffer;
-	private WebGLBuffer colorBuffer;
+	//private WebGLBuffer colorBuffer;
 
 	public float[] verts,texcoords,normals,colors;
 	public int[] triangles;
@@ -25,11 +25,12 @@ public class Mesh //implements Renderable {
 	public float rotX, rotY, rotZ;
 	public float scaleX, scaleY, scaleZ;
 	public float scale;
+	public int id;
 	
 	private FloatMatrix modelMatrix;
 	
 	private WebGLUniformLocation texUniform, resolutionUniform, timeUniform,
-	matrixUniform, camPosUniform;
+	matrixUniform, camPosUniform, idUniform;
 	
 	public Mesh(float[] vs, float[] ts, float[] ns, int tris, WebGLRenderingContext glContext) {
 		
@@ -43,42 +44,46 @@ public class Mesh //implements Renderable {
 		scaleY = 1.0f;
 		scaleZ = 1.0f;
 		scale = 0.1f;
+		id = 0;
 		
 		updateModelMatrix();
 		
 		float[] temp = scale(vs,scale);
-		System.out.println("**********VERTS*************");
-		System.out.println(temp.length);
-		printArray(temp);
+//		System.out.println("**********VERTS*************");
+//		System.out.println(temp.length);
+//		printArray(temp);
 		verts = temp;
 		texcoords = scale(ts,1.0f);
-		System.out.println("***********TEXCOORDS***********");
-		System.out.println(texcoords.length);
-		printArray(texcoords);
+//		System.out.println("***********TEXCOORDS***********");
+//		System.out.println(texcoords.length);
+//		printArray(texcoords);
 		normals = scale(ns,1.0f);
-		System.out.println("*********NORMALS************");
-		System.out.println(normals.length);
-		printArray(normals);
+//		System.out.println("*********NORMALS************");
+//		System.out.println(normals.length);
+//		printArray(normals);
 		triCount = tris;
 		int[] tempTris = new int[triCount*3];
 		tempTris = buildTriangleArray();
-		System.out.println("*********TRIS************");
-		for(int i = 0; i < tempTris.length; i++) {
-			if(i % 3 == 0)
-				System.out.println();
-			System.out.print(tempTris[i]+", ");
-		}
+//		System.out.println("*********TRIS************");
+//		for(int i = 0; i < tempTris.length; i++) {
+//			if(i % 3 == 0)
+//				System.out.println();
+//			System.out.print(tempTris[i]+", ");
+//		}
 		triangles = tempTris;
-		System.out.println();
-		System.out.println("Tricount: " + triCount);
-		System.out.println("Initializing Mesh buffers...");
+//		System.out.println();
+//		System.out.println("Tricount: " + triCount);
+//		System.out.println("Initializing Mesh buffers...");
 		
 		initBuffers(glContext);
 		
-		System.out.println("Complete!");
+//		System.out.println("Mesh with id " + id + " initialized!");
 	}
 	
-	// Prints a float array!
+	/**
+	 * Prints an array of floats.
+	 * @param arr
+	 */
 	private void printArray(float[] arr) {
 		for(int i = 0; i < arr.length; i++) {
 			if(i % 3 == 0)
@@ -88,6 +93,9 @@ public class Mesh //implements Renderable {
 		System.out.println();
 	}
 	
+	/**
+	 * Updates the model matrix of the mesh which governs translation, rotation, and scale.
+	 */
 	private void updateModelMatrix() {
 		//FloatMatrix rotMatrix = FloatMatrix.createRotationMatrix(rotX,rotY,rotZ);
 		//modelMatrix = FloatMatrix.multiply(FloatMatrix.translationMatrix(posX,posY,posZ),FloatMatrix.flipXZMatrix());
@@ -95,18 +103,25 @@ public class Mesh //implements Renderable {
 		modelMatrix = FloatMatrix.translationMatrix(posX,posY,posZ);
 	}
 	
+	/**
+	 * Scales all elements of a float array by the given percent.
+	 * @param arr
+	 * @param percent
+	 * @return
+	 */
 	private float[] scale(float[] arr, float percent) {
 		for(int i = 0; i < arr.length; i++)
 			arr[i] = arr[i] * percent;
 		return arr;
 	}
 	
-	/*
+	/**
 	 * This function constructs the array that enumerates the
 	 * triangles to be rendered. Because of how the OBJImporter works, each
 	 * triangle has its own set of vertices rather than sharing them between
 	 * adjacent triangles (which would be more optimized but who wants to write
-	 * an optimizer???). The function just holds [0,1,2,3,4,5,...,(3n-1)].
+	 * an optimizer?). The function just holds [0,1,2,3,4,5,...,(3n-1)].
+	 * @return
 	 */
 	private int[] buildTriangleArray() {
 		int[] temp = new int[triCount * 3];
@@ -115,6 +130,12 @@ public class Mesh //implements Renderable {
 		return temp;
 	}
 	
+	/**
+	 * Initializes the attribute buffers for the mesh. This holds information regarding
+	 * vertices, texture coordinates, colors, normals, and triangles.
+	 * @param glContext
+	 * @return
+	 */
 	private int initBuffers(WebGLRenderingContext glContext) {
 		
 		// Bind and build the vertexBuffer //
@@ -167,24 +188,33 @@ public class Mesh //implements Renderable {
 		return 0;
 	}
 	
-	/**
-	 * Utilizes a custom Shader object to render the Mesh
-	 */
+/**
+ * Utilizes a custom Shader object to render the Mesh. The cam dictates where to
+ * render the view from.
+ * @param glContext
+ * @param shader
+ * @param cam
+ */
 	public void render(WebGLRenderingContext glContext, Shader shader, Camera cam) {
-		// Don't clear the scene!
-		//glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT | WebGLRenderingContext.DEPTH_BUFFER_BIT);
-
+		// Update the model matrix of the mesh in case things like position, rotation
+		// and scale have changed.
 		updateModelMatrix();
 		
 		// Activate the shaderProgram for this object
 		glContext.useProgram(shader.shaderProgram);
-				
-		// Gotta make sure the buffers exist first
-		//initBuffers(glContext);
 		
+		// Set the uniform variable for the camera position
 		camPosUniform = glContext.getUniformLocation(shader.shaderProgram, "camPos");
-		// uniforms
 		glContext.uniform3f(camPosUniform, cam.getX(), cam.getY(), cam.getZ());
+		
+		// Set the uniform variable for the vec4 of the color components of the mesh.
+		// This is derived from the id given to the mesh. Unclickable meshes will generally
+		// have an id of 0.
+		idUniform = glContext.getUniformLocation(shader.shaderProgram, "id");
+		int b = (id % 256);
+		int g = ((id / 256) %256);
+		int r = ((id / 65535) %256);
+		glContext.uniform4f(idUniform, r/255.0f, g/255.0f, b/255.0f, 1.0f);
 		
 		// Enable the vertexPosition attribute in the vertex shader
 		int vertexPositionAttribute = glContext.getAttribLocation(shader.shaderProgram, "vertexPosition");		
@@ -205,27 +235,28 @@ public class Mesh //implements Renderable {
 		glContext.vertexAttribPointer(normalAttribute, 3, WebGLRenderingContext.FLOAT, false, 0, 0);
 
 		// Enable the vertexColor attribute in the vertex shader
+		// Could be useful later on!
 //		int vertexColorAttribute = glContext.getAttribLocation(shader.shaderProgram, "vertexColor");
 //		glContext.enableVertexAttribArray(vertexColorAttribute);
 //		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, colorBuffer);
 //		glContext.vertexAttribPointer(vertexColorAttribute, 4, WebGLRenderingContext.FLOAT, false, 0, 0);
 
-		// perspective matrix
+		// Set the uniform variable for the perspective matrix
 		WebGLUniformLocation uniformLocation = glContext.getUniformLocation(
 				shader.shaderProgram, "perspectiveMatrix");
 		glContext.uniformMatrix4fv(uniformLocation, false, cam.getCameraMatrix());
 		
-		// model matrix
+		// Set the uniform varaible for the model matrix. This contains things like
+		// translation, rotation, and scaling.
 		WebGLUniformLocation uniformModelMatrix = glContext.getUniformLocation(
 				shader.shaderProgram, "modelMatrix");
 		glContext.uniformMatrix4fv(uniformModelMatrix, false, modelMatrix.rowWiseData());
 		
-		// draw geometry
+		// Actually draw the triangle of the mesh
 		glContext.bindBuffer(WebGLRenderingContext.ELEMENT_ARRAY_BUFFER, triangleBuffer);
 		glContext.drawElements(WebGLRenderingContext.TRIANGLES, triCount*3,WebGLRenderingContext.UNSIGNED_SHORT, 0);
-		//glContext.drawArrays(WebGLRenderingContext.TRIANGLES, 0, 36);
 
-		 //Disable attribute Arrays
+		 //Disable the attribute arrays. Is this necessary?
 		glContext.disableVertexAttribArray(vertexPositionAttribute);
 		glContext.disableVertexAttribArray(texcoordAttribute);
 		glContext.disableVertexAttribArray(normalAttribute);

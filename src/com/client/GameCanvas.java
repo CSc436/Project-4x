@@ -2,6 +2,8 @@ package com.client;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 import static com.google.gwt.query.client.GQuery.$;
 
@@ -70,9 +72,14 @@ public class GameCanvas {
 	private final Canvas webGLCanvas = Canvas.createIfSupported();
 	
 	private ClickSelector objectSelector;
+	private HashMap<Integer,Mesh> entities;
+	public ArrayList<Integer> selectedEntities;
 
 	public GameCanvas(ClientModel theModel) {
+		// CODE FOR MINIMAP DEV/CLICK SELECTING
 		thisCanvas = this;
+		selectedEntities = new ArrayList<Integer>();
+		// END OF CODE
 		
 		RootPanel.get("gwtGL").add(webGLCanvas);
 		glContext = (WebGLRenderingContext) webGLCanvas
@@ -94,7 +101,9 @@ public class GameCanvas {
 
 		glContext.viewport(0, 0, WIDTH, HEIGHT);
 		
+		// MORE CLICK CODE
 		objectSelector = new ClickSelector(glContext, this);
+		initEntities();
 		
 		this.theModel = theModel;
 		
@@ -102,6 +111,38 @@ public class GameCanvas {
 		registerResizeHandler();
 		camera.makeCameraMatrix();
 		start();
+	}
+	
+	// CLICKSELECTOR STUFF
+	private void initEntities() {
+		entities = new HashMap<Integer,Mesh>();
+		final Mesh ent1 = OBJImporter.objToMesh(ClientResources.INSTANCE.barrelOBJ().getText(), glContext);
+		ent1.posX = 10.0f;
+		ent1.posY = 10.0f;
+		ent1.posZ = -5.0f;
+		ent1.id = 11111;
+		final Mesh ent2 = OBJImporter.objToMesh(ClientResources.INSTANCE.cubeOBJ().getText(), glContext);
+		ent2.posX = 20.0f;
+		ent2.id = 65432;
+		entities.put(ent1.id, ent1);
+		entities.put(ent2.id, ent2);
+	}
+	
+	// CLICKSELECTOR STUFF
+	public void renderEntities(Shader shader) {
+		Set<Integer> keys = entities.keySet();
+		Integer[] keysArr = new Integer[entities.size()];
+		keysArr = keys.toArray(keysArr);
+		for(int i = 0; i< keysArr.length; i++) {
+			entities.get(keysArr[i]).render(glContext, shader, camera);
+		}
+	}
+	
+	public void renderSelectedEntities(Shader selectedShader) {
+		int size = selectedEntities.size();
+		for(int i = 0; i < size; i++) {
+			entities.get(selectedEntities.get(i)).render(glContext, selectedShader, camera);
+		}
 	}
 	
 	/**
@@ -173,12 +214,21 @@ public class GameCanvas {
 			}
 		}, KeyUpEvent.getType());
 
+		// Handle mousedown events (for any button on the moues)
 		RootPanel.get().addDomHandler(new MouseDownHandler() {
 
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
-				System.out.println("MOUSEDOWN!");
-				objectSelector.pick(event.getClientX(), event.getClientY());
+				selectedEntities.clear();
+				int selectedID = objectSelector.pick(event.getClientX(), event.getClientY());
+				selectedEntities.add(selectedID);
+				System.out.println("Selected entity with ID " + selectedID + ".");
+				if (entities.containsKey(selectedID)) {
+					System.out.println("This entity exists!");
+				}
+				else {
+					System.out.println("This entity DOES NOT exist!");
+				}
 			}
 	
 		}, MouseDownEvent.getType());
@@ -320,6 +370,14 @@ public class GameCanvas {
 				.simpleMeshVS().getText(),ClientResources.INSTANCE
 				.normalsMeshFS().getText());
 		
+		final Shader idShader = new Shader(glContext,ClientResources.INSTANCE
+				.simpleMeshVS().getText(),ClientResources.INSTANCE
+				.idFS().getText());
+		
+		final Shader selectedShader = new Shader(glContext,ClientResources.INSTANCE
+				.simpleMeshVS().getText(),ClientResources.INSTANCE
+				.selectedFS().getText());
+		
 		final Mesh barrel = OBJImporter.objToMesh(ClientResources.INSTANCE.barrelOBJ().getText(), glContext);
 
 		startTime = System.currentTimeMillis();
@@ -342,6 +400,9 @@ public class GameCanvas {
 				barrel.posY = agentY;
 				barrel.posZ = agentZ;
 				barrel.rotX = barrel.rotX + 0.01f;
+				
+				renderEntities(idShader);
+				renderSelectedEntities(selectedShader);
 			}
 		};
 		t.scheduleRepeating(16);
