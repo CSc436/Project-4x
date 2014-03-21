@@ -1,12 +1,19 @@
 package com.client;
 
 import com.client.matrixutils.FloatMatrix;
+import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.googlecode.gwtgl.array.Float32Array;
 import com.googlecode.gwtgl.array.Int16Array;
 import com.googlecode.gwtgl.array.Int32Array;
 import com.googlecode.gwtgl.array.Uint16Array;
 import com.googlecode.gwtgl.binding.WebGLBuffer;
 import com.googlecode.gwtgl.binding.WebGLRenderingContext;
+import com.googlecode.gwtgl.binding.WebGLTexture;
 import com.googlecode.gwtgl.binding.WebGLUniformLocation;
 
 public class Mesh //implements Renderable {
@@ -16,6 +23,7 @@ public class Mesh //implements Renderable {
 	private WebGLBuffer normalBuffer;
 	private WebGLBuffer triangleBuffer;
 	//private WebGLBuffer colorBuffer;
+	private WebGLTexture texture;
 
 	public float[] verts,texcoords,normals,colors;
 	public int[] triangles;
@@ -76,6 +84,7 @@ public class Mesh //implements Renderable {
 //		System.out.println("Initializing Mesh buffers...");
 		
 		initBuffers(glContext);
+		initTexture(glContext);
 		
 //		System.out.println("Mesh with id " + id + " initialized!");
 	}
@@ -188,6 +197,48 @@ public class Mesh //implements Renderable {
 		return 0;
 	}
 	
+	private void initTexture(WebGLRenderingContext glContext) {
+		texture = glContext.createTexture();
+
+		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
+		glContext.texImage2D(WebGLRenderingContext.TEXTURE_2D, 0,
+				WebGLRenderingContext.RGB, WebGLRenderingContext.RGB,
+				WebGLRenderingContext.UNSIGNED_BYTE, ImageElement.as(getImage(
+						ClientResources.INSTANCE.genericTexture())
+						.getElement()));
+		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
+				WebGLRenderingContext.TEXTURE_MAG_FILTER,
+				WebGLRenderingContext.NEAREST);
+		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
+				WebGLRenderingContext.TEXTURE_MIN_FILTER,
+				WebGLRenderingContext.NEAREST);
+		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
+				WebGLRenderingContext.TEXTURE_WRAP_S,
+				WebGLRenderingContext.CLAMP_TO_EDGE);
+		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
+				WebGLRenderingContext.TEXTURE_WRAP_T,
+				WebGLRenderingContext.CLAMP_TO_EDGE);
+		glContext.generateMipmap(WebGLRenderingContext.TEXTURE_2D);
+
+		glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
+		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
+	}
+	
+	private Image getImage(final ImageResource imageResource) {
+		final Image img = new Image();
+		img.addLoadHandler(new LoadHandler() {
+			@Override
+			public void onLoad(LoadEvent event) {
+				RootPanel.get().remove(img);
+			}
+		});
+		img.setVisible(false);
+		RootPanel.get().add(img);
+
+		img.setUrl(imageResource.getSafeUri());
+		return img;
+	}
+	
 /**
  * Utilizes a custom Shader object to render the Mesh. The cam dictates where to
  * render the view from.
@@ -241,6 +292,11 @@ public class Mesh //implements Renderable {
 //		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, colorBuffer);
 //		glContext.vertexAttribPointer(vertexColorAttribute, 4, WebGLRenderingContext.FLOAT, false, 0, 0);
 
+		// Enable the texture
+		glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
+		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
+		glContext.uniform1i(texUniform, 0);
+		
 		// Set the uniform variable for the perspective matrix
 		WebGLUniformLocation uniformLocation = glContext.getUniformLocation(
 				shader.shaderProgram, "perspectiveMatrix");

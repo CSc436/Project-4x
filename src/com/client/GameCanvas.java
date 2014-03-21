@@ -18,6 +18,8 @@ import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.query.client.Function;
@@ -221,10 +223,10 @@ public class GameCanvas {
 			public void onMouseDown(MouseDownEvent event) {
 				selectedEntities.clear();
 				int selectedID = objectSelector.pick(event.getClientX(), event.getClientY());
-				selectedEntities.add(selectedID);
 				System.out.println("Selected entity with ID " + selectedID + ".");
 				if (entities.containsKey(selectedID)) {
-					System.out.println("This entity exists!");
+					System.out.println("This entity exists! Adding to selected entities...");
+					selectedEntities.add(selectedID);
 				}
 				else {
 					System.out.println("This entity DOES NOT exist!");
@@ -366,6 +368,10 @@ public class GameCanvas {
 		makeAgent();
 		initBuffers();
 		
+		final Shader texturedMeshShader = new Shader(glContext,ClientResources.INSTANCE
+				.simpleMeshVS().getText(),ClientResources.INSTANCE
+				.texturedMeshFS().getText());
+		
 		final Shader normalShader = new Shader(glContext,ClientResources.INSTANCE
 				.simpleMeshVS().getText(),ClientResources.INSTANCE
 				.normalsMeshFS().getText());
@@ -401,7 +407,7 @@ public class GameCanvas {
 				barrel.posZ = agentZ;
 				barrel.rotX = barrel.rotX + 0.01f;
 				
-				renderEntities(idShader);
+				renderEntities(texturedMeshShader);
 				renderSelectedEntities(selectedShader);
 			}
 		};

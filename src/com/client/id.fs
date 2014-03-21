@@ -2,7 +2,7 @@ precision mediump float;
 
 uniform sampler2D texture;
 uniform vec4 id;
-varying vec2 texCoord;
+varying vec3 texCoord;
 varying vec3 normal;
 varying vec3 position;
 //varying vec4 vColor;
