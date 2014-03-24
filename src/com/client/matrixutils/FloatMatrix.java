@@ -84,7 +84,7 @@ public class FloatMatrix {
 	 * @param z		z component of translation
 	 * @return		a {@link FloatMatrix} transformation
 	 */
-	private static FloatMatrix createRotationMatrix(float roll, float pitch, float yaw){
+	public static FloatMatrix createRotationMatrix(float roll, float pitch, float yaw){
 		float sinA = (float)Math.sin(roll); float cosA = (float)Math.cos(roll);
 		float sinB = (float)Math.sin(yaw); float cosB = (float)Math.cos(yaw);
 		float sinY = (float)Math.sin(pitch); float cosY = (float)Math.cos(pitch);
