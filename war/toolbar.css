@@ -4,10 +4,9 @@
 	left: 0;
 	width: 100%;
 	height: 50px;
-	/*background-color: rgba(51, 51, 51, 0.8);*/
 	background-image: url('assets/Panels/toolbar.png');
 	background-size: 100% 100%;
-	color: #EEEEEE;
+	color: #E7CE99 !important;
 	margin: 0;
 	z-index: 999;
 }
@@ -18,6 +17,8 @@
 	font-size: 20px;
 	font-weight: bold;
 	padding: 10px;
+	width: 15%;
+	text-align: center;
 }
 
 #toolbar {
@@ -25,9 +26,10 @@
 	height: 50px;
 	margin: 0;
 	padding-left: 10px;
-	border-left: 2px solid #EEEEEE;
+	border-left: 2px solid #E7CE99;
 	list-style-type: none;
 	display: inline;
+	width: 80%;
 }
 
 #toolbar li {
@@ -37,13 +39,13 @@
 }
 
 #toolbar li a {
-	color: white;
 	float: left;
 	cursor: pointer;
 	width: 70px;
 	height: 45px;
 	text-decoration: none;
 	padding-top: 5px;
+	color: #E7CE99 !important;
 }
 
 #toolbar li a img {
@@ -53,4 +55,13 @@
 
 #toolbar li a:hover {
 	background-color: rgba(255, 255, 255, 0.4);
+}
+
+#toolbar .toolbar-right {
+	float: right !important;
+}
+
+#game-resources {
+	padding: 5px;
+	text-align: left !important;
 }

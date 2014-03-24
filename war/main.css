@@ -4,7 +4,9 @@ body,html {
 	border: 0px;
 	padding: 0px;
 	margin: 0px;
-	font-family: 'MedievalSharp', cursive !important;
+	font-family: 'MedievalSharp', cursive;
+	font-size: 14px;
+	color: #E7CE99 !important;
 }
 
 #gwtGL {
@@ -23,4 +25,12 @@ body,html {
 
 .half-size {
 	width: 50%;
+}
+
+.text-center {
+	text-align: center;
+}
+
+hr {
+	border-color: #E7CE99 !important;
 }
