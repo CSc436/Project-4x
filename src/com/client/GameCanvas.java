@@ -64,7 +64,7 @@ public class GameCanvas {
 			right = false, left = false, rotateLeft = false, rotateRight = false, center = false;
 	private long time;
 
-	public static final int GRID_WIDTH = 512;
+	public static final int GRID_WIDTH = 128;
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
 	private final boolean debug = true;
 
