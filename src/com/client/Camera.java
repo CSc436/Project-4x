@@ -47,7 +47,9 @@ public class Camera {
 
 	public void down(float delta) {
 		// TODO Auto-generated method stub
-		Vector3 temp = new Vector3((float)Math.tan(Math.toRadians(yaw)) * getSign(yaw) , -getSign(yaw), 0);
+		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw) , getSign(yaw), 0);
+		temp.left();
+		temp.left();
 		temp.normalize();
 		camX += temp.x;
 		camY += temp.y;
