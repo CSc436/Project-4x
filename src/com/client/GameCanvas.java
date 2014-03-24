@@ -59,7 +59,7 @@ public class GameCanvas {
 
 	public static final int GRID_WIDTH = 64;
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
-	private final boolean debug = false;
+	private final boolean debug = true;
 
 	private ArrayList<RenderTile> tiles = new ArrayList<RenderTile>();
 	
@@ -108,7 +108,7 @@ public class GameCanvas {
 //					return;
 //
 //				lastHit = time;
-
+				if (debug) Console.log("Pressed: " + event.getNativeKeyCode());
 				switch (event.getNativeKeyCode()) {
 				case KeyCodes.KEY_UP:
 				case KeyCodes.KEY_W:
@@ -126,12 +126,12 @@ public class GameCanvas {
 				case KeyCodes.KEY_D:
 					right = true;
 					break;
-				case 173: out = true; break;
-				case 61: in = true; break;
+				//case KeyEvent.VK_MINUS: out = true; break;
+				//case KeyEvent.VK_PLUS: in = true; break;
 				case KeyCodes.KEY_Q: rotateLeft = true; break;
 				case KeyCodes.KEY_E: rotateRight = true; break;
 				case KeyCodes.KEY_X: center = true; break;
-				default: break;
+				default: if (debug) Console.log("Unrecognized: " + event.getNativeKeyCode()); break;
 				}
 			}
 		}, KeyDownEvent.getType());
@@ -152,8 +152,8 @@ public class GameCanvas {
 				case KeyCodes.KEY_RIGHT:
 				case KeyCodes.KEY_D:
 					right = false; break;
-				case KeyEvent.VK_MINUS: out = false; break;
-				case KeyEvent.VK_PLUS: in = false; break;
+				//case KeyEvent.VK_MINUS: out = false; break;
+				//case KeyEvent.VK_PLUS: in = false; break;
 				case KeyCodes.KEY_Q: rotateLeft = false; break;
 				case KeyCodes.KEY_E: rotateRight = false; break;
 				case KeyCodes.KEY_X: center = false; break;
@@ -279,8 +279,8 @@ public class GameCanvas {
 			camera.rotateRight();
 		if (center)
 			camera.defaultPosition();
-		if (debug) 
-			System.out.println("X: " + camera.getX() + ", Y: " + camera.getY() + ", Z: " + camera.getZ() + ", Height: " + HEIGHT + ", Width: " + WIDTH);
+//		if (debug) 
+//			Console.log("X: " + camera.getX() + ", Y: " + camera.getY() + ", Z: " + camera.getZ());
 	}
 
 	private void start() {
