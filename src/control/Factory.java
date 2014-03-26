@@ -5,6 +5,7 @@ import java.util.UUID;
 import entities.GameObjectType;
 import entities.buildings.Barracks;
 import entities.buildings.Building;
+import entities.buildings.Castle;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 import entities.units.Unit;
@@ -126,6 +127,11 @@ public class Factory {
 		Building result = null;
 
 		switch (buildingType) {
+		
+		case CASTLE:
+			result = new Castle(newId, playerId, BaseStatsEnum.CASTLE,
+					BaseStatsEnum.CASTLE.getStats(), GameObjectType.BUILDING,
+					BuildingType.CASTLE, xco, yco, 4, 4, 500, 10);
 
 		case BARRACKS:
 			result = new Barracks(newId, playerId, BaseStatsEnum.BARRACKS,

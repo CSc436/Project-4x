@@ -11,12 +11,12 @@ import org.junit.Test;
 
 import control.Actions;
 import control.BuildingType;
-import control.Command;
 import control.Controller;
 import control.GameState;
 import control.PlayerCommands;
 import control.Targets;
 import control.UnitType;
+import control.commands.Command;
 import entities.util.Point;
 
 public class GameBoardTest {

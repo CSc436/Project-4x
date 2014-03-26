@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import control.BuildingType;
 import control.Tools;
+import control.UnitType;
 import entities.GameObject;
 import entities.GameObjectType;
 import entities.stats.BaseStatsEnum;
@@ -20,7 +21,7 @@ public abstract class Building extends GameObject {
 														// knows what 'city' it
 														// belongs to
 	private BuildingType buildingType;
-	private Queue<Unit> buildingQ = new LinkedList<Unit>();
+	private Queue<UnitType> buildingQ = new LinkedList<UnitType>();
 
 	public Building(UUID id, int playerId, BaseStatsEnum baseStats,
 			UnitStats new_stats, GameObjectType gameObjectType,
@@ -28,9 +29,6 @@ public abstract class Building extends GameObject {
 			int width) {
 		super(id, playerId, baseStats, new_stats, gameObjectType, xco, yco);
 		this.buildingType = buildingType;
-		this.height = height;
-		this.width = width;
-		// super(p, baseStats, type, xco, yco);
 		this.height = height;
 		this.width = width;
 
@@ -49,7 +47,7 @@ public abstract class Building extends GameObject {
 	 * producing. It can add units to its queue or remove finished units from
 	 * its queue
 	 */
-	public boolean queueUnit(Unit u) {
+	public boolean queueUnit(UnitType u) {
 		return buildingQ.offer(u);
 	}
 
@@ -71,8 +69,8 @@ public abstract class Building extends GameObject {
 
 	}
 
+	//will have to pla
 	public Unit getProducedUnit() {
 		return buildingQ.poll();
 	}
-
 }

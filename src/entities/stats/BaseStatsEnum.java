@@ -45,6 +45,8 @@ public enum BaseStatsEnum {
 	PROSPECTOR(new UnitStats(1, 1, 2, .5f, 6, 6, 3.0f)), 
 	
 	// BUILDINGS
+	
+	CASTLE(new UnitStats(0, 2, 200, 0, 2000, 0, 0)),
 
 	BARRACKS(new UnitStats(0, 2, 100, 0, 1000, 0, 0)),
 
