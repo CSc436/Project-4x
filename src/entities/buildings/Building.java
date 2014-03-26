@@ -21,8 +21,10 @@ public abstract class Building extends GameObject {
 														// knows what 'city' it
 														// belongs to
 	private BuildingType buildingType;
-	private Queue<UnitType> buildingQ = new LinkedList<UnitType>();
-
+	
+	private Queue<Unit> buildingQ = new LinkedList<Unit>();
+	private int turnsToExecute = 5;
+	
 	public Building(UUID id, int playerId, BaseStatsEnum baseStats,
 			UnitStats new_stats, GameObjectType gameObjectType,
 			BuildingType buildingType, float xco, float yco, int height,
@@ -47,12 +49,22 @@ public abstract class Building extends GameObject {
 	 * producing. It can add units to its queue or remove finished units from
 	 * its queue
 	 */
-	public boolean queueUnit(UnitType u) {
+	public boolean queueUnit(Unit u) {
 		return buildingQ.offer(u);
 	}
 
 	public Unit dequeueUnit() {
-		return buildingQ.poll();
+		if (buildingQ.size() == 0)
+			return null;
+		
+		if (turnsToExecute > 0) {
+			turnsToExecute--;
+			return null;
+		}
+		else {
+			turnsToExecute = 5;
+			return buildingQ.poll();
+		}
 	}
 
 	public long getCastleId() {
