@@ -34,5 +34,7 @@ public enum UnitType {
 	// AGENTS
 	GENERAL,
 	
-	PROSPECTOR
+	PROSPECTOR, 
+	
+	MERCHANT
 }

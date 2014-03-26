@@ -12,6 +12,7 @@ import entities.research.TechnologyTree;
 import entities.research.Upgrades;
 import entities.resources.Resources;
 import entities.units.Unit;
+import entities.units.agents.Goods;
 
 public class Player {
 
@@ -24,6 +25,7 @@ public class Player {
 	public TechnologyTree techTree;
 	public Upgrades upgrades;
 	public static Resources resources;
+	public static Goods goods;
 	private Civilization civ;
 	private CommandQueue cq;
 
@@ -76,7 +78,10 @@ public class Player {
 	public static Resources getResources() {
 		return resources;
 	}
-
+	
+	public static int getGoodsNumber(Goods goods){
+		return Goods.number;
+	}
 	public TechnologyTree getTechTree() {
 		return techTree;
 	}
