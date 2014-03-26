@@ -146,5 +146,13 @@ public class Controller implements Runnable {
 			}
 		}
 	}
+	
+	public void addCommand(Command c) {
+		commandQueue.add(c);
+	}
+	
+	public GameModel getGameModel() {
+		return model;
+	}
 
 }

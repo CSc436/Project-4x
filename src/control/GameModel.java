@@ -26,6 +26,10 @@ public class GameModel {
 		map.placeBuildingAt(castle, 100, 100);
 	}
 	
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+	
 	public Player getPlayer(int playerId) {
 		return players.get(playerId-1);
 	}

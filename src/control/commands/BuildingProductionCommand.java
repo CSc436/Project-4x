@@ -14,10 +14,10 @@ public class BuildingProductionCommand implements Command{
 	private UUID buildingId;
 	private UnitType unitType;
 	
-	BuildingProductionCommand(int playerId, UUID buidingId, UnitType unitType) {
-		playerId = playerId;
-		buildingId = buildingId;
-		unitType = unitType;
+	public BuildingProductionCommand(int playerId, UUID buildingId, UnitType unitType) {
+		this.playerId = playerId;
+		this.buildingId = buildingId;
+		this.unitType = unitType;
 	}
 	
 	@Override
