@@ -32,7 +32,7 @@ public class Player {
 	private HashMap<UUID, Unit> selectedUnits;
 	private HashMap<UUID, Building> selectedBuildings;
 
-	// Bare constructor
+	// Bare constructor 
 	public Player(String name, int id) {
 		this(name, id, new PerfectCivilization());
 	}
