@@ -67,6 +67,7 @@ public abstract class Building extends GameObject {
 	}
 
 	public Unit advanceUnitProduction() {
+		System.out.println("running");
 		if (buildingQ.size() == 0)
 			return null;
 		

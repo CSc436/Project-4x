@@ -1,10 +1,10 @@
 package control;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import entities.buildings.Building;
 import entities.gameboard.GameBoard;
+import entities.gameboard.Tile;
 import entities.units.Unit;
 
 public class GameModel {
@@ -14,6 +14,7 @@ public class GameModel {
 	//simple test model start up.
 	//A different constructor should be used for different 
 	public GameModel() {
+		players = new ArrayList<Player>();
 		players.add(new Player("Player 1", 1));
 		players.add(new Player("Player 2", 2));
 		map = new GameBoard(500, 500);
@@ -50,7 +51,8 @@ public class GameModel {
 			for (Building b : p.getGameObjects().getBuildings().values()) {
 				Unit potentialUnit = b.advanceUnitProduction();
 				if (potentialUnit != null) {
-					map.getTileAt(0, 0).addUnit(potentialUnit);
+					Tile t = map.getTileAt(0, 0);
+					t.addUnit(potentialUnit);
 					p.getGameObjects().addUnit(potentialUnit);
 				}
 			}

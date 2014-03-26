@@ -50,15 +50,15 @@ public class Controller implements Runnable {
 			}
 			model.advanceTimeStep();
 			// produceGameObjects
-			agentDecision();
-			unitInteraction();
+		//	agentDecision();
+			//unitInteraction();
 			// When the timer on a unit in the production queue hits 0, add the
 			// unit to the player's unit list.
 			
 			// TODO: change timestep to what we really want
-			checkBuildingProductionQueue(10);
+	//		checkBuildingProductionQueue(10);
 
-			gameRunning = playerCommands();
+		//	gameRunning = playerCommands();
 
 		}
 	}
