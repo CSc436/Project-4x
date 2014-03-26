@@ -1,7 +1,10 @@
 package entities.gameboard;
 
+import java.util.ArrayList;
+
 import control.Player;
 import entities.buildings.Building;
+import entities.units.Unit;
 
 /**
  * 
@@ -35,7 +38,8 @@ public class Tile {
 	private float yco; // y coordinate of upper left hand corner of tile 
 	
 	private Building buildingRef = null;
-
+	private ArrayList<Unit> unitsOnTile;
+	
 	// Resource Base Amounts - 'Average' amount a tile contiaining resource X will start with
 	private static final int foodBase  = 200; 
 	private static final int woodBase  = 100; 
@@ -93,6 +97,7 @@ public class Tile {
 		owner = null;
 		passable = true;
 		terrain = calculateTerrainType(height);
+		unitsOnTile = new ArrayList<Unit>();
 	}
 
 	/*
@@ -506,5 +511,13 @@ public class Tile {
 	public float getYCoordinate()
 	{
 		return yco;
+	}
+	
+	public void addUnit(Unit u) {
+		unitsOnTile.add(u);
+	}
+	
+	public boolean removeUnit(Unit u) {
+		return unitsOnTile.remove(u);
 	}
 }

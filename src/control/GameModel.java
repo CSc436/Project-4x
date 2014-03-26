@@ -32,12 +32,25 @@ public class GameModel {
 
 	public void advanceTimeStep() {
 		produceResources();
+		placeNewUnits();
 		
 	}
 
 	private void produceResources() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	private void placeNewUnits() {
+		for (Player p : players) {
+			for (Building b : p.getGameObjects().getBuildings().values()) {
+				Unit potentialUnit = b.advanceUnitProduction();
+				if (potentialUnit != null) {
+					map.getTileAt(0, 0).addUnit(potentialUnit);
+					p.getGameObjects().addUnit(potentialUnit);
+				}
+			}
+		}
 	}
 
 	public void modelState() {

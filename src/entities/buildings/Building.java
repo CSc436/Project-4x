@@ -54,17 +54,7 @@ public abstract class Building extends GameObject {
 	}
 
 	public Unit dequeueUnit() {
-		if (buildingQ.size() == 0)
-			return null;
-		
-		if (turnsToExecute > 0) {
-			turnsToExecute--;
-			return null;
-		}
-		else {
-			turnsToExecute = 5;
-			return buildingQ.poll();
-		}
+		return buildingQ.poll();
 	}
 
 	public long getCastleId() {
@@ -76,8 +66,18 @@ public abstract class Building extends GameObject {
 		return buildingQ.isEmpty();
 	}
 
-	public void advanceUnitProduction(int timestep) {
-		// add timestep to each unit
+	public Unit advanceUnitProduction() {
+		if (buildingQ.size() == 0)
+			return null;
+		
+		if (turnsToExecute > 0) {
+			turnsToExecute--;
+			return null;
+		}
+		else {
+			turnsToExecute = 5;
+			return dequeueUnit();
+		}
 
 	}
 
