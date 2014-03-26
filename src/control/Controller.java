@@ -7,7 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
+import com.shared.Request;
+
+import control.commands.Command;
 import entities.gameboard.GameBoard;
 import entities.buildings.Building;
 import entities.buildings.ResourceBuilding;
@@ -16,75 +20,46 @@ import entities.units.Unit;
 import entities.util.Point;
 
 public class Controller implements Runnable {
-	private ArrayList<Player> players;
-	private GameBoard map;
-	private PlayerCommands sharedInstructions;
-	private Queue<Command> currentInstructions;
+	private GameModel model;
+	private ConcurrentLinkedDeque<Command> commandQueue;
 	private int turnWaitTime;// in ms
-	private GameState gs;
 
-	public Controller(PlayerCommands instructions, GameState gs) {
-		players = new ArrayList<Player>();
-		this.sharedInstructions = instructions;
-		turnWaitTime = 1000;
-		this.gs = gs;
+	public Controller() {
+		model = new GameModel();
+		commandQueue = new ConcurrentLinkedDeque<Command>();
+		turnWaitTime = 100;
 	}
 
 	@Override
 	public void run() {
-		System.out.println("Setup : ");
-		currentInstructions = sharedInstructions.dump();
-
-		for (Command comm : currentInstructions) {
-			System.out.println(comm.getTarget());
-			if (comm.getAction() != Actions.STARTUP_CREATE) {
-				System.out.println("You suck for not using startup_create");
-			}
-			Iterator<Object> it = comm.getPayload().iterator();
-			switch (comm.getTarget()) {
-			case PLAYER:
-				players.add(new Player((String) it.next(), (Integer) it.next()));
-				break;
-			case MAP:
-				map = new GameBoard((Integer) it.next(), (Integer) it.next());
-				break;
-			default:
-				System.out
-						.println("You suck for screwing up the target in the command object");
-				break;
-			}
-			// turnNum++;
-		}
-
-		gs.update(players, map);
-		gameStatus();
+		model.modelState();
+		
 		// actual game execution
 		boolean gameRunning = true;
 		while (gameRunning) {
-			// gs.toString();
+			
 			try {
 				Thread.sleep(turnWaitTime);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			produceResources();
+			while(!commandQueue.isEmpty()) {
+				Command comm = commandQueue.poll();
+				comm.performCommand(model);
+			}
+			model.advanceTimeStep();
 			// produceGameObjects
-			agentDecision();
-			unitInteraction();
+		//	agentDecision();
+			//unitInteraction();
 			// When the timer on a unit in the production queue hits 0, add the
 			// unit to the player's unit list.
 			
 			// TODO: change timestep to what we really want
-			checkBuildingProductionQueue(10);
+	//		checkBuildingProductionQueue(10);
 
-			gameRunning = playerCommands();
-			System.out.println("STILL RUNNING: " + gameRunning);
-			System.out
-					.println("STILL RUNNING: "
-							+ players.get(0).getGameObjects().getBuildings()
-									.toString());
-			gs.update(players, map);
+		//	gameRunning = playerCommands();
+
 		}
 	}
 
@@ -102,31 +77,6 @@ public class Controller implements Runnable {
 				}
 			}
 		}
-	}
-
-	private void gameStatus() {
-		System.out.println("Game State:");
-		System.out.print("Players: ");
-		for (Player player : players) {
-			player.getAlias();
-			System.out.print(player.getAlias() + ",");
-		}
-		System.out.println();
-		System.out.println();
-		for (Player player : players) {
-			System.out.println(player.getAlias() + "'s Resources:");
-			System.out.println(player.getResources().toString());
-			System.out.println(player.getAlias() + "'s Units: ");
-			for (Unit u : player.getGameObjects().getUnits().values()) {
-				System.out.println(u.toString());
-			}
-			System.out.println(player.getAlias() + "'s Buildings: ");
-			for (Building b : player.getGameObjects().getBuildings().values()) {
-				System.out.println(b.toString());
-			}
-			System.out.println();
-		}
-
 	}
 
 	private boolean playerCommands() {
@@ -195,6 +145,14 @@ public class Controller implements Runnable {
 
 			}
 		}
+	}
+	
+	public void addCommand(Command c) {
+		commandQueue.add(c);
+	}
+	
+	public GameModel getGameModel() {
+		return model;
 	}
 
 }

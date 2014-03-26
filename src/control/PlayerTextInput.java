@@ -3,6 +3,8 @@ package control;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import control.commands.Command;
+
 //might break this into two threads. one for input, one for update
 public class PlayerTextInput implements Runnable {
 	private PlayerCommands instructions;

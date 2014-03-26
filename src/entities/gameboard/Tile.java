@@ -1,7 +1,10 @@
 package entities.gameboard;
 
+import java.util.ArrayList;
+
 import control.Player;
 import entities.buildings.Building;
+import entities.units.Unit;
 
 /**
  * 
@@ -35,7 +38,8 @@ public class Tile {
 	private float yco; // y coordinate of upper left hand corner of tile 
 	
 	private Building buildingRef = null;
-
+	private ArrayList<Unit> unitsOnTile;
+	
 	// Resource Base Amounts - 'Average' amount a tile contiaining resource X will start with
 	private static final int foodBase  = 200; 
 	private static final int woodBase  = 100; 
@@ -50,50 +54,6 @@ public class Tile {
 	
 
 
-	/**
-	 * Tile(): Description: Constructor for Tile Object. Determines the terrain
-	 * type based on heightMap, and assigns resource.
-	 * 
-	 * Parameters:
-	 * 
-	 * @param int resourceNum - the number of the resource, Currently 0 for
-	 * Gold, 1 for wood, 2 for food, and 3 for stone
-	 * 
-	 * @param float heightMap - the height of this specific tile, determines the
-	 * terrain type.
-	 * @param float xco - xcoordinate of upper left hand corner of tile 
-	 * @param float yco - y coordinate of upper left hand corener of tile
-	 * 
-	 * Return Value:
-	 * 
-	 * @return a new Tile object.
-	 */
-	public Tile(int resourceNum, float heightMap, float xco, float yco)  
-	{
-		height = heightMap;
-
-		if (resourceNum == 0) {
-			resource = Resource.GOLD;
-		} else if (resourceNum == 1) {
-			resource = Resource.WOOD;
-		} else if (resourceNum == 2) {
-			resource = Resource.FOOD;
-		} else if (resourceNum == 3) {
-			resource = Resource.STONE;
-		} else {
-			resource = Resource.NONE;
-		}
-
-		this.xco = xco; 
-		this.yco = yco;
-		
-		setResourceAmount(resource);
-		setResourceRegen(resource);
-		
-		owner = null;
-		passable = true;
-		terrain = calculateTerrainType(height);
-	}
 
 	/*
 	 * Tile(): Description: Constructor for Tile Object. Determines the terrain
@@ -123,6 +83,7 @@ public class Tile {
 		owner = null;
 		passable = true;
 		terrain = calculateTerrainType(height);
+		unitsOnTile = new ArrayList<Unit>();
 	}
 	
 	/*
@@ -506,5 +467,13 @@ public class Tile {
 	public float getYCoordinate()
 	{
 		return yco;
+	}
+	
+	public void addUnit(Unit u) {
+		unitsOnTile.add(u);
+	}
+	
+	public boolean removeUnit(Unit u) {
+		return unitsOnTile.remove(u);
 	}
 }

@@ -65,5 +65,9 @@ public abstract class Unit extends GameObject {
 	public int getCreationTime() {
 		return this.baseStats.getCreationTime();
 	}
+	
+	public UnitType getUnitType() {
+		return unitType;
+	}
 
 }

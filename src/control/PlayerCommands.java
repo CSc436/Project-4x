@@ -3,6 +3,8 @@ package control;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
+import control.commands.Command;
+
 public class PlayerCommands {
 	
 	private Queue<Command> commands;

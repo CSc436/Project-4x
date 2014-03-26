@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import control.BuildingType;
 import control.Tools;
+import control.UnitType;
 import entities.GameObject;
 import entities.GameObjectType;
 import entities.stats.BaseStatsEnum;
@@ -20,17 +21,16 @@ public abstract class Building extends GameObject {
 														// knows what 'city' it
 														// belongs to
 	private BuildingType buildingType;
+	
 	private Queue<Unit> buildingQ = new LinkedList<Unit>();
-
+	private int turnsToExecute = 5;
+	
 	public Building(UUID id, int playerId, BaseStatsEnum baseStats,
 			UnitStats new_stats, GameObjectType gameObjectType,
 			BuildingType buildingType, float xco, float yco, int height,
 			int width) {
 		super(id, playerId, baseStats, new_stats, gameObjectType, xco, yco);
 		this.buildingType = buildingType;
-		this.height = height;
-		this.width = width;
-		// super(p, baseStats, type, xco, yco);
 		this.height = height;
 		this.width = width;
 
@@ -66,13 +66,24 @@ public abstract class Building extends GameObject {
 		return buildingQ.isEmpty();
 	}
 
-	public void advanceUnitProduction(int timestep) {
-		// add timestep to each unit
+	public Unit advanceUnitProduction() {
+		System.out.println("running");
+		if (buildingQ.size() == 0)
+			return null;
+		
+		if (turnsToExecute > 0) {
+			turnsToExecute--;
+			return null;
+		}
+		else {
+			turnsToExecute = 5;
+			return dequeueUnit();
+		}
 
 	}
 
+	//will have to pla
 	public Unit getProducedUnit() {
 		return buildingQ.poll();
 	}
-
 }
