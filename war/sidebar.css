@@ -58,12 +58,12 @@
 }
 
 .btn-green {
-	background-image: url('assets/Buttons/longButton_Green_pressed.png');
+	background-image: url('assets/Buttons/longButton_Green.png');
 	background-size: 100% 100%;
 }
 
 .btn-green:hover {
-	background-image: url('assets/Buttons/longButton_Green_unpressed.png');
+	background-image: url('assets/Buttons/longButton_Green_hover.png');
 	background-size: 100% 100%;
 }
 
