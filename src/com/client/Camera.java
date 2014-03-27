@@ -16,7 +16,7 @@ public class Camera {
 	public void makeCameraMatrix() {
 		cameraMatrix = FloatMatrix.createCameraMatrix((float)Math.toRadians(yaw),
 				(float)Math.toRadians(pitch), (float)Math.toRadians(roll), 45,
-				GameCanvas.WIDTH / GameCanvas.HEIGHT, 0.1f, 1000000f)
+				(float)GameCanvas.WIDTH / (float)GameCanvas.HEIGHT, 0.1f, 1000000f)
 				.columnWiseData();
 	}
 	
