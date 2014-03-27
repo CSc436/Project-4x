@@ -39,7 +39,7 @@ public class Camera {
 
 	public void up(float delta) {
 		// TODO Auto-generated method stub
-		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 0);
+		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 1/camZ);
 		temp.normalize();
 		camX += temp.x;
 		camY += temp.y;
@@ -47,7 +47,7 @@ public class Camera {
 
 	public void down(float delta) {
 		// TODO Auto-generated method stub
-		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw) , getSign(yaw), 0);
+		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw) , getSign(yaw), 1/camZ);
 		temp.left();
 		temp.left();
 		temp.normalize();
@@ -57,7 +57,7 @@ public class Camera {
 
 	public void left(float delta) {
 		// TODO Auto-generated method stub
-		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 0);
+		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 1/camZ);
 		temp.right(); // the map starts off backwards...
 		temp.normalize();
 		camX += temp.x;
@@ -67,7 +67,7 @@ public class Camera {
 
 	public void right(float delta) {
 		// TODO Auto-generated method stub
-		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 0);
+		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 1/camZ);
 		temp.left();
 		temp.normalize();
 		camX += temp.x;
