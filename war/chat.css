@@ -15,7 +15,6 @@
 
 #chat-trigger:hover {
 	background-color: #777;
-	cursor: pointer;
 }
 
 #chat-box {
@@ -55,7 +54,6 @@
 }
 
 #send-message:hover {
-	cursor: pointer;
 	background-color: #777;
 }
 

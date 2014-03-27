@@ -1,7 +1,8 @@
 #sidebar {
 	position: fixed;
 	bottom: 0;
-	left: -1000px; /* This is too big, but get's calculated on Interface.init */
+	left: -1000px;
+	/* This is too big, but get's calculated on Interface.init */
 	top: 50px;
 	width: 350px;
 	background-image: url('assets/Panels/panel_sidebar.png');
@@ -12,6 +13,8 @@
 	margin: 0;
 	z-index: 999;
 	font-size: 16px;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 #sidebar-hide {
@@ -19,7 +22,6 @@
 	top: 45%; /*Not correct*/
 	left: 100%;
 	padding: 5px;
-	cursor: pointer;
 	float: right;
 	margin-right: -32px;
 	width: 15px;
@@ -40,7 +42,6 @@
 
 .sidebar-btn {
 	font-family: 'MedievalSharp', cursive;
-	cursor: pointer;
 	outline: 0;
 	padding: 5px;
 	font-size: 14px;
@@ -69,22 +70,28 @@
 
 .sidebar-table {
 	width: 100%;
-	table-layout:fixed;
+	table-layout: fixed;
 }
 
 .sidebar-table tr td:first-child {
 	width: 70%;
 }
 
-.sidebar-table tr td:nth-child(2) {
+.sidebar-table tr td:nth-child (2) {
 	text-align: center;
-}
-
-.sidebar-table tr td div:first-child {
-	font-size: 20px;
-	font-weight: bold;
 }
 
 .sidebar-table tr td {
 	padding-bottom: 10px;
+}
+
+.sidebar-table tr td div:first-child {
+	/*#agent-menu-table tr td div:first-child {*/
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.form-label {
+	width: 25%;
+	float: left;
 }
