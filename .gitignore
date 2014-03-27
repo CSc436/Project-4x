@@ -2,3 +2,4 @@
 /gwt-unitCache
 /war/game
 *~
+*.symbolMap
