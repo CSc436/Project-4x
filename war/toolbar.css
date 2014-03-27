@@ -40,7 +40,6 @@
 
 #toolbar li a {
 	float: left;
-	cursor: pointer;
 	width: 70px;
 	height: 45px;
 	text-decoration: none;

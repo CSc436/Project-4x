@@ -112,8 +112,8 @@ public class Interface {
 		$(".detail-return").click(new Function() {
 			public boolean f(Event e) {
 				// Responsible for returning from ALL detail menus to list menus
-				// Will pass in name of menu to return to
-				// And will simulate that click
+				// Gets name of menu to return to from it's data-return attribue
+				/*
 				if (showing.equals("agent-menu-detail") || showing.equals("agent-menu-create")) {
 					changeSidebarContent("agent-menu");
 				} else if (showing.equals("diplomacy-menu-detail") || showing.equals("diplomacy-menu-create")) {
@@ -123,6 +123,9 @@ public class Interface {
 				} else if (showing.equals("economies-menu-detail")) {
 					changeSidebarContent("economies-menu");
 				}
+				*/
+				String returnTo = $(this).attr("data-return");
+				changeSidebarContent(returnTo);
 				return true;
 			}
 		});
@@ -130,7 +133,7 @@ public class Interface {
 		$("#agent-create").click(new Function() {
 			public boolean f(Event e) {
 				// Show agent create menu
-				changeSidebarContent("agent-create-menu");
+				changeSidebarContent("agent-menu-create");
 				return true;
 			}
 		});
@@ -138,7 +141,7 @@ public class Interface {
 		$("#diplomacy-create").click(new Function() {
 			public boolean f(Event e) {
 				// Show diplomacy create menu
-				changeSidebarContent("diplomacy-create-menu");
+				changeSidebarContent("diplomacy-menu-create");
 				return true;
 			}
 		});
@@ -164,6 +167,13 @@ public class Interface {
 		$("#menu-button").click(new Function() {
 			public boolean f(Event e) {
 				// Hide/show menu
+				$("#game-menu").fadeToggle(400);
+				return true;
+			}
+		});
+		
+		$("#close-menu").click(new Function() {
+			public boolean f(Event e) {
 				$("#game-menu").fadeToggle(400);
 				return true;
 			}

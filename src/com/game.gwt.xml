@@ -30,7 +30,6 @@
 
   <!-- allow Super Dev Mode -->
   <add-linker name="xsiframe"/>
-<!--   <collapse-all-properties /> -->
   
 </module>
 

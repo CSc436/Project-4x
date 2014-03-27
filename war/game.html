@@ -19,7 +19,6 @@
 
 <script type="text/javascript" language="javascript"
 	src="game/game.nocache.js"></script>
-
 </head>
 
 <body>
@@ -113,10 +112,45 @@
 			</div>
 			<div class="text-center">
 				<button type="button" class="sidebar-btn btn-red">Dismiss</button>
-				<button type="button" class="sidebar-btn btn-red detail-return">Back</button>
+				<button type="button" class="sidebar-btn btn-red detail-return"
+					data-return="agent-menu">Back</button>
 			</div>
 		</div>
-		<!-- CITY MENU -->
+		<!-- AGENT MENU CREATE -->
+		<div id="agent-menu-create" class="sidebar-menu">
+			<div class="text-center">
+				<h2>Create an Agent</h2>
+			</div>
+			<hr>
+			<div>
+				<label class="form-label" for="agent-name">Name:</label><input
+					type="text" id="agent-name" />
+			</div>
+			<div>
+				<label class="form-label" for="agent-type">Type:</label> <select
+					id="agent-type">
+					<option value="Banker">Banker</option>
+					<option value="General">General</option>
+					<option value="Infantry">Infantry</option>
+					<option value="Prospector">Prospector</option>
+				</select>
+			</div>
+			<div>
+				<label class="form-label" for="agent-action">Set Action:</label> <select
+					id="agent-action">
+					<option value="?">?</option>
+					<option value="?">?</option>
+					<option value="?">?</option>
+				</select>
+			</div>
+			<div class="text-center">
+				<button type="button" class="sidebar-btn btn-red"
+					id="agent-create-confirm">Create Agent</button>
+				<button type="button" class="sidebar-btn btn-red detail-return"
+					data-return="agent-menu">Back</button>
+			</div>
+		</div>
+		<!-- CITIES MENU -->
 		<div id="cities-menu" class="sidebar-menu">
 			<div class="text-center">
 				<h2>Cities</h2>
@@ -157,7 +191,7 @@
 				</tbody>
 			</table>
 		</div>
-		<!-- CITY MENU DETAIL -->
+		<!-- CITIES MENU DETAIL -->
 		<div id="cities-menu-detail" class="sidebar-menu">
 			<div class="text-center">
 				<h2>Metropolis</h2>
@@ -172,10 +206,11 @@
 			</div>
 			<div class="text-center">
 				<button type="button" class="sidebar-btn btn-red">Destroy</button>
-				<button type="button" class="sidebar-btn btn-red detail-return">Back</button>
+				<button type="button" class="sidebar-btn btn-red detail-return"
+					data-return="cities-menu">Back</button>
 			</div>
 		</div>
-
+		<!-- DIPLOMACY MENU -->
 		<div id="diplomacy-menu" class="sidebar-menu">
 			<div class="text-center">
 				<h2>Diplomacy</h2>
@@ -186,20 +221,166 @@
 			</div>
 			<hr>
 			<div>
-				<h3>Pending Agreements</h3>
-				<div id="sent-agreements">Sent Agreements</div>
-				<div id="received-agreements">Received Agreements</div>
+				<h3 class="text-center">Sent Agreements</h3>
+				<hr>
+				<table class="sidebar-table">
+					<tbody>
+						<tr>
+							<td>
+								<div>Corn for Sheep</div>
+							</td>
+							<td>
+								<button type="button"
+									class="sidebar-btn btn-green diplomacy-view-button">View</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div>Halp give me gold</div>
+							</td>
+							<td>
+								<button type="button"
+									class="sidebar-btn btn-green diplomacy-view-button">View</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
 			</div>
 			<div>
-				<h3>Accepted Agreements</h3>
+				<h3 class="text-center">Received Agreements</h3>
+				<hr>
+				<table class="sidebar-table">
+					<tbody>
+						<tr>
+							<td>
+								<div>Need Fish plz</div>
+							</td>
+							<td>
+								<button type="button" class="sidebar-btn btn-green">A</button>
+								<button type="button" class="sidebar-btn btn-red">R</button>
+								<button type="button"
+									class="sidebar-btn btn-green diplomacy-view-button">View</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div>Help me Obi-Wan</div>
+							</td>
+							<td>
+								<button type="button" class="sidebar-btn btn-green">A</button>
+								<button type="button" class="sidebar-btn btn-red">R</button>
+								<button type="button"
+									class="sidebar-btn btn-green diplomacy-view-button">View</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div>
+				<h3 class="text-center">Accepted Agreements</h3>
+				<hr>
+				<table class="sidebar-table">
+					<tbody>
+						<tr>
+							<td>
+								<div>Need Hard Wood</div>
+							</td>
+							<td>
+								<button type="button"
+									class="sidebar-btn btn-green diplomacy-view-button">View</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div>Need Hard Wood</div>
+							</td>
+							<td>
+								<button type="button"
+									class="sidebar-btn btn-green diplomacy-view-button">View</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div>Need Hard Wood</div>
+							</td>
+							<td>
+								<button type="button"
+									class="sidebar-btn btn-green diplomacy-view-button">View</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
-		<div id="diplomacy-menu-detail" class="sidebar-menu">Diplomacy
-			Detail Menu</div>
-		<div id="diplomacy-menu-create" class="sidebar-menu">Create
-			Agreement Menu</div>
-
+		<!-- DIPLOMACY MENU DETAIL -->
+		<div id="diplomacy-menu-detail" class="sidebar-menu">
+			<div class="text-center">
+				<h2>Agreement: Help me Obi-Wan</h2>
+			</div>
+			<hr>
+			<div class="text-center">
+				<div>Agreement With</div>
+				<div>They Receive</div>
+				<div>You Receive</div>
+				<div>Time Unit</div>
+				<div>Expires in</div>
+			</div>
+			<div class="text-center">
+				<button type="button" class="sidebar-btn btn-red">Cancel
+					Agreement</button>
+				<button type="button" class="sidebar-btn btn-red detail-return"
+					data-return="diplomacy-menu">Back</button>
+			</div>
+		</div>
+		<!-- DIPLOMACY MENY CREATE -->
+		<div id="diplomacy-menu-create" class="sidebar-menu">
+			<div class="text-center">
+				<h2>Propose Agreement</h2>
+			</div>
+			<hr>
+			<div>
+				<label class="form-label" for="diplomacy-name">Name:</label><input
+					type="text" id="diplomacy-name" />
+			</div>
+			<div>
+				<label class="form-label" for="diplomacy-send-quantity">They
+					Receive:</label> <input type="text" id="diplomacy-send-quantity" /> <select
+					id="diplomacy-send-type">
+					<option value="Gold">Gold</option>
+					<option value="Wood">Wood</option>
+					<option value="Food">Food</option>
+					<option value="Stone">Stone</option>
+				</select>
+			</div>
+			<div>
+				<label class="form-label" for="diplomacy-receive-quantity">You
+					Receive:</label> <input type="text" id="diplomacy-receive-quantity" /> <select
+					id="diplomacy-receive-type">
+					<option value="Gold">Gold</option>
+					<option value="Wood">Wood</option>
+					<option value="Food">Food</option>
+					<option value="Stone">Stone</option>
+				</select>
+			</div>
+			<div>
+				<label class="form-label" for="diplomacy-time-unit">Trade
+					Every:</label> <input type="text" id="diplomacy-time-unit" /> Time Units
+			</div>
+			<div>
+				<label class="form-label" for="diplomacy-expire">Expires In:</label>
+				<input type="text" id="diplomacy-expire" /> Time Units
+			</div>
+			<div class="text-center">
+				<button type="button" class="sidebar-btn btn-red"
+					id="diplomacy-create-confirm">Send</button>
+				<button type="button" class="sidebar-btn btn-red detail-return"
+					data-return="diplomacy-menu">Back</button>
+			</div>
+		</div>
+		<!-- ECONOMIES MENU -->
 		<div id="economies-menu" class="sidebar-menu">Economies menu</div>
+		<!-- ECONOMIES MENU DETAIL -->
 		<div id="economies-menu-detail" class="sidebar-menu">Economies
 			Detail Menu</div>
 
@@ -207,21 +388,31 @@
 	</div>
 
 	<div id="gwtGL"></div>
-	<div id="game-menu">Menu content here</div>
+
+	<div id="game-menu">
+		<div id="menu-content">Menu content here</div>
+		<div id="menu-actions" class="text-center">
+			<button type="button" id="close-menu" class="sidebar-btn btn-red">Close</button>
+		</div>
+	</div>
 
 	<div id="chat-container">
 		<div id="chat-trigger" class="full-size text-center">Chat</div>
 		<div id="chat-box" class="full-size">
 			<div id="messages">
 				<!-- Messages go here -->
-				"The quick brown fox jumps over the lazy dog."<br /> 
-				Five hexing	wizard bots jump quickly.<br /> 
-				My jocks box, get hard, unzip, quiver, flow. <br /> 
-				"HA. HA. MIKE YOU'RE SO ECCENTRIC. MAN I AM HILARIOUS!" - Kelsey Young, March 2014<br /> 
-				oh-- TARTS!<br /> 
-				"Overloading is making a lot of	functions do things while Overriding overrides exceptions for things that would be problems."<br />  
-				Is this the real life? Is this just	fantasy? Caught in a landslide, No escape from reality. Open your eyes, Look up to the skies and see, I'm just a poor boy, I need no sympathy, Because I'm easy come, easy go, Little high, little low, Anyway the wind blows doesn't really matter to me, to me.<br />
-				test<br /> test<br /> test<br /> test<br /> test<br />
+				"The quick brown fox jumps over the lazy dog."<br /> Five hexing
+				wizard bots jump quickly.<br /> My jocks box, get hard, unzip,
+				quiver, flow. <br /> "HA. HA. MIKE YOU'RE SO ECCENTRIC. MAN I AM
+				HILARIOUS!" - Kelsey Young, March 2014<br /> oh-- TARTS!<br />
+				"Overloading is making a lot of functions do things while Overriding
+				overrides exceptions for things that would be problems."<br /> Is
+				this the real life? Is this just fantasy? Caught in a landslide, No
+				escape from reality. Open your eyes, Look up to the skies and see,
+				I'm just a poor boy, I need no sympathy, Because I'm easy come, easy
+				go, Little high, little low, Anyway the wind blows doesn't really
+				matter to me, to me.<br /> test<br /> test<br /> test<br /> test<br />
+				test<br />
 			</div>
 			<div id="chat-send-box" class="text-center">
 				<input type="text" id="message" autocomplete="off"
