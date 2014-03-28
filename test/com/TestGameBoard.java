@@ -17,11 +17,12 @@ public class TestGameBoard {
 
 	GameBoard board = new GameBoard(200, 200);
 	Player p = new Player("meathook", 0);
-	Building b = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f, 2.0f);
+	Building b = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f, 2.0f,board);
+	Building c = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 2.0f, 3.0f,board);
 	Tile t = board.getTileAt(0, 0);
 
 	@Test
-	public void testGet() {
+	public void testOccupied1() {
 
 		assertEquals(200, board.getCols());
 		assertEquals(200, board.getRows());
@@ -60,8 +61,12 @@ public class TestGameBoard {
 			}
 
 		}
-		
-		
 
 	}
+
+	@Test
+	public void testOccupied2() {
+
+	}
+
 }

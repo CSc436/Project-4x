@@ -3,17 +3,19 @@ package entities;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
 import control.BuildingType;
 import control.Factory;
 import control.Player;
 import entities.buildings.Building;
+import entities.gameboard.GameBoard;
 
 
 public class TestBuilding {
-
+	GameBoard board = new GameBoard(200,200);
 	Player p = new Player("meathook", 0);
 	Building b = Factory.buildBuilding(p, p.getId(), BuildingType.BARRACKS,
-			1.0f, 1.0f);
+			1.0f, 1.0f,board);
 
 	@Test
 	public void testGet() {

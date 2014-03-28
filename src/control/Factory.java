@@ -6,6 +6,7 @@ import entities.GameObjectType;
 import entities.buildings.Barracks;
 import entities.buildings.Building;
 import entities.buildings.Castle;
+import entities.gameboard.GameBoard;
 import entities.stats.BaseStatsEnum;
 import entities.units.Unit;
 import entities.units.pawns.Archer;
@@ -124,7 +125,7 @@ public class Factory {
 	// buildings for the player
 
 	public static Building buildBuilding(Player p, int playerId,
-			BuildingType buildingType, float xco, float yco) {
+			BuildingType buildingType, float xco, float yco, GameBoard gb) {
 		UUID newId = getId();
 		Building result = null;
 
