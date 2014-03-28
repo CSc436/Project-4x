@@ -1,6 +1,5 @@
 package control.commands;
 
-import java.util.ArrayList;
 
 import control.GameModel;
 

@@ -32,7 +32,7 @@ public class BuildingProductionCommand implements Command{
 		Player player = model.getPlayer(playerId);
 		Building thisBuilding = player.getGameObjects().getBuildings().get(buildingId);
 		
-		Unit u = Factory.buildUnit(playerId, unitType, thisBuilding.getX(), thisBuilding.getY());
+		Unit u = Factory.buildUnit(player,playerId, unitType, thisBuilding.getX(), thisBuilding.getY());
 		
 		//Add this unit to the player's queue
 		thisBuilding.queueUnit(u);

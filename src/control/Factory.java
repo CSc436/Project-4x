@@ -7,7 +7,6 @@ import entities.buildings.Barracks;
 import entities.buildings.Building;
 import entities.buildings.Castle;
 import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
 import entities.units.Unit;
 import entities.units.pawns.Archer;
 import entities.units.pawns.Battering_Ram;
@@ -29,8 +28,8 @@ public class Factory {
 		return UUID.randomUUID();
 	}
 
-	public static Unit buildUnit(int playerId, UnitType unitType, float xco,
-			float yco) {
+	public static Unit buildUnit(Player p, int playerId, UnitType unitType,
+			float xco, float yco) {
 
 		UUID newId = getId();
 		Unit result = null;
@@ -116,18 +115,21 @@ public class Factory {
 			break;
 		// result = new Infantry(p, 1, 1, uniqueid);
 		}
-		
+		p.getGameObjects().addUnit(result);
 		return result;
 
 	}
 
-	public static Building buildBuilding(int playerId,
+	// Do not remove Player p arg. It is needed to maintain the collection of
+	// buildings for the player
+
+	public static Building buildBuilding(Player p, int playerId,
 			BuildingType buildingType, float xco, float yco) {
 		UUID newId = getId();
 		Building result = null;
 
 		switch (buildingType) {
-		
+
 		case CASTLE:
 			result = new Castle(newId, playerId, BaseStatsEnum.CASTLE,
 					BaseStatsEnum.CASTLE.getStats(), GameObjectType.BUILDING,
@@ -155,6 +157,8 @@ public class Factory {
 
 			// result = new Barracks(p, 1, 1, uniqueid);
 		}
+
+		p.getGameObjects().addBuilding(result);
 		return result;
 
 	}

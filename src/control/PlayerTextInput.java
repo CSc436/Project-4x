@@ -3,7 +3,7 @@ package control;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import control.commands.Command;
+
 
 //might break this into two threads. one for input, one for update
 public class PlayerTextInput implements Runnable {
@@ -31,8 +31,7 @@ public class PlayerTextInput implements Runnable {
 			String name = keyboard.next();
 			payload.add(name);
 			payload.add(count);
-			instructions.push(new Command(Actions.STARTUP_CREATE,
-					Targets.PLAYER, payload));
+			
 			payload.clear();
 		}
 
@@ -40,13 +39,12 @@ public class PlayerTextInput implements Runnable {
 				.println("How big should the map be? Give height and width. ex:5 5");
 		payload.add(keyboard.nextInt());
 		payload.add(keyboard.nextInt());
-		instructions.push(new Command(Actions.STARTUP_CREATE, Targets.MAP,
-				payload));
+
 		payload.clear();
 
 		// start controller in here
 		System.out.println("Let's start!");
-		Thread controller = new Thread(new Controller(instructions, gs));
+		Thread controller = new Thread(new Controller());
 		controller.start();
 
 		while (result != -1) {

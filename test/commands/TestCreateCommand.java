@@ -16,7 +16,7 @@ import control.commands.Command;
 import entities.buildings.Building;
 import entities.units.Unit;
 
-public class CreateCommandTest {
+public class TestCreateCommand {
 
 	@Test
 	public void testCreate() {

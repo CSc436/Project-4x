@@ -1,5 +1,7 @@
 package control;
 
+import java.util.UUID;
+
 import entities.Action;
 import entities.Civilization;
 import entities.PerfectCivilization;
@@ -87,7 +89,12 @@ public class Player {
 		// u.addAction(a);
 	}
 
-	public Building getBuilding(int buildingId) {
+	public Building getBuilding(UUID buildingId) {
 		return objects.getBuildings().get(buildingId);
+	}
+
+	public Object getUnit(UUID id2) {
+		// TODO Auto-generated method stub
+		return objects.getUnits().get(id2);
 	}
 }

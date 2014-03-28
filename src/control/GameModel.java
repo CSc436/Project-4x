@@ -10,42 +10,44 @@ import entities.units.Unit;
 public class GameModel {
 	private ArrayList<Player> players;
 	private GameBoard map;
-	
-	//simple test model start up.
-	//A different constructor should be used for different 
+
+	// simple test model start up.
+	// A different constructor should be used for different
 	public GameModel() {
 		players = new ArrayList<Player>();
 		players.add(new Player("Player 1", 1));
 		players.add(new Player("Player 2", 2));
 		map = new GameBoard(500, 500);
-		Building castle = Factory.buildBuilding(1, BuildingType.CASTLE, 0, 0);
+		Building castle = Factory.buildBuilding(players.get(0), 1,
+				BuildingType.CASTLE, 0, 0);
 		players.get(0).getGameObjects().addBuilding(castle);
 		map.placeBuildingAt(castle, 0, 0);
-		
-		castle = Factory.buildBuilding(2, BuildingType.CASTLE, 100, 100);
+
+		castle = Factory.buildBuilding(players.get(1), 2, BuildingType.CASTLE,
+				100, 100);
 		players.get(1).getGameObjects().addBuilding(castle);
 		map.placeBuildingAt(castle, 100, 100);
 	}
-	
+
 	public ArrayList<Player> getPlayers() {
 		return players;
 	}
-	
+
 	public Player getPlayer(int playerId) {
-		return players.get(playerId-1);
+		return players.get(playerId - 1);
 	}
 
 	public void advanceTimeStep() {
 		produceResources();
 		placeNewUnits();
-		
+
 	}
 
 	private void produceResources() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	private void placeNewUnits() {
 		for (Player p : players) {
 			for (Building b : p.getGameObjects().getBuildings().values()) {
@@ -81,6 +83,6 @@ public class GameModel {
 			}
 			System.out.println();
 		}
-		
+
 	}
 }

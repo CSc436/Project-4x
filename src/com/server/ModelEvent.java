@@ -1,6 +1,6 @@
 package com.server;
 
-import control.Targets;
+import deprecated.Targets;
 import entities.Locatable;
 
 public class ModelEvent {
