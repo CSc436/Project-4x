@@ -97,4 +97,8 @@ public class Player {
 		// TODO Auto-generated method stub
 		return objects.getUnits().get(id2);
 	}
+
+	public void addBuilding(Building b) {
+		objects.addBuilding(b);
+	}
 }
