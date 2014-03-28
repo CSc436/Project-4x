@@ -17,8 +17,9 @@ public class TestGameBoard {
 
 	GameBoard board = new GameBoard(200, 200);
 	Player p = new Player("meathook", 0);
-	Building b = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f, 2.0f,board);
-	Building c = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 2.0f, 3.0f,board);
+	Building b = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f, 2.0f,
+			board);
+
 	Tile t = board.getTileAt(0, 0);
 
 	@Test
@@ -66,6 +67,15 @@ public class TestGameBoard {
 
 	@Test
 	public void testOccupied2() {
+
+		Building b = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f,
+				2.0f, board);
+		Building c = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f,
+				3.0f, board);
+		c = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 5.0f, 4.0f,
+				board);
+		Building d = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 199.0f,
+				3.0f, board);
 
 	}
 

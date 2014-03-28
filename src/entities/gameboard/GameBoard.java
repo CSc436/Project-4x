@@ -286,31 +286,44 @@ public class GameBoard {
 	 * @param int y - y coordinate where to place building (0 to cols - 1)
 	 */
 
-	public void placeBuildingAt(Building b, int x, int y) {
+	public boolean placeBuildingAt(Building b, int x, int y) {
 
 		// the tile must be owned to place a building
 
 		// calculate the distance to the the bottom right corner
 		int dc = (cols - (x + b.getWidth() - 1));
 		int dr = (rows - (y + b.getHeight() - 1));
+		System.out.println(x + " . " + y);
+		System.out.println(dc + " . " + dr);
 
+		
+		boolean boo = false;
 		// if the placement of the building does not go off the map if (dc > 0
 		// && dr > 0) {
 		if (dc > 0 && dr > 0) {
-		
-			
 
 			// set the area of the rectangle to be occupied by a building
 
 			for (int r = x; r < (x + b.getHeight()); r++) {
 
 				for (int c = y; c < (y + b.getWidth()); c++) {
-					map[r][c].setIsOccupiedByBuilding(true);
+					if (map[r][c].isOccupiedByBuilding()) {
+						boo = false;
+						break;
+
+					} else {
+						map[r][c].setIsOccupiedByBuilding(true);
+						boo = true;
+
+					}
 				}
 			}
+			
+			return boo;
 		} else {
-			System.err.println("The building does not fit on the map");
+			return false;
 		}
+		
 	}
 
 	public void removeBuilding(Building b) {

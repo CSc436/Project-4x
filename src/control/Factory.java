@@ -129,37 +129,54 @@ public class Factory {
 		UUID newId = getId();
 		Building result = null;
 
-		switch (buildingType) {
+		// if the tile is not occupied
+		if (!gb.getTileAt((int) xco, (int) yco).isOccupiedByBuilding()) {
 
-		case CASTLE:
-			result = new Castle(newId, playerId, BaseStatsEnum.CASTLE,
-					BaseStatsEnum.CASTLE.getStats(), GameObjectType.BUILDING,
-					BuildingType.CASTLE, xco, yco, 4, 4, 500, 10);
-			break;
+			switch (buildingType) {
 
-		case BARRACKS:
-			result = new Barracks(newId, playerId, BaseStatsEnum.BARRACKS,
-					BaseStatsEnum.BARRACKS.getStats(), GameObjectType.BUILDING,
-					BuildingType.BARRACKS, xco, yco, 2, 4);
-			break;
-		case BANK:
-			result = new Barracks(newId, playerId, BaseStatsEnum.BANK,
-					BaseStatsEnum.BANK.getStats(), GameObjectType.BUILDING,
-					BuildingType.BANK, xco, yco, 2, 2);
-			break;
+			case CASTLE:
+				result = new Castle(newId, playerId, BaseStatsEnum.CASTLE,
+						BaseStatsEnum.CASTLE.getStats(),
+						GameObjectType.BUILDING, BuildingType.CASTLE, xco, yco,
+						4, 4, 500, 10);
+				break;
 
-		case TOWN_HALL:
-			result = new Barracks(newId, playerId, BaseStatsEnum.TOWN_HALL,
-					BaseStatsEnum.TOWN_HALL.getStats(),
-					GameObjectType.BUILDING, BuildingType.TOWN_HALL, xco, yco,
-					4, 4);
-			break;
-		default:
+			case BARRACKS:
+				result = new Barracks(newId, playerId, BaseStatsEnum.BARRACKS,
+						BaseStatsEnum.BARRACKS.getStats(),
+						GameObjectType.BUILDING, BuildingType.BARRACKS, xco,
+						yco, 2, 4);
+				break;
+			case BANK:
+				result = new Barracks(newId, playerId, BaseStatsEnum.BANK,
+						BaseStatsEnum.BANK.getStats(), GameObjectType.BUILDING,
+						BuildingType.BANK, xco, yco, 2, 2);
+				break;
 
-			// result = new Barracks(p, 1, 1, uniqueid);
-		}
+			case TOWN_HALL:
+				result = new Barracks(newId, playerId, BaseStatsEnum.TOWN_HALL,
+						BaseStatsEnum.TOWN_HALL.getStats(),
+						GameObjectType.BUILDING, BuildingType.TOWN_HALL, xco,
+						yco, 4, 4);
+				break;
+			default:
 
-		p.getGameObjects().addBuilding(result);
+				// result = new Barracks(p, 1, 1, uniqueid);
+			}
+
+			// if the building is successfully placed on the map (within range)
+			// add it to the players object list
+			if (gb.placeBuildingAt(result, (int) xco, (int) yco)) {
+				p.getGameObjects().addBuilding(result);
+				System.out.println("Building placement success ");
+			} else
+				System.out
+						.println("Building placement error;  Out of range, or overlap");
+
+		} else
+			System.out
+					.println("Building placement error;  Out of range, or overlap");
+
 		return result;
 
 	}
