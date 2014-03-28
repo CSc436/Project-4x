@@ -108,6 +108,17 @@ public class Interface {
 				return true;
 			}
 		});
+		
+		$(".economies-view-button").click(new Function() {
+			public boolean f(Event e) {
+				// Show diplomacy detail menu
+				changeSidebarContent("economies-menu-detail");
+				// TODO: actual functionality
+				// Get agreement ID from btn
+				// Populate diplomacy-menu-detail
+				return true;
+			}
+		});
 
 		$(".detail-return").click(new Function() {
 			public boolean f(Event e) {
@@ -159,7 +170,7 @@ public class Interface {
 		$("#chat-trigger").click(new Function() {
 			public boolean f(Event e) {
 				// Hide/show chat
-				$("#chat-box").slideToggle(100);
+				$("#chat-box").slideToggle(500);
 				return true; // Default return true;
 			}
 		});

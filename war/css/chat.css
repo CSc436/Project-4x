@@ -13,7 +13,7 @@
 	/* 	border: 1px solid white; */
 /* 	color: #EEEEEE; */
 	height: 20px;
-	background-image: url('assets/Panels/chatbox.png');
+	background-image: url('../assets/Panels/chatbox.png');
 	background-size: 100% 100%;
 }
 
@@ -23,7 +23,7 @@
 
 #chat-box {
 	display: none; /*Initially hidden*/
-	background-image: url('assets/Panels/chatbox.png');
+	background-image: url('../assets/Panels/chatbox.png');
 	background-size: 100% 100%;
 	border-bottom: none;
 	/* 	border: 1px solid white; */
