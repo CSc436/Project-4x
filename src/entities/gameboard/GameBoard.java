@@ -296,7 +296,6 @@ public class GameBoard {
 		System.out.println(x + " . " + y);
 		System.out.println(dc + " . " + dr);
 
-		
 		boolean boo = false;
 		// if the placement of the building does not go off the map if (dc > 0
 		// && dr > 0) {
@@ -318,12 +317,12 @@ public class GameBoard {
 					}
 				}
 			}
-			
+
 			return boo;
 		} else {
 			return false;
 		}
-		
+
 	}
 
 	public void removeBuilding(Building b) {

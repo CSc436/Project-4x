@@ -68,12 +68,17 @@ public class TestGameBoard {
 	@Test
 	public void testOccupied2() {
 
+		// These should fail, as there is a building at 1,2
 		Building b = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f,
 				2.0f, board);
 		Building c = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f,
 				3.0f, board);
+
+		// This should pass
 		c = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 5.0f, 4.0f,
 				board);
+
+		// This should fail, as it is off the map
 		Building d = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 199.0f,
 				3.0f, board);
 

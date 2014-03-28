@@ -41,7 +41,6 @@ public class TestRandomMapGenerator extends Thread {
 
 // 1391894924588
 
-
 class draw2 extends JPanel {
 
 	/**

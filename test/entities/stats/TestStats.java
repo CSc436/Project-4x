@@ -24,6 +24,10 @@ public class TestStats {
 		assertEquals(20.0, 0, us.max_health);
 		assertEquals(3.0, 0, us.movementSpeed);
 		assertEquals(4.0, 0, us.range);
+		
+		
+		
+	
 
 	}
 }
