@@ -43,4 +43,8 @@ public class Vector3 {
 	public String toString() {
 		return "[" + x + ", " + y + ", " + z + "]";
 	}
+	
+	public static float dist(float x, float y) {
+		return (float)Math.sqrt(x*x + y*y);
+	}
 }
