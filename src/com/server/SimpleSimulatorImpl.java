@@ -1,15 +1,14 @@
 package com.server;
 
+import java.util.HashMap;
 import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.client.SimpleSimulator;
-import com.google.gwt.dev.util.collect.HashMap;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.shared.MovingUnitModel;
 import com.shared.Request;
+import com.shared.SimpleGameModel;
 
 /**
  * The server-side implementation of the RPC service.
@@ -42,7 +41,7 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 		return new Request[] {input};
 	}
 	
-	public MovingUnitModel sendRequests( Queue<Request> requestQueue ) {
+	public SimpleGameModel sendRequests( Queue<Request> requestQueue ) {
 		/*
 		while( !requestQueue.isEmpty() ) {
 			Request r = requestQueue.remove();
@@ -50,7 +49,7 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 		}
 		*/
 		m.simulateFrame();
-		return m.getUnit();
+		return m.getGame();
 	}
 
 	/**
@@ -102,7 +101,7 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public MovingUnitModel getSimulationState( int playerNumber, int lastTurnReceived ) {
+	public SimpleGameModel getSimulationState( int playerNumber, int lastTurnReceived ) {
 		while(!m.sendingGame()) {
 			//System.out.println("    Client already up to date");
 			try {
@@ -112,7 +111,7 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 			}
 		}
 		//playerTable.put(playerNumber, true);
-		return m.getUnit();
+		return m.getGame();
 	}
 	
 	public Integer joinSimulation() {

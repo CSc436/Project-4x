@@ -105,4 +105,8 @@ public class PhysicsVector implements Serializable{
 	public double getY() {
 		return y;
 	}
+	
+	public PhysicsVector copy() {
+		return new PhysicsVector(x,y);
+	}
 }

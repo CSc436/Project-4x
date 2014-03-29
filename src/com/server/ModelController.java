@@ -7,9 +7,10 @@ import java.util.TimerTask;
 
 import com.shared.MovingUnitModel;
 import com.shared.Request;
+import com.shared.SimpleGameModel;
 
 public class ModelController implements Runnable {
-	public MovingUnitModel unit;
+	public SimpleGameModel game;
 	public boolean isBlack;
 	public int timeStep = 200; // Number of milliseconds per simulation step
 	public int turnNumber = 0;
@@ -24,7 +25,7 @@ public class ModelController implements Runnable {
 	public boolean isRunning;
 	
 	public ModelController() {
-		unit = new MovingUnitModel( 0.0, 0.0, 3.0 );
+		game = new SimpleGameModel( 5 );
 		isBlack = false;
 		for(int i = 0; i < numTimesSaved; i++)
 			runningAvgQueue.add(timeStep);
@@ -62,10 +63,10 @@ public class ModelController implements Runnable {
 		
 		while(!frameRequestQueue.isEmpty()) {
 			Request r = frameRequestQueue.remove();
-			r.executeOn(this.unit);
+			r.executeOn(this.game);
 		}
 		
-		unit.simulateTimeStep( movingAverage );
+		game.simulateTimeStep( movingAverage );
 		//System.out.println("Server >>> "  + unit.position.getX() + " " + unit.position.getY());
 		turnNumber++;
 		sendGame = true; // Game updated, ready to update clients
@@ -81,13 +82,9 @@ public class ModelController implements Runnable {
 		}
 		System.out.println(movingAverage);
 	}
-
-	public void setTarget( double x, double y ) {
-		unit.setTarget(x, y);
-	}
 	
-	public MovingUnitModel getUnit() {
-		return unit;
+	public SimpleGameModel getGame() {
+		return game;
 	}
 	
 	public void continueSimulation() {

@@ -36,7 +36,7 @@ public class Request implements Serializable {
 		return r;
 	}
 	
-	public boolean executeOn(MovingUnitModel m) {
+	public boolean executeOn(SimpleGameModel m) {
 		return false;
 	}
 	

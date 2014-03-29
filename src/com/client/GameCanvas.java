@@ -304,7 +304,7 @@ public class GameCanvas {
 			public void run() {
 				time = System.currentTimeMillis();
 				
-				float[] pos = theModel.getPosition(System.currentTimeMillis());
+				float[] pos = theModel.getPosition(0, System.currentTimeMillis());
 				agentX = pos[0];
 				agentY = pos[1];
 				

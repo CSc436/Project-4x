@@ -14,6 +14,7 @@ import com.google.gwt.user.client.rpc.impl.Serializer;
 import com.shared.MovingUnitModel;
 import com.shared.Request;
 import com.shared.SetTargetRequest;
+import com.shared.SimpleGameModel;
 
 public class ClientModel {
 	
@@ -22,8 +23,8 @@ public class ClientModel {
 	float[] position = { 0.0F, 0.0F };
 	private long lastUpdateTime;
 	private final SimpleSimulatorAsync simpleSimulator;
-	private MovingUnitModel lastUnit;
-	private MovingUnitModel nextUnit = new MovingUnitModel(0.0, 0.0, 3.0);
+	private SimpleGameModel lastModel;
+	private SimpleGameModel nextModel = new SimpleGameModel(5);
 	private int averageTurnInterval = 200;
 	private boolean readyForNext = true;
 	private int cycleTime = 100;
@@ -45,9 +46,9 @@ public class ClientModel {
 		
 	}
 	
-	public void setTarget( double x, double y ) {
+	public void setTarget( int unitID, double x, double y ) {
 		
-		Request r = new SetTargetRequest(x,y);
+		Request r = new SetTargetRequest( unitID, x, y );
 		
 		//requestQueue.add(r);
 		
@@ -58,9 +59,10 @@ public class ClientModel {
 					}
 
 					public void onSuccess(Request[] result) {
+						int entityID = ((SetTargetRequest) result[0]).entityID;
 						double x = ((SetTargetRequest) result[0]).x;
 						double y = ((SetTargetRequest) result[0]).y;
-						nextUnit.setTarget(x, y);
+						nextModel.get(entityID).getMovementBehavior().setTarget(x, y);
 						System.out.println("New target set: " + x + " " + y);
 					}
 				});
@@ -68,9 +70,9 @@ public class ClientModel {
 		
 	}
 	
-	public float[] getPosition( long currentTime ) {
+	public float[] getPosition( int unitID, long currentTime ) {
 		
-		if (lastUnit == null || nextUnit == null)
+		if (lastModel == null || nextModel == null)
 			return position;
 		// Interpolation System
 		/*
@@ -79,7 +81,7 @@ public class ClientModel {
 		*/
 		
 		// Dead-Reckoning System
-		double[] positionDouble = nextUnit.deadReckonPosition( currentTime - lastUpdateTime );
+		double[] positionDouble = nextModel.deadReckonEntityPosition( unitID, currentTime - lastUpdateTime );
 		position[0] = (float) positionDouble[0];
 		position[1] = (float) positionDouble[1];
 		
@@ -133,7 +135,7 @@ public class ClientModel {
 				Queue<Request> tempQueue = requestQueue;
 				requestQueue = new LinkedList<Request>();
 				
-				simpleSimulator.getSimulationState( playerNumber, turnNumber, new AsyncCallback<MovingUnitModel>() {
+				simpleSimulator.getSimulationState( playerNumber, turnNumber, new AsyncCallback<SimpleGameModel>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -142,12 +144,12 @@ public class ClientModel {
 					}
 
 					@Override
-					public void onSuccess(MovingUnitModel result) {
+					public void onSuccess(SimpleGameModel result) {
 						
 						
 						
-						lastUnit = nextUnit;
-						nextUnit = result;
+						lastModel = nextModel;
+						nextModel = result;
 						
 						long currTime = System.currentTimeMillis();
 						cycleTime = (int) (currTime - lastUpdateTime);
@@ -168,8 +170,7 @@ public class ClientModel {
 
 			@Override
 			public void run() {
-
-				setTarget( 16*Math.random(), 16*Math.random() );
+				setTarget( (int) (nextModel.numEntities * Math.random()), 16*Math.random(), 16*Math.random() );
 			}
 
 		};
