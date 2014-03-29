@@ -147,13 +147,13 @@ public class GameCanvas {
 		entities.put(4, unit4);
 		entities.put(5, unit5);
 		
-		for(int i = 0; i < 16; i++) {
-			for(int j = 0; j < 16; j++) {
+		for(int i = 0; i < GRID_WIDTH; i++) {
+			for(int j = 0; j < GRID_WIDTH; j++) {
 				final Mesh tile = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
 				tile.posX = i;
 				tile.posY = j;
 				tile.posZ = 0.1f;
-				tile.id = 100 + i*16 + j;
+				tile.id = 100 + i*GRID_WIDTH + j;
 				entities.put(tile.id, tile);
 			}
 		}
@@ -247,35 +247,38 @@ public class GameCanvas {
 
 		// Handle mousedown events (for any button on the moues)
 		RootPanel.get().addDomHandler(new MouseDownHandler() {
-
+			
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
 				switch(event.getNativeButton()) {
 				case NativeEvent.BUTTON_LEFT:
-					selectedEntities.clear();
-					int selectedID = objectSelector.pick(event.getClientX(), event.getClientY());
-					System.out.println("Selected entity with ID " + selectedID + ".");
-					if (entities.containsKey(selectedID)) {
-						System.out.println("This entity exists! Adding to selected entities...");
-						selectedEntities.add(selectedID);
-					}
-					else {
-						System.out.println("This entity DOES NOT exist!");
-					}
-					break;
-				case NativeEvent.BUTTON_MIDDLE:
-					int targetID = objectSelector.pick(event.getClientX(), event.getClientY());
-					System.out.println("Selected entity with ID " + targetID + ".");
-					if (entities.containsKey(targetID)) {
-						System.out.println("This entity exists! Adding to selected entities...");
-						double x = entities.get(targetID).posX;
-						double y = entities.get(targetID).posY;
-						for(Integer i : selectedEntities) {
-							theModel.setTarget(i, x, y);
+					if(event.isShiftKeyDown()) {
+						int targetID = objectSelector.pick(event.getClientX(), event.getClientY());
+						System.out.println("Selected entity with ID " + targetID + ".");
+						if (entities.containsKey(targetID)) {
+							System.out.println("This entity exists! Adding to selected entities...");
+							double x = entities.get(targetID).posX;
+							double y = entities.get(targetID).posY;
+							for(Integer i : selectedEntities) {
+								theModel.setTarget(i, x, y);
+							}
 						}
-					}
-					else {
-						System.out.println("This entity DOES NOT exist!");
+						else {
+							System.out.println("This entity DOES NOT exist!");
+						}
+					} else {
+						if(!event.isControlKeyDown()) selectedEntities.clear();
+						int selectedID = objectSelector.pick(event.getClientX(), event.getClientY());
+						if(selectedID < 50) {
+							System.out.println("Selected entity with ID " + selectedID + ".");
+							if (entities.containsKey(selectedID)) {
+								System.out.println("This entity exists! Adding to selected entities...");
+								selectedEntities.add(selectedID);
+							}
+							else {
+								System.out.println("This entity DOES NOT exist!");
+							}
+						}
 					}
 					break;
 				}

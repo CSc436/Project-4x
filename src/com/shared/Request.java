@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 public class Request implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6473064780643204773L;
 	private int scheduledTurn;
 	private int lastTurnReceived;
 	

@@ -7,6 +7,10 @@ import java.util.Set;
 
 public class SimpleGameModel implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8880929617458008388L;
 	Map<Integer, EntityModel> entityMap = new HashMap<Integer, EntityModel>();
 	public int turnNumber = 0;
 	public int numEntities;

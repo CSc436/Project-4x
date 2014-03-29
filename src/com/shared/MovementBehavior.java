@@ -3,6 +3,10 @@ package com.shared;
 import java.io.Serializable;
 
 public class MovementBehavior implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3598422786758781965L;
 	public double maxVelocity; // Movement velocity, in units per second
 	public PhysicsVector position;
 	public PhysicsVector targetPosition;
