@@ -1,6 +1,10 @@
 package control;
 
-// merge with other unittype
+/**
+ * UnitType
+ * @author NRTop
+ * The more specific type of unit 
+ */
 public enum UnitType {
 	// BASE UNITS
 	MILITIA,

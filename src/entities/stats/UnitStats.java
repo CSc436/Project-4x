@@ -1,15 +1,15 @@
 package entities.stats;
 
 public class UnitStats {
-	public int damage;
-	public float range;
-	public int armor;
+	public int damage;		// how much damage this unit can deal out
+	public float range;		// range of attack for this unit (archers have greater range than knights)
+	public int armor;		// How much armor defends this unit 
 	
-	public float health_regen;
-	public float health;
-	public float max_health;
+	public float health_regen;	// how quickly the health of this unit regenerates
+	public float health;		// the current health of this unit
+	public float max_health;	// the max_health of this unit
 	
-	public float movementSpeed;
+	public float movementSpeed;	// the movement speed of this unit (how many tiles per tick they can cross)
 	// like resource generation / attack speed.
 	public float actionSpeed;
 	
@@ -36,6 +36,10 @@ public class UnitStats {
 		this.actionSpeed = actionSpeed;
 	}
 	
+	/**
+	 * clone()
+	 * returns a new UnitStats with the same data as this one. 
+	 */
 	public UnitStats clone() {
 		return new UnitStats(damage, range, armor, health_regen, max_health, movementSpeed, actionSpeed);
 	}

@@ -1,5 +1,13 @@
 package entities.stats;
 
+/**
+ * Base Stats Enum
+ * @author NRTop
+ * @summary
+ * Provides the base statistics for a given unit, agent, or building. Specifies things such as 
+ * damage, range, armor, health regenerations, max health, movememnt speed, and action speed. 
+ * 
+ */
 public enum BaseStatsEnum {
 
 	/*
