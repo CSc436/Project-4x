@@ -1,12 +1,12 @@
 package com.server;
 
 public class Model implements Runnable {
-	public MovingNumber number;
+	public MovingUnit unit;
 	public boolean isBlack;
 	public int timeStep = 200; // Number of milliseconds per simulation step
 	
 	public Model() {
-		number = new MovingNumber(0.0,1.0);
+		unit = new MovingUnit( 0.0, 0.0, 1.0 );
 		isBlack = false;
 	}
 	
@@ -23,27 +23,15 @@ public class Model implements Runnable {
 	}
 	
 	public void simulateFrame() {
-		number.simulateTimeStep(timeStep);
+		unit.simulateTimeStep(timeStep);
 	}
 
-	public void increment() {
-		number.increment();
-	}
-
-	public boolean canIncrement() {
-		return number.canIncrement();
+	public void setTarget( double x, double y ) {
+		unit.setTarget(x, y);
 	}
 	
-	public boolean canDecrement() {
-		return number.canDecrement();
-	}
-
-	public void decrement() {
-		number.decrement();;
-	}
-	
-	public MovingNumber getNumber() {
-		return number;
+	public MovingUnit getUnit() {
+		return unit;
 	}
 	
 }
