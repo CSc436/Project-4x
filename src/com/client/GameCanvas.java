@@ -2,6 +2,8 @@ package com.client;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 import static com.google.gwt.query.client.GQuery.$;
 
@@ -15,6 +17,10 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.query.client.Function;
@@ -34,6 +40,7 @@ import com.googlecode.gwtgl.binding.WebGLUniformLocation;
 import com.shared.Terrain;
 
 public class GameCanvas {
+	private GameCanvas thisCanvas;
 	private WebGLRenderingContext glContext;
 	private WebGLProgram shaderProgram, agentShader;
 	private WebGLTexture texture;
@@ -58,16 +65,27 @@ public class GameCanvas {
 			right = false, left = false, rotateLeft = false, rotateRight = false, center = false;
 	private long time;
 
+
 	public static final int GRID_WIDTH = 16;
+
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
-	private final boolean debug = false;
+	private final boolean debug = true;
 
 	private ArrayList<RenderTile> tiles = new ArrayList<RenderTile>();
 	
 	private final ClientModel theModel;
 	private final Canvas webGLCanvas = Canvas.createIfSupported();
+	
+	private ClickSelector objectSelector;
+	private HashMap<Integer,Mesh> entities;
+	public ArrayList<Integer> selectedEntities;
 
 	public GameCanvas(ClientModel theModel) {
+		// CODE FOR MINIMAP DEV/CLICK SELECTING
+		thisCanvas = this;
+		selectedEntities = new ArrayList<Integer>();
+		// END OF CODE
+		
 		RootPanel.get("gwtGL").add(webGLCanvas);
 		glContext = (WebGLRenderingContext) webGLCanvas
 				.getContext("experimental-webgl");
@@ -75,6 +93,8 @@ public class GameCanvas {
 		if (glContext == null) {
 			Window.alert("Sorry, your browser doesn't support WebGL!");
 		}
+		
+		
 		// These lines make the viewport fullscreen
 		webGLCanvas.setCoordinateSpaceHeight(webGLCanvas.getParent()
 				.getOffsetHeight());
@@ -86,12 +106,48 @@ public class GameCanvas {
 
 		glContext.viewport(0, 0, WIDTH, HEIGHT);
 		
+		// MORE CLICK CODE
+		objectSelector = new ClickSelector(glContext, this);
+		initEntities();
+		
 		this.theModel = theModel;
 		
 		registerMapMovements();
 		registerResizeHandler();
 		camera.makeCameraMatrix();
 		start();
+	}
+	
+	// CLICKSELECTOR STUFF
+	private void initEntities() {
+		entities = new HashMap<Integer,Mesh>();
+		final Mesh ent1 = OBJImporter.objToMesh(ClientResources.INSTANCE.barrelOBJ().getText(), glContext);
+		ent1.posX = 10.0f;
+		ent1.posY = 10.0f;
+		ent1.posZ = -5.0f;
+		ent1.id = 11111;
+		final Mesh ent2 = OBJImporter.objToMesh(ClientResources.INSTANCE.cubeOBJ().getText(), glContext);
+		ent2.posX = 20.0f;
+		ent2.id = 65432;
+		entities.put(ent1.id, ent1);
+		entities.put(ent2.id, ent2);
+	}
+	
+	// CLICKSELECTOR STUFF
+	public void renderEntities(Shader shader) {
+		Set<Integer> keys = entities.keySet();
+		Integer[] keysArr = new Integer[entities.size()];
+		keysArr = keys.toArray(keysArr);
+		for(int i = 0; i< keysArr.length; i++) {
+			entities.get(keysArr[i]).render(glContext, shader, camera);
+		}
+	}
+	
+	public void renderSelectedEntities(Shader selectedShader) {
+		int size = selectedEntities.size();
+		for(int i = 0; i < size; i++) {
+			entities.get(selectedEntities.get(i)).render(glContext, selectedShader, camera);
+		}
 	}
 	
 	/**
@@ -109,7 +165,7 @@ public class GameCanvas {
 //					return;
 //
 //				lastHit = time;
-
+				if (debug) Console.log("Pressed: " + event.getNativeKeyCode());
 				switch (event.getNativeKeyCode()) {
 				case KeyCodes.KEY_UP:
 				case KeyCodes.KEY_W:
@@ -127,12 +183,12 @@ public class GameCanvas {
 				case KeyCodes.KEY_D:
 					right = true;
 					break;
-				case 173: out = true; break;
-				case 61: in = true; break;
+				case KeyCodes.KEY_P: out = true; break;
+				case KeyCodes.KEY_O: in = true; break;
 				case KeyCodes.KEY_Q: rotateLeft = true; break;
 				case KeyCodes.KEY_E: rotateRight = true; break;
 				case KeyCodes.KEY_X: center = true; break;
-				default: break;
+				default: if (debug) Console.log("Unrecognized: " + event.getNativeKeyCode()); break;
 				}
 			}
 		}, KeyDownEvent.getType());
@@ -153,8 +209,8 @@ public class GameCanvas {
 				case KeyCodes.KEY_RIGHT:
 				case KeyCodes.KEY_D:
 					right = false; break;
-				case KeyEvent.VK_MINUS: out = false; break;
-				case KeyEvent.VK_PLUS: in = false; break;
+				case KeyCodes.KEY_O: in = false; break;
+				case KeyCodes.KEY_P: out = false; break;
 				case KeyCodes.KEY_Q: rotateLeft = false; break;
 				case KeyCodes.KEY_E: rotateRight = false; break;
 				case KeyCodes.KEY_X: center = false; break;
@@ -163,7 +219,24 @@ public class GameCanvas {
 			}
 		}, KeyUpEvent.getType());
 
-		
+		// Handle mousedown events (for any button on the moues)
+		RootPanel.get().addDomHandler(new MouseDownHandler() {
+
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				selectedEntities.clear();
+				int selectedID = objectSelector.pick(event.getClientX(), event.getClientY());
+				System.out.println("Selected entity with ID " + selectedID + ".");
+				if (entities.containsKey(selectedID)) {
+					System.out.println("This entity exists! Adding to selected entities...");
+					selectedEntities.add(selectedID);
+				}
+				else {
+					System.out.println("This entity DOES NOT exist!");
+				}
+			}
+	
+		}, MouseDownEvent.getType());
 	}
 
 	private void registerResizeHandler() {
@@ -280,8 +353,8 @@ public class GameCanvas {
 			camera.rotateRight();
 		if (center)
 			camera.defaultPosition();
-		if (debug) 
-			System.out.println("X: " + camera.getX() + ", Y: " + camera.getY() + ", Z: " + camera.getZ() + ", Height: " + HEIGHT + ", Width: " + WIDTH);
+//		if (debug) 
+//			Console.log("X: " + camera.getX() + ", Y: " + camera.getY() + ", Z: " + camera.getZ());
 	}
 
 	private void start() {
@@ -297,6 +370,24 @@ public class GameCanvas {
 		makeTiles();
 		makeAgent();
 		initBuffers();
+		
+		final Shader texturedMeshShader = new Shader(glContext,ClientResources.INSTANCE
+				.simpleMeshVS().getText(),ClientResources.INSTANCE
+				.texturedMeshFS().getText());
+		
+		final Shader normalShader = new Shader(glContext,ClientResources.INSTANCE
+				.simpleMeshVS().getText(),ClientResources.INSTANCE
+				.normalsMeshFS().getText());
+		
+		final Shader idShader = new Shader(glContext,ClientResources.INSTANCE
+				.simpleMeshVS().getText(),ClientResources.INSTANCE
+				.idFS().getText());
+		
+		final Shader selectedShader = new Shader(glContext,ClientResources.INSTANCE
+				.simpleMeshVS().getText(),ClientResources.INSTANCE
+				.selectedFS().getText());
+		
+		final Mesh barrel = OBJImporter.objToMesh(ClientResources.INSTANCE.barrelOBJ().getText(), glContext);
 
 		startTime = System.currentTimeMillis();
 		Timer t = new Timer() {
@@ -312,11 +403,122 @@ public class GameCanvas {
 				
 				updateCamera();
 				drawScene();
+				
+				barrel.render(glContext, normalShader, camera);
+				barrel.posX = agentX;
+				barrel.posY = agentY;
+				barrel.posZ = agentZ;
+				barrel.rotX = barrel.rotX + 0.01f;
+				
+				renderEntities(texturedMeshShader);
+				renderSelectedEntities(selectedShader);
 			}
 		};
 		t.scheduleRepeating(16);
 	}
-
+//
+//	private WebGLFramebuffer minimapFrameBuffer;
+//	private WebGLRenderbuffer minimapRenderBuffer;
+//	private WebGLTexture minimapTexture;
+//	private final int MAPWIDTH = 512;
+//	private final int MAPHEIGHT = 512;
+//	
+//	private void initRealTimeMinimap() {
+//		minimapFrameBuffer = glContext.createFramebuffer();
+//		glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, minimapFrameBuffer);
+//		minimapRenderBuffer = glContext.createRenderbuffer();
+//				
+//		initMinimapTexture();
+//		
+//		glContext.bindRenderbuffer(glContext.RENDERBUFFER, minimapRenderBuffer);
+//	    glContext.renderbufferStorage(glContext.RENDERBUFFER, WebGLRenderingContext.DEPTH_COMPONENT16,
+//	    		MAPWIDTH, MAPHEIGHT);
+//	    
+//	    glContext.framebufferTexture2D(WebGLRenderingContext.FRAMEBUFFER,
+//	    		WebGLRenderingContext.COLOR_ATTACHMENT0, WebGLRenderingContext.TEXTURE_2D,
+//	    		minimapTexture, 0);
+//	    glContext.framebufferRenderbuffer(WebGLRenderingContext.FRAMEBUFFER,
+//	    		WebGLRenderingContext.DEPTH_ATTACHMENT, WebGLRenderingContext.RENDERBUFFER,
+//	    		minimapRenderBuffer);
+//	    
+//	    // Reset to defaults
+//	    glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, null);
+//	    glContext.bindRenderbuffer(WebGLRenderingContext.RENDERBUFFER, null);
+//	    glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, null);
+//
+//	}
+//	
+//	private void renderRealTimeMinimap() {
+//		// Set the current framebuffer to the minimap buffer
+//		glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, minimapFrameBuffer);    
+//	    
+//		// START Render the scene
+//		glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
+//	    glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, minimapTexture);
+//	    
+//	    
+//		// Override the camera matrix with a new matrix in
+//		// which the camera is looking down on the map.
+//		float[] tempMatrix = FloatMatrix.createCameraMatrix(0.0f,
+//				3.14159f + .785398163f, 0.0f, 1,
+//				(float) WIDTH/ (float) HEIGHT, 0.1f, 1000000f)
+//				.columnWiseData();
+//
+//		// These values were tested by hand and picked because
+//		// they looked about right.
+//		float camX = -16.f + 50.f;
+//		float camZ = 3000.0f - 16.0f + 35.0f;
+//		float camY = -3000.0f;
+//		// Draw the minimap
+//		drawScene();
+//		glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, null);
+//		drawScene();
+//		// Restore the old camera matrix
+//		cameraMatrix = tempMatrix;
+//		// Restore the old camera position
+//		camX = tempX;
+//		camY = tempY;
+//		camZ = tempZ;
+//	    //gl.uniform1i(shaderProgram.samplerUniform, 0);
+//	    
+//	    // END Render the scene
+//		glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
+//	    glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
+//	    
+//	    // Reset to the default framebuffer
+//	    glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, null);
+//	}
+//	
+//	private void initMinimapTexture() {
+//		minimapTexture = glContext.createTexture();
+//
+//		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, minimapTexture);
+//		
+//		glContext.texImage2D(WebGLRenderingContext.TEXTURE_2D, 0,
+//				WebGLRenderingContext.RGBA, MAPWIDTH, MAPHEIGHT, 0, WebGLRenderingContext.RGBA,
+//				WebGLRenderingContext.UNSIGNED_BYTE, null);
+//		
+//		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
+//				WebGLRenderingContext.TEXTURE_MAG_FILTER,
+//				WebGLRenderingContext.NEAREST);
+//		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
+//				WebGLRenderingContext.TEXTURE_MIN_FILTER,
+//				WebGLRenderingContext.NEAREST);
+//		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
+//				WebGLRenderingContext.TEXTURE_WRAP_S,
+//				WebGLRenderingContext.CLAMP_TO_EDGE);
+//		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
+//				WebGLRenderingContext.TEXTURE_WRAP_T,
+//				WebGLRenderingContext.CLAMP_TO_EDGE);
+//		glContext.generateMipmap(WebGLRenderingContext.TEXTURE_2D);
+//		
+//	      glContext.texImage2D(WebGLRenderingContext.TEXTURE_2D, 0, WebGLRenderingContext.RGBA, MAPWIDTH, MAPHEIGHT, 0,
+//	    		  WebGLRenderingContext.RGBA, WebGLRenderingContext.UNSIGNED_BYTE, null);
+//
+////		glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
+////		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, minimapTexture);
+//	}
+	
 	private void initTexture() {
 		texture = glContext.createTexture();
 
@@ -535,7 +737,7 @@ public class GameCanvas {
 			}
 	}
 
-	private void drawScene() {
+	public void drawScene() {
 		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT
 				| WebGLRenderingContext.DEPTH_BUFFER_BIT);
 

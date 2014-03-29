@@ -41,4 +41,30 @@ public interface ClientResources extends ClientBundle{
     
     @Source(value={"simple_outline.fs"})
     TextResource simpleOutlineFS();
+    
+    @Source(value={"simple_mesh.vs"})
+    TextResource simpleMeshVS();
+    
+    @Source(value={"normals_mesh.fs"})
+    TextResource normalsMeshFS();
+    
+    @Source(value={"id.fs"})
+    TextResource idFS();
+    
+    @Source(value={"selected.fs"})
+    TextResource selectedFS();
+    
+    @Source(value={"meshTextured.fs"})
+    TextResource texturedMeshFS();
+    
+    // OBJ definitions
+    @Source(value={"barrel.obj"})
+    TextResource barrelOBJ();
+    
+    @Source(value={"cube.obj"})
+    TextResource cubeOBJ();
+    
+	@Source("genericTexture.png")
+	ImageResource genericTexture();
 }
+
