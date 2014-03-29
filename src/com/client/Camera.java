@@ -16,7 +16,7 @@ public class Camera {
 	public void makeCameraMatrix() {
 		cameraMatrix = FloatMatrix.createCameraMatrix((float)Math.toRadians(yaw),
 				(float)Math.toRadians(pitch), (float)Math.toRadians(roll), 45,
-				GameCanvas.WIDTH / GameCanvas.HEIGHT, 0.1f, 1000000f)
+				(float)GameCanvas.WIDTH / (float)GameCanvas.HEIGHT, 0.1f, 1000000f)
 				.columnWiseData();
 	}
 	
@@ -37,27 +37,29 @@ public class Camera {
 		return camZ;
 	}
 
-	public void up(float delta) {
+	public float up(float delta) {
 		// TODO Auto-generated method stub
-		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 0);
+		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 10/camZ);
 		temp.normalize();
 		camX += temp.x;
 		camY += temp.y;
+		return Vector3.dist(temp.x, temp.y);
 	}
 
-	public void down(float delta) {
+	public float down(float delta) {
 		// TODO Auto-generated method stub
-		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw) , getSign(yaw), 0);
+		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw) , getSign(yaw), 10/camZ);
 		temp.left();
 		temp.left();
 		temp.normalize();
 		camX += temp.x;
 		camY += temp.y;
+		return Vector3.dist(temp.x, temp.y);
 	}
 
 	public void left(float delta) {
 		// TODO Auto-generated method stub
-		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 0);
+		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 10/camZ);
 		temp.right(); // the map starts off backwards...
 		temp.normalize();
 		camX += temp.x;
@@ -67,7 +69,7 @@ public class Camera {
 
 	public void right(float delta) {
 		// TODO Auto-generated method stub
-		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 0);
+		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 10/camZ);
 		temp.left();
 		temp.normalize();
 		camX += temp.x;
@@ -83,14 +85,14 @@ public class Camera {
 
 	public void zoomIn() {
 		// TODO Auto-generated method stub
-		camZ -= 1.0f;
-		camY += 1.0f;
+		float delta = this.up(1.0f);
+		camZ -= delta;
 	}
 
 	public void zoomOut() {
 		// TODO Auto-generated method stub
-		camZ += 1.0f;
-		camY -= 1.0f;
+		float delta = this.down(1.0f);
+		camZ += delta;
 	}
 
 	public void rotateLeft() {

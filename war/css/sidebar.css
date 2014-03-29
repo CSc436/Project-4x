@@ -5,7 +5,7 @@
 	/* This is too big, but get's calculated on Interface.init */
 	top: 50px;
 	width: 350px;
-	background-image: url('assets/Panels/panel_sidebar.png');
+	background-image: url('../assets/Panels/panel_sidebar.png');
 	background-size: 100% 100%;
 	border-left: none;
 	/*color: white;*/
@@ -13,7 +13,7 @@
 	margin: 0;
 	z-index: 999;
 	font-size: 16px;
-	overflow-y: auto;
+	overflow-y: scroll;
 	overflow-x: hidden;
 }
 
@@ -49,22 +49,22 @@
 }
 
 .btn-red {
-	background-image: url('assets/Buttons/longButton_pressed.png');
+	background-image: url('../assets/Buttons/longButton_pressed.png');
 	background-size: 100% 100%;
 }
 
 .btn-red:hover {
-	background-image: url('assets/Buttons/longButton_unpressed.png');
+	background-image: url('../assets/Buttons/longButton_unpressed.png');
 	background-size: 100% 100%;
 }
 
 .btn-green {
-	background-image: url('assets/Buttons/longButton_Green.png');
+	background-image: url('../assets/Buttons/longButton_Green.png');
 	background-size: 100% 100%;
 }
 
 .btn-green:hover {
-	background-image: url('assets/Buttons/longButton_Green_hover.png');
+	background-image: url('../assets/Buttons/longButton_Green_hover.png');
 	background-size: 100% 100%;
 }
 

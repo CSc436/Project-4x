@@ -4,12 +4,12 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 
 <!-- CSS -->
-<link type="text/css" rel="stylesheet" href="main.css">
-<link type="text/css" rel="stylesheet" href="sidebar.css">
-<link type="text/css" rel="stylesheet" href="toolbar.css">
-<link type="text/css" rel="stylesheet" href="minimap.css">
-<link type="text/css" rel="stylesheet" href="chat.css">
-<link type="text/css" rel="stylesheet" href="menu.css">
+<link type="text/css" rel="stylesheet" href="css/main.css">
+<link type="text/css" rel="stylesheet" href="css/sidebar.css">
+<link type="text/css" rel="stylesheet" href="css/toolbar.css">
+<link type="text/css" rel="stylesheet" href="css/minimap.css">
+<link type="text/css" rel="stylesheet" href="css/chat.css">
+<link type="text/css" rel="stylesheet" href="css/menu.css">
 
 <!-- Fonts -->
 <link href='http://fonts.googleapis.com/css?family=MedievalSharp'
@@ -379,11 +379,71 @@
 			</div>
 		</div>
 		<!-- ECONOMIES MENU -->
-		<div id="economies-menu" class="sidebar-menu">Economies menu</div>
-		<!-- ECONOMIES MENU DETAIL -->
-		<div id="economies-menu-detail" class="sidebar-menu">Economies
-			Detail Menu</div>
-
+		<div id="economies-menu" class="sidebar-menu">
+			<div class="text-center">
+				<h2>Economies</h2>
+			</div>
+			<hr>
+			<div>Gold: 25</div>
+			<div>Wood: 100</div>
+			<div>Stone: 57</div>
+			<div>Food: 74</div>
+			<div>Research: 30</div>
+			<h3>City Resources</h3>
+			<table class="sidebar-table">
+				<tbody>
+					<tr>
+						<td>
+							<div>Metropolis</div>
+							<button type="button"
+								class="sidebar-btn btn-green economies-view-button">View</button>
+						</td>
+						<td>
+							<button type="button" class="sidebar-btn btn-green">Goto</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div>Mike</div>
+							<button type="button"
+								class="sidebar-btn btn-green economies-view-button">View</button>
+						</td>
+						<td>
+							<button type="button" class="sidebar-btn btn-green">Goto</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div>Porkins</div>
+							<button type="button"
+								class="sidebar-btn btn-green economies-view-button">View</button>
+						</td>
+						<td>
+							<button type="button" class="sidebar-btn btn-green">Goto</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- ECONOMIES MENU DETAIL (same as cities-menu-detail) -->
+		<div id="economies-menu-detail" class="sidebar-menu">
+			<div class="text-center">
+				<h2>Metropolis</h2>
+			</div>
+			<div class="text-center">
+				<div>Days Since Creation</div>
+				<div>Population</div>
+				<div>Resource info</div>
+				<div>
+					<button type="button" class="sidebar-btn btn-green">Goto</button>
+				</div>
+			</div>
+			<div class="text-center">
+				<button type="button" class="sidebar-btn btn-red">Destroy</button>
+				<button type="button" class="sidebar-btn btn-red detail-return"
+					data-return="economies-menu">Back</button>
+			</div>
+		</div>
 		<div id="sidebar-hide">&lt;&lt;</div>
 	</div>
 
@@ -473,7 +533,7 @@
 
 	<script type="text/javascript">
 		$(document).ready(function() {
-
+						
 			// Prevents '#' from appending to url when
 			// clicking menu icons
 			$("#toolbar > li > a").click(function(e) {

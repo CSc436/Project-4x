@@ -1,0 +1,20 @@
+#game-menu {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background-image: url('../assets/Panels/panel_menu.png');
+	background-size: 100% 100%;
+	width: 350px;
+	height: 350px;
+	margin: auto;
+	padding: 100px 90px;
+	z-index: 1000;
+}
+
+#menu-content {
+	height: 85%;
+}
+
