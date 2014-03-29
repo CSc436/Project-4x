@@ -64,6 +64,9 @@ public interface ClientResources extends ClientBundle{
     @Source(value={"cube.obj"})
     TextResource cubeOBJ();
     
+    @Source(value={"tile.obj"})
+    TextResource tileOBJ();
+    
 	@Source("genericTexture.png")
 	ImageResource genericTexture();
 }

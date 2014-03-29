@@ -109,4 +109,8 @@ public class PhysicsVector implements Serializable{
 	public PhysicsVector copy() {
 		return new PhysicsVector(x,y);
 	}
+	
+	public boolean equals( PhysicsVector other ) {
+		return other.x == x && other.y == y;
+	}
 }

@@ -51,7 +51,7 @@ public class Mesh //implements Renderable {
 		scaleX = 1.0f;
 		scaleY = 1.0f;
 		scaleZ = 1.0f;
-		scale = 0.1f;
+		scale = 1.0f;
 		id = 0;
 		
 		updateModelMatrix();

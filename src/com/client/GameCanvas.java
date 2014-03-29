@@ -3,6 +3,7 @@ package com.client;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import static com.google.gwt.query.client.GQuery.$;
@@ -10,6 +11,7 @@ import static com.google.gwt.query.client.GQuery.$;
 import com.client.model.ClientModel;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -37,6 +39,7 @@ import com.googlecode.gwtgl.binding.WebGLRenderingContext;
 import com.googlecode.gwtgl.binding.WebGLShader;
 import com.googlecode.gwtgl.binding.WebGLTexture;
 import com.googlecode.gwtgl.binding.WebGLUniformLocation;
+import com.shared.EntityModel;
 import com.shared.Terrain;
 
 public class GameCanvas {
@@ -121,16 +124,39 @@ public class GameCanvas {
 	// CLICKSELECTOR STUFF
 	private void initEntities() {
 		entities = new HashMap<Integer,Mesh>();
-		final Mesh ent1 = OBJImporter.objToMesh(ClientResources.INSTANCE.barrelOBJ().getText(), glContext);
-		ent1.posX = 10.0f;
-		ent1.posY = 10.0f;
-		ent1.posZ = -5.0f;
-		ent1.id = 11111;
-		final Mesh ent2 = OBJImporter.objToMesh(ClientResources.INSTANCE.cubeOBJ().getText(), glContext);
-		ent2.posX = 20.0f;
-		ent2.id = 65432;
-		entities.put(ent1.id, ent1);
-		entities.put(ent2.id, ent2);
+
+		final Mesh unit1 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
+		final Mesh unit2 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
+		final Mesh unit3 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
+		final Mesh unit4 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
+		final Mesh unit5 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
+		unit1.id = 1;
+		unit1.posZ = -0.1f;
+		unit2.id = 2;
+		unit2.posZ = -0.1f;
+		unit3.id = 3;
+		unit3.posZ = -0.1f;
+		unit4.id = 4;
+		unit4.posZ = -0.1f;
+		unit5.id = 5;
+		unit5.posZ = -0.1f;
+
+		entities.put(1, unit1);
+		entities.put(2, unit2);
+		entities.put(3, unit3);
+		entities.put(4, unit4);
+		entities.put(5, unit5);
+		
+		for(int i = 0; i < 16; i++) {
+			for(int j = 0; j < 16; j++) {
+				final Mesh tile = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
+				tile.posX = i;
+				tile.posY = j;
+				tile.posZ = 0.1f;
+				tile.id = 100 + i*16 + j;
+				entities.put(tile.id, tile);
+			}
+		}
 	}
 	
 	// CLICKSELECTOR STUFF
@@ -224,16 +250,36 @@ public class GameCanvas {
 
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
-				selectedEntities.clear();
-				int selectedID = objectSelector.pick(event.getClientX(), event.getClientY());
-				System.out.println("Selected entity with ID " + selectedID + ".");
-				if (entities.containsKey(selectedID)) {
-					System.out.println("This entity exists! Adding to selected entities...");
-					selectedEntities.add(selectedID);
+				switch(event.getNativeButton()) {
+				case NativeEvent.BUTTON_LEFT:
+					selectedEntities.clear();
+					int selectedID = objectSelector.pick(event.getClientX(), event.getClientY());
+					System.out.println("Selected entity with ID " + selectedID + ".");
+					if (entities.containsKey(selectedID)) {
+						System.out.println("This entity exists! Adding to selected entities...");
+						selectedEntities.add(selectedID);
+					}
+					else {
+						System.out.println("This entity DOES NOT exist!");
+					}
+					break;
+				case NativeEvent.BUTTON_MIDDLE:
+					int targetID = objectSelector.pick(event.getClientX(), event.getClientY());
+					System.out.println("Selected entity with ID " + targetID + ".");
+					if (entities.containsKey(targetID)) {
+						System.out.println("This entity exists! Adding to selected entities...");
+						double x = entities.get(targetID).posX;
+						double y = entities.get(targetID).posY;
+						for(Integer i : selectedEntities) {
+							theModel.setTarget(i, x, y);
+						}
+					}
+					else {
+						System.out.println("This entity DOES NOT exist!");
+					}
+					break;
 				}
-				else {
-					System.out.println("This entity DOES NOT exist!");
-				}
+				
 			}
 	
 		}, MouseDownEvent.getType());
@@ -395,16 +441,26 @@ public class GameCanvas {
 			public void run() {
 				time = System.currentTimeMillis();
 				
-				float[] pos = theModel.getPosition(0, System.currentTimeMillis());
-				agentX = pos[0];
-				agentY = pos[1];
+				float[] pos;
+				agentX = 0;
+				agentY = 0;
+				
+				Map<Integer,EntityModel> modelEntities = theModel.getGameModel().getEntities();
+				Set<Integer> keySet = modelEntities.keySet();
+				for(Integer i : keySet) {
+					Mesh currMesh = entities.get(i);
+					pos = theModel.getPosition(i, System.currentTimeMillis());
+					currMesh.posX = pos[0];
+					currMesh.posY = pos[1];
+				}
 				
 				//System.out.println(agentX + " " + agentY);
 				
 				updateCamera();
 				drawScene();
 				
-				barrel.render(glContext, normalShader, camera);
+				
+				//barrel.render(glContext, normalShader, camera);
 				barrel.posX = agentX;
 				barrel.posY = agentY;
 				barrel.posZ = agentZ;

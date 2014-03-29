@@ -170,7 +170,7 @@ public class ClientModel {
 
 			@Override
 			public void run() {
-				setTarget( (int) (nextModel.numEntities * Math.random()), 16*Math.random(), 16*Math.random() );
+				//setTarget( (int) (1 + nextModel.numEntities * Math.random()), 16*Math.random(), 16*Math.random() );
 			}
 
 		};
@@ -193,6 +193,10 @@ public class ClientModel {
 			}
 
 		});
+	}
+	
+	public SimpleGameModel getGameModel() {
+		return nextModel;
 	}
 	
 }

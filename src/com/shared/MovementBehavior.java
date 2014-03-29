@@ -25,8 +25,12 @@ public class MovementBehavior implements Serializable {
 	}
 	
 	public void simulateTimeStep(int timeStep) {
+		
+		if(position.equals(targetPosition)) return;
+		
 		double timeSeconds = timeStep / 1000.0;
 		targetVelocity = targetPosition.sub(position).normalize(maxVelocity);
+		PhysicsVector prevVelocity = velocity.copy();
 		velocity = velocity.setToTarget(targetVelocity, accel * timeSeconds);
 		
 		double distance = position.sub(targetPosition).magnitude();
@@ -35,7 +39,18 @@ public class MovementBehavior implements Serializable {
 			targetVelocity = velocity.normalize(Math.sqrt(2 * distance * accel));
 			velocity = velocity.setToTarget(targetVelocity, accel * timeSeconds);
 		}
-		position = position.add(velocity.multiply(timeSeconds));
+		
+		PhysicsVector avgVelocity = prevVelocity.add(velocity).multiply(.5);
+		
+		double upper = prevVelocity.magnitude() * timeSeconds + accel * timeSeconds * timeSeconds;
+		double lower = prevVelocity.magnitude() * timeSeconds - accel * timeSeconds * timeSeconds;
+		if(distance <= upper && distance >= lower) {
+			position = targetPosition.copy();
+			velocity = new PhysicsVector(0,0);
+			targetVelocity = new PhysicsVector(0,0);
+		} else {
+			position = position.add(avgVelocity.multiply(timeSeconds));
+		}
 	}
 	
 	public double[] deadReckonPosition( long timeSinceUpdate ) {
