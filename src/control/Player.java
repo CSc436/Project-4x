@@ -26,8 +26,8 @@ public class Player {
 
 	public TechnologyTree techTree;
 	public Upgrades upgrades;
-	public static Resources resources;
-	public static Goods goods;
+	public  Resources resources; // TODO WHAT THE FUCK 
+	public  Goods goods;
 	private Civilization civ;
 	private CommandQueue cq;
 
@@ -81,7 +81,7 @@ public class Player {
 		return agent.prestige;
 	}
 
-	public static Resources getResources() {
+	public Resources getResources() {
 		return resources;
 	}
 	

@@ -18,6 +18,22 @@ public class Bank extends ResourceBuilding {
 	private static final int BaseGenAmt = 100; // Base amount that banks will generate for the user
 	int gold;
 	
+	/**
+	 * Bank():
+	 * Creates a new Bank Building. 
+	 * 
+	 * @param id
+	 * @param playerId
+	 * @param baseStats
+	 * @param new_stats
+	 * @param gameObjectType
+	 * @param buildingType
+	 * @param xco
+	 * @param yco
+	 * @param height
+	 * @param width
+	 * @param resourceAmount
+	 */
 	public Bank(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, 
 			GameObjectType gameObjectType, BuildingType buildingType, float xco,
 			float yco, int height, int width, Resources resourceAmount) {
@@ -30,19 +46,35 @@ public class Bank extends ResourceBuilding {
 				+ "; GameObject id: " + this.getId();
 	}
 
+	/**
+	 * widthdraw():
+	 * allows user to withdraw an amount of gold from the bank, 
+	 * only if the bank has that much gold 
+	 * 
+	 * TODO this method DOES NOT WORK, resources was changed to static so all players cshare the same resources.
+	 * 
+	 * @param gold - amount of gold to withdraw 
+	 * @return true if we can make the withdraw 
+	 */
+	// TODO Reimplement sans static variable. 
 	public boolean withdraw(int gold) {
-		if(this.gold<gold)
+	/*	if(this.gold<gold)
 			return false;
-		Player.resources.Gold+=gold;
-		this.gold-=gold;
-		return true;
+		Player.resources.Gold+=gold; // WHAT THE FUCK
+		this.gold-=gold;*/
+		return true; 
 	}
 		
+	/**
+	 * Same as withdraw, DOES NOT WORK.
+	 * @param gold
+	 * @return
+	 */
 	public boolean deposit(int gold) {
-		if(Player.resources.Gold<gold)
+		/*if(Player.resources.Gold<gold)
 			return false;
 		Player.resources.Gold-=gold;
-		this.gold+=gold;
+		this.gold+=gold;*/
 		return true;
 	}
 	

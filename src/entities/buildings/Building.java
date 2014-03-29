@@ -52,10 +52,20 @@ public abstract class Building extends GameObject {
 
 	}
 
+	/**
+	 * getHeight()
+	 * returns the height of the building 
+	 * @return
+	 */
 	public int getHeight() {
 		return height;
 	}
 
+	/**
+	 * getWidth(): 
+	 * returns the widthe of the building 
+	 * @return
+	 */
 	public int getWidth() {
 		return width;
 	}
@@ -69,14 +79,29 @@ public abstract class Building extends GameObject {
 		return buildingQ.offer(u);
 	}
 
+	/**
+	 * dequeueUnit(): 
+	 * takes a unit off of the production queue for this building, and returns said unit
+	 * @return Unit that building finished creating
+	 */
 	public Unit dequeueUnit() {
 		return buildingQ.poll();
 	}
 
+	/**
+	 * getCastleID()
+	 * Returns the castle ID that is associated with this building
+	 * @return
+	 */
 	public long getCastleId() {
 		return castleId;
 	}
 
+	/**
+	 * productionQueueEmpty()
+	 * returns true if the production queue for this building is empty
+	 * @return 
+	 */
 	public boolean productionQueueEmpty() {
 
 		return buildingQ.isEmpty();
