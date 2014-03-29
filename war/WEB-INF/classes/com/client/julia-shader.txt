@@ -1,0 +1,109 @@
+// Gabe Kishi
+// Julia Set Fractal Shader
+
+precision mediump float;
+
+uniform float time;
+varying vec2 texCoord;
+
+const int MAX_ITER = 256;
+
+vec4 getColor (float val){
+	float t;
+	
+	if (val < 8.0 || val > 248.0)
+		return vec4(0.0);
+	
+	// Black to Red
+	if (val <= 48.0){
+		t = (val - 8.0)/40.0;
+		return (1.0-t)*vec4(0.0) + t * vec4(1.0, 0.0, 0.0, 1.0);
+	}
+	
+	// Red to Yellow
+	if (val <= 88.0){
+		t = (val - 48.0) / 40.0;
+		return (1.0-t)*vec4(1.0, 0.0, 0.0, 1.0) + t * vec4(1.0, 1.0, 0.0, 1.0);
+	}
+	
+	// Yellow to Green
+	if (val <= 128.00){
+		t = (val - 88.0) / 40.0;		
+		return (1.0-t)*vec4(1.0, 1.0, 0.0, 1.0) + t * vec4(0.0, 1.0, 0.0, 1.0);
+	}
+	
+	// Green to Purple
+	if (val <= 168.00){
+		t = (val - 128.0) / 40.0;		
+		return (1.0-t)*vec4(0.0, 1.0, 0.0, 1.0) + t * vec4(0.0, 1.0, 1.0, 1.0);
+	}
+	
+	// Purple to Blue
+	if (val <= 208.00){
+		t = (val - 168.0) / 40.0;		
+		return (1.0-t)*vec4(0.0, 1.0, 1.0, 1.0) + t * vec4(0.0, 0.0, 1.0, 1.0);
+	}
+	
+	// Blue to Black
+	if (val <= 248.00){
+		t = (val - 208.0) / 40.0;		
+		return (1.0-t)*vec4(0.0, 0.0, 1.0, 1.0) + t * vec4(0.0, 0.0, 0.0, 1.0);
+	}
+	
+	return vec4(0.0);
+}
+
+vec4 color2(float val){
+	float t;
+	// Black to Blue
+	if (val < 0.15){
+		t = 5.0 * val;
+		return (1.0-t)*vec4(0.0, 0.0, 0.0, 1.0) + t * vec4(0.0, 0.0, 1.0, 1.0);
+	}
+	// Blue - Blue Green
+	if (val < 0.20){
+		t = 20.0 * (val - 0.15);
+		return (1.0-t)*vec4(0.0, 0.0, 1.0, 1.0) + t * vec4(0.0, 1.0, 0.0, 1.0);
+	}
+	// Blue Green - Purple
+	if (val < 0.25){
+		t = 20.0 *(val - 0.20);
+		return (1.0-t)*vec4(0.0, 1.0, 0.0, 1.0) + t * vec4(1.0, 0.0, 0.0, 1.0);
+	}
+	t = 1.333333 * (val - 0.25);
+	return (1.0-t)*vec4(1.0, 0.0, 0.0, 1.0) + t * vec4(0.0, 0.0, 0.0, 1.0);
+}
+
+void main(void){
+	float ts = time / 2.0;
+	//vec2 uv = gl_FragCoord.xy - resolution.xy * 0.5;
+	vec2 uv = texCoord - 0.5;
+	uv *= 2.5;
+
+	
+	vec2 c = vec2(sin(ts) - cos(ts/4.0) + cos(ts/4.0), cos(ts/2.0) - sin(ts/8.0));
+	vec2 z = uv;
+	
+	int count = MAX_ITER;
+	int iter;
+	
+	for (int i = 0; i < MAX_ITER; i++){
+		iter = i;
+		float x = z.x*z.x - z.y*z.y;
+		float y = 2.0 * z.x*z.y;
+		
+		float x2 = x*x - y*y;
+		float y2 = 2.0 * x * y;
+		
+		z = c + vec2(x, y);
+		if (dot(z, z) > 16.0){
+			count = i;
+			break;
+		}
+	}
+	//float val = float(count) * 0.01;
+	float t = abs(-1.0 * 2.0 * (float(iter)/float(MAX_ITER)));
+	
+	//gl_FragColor = (iter == MAX_ITER - 1 ? vec4(0.0) : 8.0 * ((1.0 - t)*vec4(0.0) + t * vec4(0.0, 0.0 1.0, 1.0)));
+	gl_FragColor = 2.0 * color2(2.5 * (float(iter) / float(MAX_ITER)));
+}

@@ -1,0 +1,14 @@
+attribute vec3 vertexPosition;
+attribute vec2 vertexTexCoord;
+
+uniform mat4 perspectiveMatrix;
+uniform vec3 agentPos;
+uniform vec3 camPos;
+
+varying vec2 texCoord;
+
+void main(void)
+{
+  texCoord = vertexTexCoord;
+  gl_Position = perspectiveMatrix * vec4(vertexPosition + camPos + agentPos, 1.0);
+}
