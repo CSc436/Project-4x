@@ -3,6 +3,7 @@ package com.client;
 import java.util.Queue;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.shared.MovingUnitModel;
 import com.shared.Request;
 import com.shared.SimpleGameModel;
@@ -25,5 +26,6 @@ public interface SimpleSimulatorAsync {
 	void joinSimulation(AsyncCallback<Integer> callback);
 	
 	void exitGame(int playerNumber, AsyncCallback<Integer> callback);
+
 }
 

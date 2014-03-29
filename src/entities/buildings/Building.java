@@ -2,50 +2,38 @@ package entities.buildings;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.UUID;
 
-import com.fourx.buffs.UnitType;
-
-import control.Player;
-import entities.BaseStatsEnum;
+import control.BuildingType;
+import control.Tools;
+import control.UnitType;
+import entities.GameObject;
+import entities.GameObjectType;
+import entities.stats.BaseStatsEnum;
+import entities.stats.UnitStats;
 import entities.units.Unit;
 
-public abstract class Building extends Unit {
+public abstract class Building extends GameObject {
 
-	// buildings will be > 1 tile
-
-	// initial building types
-
-	// unit producing
-	// resource producing
-	// research options
-	// defense units
-
-	// garrison?
-
-	protected int width;
-	protected int height;
-
+	private int height; // height of the structure
+	private int width; // width of the structure
+	private long castleId = Tools.generateUniqueId();// this is how a building
+														// knows what 'city' it
+														// belongs to
+	private BuildingType buildingType;
+	
 	private Queue<Unit> buildingQ = new LinkedList<Unit>();
-
-	public Building(Player p, BaseStatsEnum baseStats, UnitType type, int xco,
-			int yco) {
-		this(p, baseStats, type, xco, yco, 1, 1);
-	}
-
-	public Building(Player p, BaseStatsEnum baseStats, UnitType type, int xco,
-			int yco, int height, int width) {
-		super(p, baseStats, type, xco, yco);
+	private int turnsToExecute = 5;
+	
+	public Building(UUID id, int playerId, BaseStatsEnum baseStats,
+			UnitStats new_stats, GameObjectType gameObjectType,
+			BuildingType buildingType, float xco, float yco, int height,
+			int width) {
+		super(id, playerId, baseStats, new_stats, gameObjectType, xco, yco);
+		this.buildingType = buildingType;
 		this.height = height;
 		this.width = width;
-		p.getUnits().addBuilding(this);
-	}
 
-	public void setHeight(int x) {
-		height = x;
-	}
-
-	public void setWidth(int x) {
-		width = x;
 	}
 
 	public int getHeight() {
@@ -54,5 +42,48 @@ public abstract class Building extends Unit {
 
 	public int getWidth() {
 		return width;
+	}
+
+	/*
+	 * Holding the Queue for the units that the building is responsible for
+	 * producing. It can add units to its queue or remove finished units from
+	 * its queue
+	 */
+	public boolean queueUnit(Unit u) {
+		return buildingQ.offer(u);
+	}
+
+	public Unit dequeueUnit() {
+		return buildingQ.poll();
+	}
+
+	public long getCastleId() {
+		return castleId;
+	}
+
+	public boolean productionQueueEmpty() {
+
+		return buildingQ.isEmpty();
+	}
+
+	public Unit advanceUnitProduction() {
+		System.out.println("running");
+		if (buildingQ.size() == 0)
+			return null;
+		
+		if (turnsToExecute > 0) {
+			turnsToExecute--;
+			return null;
+		}
+		else {
+			turnsToExecute = 5;
+			return dequeueUnit();
+		}
+
+	}
+
+	//will have to pla
+	public Unit getProducedUnit() {
+		return buildingQ.poll();
 	}
 }

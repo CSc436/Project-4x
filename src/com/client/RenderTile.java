@@ -5,7 +5,8 @@ import java.util.Arrays;
 import com.googlecode.gwtgl.array.Float32Array;
 import com.googlecode.gwtgl.binding.WebGLBuffer;
 import com.googlecode.gwtgl.binding.WebGLRenderingContext;
-import com.shared.Terrain;
+
+import entities.gameboard.Terrain;
 
 public class RenderTile {
 	public Coordinate position;

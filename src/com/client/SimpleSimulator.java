@@ -4,6 +4,7 @@ import java.util.Queue;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+
 import com.shared.MovingUnitModel;
 import com.shared.Request;
 import com.shared.SimpleGameModel;

@@ -5,6 +5,7 @@ import java.util.Queue;
 import java.util.Set;
 
 import com.client.SimpleSimulator;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.shared.MovingUnitModel;
 import com.shared.Request;
@@ -26,6 +27,7 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 	int nextPlayerSlot = 0;
 
 	public Request[] sendRequest(Request input) throws IllegalArgumentException {
+		
 		// Verify that the input is valid.
 
 		String serverInfo = getServletContext().getServerInfo();
@@ -101,6 +103,7 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
+
 	public SimpleGameModel getSimulationState( int playerNumber, int lastTurnReceived ) {
 		while(!m.sendingGame()) {
 			//System.out.println("    Client already up to date");
@@ -125,5 +128,6 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 		if(playerTable.isEmpty())
 			m.stop();
 		return nextPlayerSlot;
+
 	}
 }

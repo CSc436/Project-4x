@@ -1,27 +1,21 @@
 package control;
 
-import java.util.ArrayList;
-
-import com.fourx.civilizations.Civilization;
-import com.fourx.civilizations.PerfectCivilization;
-import com.fourx.research.TechnologyTree;
-import com.fourx.research.Upgrades;
-import com.fourx.resources.Resources;
-
-/* state
- based on state, the unit will:
- continue following orders
- interrupt current orders for an active action
- allow other object to give unit an order
- */
+import java.util.UUID;
 
 import entities.Action;
+import entities.Civilization;
+import entities.PerfectCivilization;
 import entities.PlayerUnits;
+import entities.buildings.Building;
+import entities.research.TechnologyTree;
+import entities.research.Upgrades;
+import entities.resources.Resources;
 import entities.units.Unit;
 
 public class Player {
 
 	private final String name;
+	private int id;
 
 	private PlayerUnits objects; // the objects that the player owns, including
 									// the currently selected units
@@ -33,15 +27,15 @@ public class Player {
 	private CommandQueue cq;
 
 	// Bare constructor
-	public Player() {
-		this("", new PerfectCivilization());
+	public Player(String name, int id) {
+		this(name, id, new PerfectCivilization());
 	}
 
-	public Player(String alias, Civilization civ) {
-		this(alias, new Resources(0, 0, 0, 0), civ);
+	public Player(String alias, int id, Civilization civ) {
+		this(alias, id, civ, new Resources(0, 0, 0, 0));
 	}
 
-	public Player(String alias, Resources resources, Civilization civ) {
+	public Player(String alias, int id, Civilization civ, Resources resources) {
 		name = alias;
 		// civilization
 
@@ -51,19 +45,24 @@ public class Player {
 		this.resources = resources;
 
 		// units
-		objects = new PlayerUnits();
+		objects = new PlayerUnits(id);
 
 		// technology
 		upgrades = new Upgrades();
 		techTree = new TechnologyTree(this);
 		cq = new CommandQueue();
+		this.id = id;
 	}
 
 	public String getAlias() {
 		return name;
 	}
 
-	public PlayerUnits getUnits() {
+	public int getId() {
+		return id;
+	}
+
+	public PlayerUnits getGameObjects() {
 		return objects;
 	}
 
@@ -87,9 +86,19 @@ public class Player {
 	public void addActionTo(Unit u, Action a) {
 
 		cq.push(a, u);
-		u.addAction(a);
+		// u.addAction(a);
 	}
-	
-	
-	
+
+	public Building getBuilding(UUID buildingId) {
+		return objects.getBuildings().get(buildingId);
+	}
+
+	public Object getUnit(UUID id2) {
+		// TODO Auto-generated method stub
+		return objects.getUnits().get(id2);
+	}
+
+	public void addBuilding(Building b) {
+		objects.addBuilding(b);
+	}
 }

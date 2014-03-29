@@ -1,4 +1,4 @@
 /test-classes
-/gwt-unitCache
-/war/game
 *~
+war/
+/gwt-unitCache/

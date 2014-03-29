@@ -40,7 +40,8 @@ import com.googlecode.gwtgl.binding.WebGLShader;
 import com.googlecode.gwtgl.binding.WebGLTexture;
 import com.googlecode.gwtgl.binding.WebGLUniformLocation;
 import com.shared.EntityModel;
-import com.shared.Terrain;
+
+import entities.gameboard.Terrain;
 
 public class GameCanvas {
 	private GameCanvas thisCanvas;
