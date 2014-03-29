@@ -4,6 +4,8 @@ import java.awt.Graphics;
 
 import javax.swing.*;
 
+import com.shared.Terrain;
+
 public class RunGame {
 
 	// controller class!
