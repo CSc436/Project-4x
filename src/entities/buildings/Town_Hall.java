@@ -26,7 +26,7 @@ public class Town_Hall extends ResourceBuilding {
 			BuildingType buildingType, float xco, float yco, int height,
 			int width, boolean iscapital) {
 		super(id, playerId, baseStats, new_stats, gameObjectType, buildingType,
-				xco, yco, height, width, new Resources(0, 0, 0, 0));
+				xco, yco, height, width, new Resources(0, 0, 0, 0, 0));
 
 		this.iscapital = iscapital;
 

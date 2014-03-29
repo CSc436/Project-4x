@@ -38,7 +38,7 @@ public class Player {
 	}
 
 	public Player(String alias, int id, Civilization civ) {
-		this(alias, id, civ, new Resources(0, 0, 0, 0));
+		this(alias, id, civ, new Resources(0, 0, 0, 0, 0));
 	}
 
 	public Player(String alias, int id, Civilization civ, Resources resources) {

@@ -14,7 +14,7 @@ public abstract class ResourceBuilding extends Building {
 	protected Resources resourceAmount;
 
 	// Global resource rate modifier that affects all resource buildings
-	private static Resources globalRateModifier = new Resources(1, 1, 1, 1);
+	private static Resources globalRateModifier = new Resources(1, 1, 1, 1, 1);
 
 	/**
 	 * ResourceBuidling():
