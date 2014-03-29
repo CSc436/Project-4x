@@ -19,7 +19,6 @@ public class General extends Agent {
 
 	private int range;
 	private AIControl brain;
-	int prestige;
 	/**
 	 * General():
 	 * @param id       - unique id for this General object
@@ -35,13 +34,13 @@ public class General extends Agent {
 	}
 
 	public void addPrestige(int i){
-		prestige+=i;
+		this.prestige+=i;
 	}
 	
 	public int getPrestige(){
-		if(prestige<100)
+		if(this.prestige<100)
 			return 1;
-		else if (prestige>1000)
+		else if (this.prestige>1000)
 			return 3;
 		else return 2;
 	}

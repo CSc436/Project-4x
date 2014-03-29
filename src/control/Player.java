@@ -11,7 +11,9 @@ import entities.buildings.Building;
 import entities.research.TechnologyTree;
 import entities.research.Upgrades;
 import entities.resources.Resources;
+import entities.units.Agent;
 import entities.units.Unit;
+import entities.units.agents.General;
 import entities.units.agents.Goods;
 
 public class Player {
@@ -73,6 +75,10 @@ public class Player {
 
 	public PlayerUnits getGameObjects() {
 		return objects;
+	}
+	
+	public int getPrestige(Agent agent){
+		return agent.prestige;
 	}
 
 	public static Resources getResources() {
