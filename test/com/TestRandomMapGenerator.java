@@ -5,10 +5,11 @@ import java.awt.Graphics;
 
 import javax.swing.*;
 
+import com.shared.Terrain;
+
 import control.Controller;
 import entities.gameboard.GameBoard;
 import entities.gameboard.Resource;
-import entities.gameboard.Terrain;
 
 public class TestRandomMapGenerator extends Thread {
 

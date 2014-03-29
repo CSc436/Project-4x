@@ -3,6 +3,8 @@ package entities.gameboard;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.shared.Terrain;
+
 import entities.buildings.Building;
 import entities.units.Unit;
 import entities.util.Point;
