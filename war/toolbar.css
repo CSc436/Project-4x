@@ -1,0 +1,66 @@
+#toolbar-div {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	background-image: url('assets/Panels/toolbar.png');
+	background-size: 100% 100%;
+	color: #E7CE99 !important;
+	margin: 0;
+	z-index: 999;
+}
+
+#banner {
+	display: inline-block;
+	height: 30px;
+	font-size: 20px;
+	font-weight: bold;
+	padding: 10px;
+	width: 15%;
+	text-align: center;
+}
+
+#toolbar {
+	position: absolute;
+	height: 50px;
+	margin: 0;
+	padding-left: 10px;
+	border-left: 2px solid #E7CE99;
+	list-style-type: none;
+	display: inline;
+	width: 80%;
+}
+
+#toolbar li {
+	display: inline;
+	vertical-align: middle;
+	text-align: center;
+}
+
+#toolbar li a {
+	float: left;
+	width: 70px;
+	height: 45px;
+	text-decoration: none;
+	padding-top: 5px;
+	color: #E7CE99 !important;
+}
+
+#toolbar li a img {
+	width: 60px;
+	height: 40px;	
+}
+
+#toolbar li a:hover {
+	background-color: rgba(255, 255, 255, 0.4);
+}
+
+#toolbar .toolbar-right {
+	float: right !important;
+}
+
+#game-resources {
+	padding: 5px;
+	text-align: left !important;
+}
