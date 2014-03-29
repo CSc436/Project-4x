@@ -18,7 +18,7 @@ public class TestUnit {
 		assertEquals(20, 0, u.getHealth());
 		assertEquals(1.0, 0, u.getX());
 		assertEquals(1.0, 0, u.getY());
-		assertEquals(0, u.getPlayerId());
+		assertEquals(0, u.getPlayerID());
 		assertEquals(GameObjectType.UNIT, u.type);
 		assertEquals(100, u.getCreationTime());
 

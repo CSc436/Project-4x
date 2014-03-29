@@ -25,7 +25,7 @@ public class Bank extends ResourceBuilding {
 	
 	@Override
 	public String toString() {
-		return "GameObject type: Bank; Player owner Id: " + this.getPlayerId() + "; Castle id: " + this.getCastleId() 
+		return "GameObject type: Bank; Player owner Id: " + this.getPlayerID() + "; Castle id: " + this.getCastleId() 
 				+ "; GameObject id: " + this.getId();
 	}
 
@@ -40,12 +40,4 @@ public class Bank extends ResourceBuilding {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public int getPlayerID() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
 }

@@ -40,7 +40,8 @@ public abstract class GameObject implements Locatable {
 		return id;
 	}
 
-	public int getPlayerId() {
+	
+	public int getPlayerID() {
 		return playerId;
 	}
 

@@ -45,7 +45,7 @@ public class TestCreateCommand {
 		}
 		assertEquals(1, units.size());
 		Unit u = units.values().iterator().next();
-		assertEquals(p.getId(), u.getPlayerId());
+		assertEquals(p.getId(), u.getPlayerID());
 		assertEquals(castle.getX(), u.getX(), .001);
 		assertEquals(castle.getY(), u.getY(), .001);
 		assertEquals(UnitType.INFANTRY, u.getUnitType());
@@ -68,7 +68,7 @@ public class TestCreateCommand {
 		}
 		assertEquals(1, units.size());
 		u = units.values().iterator().next();
-		assertEquals(p.getId(), u.getPlayerId());
+		assertEquals(p.getId(), u.getPlayerID());
 		assertEquals(castle.getX(), u.getX(), .001);
 		assertEquals(castle.getY(), u.getY(), .001);
 		assertEquals(UnitType.INFANTRY, u.getUnitType());

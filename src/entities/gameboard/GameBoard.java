@@ -128,7 +128,7 @@ public class GameBoard {
 	 * constants at top of file. Allocates tile types into a variety of
 	 * linkedlists, attempts to perform 'realistic' resource distribution
 	 */
-	private void resourceDistNatural() {
+	public void resourceDistNatural() {
 		ArrayList<ArrayList<Point>> terrainList = new ArrayList<ArrayList<Point>>();
 		// Init lists for terain types
 		for (int i = 0; i < 6; i++) {

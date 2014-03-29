@@ -21,7 +21,7 @@ public class TestBuilding {
 
 		assertEquals(100.0, 0, b.getHealth());
 		assertEquals(2, b.getHeight());
-		assertEquals(0, b.getPlayerId());
+		assertEquals(0, b.getPlayerID());
 		assertEquals(4, b.getWidth());
 		assertEquals(1.0, 0, b.getY());
 		assertEquals(1.0, 0, b.getX());
