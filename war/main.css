@@ -7,10 +7,10 @@ body,html {
 	font-family: 'MedievalSharp', cursive;
 	font-size: 14px;
 	color: #E7CE99 !important;
-	cursor: url('assets/Cursors/Arrow.cur'), default;
+	cursor: url('assets/Cursors/Arrow.cur'), default !important;
 }
 
-a, button {
+a,button {
 	cursor: url('assets/Cursors/Arrow.cur'), default;
 }
 
@@ -26,6 +26,12 @@ a, button {
 
 .full-size {
 	width: 100%;
+}
+
+.info-text {
+	font-family: 'MedievalSharp', cursive;
+	color: #FCD583 !important;
+	font-size: 14px;
 }
 
 .half-size {
