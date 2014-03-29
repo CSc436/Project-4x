@@ -25,7 +25,7 @@ import entities.stats.UnitStats;
 public abstract class Agent extends Unit {
 	private Map<String, Unit> underlings; // TODO possibly replace Unit or String with their unique ID's (UUID?)
 	private CommandQueue cq; // list of current commnands to issue.
-	/*
+	public int prestige;/*
 	 * Agent():
 	 * Description:
 	 * Base constructor for and Agent object. Calls the Unit constructor, 

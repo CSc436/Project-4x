@@ -13,7 +13,6 @@ import entities.units.Agent;
 
 public class Merchant extends Agent{
 
-	static int prestige;
 	Goods goods;
 	public Merchant(UUID id, int playerId, UnitStats new_stats, float xco, float yco, 
 			int price, int number, int currency) {
@@ -23,25 +22,30 @@ public class Merchant extends Agent{
 	}
 	
 	public int getPrestige(){
-		if(prestige<100)
+		if(this.prestige<100)
 			return 1;
-		else if (prestige>1000)
+		else if (this.prestige>1000)
 			return 3;
 		else return 2;
 	}
-	@Override
-	public void update(Player p, GameBoard gb) {
-		// TODO Auto-generated method stub
-		
+
+	public void addPrestige(int i){
+		this.prestige+=i;
 	}
 	
 	public void buy(Goods goods, int numbe){
-		if(Merchant.prestige<=50)
+		if(this.prestige<=50)
 			System.out.println("The merchant doen't wanna sell it to you");
 		else
 		{
 			goods.number += numbe;
 			Player.resources.Gold -= numbe * goods.price;
 		}
+	}
+
+	@Override
+	public void update(Player p, GameBoard gb) {
+		// TODO Auto-generated method stub
+		
 	}
 }
