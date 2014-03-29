@@ -143,7 +143,7 @@ public class GameBoard {
 			}
 		}
 
-		System.out.println("Distributing resources in Natural Fashion...");
+		System.out.println("Distributing resources in 'Natural' Fashion...");
 		System.out.println("Distributing food...");
 		int numFood = (int) (foodMult * (terrainList.get(
 				Terrain.WATER.ordinal()).size()

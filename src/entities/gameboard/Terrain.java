@@ -1,5 +1,10 @@
 package entities.gameboard;
 
+/**
+ * Terrain 
+ * @author NRTop
+ * specifies what kind of terrain a Tile object has (water being lowest, then grass, dirt, etc.)
+ */
 public enum Terrain {
-	GRASS, DIRT, WATER, FOREST, MOUNTAIN, SNOW;
+	WATER, DIRT, GRASS, FOREST, MOUNTAIN, SNOW;
 }
