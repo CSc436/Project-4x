@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import entities.gameboard.GameBoard;
 
-
-
 public class GameState {
 	private ArrayList<Player> players;
 	private GameBoard map;

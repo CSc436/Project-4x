@@ -10,7 +10,7 @@ import entities.gameboard.GameBoard;
 import entities.gameboard.Resource;
 import entities.gameboard.Terrain;
 
-public class RunGame extends Thread {
+public class TestRandomMapGenerator extends Thread {
 
 	public static void main(String[] args) {
 
@@ -31,7 +31,7 @@ public class RunGame extends Thread {
 		JFrame frame = new JFrame("display");
 		frame.setVisible(true);
 		frame.setSize(x, y);
-		JPanel test = new draw(game);
+		JPanel test = new draw2(game);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setContentPane(test);
 
@@ -41,11 +41,15 @@ public class RunGame extends Thread {
 
 // 1391894924588
 
-class draw extends JPanel {
+class draw2 extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	GameBoard game;
 
-	public draw(GameBoard g) {
+	public draw2(GameBoard g) {
 		game = g;
 
 	}

@@ -6,8 +6,8 @@ import entities.GameObjectType;
 import entities.buildings.Barracks;
 import entities.buildings.Building;
 import entities.buildings.Castle;
+import entities.gameboard.GameBoard;
 import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
 import entities.units.Unit;
 import entities.units.pawns.Archer;
 import entities.units.pawns.Battering_Ram;
@@ -29,8 +29,8 @@ public class Factory {
 		return UUID.randomUUID();
 	}
 
-	public static Unit buildUnit(int playerId, UnitType unitType, float xco,
-			float yco) {
+	public static Unit buildUnit(Player p, int playerId, UnitType unitType,
+			float xco, float yco) {
 
 		UUID newId = getId();
 		Unit result = null;
@@ -116,45 +116,67 @@ public class Factory {
 			break;
 		// result = new Infantry(p, 1, 1, uniqueid);
 		}
-		
+		p.getGameObjects().addUnit(result);
 		return result;
 
 	}
 
-	public static Building buildBuilding(int playerId,
-			BuildingType buildingType, float xco, float yco) {
+	// Do not remove Player p arg. It is needed to maintain the collection of
+	// buildings for the player
+
+	public static Building buildBuilding(Player p, int playerId,
+			BuildingType buildingType, float xco, float yco, GameBoard gb) {
 		UUID newId = getId();
 		Building result = null;
 
-		switch (buildingType) {
-		
-		case CASTLE:
-			result = new Castle(newId, playerId, BaseStatsEnum.CASTLE,
-					BaseStatsEnum.CASTLE.getStats(), GameObjectType.BUILDING,
-					BuildingType.CASTLE, xco, yco, 4, 4, 500, 10);
-			break;
+		// if the tile is not occupied
+		if (!gb.getTileAt((int) xco, (int) yco).isOccupiedByBuilding()) {
 
-		case BARRACKS:
-			result = new Barracks(newId, playerId, BaseStatsEnum.BARRACKS,
-					BaseStatsEnum.BARRACKS.getStats(), GameObjectType.BUILDING,
-					BuildingType.BARRACKS, xco, yco, 2, 4);
-			break;
-		case BANK:
-			result = new Barracks(newId, playerId, BaseStatsEnum.BANK,
-					BaseStatsEnum.BANK.getStats(), GameObjectType.BUILDING,
-					BuildingType.BANK, xco, yco, 2, 2);
-			break;
+			switch (buildingType) {
 
-		case TOWN_HALL:
-			result = new Barracks(newId, playerId, BaseStatsEnum.TOWN_HALL,
-					BaseStatsEnum.TOWN_HALL.getStats(),
-					GameObjectType.BUILDING, BuildingType.TOWN_HALL, xco, yco,
-					4, 4);
-			break;
-		default:
+			case CASTLE:
+				result = new Castle(newId, playerId, BaseStatsEnum.CASTLE,
+						BaseStatsEnum.CASTLE.getStats(),
+						GameObjectType.BUILDING, BuildingType.CASTLE, xco, yco,
+						4, 4, 500, 10);
+				break;
 
-			// result = new Barracks(p, 1, 1, uniqueid);
-		}
+			case BARRACKS:
+				result = new Barracks(newId, playerId, BaseStatsEnum.BARRACKS,
+						BaseStatsEnum.BARRACKS.getStats(),
+						GameObjectType.BUILDING, BuildingType.BARRACKS, xco,
+						yco, 2, 4);
+				break;
+			case BANK:
+				result = new Barracks(newId, playerId, BaseStatsEnum.BANK,
+						BaseStatsEnum.BANK.getStats(), GameObjectType.BUILDING,
+						BuildingType.BANK, xco, yco, 2, 2);
+				break;
+
+			case TOWN_HALL:
+				result = new Barracks(newId, playerId, BaseStatsEnum.TOWN_HALL,
+						BaseStatsEnum.TOWN_HALL.getStats(),
+						GameObjectType.BUILDING, BuildingType.TOWN_HALL, xco,
+						yco, 4, 4);
+				break;
+			default:
+
+				// result = new Barracks(p, 1, 1, uniqueid);
+			}
+
+			// if the building is successfully placed on the map (within range)
+			// add it to the players object list
+			if (gb.placeBuildingAt(result, (int) xco, (int) yco)) {
+				p.getGameObjects().addBuilding(result);
+				System.out.println("Building placement success ");
+			} else
+				System.out
+						.println("Building placement error;  Out of range, or overlap");
+
+		} else
+			System.out
+					.println("Building placement error;  Out of range, or overlap");
+
 		return result;
 
 	}

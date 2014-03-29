@@ -41,4 +41,11 @@ public class Bank extends ResourceBuilding {
 		return null;
 	}
 
+	@Override
+	public int getPlayerID() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
 }

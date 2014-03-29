@@ -16,7 +16,7 @@ import control.commands.Command;
 import entities.buildings.Building;
 import entities.units.Unit;
 
-public class CreateCommandTest {
+public class TestCreateCommand {
 
 	@Test
 	public void testCreate() {
@@ -25,14 +25,15 @@ public class CreateCommandTest {
 		Thread t = new Thread(controller);
 		t.start();
 		assertEquals(2, model.getPlayers().size());
-		
-		//test create for player 1
+
+		// test create for player 1
 		Player p = model.getPlayer(1);
 		Map<UUID, Building> buildings = p.getGameObjects().getBuildings();
 		assertEquals(1, buildings.size());
 		Building castle = buildings.values().iterator().next();
-		
-		Command comm = new BuildingProductionCommand(p.getId(), castle.getId(), UnitType.INFANTRY);
+
+		Command comm = new BuildingProductionCommand(p.getId(), castle.getId(),
+				UnitType.INFANTRY);
 		controller.addCommand(comm);
 		Map<UUID, Unit> units = p.getGameObjects().getUnits();
 		int count = 0;
@@ -48,14 +49,15 @@ public class CreateCommandTest {
 		assertEquals(castle.getX(), u.getX(), .001);
 		assertEquals(castle.getY(), u.getY(), .001);
 		assertEquals(UnitType.INFANTRY, u.getUnitType());
-		
-		//test create for player 2
+
+		// test create for player 2
 		p = model.getPlayer(2);
 		buildings = p.getGameObjects().getBuildings();
 		assertEquals(1, buildings.size());
 		castle = buildings.values().iterator().next();
-		
-		comm = new BuildingProductionCommand(p.getId(), castle.getId(), UnitType.INFANTRY);
+
+		comm = new BuildingProductionCommand(p.getId(), castle.getId(),
+				UnitType.INFANTRY);
 		controller.addCommand(comm);
 		units = p.getGameObjects().getUnits();
 		try {

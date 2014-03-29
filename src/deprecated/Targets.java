@@ -1,4 +1,4 @@
-package control;
+package deprecated;
 
 public enum Targets {
 	GAMEOBJECT, 
