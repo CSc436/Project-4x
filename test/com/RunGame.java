@@ -1,10 +1,13 @@
-package entities.gameboard;
+package com;
 import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.*;
 
 import com.shared.Terrain;
+
+import entities.gameboard.GameBoard;
+import entities.gameboard.Resource;
 
 public class RunGame {
 
