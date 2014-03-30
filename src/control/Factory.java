@@ -169,11 +169,11 @@ public class Factory {
 				p.getGameObjects().addBuilding(result);
 				System.out.println("Building placement success ");
 
-			} else
+			} else {
 				System.out
 						.println("Building placement error;  Out of range, or overlap");
-			result = null;
-
+				result = null;
+			}
 		} else
 			System.out
 					.println("Building placement error;  Out of range, or overlap");
