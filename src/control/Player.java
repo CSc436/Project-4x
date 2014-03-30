@@ -26,7 +26,7 @@ public class Player {
 
 	public TechnologyTree techTree;
 	public Upgrades upgrades;
-	public  Resources resources; // TODO WHAT THE FUCK 
+	public  Resources resources;
 	public  Goods goods;
 	private Civilization civ;
 	private CommandQueue cq;
