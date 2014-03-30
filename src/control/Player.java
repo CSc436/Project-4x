@@ -1,6 +1,8 @@
 package control;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import entities.Action;
@@ -15,22 +17,25 @@ import entities.units.Agent;
 import entities.units.Unit;
 import entities.units.agents.General;
 import entities.units.agents.Goods;
+import entities.units.agents.Merchant;
 
 public class Player {
 
 	private final String name;
 	private int id;
 
+	public Map<Agent,Integer> prestige;
+	public Map<Goods,Integer> goodsNumber;
 	private PlayerUnits objects; // the objects that the player owns, including
 									// the currently selected units
 
 	public TechnologyTree techTree;
 	public Upgrades upgrades;
-	public  Resources resources;
-	public  Goods goods;
+	public Resources resources;
+	public Goods goods;
 	private Civilization civ;
 	private CommandQueue cq;
-
+	
 	private HashMap<UUID, Unit> selectedUnits;
 	private HashMap<UUID, Building> selectedBuildings;
 
@@ -76,18 +81,19 @@ public class Player {
 	public PlayerUnits getGameObjects() {
 		return objects;
 	}
-	
-	public int getPrestige(Agent agent){
-		return agent.prestige;
-	}
 
 	public Resources getResources() {
 		return resources;
 	}
 	
-	public static int getGoodsNumber(Goods goods){
-		return Goods.number;
+	public int getPrestige(Agent ag){
+		return prestige.get(ag);
 	}
+	
+	public int getGoodsNumber(Goods goods){
+		return goodsNumber.get(goods);
+	}
+	
 	public TechnologyTree getTechTree() {
 		return techTree;
 	}
@@ -97,12 +103,10 @@ public class Player {
 	}
 
 	public CommandQueue getCommandQueue() {
-
 		return cq;
 	}
 
 	public void addActionTo(Unit u, Action a) {
-
 		cq.push(a, u);
 		// u.addAction(a);
 	}
@@ -112,25 +116,19 @@ public class Player {
 	}
 
 	public void selectUnit(Unit u) {
-
 		selectedUnits.put(u.getId(), u);
 	}
 
 	public void selectBuilding(Building b) {
-
 		selectedBuildings.put(b.getId(), b);
-
 	}
 
 	public void deselectBuilding(Building b) {
-
 		selectedBuildings.remove(b);
-
 	}
 
 	public void addBuilding(Building b) {
 		objects.addBuilding(b);
-
 	}
 
 	public void deselect() {
@@ -149,7 +147,6 @@ public class Player {
 				System.out.println(b.getBuildingType());
 				if (b.getBuildingType() == BuildingType.BARRACKS)
 					return true;
-
 			}
 			return false;
 		} else {

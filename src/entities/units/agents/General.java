@@ -7,6 +7,8 @@ import control.Player;
 import entities.units.Agent;
 import entities.gameboard.GameBoard;
 import entities.stats.BaseStatsEnum;
+import entities.stats.UnitStats;
+import entities.GameObjectType;
 import control.UnitType;
 
 //queueing of commands for controller, controller checks queue each
@@ -25,26 +27,14 @@ public class General extends Agent {
 	 * @param xco  - initial x coordinate on gameboard of general object. 
 	 * @param yco  - initial y coordinate on gameboard of genera object. 
 	 */
-	public General(UUID id, int playerId, float xco, float yco) {
-		super( id, playerId, BaseStatsEnum.GENERAL, BaseStatsEnum.GENERAL.getStats(), UnitType.GENERAL,  xco,
+	public General(UUID id, int playerId, UnitStats new_stats, float xco, float yco) {
+		super( id, playerId, BaseStatsEnum.GENERAL, new_stats, GameObjectType.UNIT, UnitType.GENERAL,  xco,
 				 yco);
 		// TODO Auto-generated constructor stub
 	}
-
-	public void addPrestige(int i){
-		this.prestige+=i;
-	}
-	
-	public int getPrestige(){
-		if(this.prestige<100)
-			return 1;
-		else if (this.prestige>1000)
-			return 3;
-		else return 2;
-	}
 	
 	public String acceptCommandByPrestige(int i){
-		switch(i){
+		switch(i/50){
 		case(0):return "nothing";
 		case(1):return "no";
 		case(2):return "maybe no";
@@ -56,7 +46,14 @@ public class General extends Agent {
 	public String decision() {
 		return "NO";
 	}
-
+	
+	public int getPrestige(Player p){
+		return p.prestige.get(this);
+	}
+	
+	public void addPrestige(int i,Player p){
+		p.prestige.put(this, this.getPrestige(p)+i);
+	}
 	// add unit to collection
 
 	// make decision command

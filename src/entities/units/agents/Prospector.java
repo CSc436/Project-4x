@@ -32,7 +32,7 @@ public class Prospector extends Agent{
 	 * @param yco  - initial y coordinate on gameboard of Prospector object. 
 	 */
 	public Prospector(UUID id, int playerid, float xco, float yco) {
-		super(id,  playerid, BaseStatsEnum.PROSPECTOR, BaseStatsEnum.PROSPECTOR.getStats(), UnitType.PROSPECTOR, xco,
+		super(id,  playerid, BaseStatsEnum.PROSPECTOR, BaseStatsEnum.PROSPECTOR.getStats(), null, UnitType.PROSPECTOR, xco,
 			 yco);
 		// TODO Auto-generated constructor stub
 	}
