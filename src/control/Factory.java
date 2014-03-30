@@ -129,20 +129,20 @@ public class Factory {
 
 		case BARRACKS:
 			result = new Barracks(newId, playerId, BaseStatsEnum.BARRACKS,
-					BaseStatsEnum.BARRACKS.getStats(), GameObjectType.BUILDING,
+					BaseStatsEnum.BARRACKS.getStats(),
 					BuildingType.BARRACKS, xco, yco, 2, 4);
 			break;
 
 		case BANK:
 			result = new Barracks(newId, playerId, BaseStatsEnum.BANK,
-					BaseStatsEnum.BANK.getStats(), GameObjectType.BUILDING,
+					BaseStatsEnum.BANK.getStats(),
 					BuildingType.BANK, xco, yco, 2, 2);
 			break;
 
 		case TOWN_HALL:
 			result = new Barracks(newId, playerId, BaseStatsEnum.TOWN_HALL,
 					BaseStatsEnum.TOWN_HALL.getStats(),
-					GameObjectType.BUILDING, BuildingType.TOWN_HALL, xco, yco,
+				    BuildingType.TOWN_HALL, xco, yco,
 					4, 4);
 			break;
 		default:

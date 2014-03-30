@@ -20,7 +20,7 @@ public class TestBuildings {
 		// TODO Auto-generated method stub
 			Player p = new Player("Xu", 111);
 			Bank bk = new Bank(new UUID(0, 0),1,BaseStatsEnum.BANK,new UnitStats(0, 0, 0, 0, 0, 0, 0), 
-					GameObjectType.BUILDING, BuildingType.BANK,1,1,1,1, null);
+					BuildingType.BANK,1,1,1,1, null);
 			bk.gold=100000;
 			p.resources.Gold=0;
 //			bk.withdraw(1000);

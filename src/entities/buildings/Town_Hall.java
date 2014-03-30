@@ -22,10 +22,10 @@ public class Town_Hall extends ResourceBuilding {
 	 */
 
 	public Town_Hall(UUID id, int playerId, BaseStatsEnum baseStats,
-			UnitStats new_stats, GameObjectType gameObjectType,
+			UnitStats new_stats,
 			BuildingType buildingType, float xco, float yco, int height,
 			int width, boolean iscapital) {
-		super(id, playerId, baseStats, new_stats, gameObjectType, buildingType,
+		super(id, playerId, baseStats, new_stats, buildingType,
 				xco, yco, height, width, new Resources(0, 0, 0, 0, 0));
 
 		this.iscapital = iscapital;

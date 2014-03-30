@@ -60,8 +60,16 @@ public enum BaseStatsEnum {
 
 	BANK(new UnitStats(0, 2, 100, 0, 1000, 0, 0)),
 
-	TOWN_HALL(new UnitStats(0, 2, 100, 0, 1000, 0, 0));
+	TOWN_HALL(new UnitStats(0, 2, 100, 0, 1000, 0, 0)),
 
+	// RESOURCE BUILDINGS
+	LUMBER_MILL(new UnitStats(0, 2, 100, 0, 1000, 0, 0)), 
+	STONE_MINE(new UnitStats(0, 2, 100, 0, 1000, 0, 0)), 
+	GOLD_MINE(new UnitStats(0, 2, 100, 0, 1000, 0, 0)), 
+	FARM(new UnitStats(0, 2, 100, 0, 1000, 0, 0)), 
+	UNIVERSITY(new UnitStats(0, 2, 100, 0, 1000, 0, 0));
+	
+	
 	private UnitStats stats;
 	private int baseCreationTime;
 

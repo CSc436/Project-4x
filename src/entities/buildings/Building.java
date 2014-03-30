@@ -48,10 +48,10 @@ public abstract class Building extends GameObject {
 	 * @param int width - how many tiles wide the building takes up
 	 */
 	public Building(UUID id, int playerId, BaseStatsEnum baseStats,
-			UnitStats new_stats, GameObjectType gameObjectType,
+			UnitStats new_stats,
 			BuildingType buildingType, float xco, float yco, int height,
 			int width) {
-		super(id, playerId, baseStats, new_stats, gameObjectType, xco, yco);
+		super(id, playerId, baseStats, new_stats, GameObjectType.BUILDING, xco, yco);
 		this.buildingType = buildingType;
 		this.height = height;
 		this.width = width;

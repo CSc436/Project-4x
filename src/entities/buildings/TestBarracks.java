@@ -18,7 +18,7 @@ public class TestBarracks {
 	public void testbrk(){
 		Player p = new Player("Xu", 111);
 		Barracks brk = new Barracks(new UUID(0, 0),1,BaseStatsEnum.BARRACKS,new UnitStats(0, 0, 0, 0, 0, 0, 0), 
-				GameObjectType.BUILDING, BuildingType.BARRACKS,1,1,1,1);
+				 BuildingType.BARRACKS,1,1,1,1);
 		brk.soldierNum=0;
 		brk.level=1;
 		assertEquals(brk.getSoldiers(),50);

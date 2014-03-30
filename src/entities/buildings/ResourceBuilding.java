@@ -8,6 +8,10 @@ import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 
+
+// TODO for construction, need to add check to make sure resource building is 
+// being placed on correct tile type (food on food, gold on gold, etc.)
+
 public abstract class ResourceBuilding extends Building {
 
 	protected final Resources baseResourceAmount;
@@ -35,10 +39,10 @@ public abstract class ResourceBuilding extends Building {
 	 * 
 	 */
 	public ResourceBuilding(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, 
-			GameObjectType gameObjectType, BuildingType buildingType, float xco,
+		    BuildingType buildingType, float xco,
 			float yco, int height, int width, Resources resourceAmount) {
 		super(id,playerId, baseStats, new_stats, 
-				gameObjectType, buildingType, xco,
+				buildingType, xco,
 				yco, height, width);
 		baseResourceAmount = resourceAmount;
 		this.resourceAmount = resourceAmount;

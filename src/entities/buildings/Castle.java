@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import control.BuildingType;
-import entities.GameObjectType;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 
@@ -16,10 +15,10 @@ public class Castle extends Building {
 	private int influenceArea;
 
 	public Castle(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, 
-			GameObjectType gameObjectType, BuildingType buildingType, float xco,
+			BuildingType buildingType, float xco,
 			float yco, int height, int width, int populationCap, int influenceArea) {
 		super(id, playerId, baseStats, new_stats, 
-				gameObjectType, buildingType, xco,
+				buildingType, xco,
 				yco, height, width);
 		this.populationCap = populationCap;
 		this.influenceArea = influenceArea;

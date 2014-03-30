@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import control.BuildingType;
 import control.Player;
-import entities.GameObjectType;
 import entities.gameboard.Resource;
 import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
@@ -35,9 +34,9 @@ public class Bank extends ResourceBuilding {
 	 * @param resourceAmount
 	 */
 	public Bank(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, 
-			GameObjectType gameObjectType, BuildingType buildingType, float xco,
+			BuildingType buildingType, float xco,
 			float yco, int height, int width, Resources resourceAmount) {
-		super(id, playerId, baseStats, new_stats, gameObjectType, buildingType, xco, yco, height, width, resourceAmount);
+		super(id, playerId, baseStats, new_stats, buildingType, xco, yco, height, width, resourceAmount);
 	}
 	
 	@Override

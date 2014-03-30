@@ -12,10 +12,10 @@ import entities.stats.UnitStats;
 public class StoneMine extends ResourceBuilding{
 
 	public StoneMine(UUID id, int playerId, BaseStatsEnum baseStats,
-			UnitStats new_stats, GameObjectType gameObjectType,
+			UnitStats new_stats, 
 			BuildingType buildingType, float xco, float yco, int height,
 			int width) {
-		super(id, playerId, baseStats, new_stats, gameObjectType, buildingType, xco,
+		super(id, playerId, baseStats, new_stats, buildingType, xco,
 				yco, height, width, new Resources(0, 0, 0, 20, 0));
 	}
 
