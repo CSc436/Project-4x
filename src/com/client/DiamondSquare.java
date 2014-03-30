@@ -7,19 +7,7 @@
 
 package com.client;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Random;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
-import java.awt.Graphics;
-
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 public class DiamondSquare {
 	

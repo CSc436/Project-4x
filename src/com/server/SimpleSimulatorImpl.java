@@ -7,7 +7,6 @@ import java.util.Set;
 import com.client.SimpleSimulator;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.shared.MovingUnitModel;
 import com.shared.Request;
 import com.shared.SimpleGameModel;
 

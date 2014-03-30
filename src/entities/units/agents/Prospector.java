@@ -2,7 +2,6 @@ package entities.units.agents;
 
 import java.util.UUID;
 
-import control.Player;
 import entities.units.Agent;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;

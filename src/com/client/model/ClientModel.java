@@ -10,8 +10,6 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.ClosingEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.impl.Serializer;
-import com.shared.MovingUnitModel;
 import com.shared.Request;
 import com.shared.SetTargetRequest;
 import com.shared.SimpleGameModel;

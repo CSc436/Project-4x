@@ -7,7 +7,6 @@ import javax.swing.*;
 
 import com.shared.Terrain;
 
-import control.Controller;
 import entities.gameboard.GameBoard;
 import entities.gameboard.Resource;
 

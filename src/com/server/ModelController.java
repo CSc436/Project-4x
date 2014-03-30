@@ -5,7 +5,6 @@ import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.shared.MovingUnitModel;
 import com.shared.Request;
 import com.shared.SimpleGameModel;
 

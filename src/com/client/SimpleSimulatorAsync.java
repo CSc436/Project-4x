@@ -4,7 +4,6 @@ import java.util.Queue;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.shared.MovingUnitModel;
 import com.shared.Request;
 import com.shared.SimpleGameModel;
 
