@@ -14,9 +14,9 @@ public class LumberMill extends ResourceBuilding{
 	public LumberMill(UUID id, int playerId, BaseStatsEnum baseStats,
 			UnitStats new_stats, GameObjectType gameObjectType,
 			BuildingType buildingType, float xco, float yco, int height,
-			int width, Resources resourceAmount) {
+			int width) {
 		super(id, playerId, baseStats, new_stats, gameObjectType, buildingType, xco,
-				yco, height, width, resourceAmount);
+				yco, height, width, new Resources(0, 20, 0, 0, 0));
 		// TODO Auto-generated constructor stub
 	}
 

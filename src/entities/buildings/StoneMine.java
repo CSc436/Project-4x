@@ -9,15 +9,14 @@ import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 
-public class Mine extends ResourceBuilding{
+public class StoneMine extends ResourceBuilding{
 
-	public Mine(UUID id, int playerId, BaseStatsEnum baseStats,
+	public StoneMine(UUID id, int playerId, BaseStatsEnum baseStats,
 			UnitStats new_stats, GameObjectType gameObjectType,
 			BuildingType buildingType, float xco, float yco, int height,
-			int width, Resources resourceAmount) {
+			int width) {
 		super(id, playerId, baseStats, new_stats, gameObjectType, buildingType, xco,
-				yco, height, width, resourceAmount);
-		// TODO Auto-generated constructor stub
+				yco, height, width, new Resources(0, 0, 0, 20, 0));
 	}
 
 	@Override

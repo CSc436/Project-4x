@@ -9,28 +9,14 @@ import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 
-public class Farm extends ResourceBuilding{
+public class GoldMine extends ResourceBuilding{
 
-	/**
-	 * Farm()
-	 * creates a new farm, must be placed on a food tile.
-	 * @param id
-	 * @param playerId
-	 * @param baseStats
-	 * @param new_stats
-	 * @param gameObjectType
-	 * @param buildingType
-	 * @param xco
-	 * @param yco
-	 * @param height
-	 * @param width
-	 */
-	public Farm(UUID id, int playerId, BaseStatsEnum baseStats,
+	public GoldMine(UUID id, int playerId, BaseStatsEnum baseStats,
 			UnitStats new_stats, GameObjectType gameObjectType,
 			BuildingType buildingType, float xco, float yco, int height,
 			int width) {
 		super(id, playerId, baseStats, new_stats, gameObjectType, buildingType, xco,
-				yco, height, width, new Resources(0, 0, 20, 0, 0));
+				yco, height, width, new Resources(20, 0, 0, 0, 0));
 	}
 
 	@Override
