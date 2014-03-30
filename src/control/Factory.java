@@ -2,7 +2,6 @@ package control;
 
 import java.util.UUID;
 
-import entities.GameObjectType;
 import entities.buildings.Barracks;
 import entities.buildings.Building;
 import entities.buildings.Castle;
@@ -11,7 +10,6 @@ import entities.buildings.GoldMine;
 import entities.buildings.LumberMill;
 import entities.buildings.StoneMine;
 import entities.buildings.University;
-import entities.stats.BaseStatsEnum;
 import entities.units.Unit;
 import entities.units.pawns.Archer;
 import entities.units.pawns.Battering_Ram;
@@ -41,79 +39,49 @@ public class Factory {
 		switch (unitType) {
 
 		case MILITIA:
-			result = new Militia(newId, playerId, BaseStatsEnum.MILITIA,
-					BaseStatsEnum.MILITIA.getStats(), GameObjectType.UNIT,
-					UnitType.MILITIA, xco, yco);
+			result = new Militia(newId, playerId, xco, yco);
 			break;
 		case INFANTRY:
-			result = new Infantry(newId, playerId, BaseStatsEnum.INFANTRY,
-					BaseStatsEnum.INFANTRY.getStats(), GameObjectType.UNIT,
-					UnitType.INFANTRY, xco, yco);
+			result = new Infantry(newId, playerId, xco, yco);
 			break;
 		case ARCHER:
-			result = new Archer(newId, playerId, BaseStatsEnum.ARCHER,
-					BaseStatsEnum.ARCHER.getStats(), GameObjectType.UNIT,
-					UnitType.ARCHER, xco, yco);
+			result = new Archer(newId, playerId, xco, yco);
 			break;
 		case SKIRMISHER:
-			result = new Skirmisher(newId, playerId, BaseStatsEnum.SKIRMISHER,
-					BaseStatsEnum.SKIRMISHER.getStats(), GameObjectType.UNIT,
-					UnitType.SKIRMISHER, xco, yco);
+			result = new Skirmisher(newId, playerId, xco, yco);
 			break;
 		case KNIGHT:
-			result = new Knight(newId, playerId, BaseStatsEnum.KNIGHT,
-					BaseStatsEnum.KNIGHT.getStats(), GameObjectType.UNIT,
-					UnitType.KNIGHT, xco, yco);
+			result = new Knight(newId, playerId, xco, yco);
 			break;
 		case RANGED_CALVARY:
-			result = new Ranged_Calvary(newId, playerId,
-					BaseStatsEnum.RANGED_CALVARY,
-					BaseStatsEnum.RANGED_CALVARY.getStats(),
-					GameObjectType.UNIT, UnitType.RANGED_CALVARY, xco, yco);
+			result = new Ranged_Calvary(newId, playerId, xco, yco);
 			break;
 		case TRANSPORT:
-			result = new Transport(newId, playerId, BaseStatsEnum.TRANSPORT,
-					BaseStatsEnum.TRANSPORT.getStats(), GameObjectType.UNIT,
-					UnitType.TRANSPORT, xco, yco);
+			result = new Transport(newId, playerId, xco, yco);
 			break;
 		case CATAPULT:
-			result = new Catapult(newId, playerId, BaseStatsEnum.CATAPULT,
-					BaseStatsEnum.CATAPULT.getStats(), GameObjectType.UNIT,
-					UnitType.CATAPULT, xco, yco);
+			result = new Catapult(newId, playerId, xco, yco);
 			break;
 		case BATTERING_RAM:
-			result = new Battering_Ram(newId, playerId,
-					BaseStatsEnum.BATTERING_RAM,
-					BaseStatsEnum.BATTERING_RAM.getStats(),
-					GameObjectType.UNIT, UnitType.BATTERING_RAM, xco, yco);
+			result = new Battering_Ram(newId, playerId, xco, yco);
 			break;
 		case RIFLEMAN:
-			result = new Rifleman(newId, playerId, BaseStatsEnum.RIFLEMAN,
-					BaseStatsEnum.RIFLEMAN.getStats(), GameObjectType.UNIT,
-					UnitType.RIFLEMAN, xco, yco);
+			result = new Rifleman(newId, playerId, xco, yco);
 			break;
 		case DRAGOON:
-			result = new Dragoon(newId, playerId, BaseStatsEnum.DRAGOON,
-					BaseStatsEnum.DRAGOON.getStats(), GameObjectType.UNIT,
-					UnitType.DRAGOON, xco, yco);
+			result = new Dragoon(newId, playerId, xco, yco);
 			break;
 
 		case CANNON:
-			result = new Cannon(newId, playerId, BaseStatsEnum.CANNON,
-					BaseStatsEnum.CANNON.getStats(), GameObjectType.UNIT,
-					UnitType.CANNON, xco, yco);
+			result = new Cannon(newId, playerId, xco, yco);
 			break;
 
 		case MEDIC:
-			result = new Medic(newId, playerId, BaseStatsEnum.MEDIC,
-					BaseStatsEnum.MEDIC.getStats(), GameObjectType.UNIT,
-					UnitType.MEDIC, xco, yco);
+			result = new Medic(newId, playerId, xco, yco);
 			break;
 
 		case TRADE_CART:
-			result = new Infantry(newId, playerId, BaseStatsEnum.TRADE_CART,
-					BaseStatsEnum.TRADE_CART.getStats(), GameObjectType.UNIT,
-					UnitType.TRADE_CART, xco, yco);
+			result = new Infantry(newId, playerId, xco, yco);
 			break;
 
 		default:

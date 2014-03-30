@@ -6,8 +6,6 @@ import control.Player;
 import entities.units.Agent;
 import entities.gameboard.GameBoard;
 import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
-import entities.GameObjectType;
 import control.UnitType;
 
 /**
@@ -33,8 +31,8 @@ public class Prospector extends Agent{
 	 * @param xco  - initial x coordinate on gameboard of Prospector object. 
 	 * @param yco  - initial y coordinate on gameboard of Prospector object. 
 	 */
-	public Prospector(UUID id, int playerid, UnitStats stats, float xco, float yco) {
-		super(id,  playerid, BaseStatsEnum.PROSPECTOR, stats, GameObjectType.UNIT, UnitType.PROSPECTOR, xco,
+	public Prospector(UUID id, int playerid, float xco, float yco) {
+		super(id,  playerid, BaseStatsEnum.PROSPECTOR, BaseStatsEnum.PROSPECTOR.getStats(), UnitType.PROSPECTOR, xco,
 			 yco);
 		// TODO Auto-generated constructor stub
 	}

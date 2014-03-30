@@ -7,8 +7,6 @@ import control.Player;
 import entities.units.Agent;
 import entities.gameboard.GameBoard;
 import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
-import entities.GameObjectType;
 import control.UnitType;
 
 //queueing of commands for controller, controller checks queue each
@@ -27,8 +25,8 @@ public class General extends Agent {
 	 * @param xco  - initial x coordinate on gameboard of general object. 
 	 * @param yco  - initial y coordinate on gameboard of genera object. 
 	 */
-	public General(UUID id, int playerId, UnitStats new_stats, float xco, float yco) {
-		super( id, playerId, BaseStatsEnum.GENERAL, new_stats, GameObjectType.UNIT, UnitType.GENERAL,  xco,
+	public General(UUID id, int playerId, float xco, float yco) {
+		super( id, playerId, BaseStatsEnum.GENERAL, BaseStatsEnum.GENERAL.getStats(), UnitType.GENERAL,  xco,
 				 yco);
 		// TODO Auto-generated constructor stub
 	}

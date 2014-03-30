@@ -4,17 +4,13 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import control.UnitType;
-import entities.GameObjectType;
 import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
 import entities.units.Unit;
 
 public class Ranged_Calvary extends Unit{
 
-	public Ranged_Calvary(UUID id, int playerId, BaseStatsEnum baseStats,
-			UnitStats new_stats, GameObjectType type, UnitType unitType,
-			float xco, float yco) {
-		super(id, playerId, baseStats, new_stats, type, unitType, xco, yco);
+	public Ranged_Calvary(UUID id, int playerId, float xco, float yco) {
+		super(id, playerId, BaseStatsEnum.RANGED_CALVARY, BaseStatsEnum.RANGED_CALVARY.getStats(), UnitType.RANGED_CALVARY, xco, yco);
 		// TODO Auto-generated constructor stub
 	}
 

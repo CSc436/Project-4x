@@ -25,9 +25,9 @@ public abstract class Unit extends GameObject {
 	private int creationTime; 
 
 	public Unit(UUID id, int playerId, BaseStatsEnum baseStats,
-			UnitStats new_stats, GameObjectType type, UnitType unitType,
+			UnitStats new_stats, UnitType unitType,
 			float xco, float yco) {
-		super(id, playerId, baseStats, new_stats, type, xco, yco);
+		super(id, playerId, baseStats, new_stats, GameObjectType.UNIT, xco, yco);
 		this.unitType = unitType;
 		this.creationTime = baseStats.getCreationTime();
 	}

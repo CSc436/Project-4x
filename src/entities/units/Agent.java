@@ -42,9 +42,9 @@ public abstract class Agent extends Unit {
 	 * @param float yco - initial y coordinate of the unit 
 	 * 
 	 */
-	public Agent(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, GameObjectType type, UnitType unitType, float xco,
+	public Agent(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, UnitType unitType, float xco,
 			float yco) {
-		super(id, playerId,  baseStats, new_stats, type, unitType, xco, yco);
+		super(id, playerId,  baseStats, new_stats, unitType, xco, yco);
 		underlings = new HashMap<String, Unit>();
 		cq = new CommandQueue();
 	}

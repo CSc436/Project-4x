@@ -4,19 +4,16 @@ import java.util.UUID;
 
 import control.Player;
 import control.UnitType;
-import entities.GameObjectType;
 import entities.gameboard.GameBoard;
-import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
 import entities.units.Agent;
 
 public class Merchant extends Agent{
 
 	Goods goods;
-	public Merchant(UUID id, int playerId, UnitStats new_stats, float xco, float yco, 
+	public Merchant(UUID id, int playerId, float xco, float yco, 
 			int price, int number, int currency) {
-		super(id, playerId, BaseStatsEnum.MERCHANT, new_stats, GameObjectType.UNIT, UnitType.MERCHANT,  xco,
+		super(id, playerId, BaseStatsEnum.MERCHANT, BaseStatsEnum.MERCHANT.getStats(), UnitType.MERCHANT,  xco,
 				 yco);
 		// TODO Auto-generated constructor stub
 	}

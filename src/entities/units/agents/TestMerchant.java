@@ -12,7 +12,7 @@ public class TestMerchant {
 
 	@Test
 	public void testgp(){
-		Merchant mch = new Merchant(new UUID(0, 0),111, new UnitStats(0, 0, 0, 0, 0, 0, 0), 0, 0, 0, 0, 0);
+		Merchant mch = new Merchant(new UUID(0, 0),111, 0, 0, 0, 0, 0);
 		Player p = new Player("Xu",111);
 		mch.prestige=70;
 		assertEquals(p.getPrestige(mch),70);

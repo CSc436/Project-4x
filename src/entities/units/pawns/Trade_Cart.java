@@ -4,20 +4,16 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import control.UnitType;
-import entities.GameObjectType;
 import entities.buildings.Town_Hall;
 import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
 import entities.units.Unit;
 
 public class Trade_Cart extends Unit{
 	
 	Town_Hall tradingCity;
 
-	public Trade_Cart(UUID id, int playerId, BaseStatsEnum baseStats,
-			UnitStats new_stats, GameObjectType type, UnitType unitType,
-			float xco, float yco) {
-		super(id, playerId, baseStats, new_stats, type, unitType, xco, yco);
+	public Trade_Cart(UUID id, int playerId, float xco, float yco) {
+		super(id, playerId, BaseStatsEnum.TRADE_CART, BaseStatsEnum.TRADE_CART.getStats(), UnitType.TRADE_CART, xco, yco);
 		// TODO Auto-generated constructor stub
 	}
 
