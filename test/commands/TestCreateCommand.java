@@ -14,7 +14,7 @@ import control.Player;
 import control.UnitType;
 import control.commands.BuildingProductionCommand;
 import control.commands.Command;
-import control.commands.ConstructBuilding;
+import control.commands.ConstructBuildingCommand;
 import entities.buildings.Building;
 import entities.units.Unit;
 
@@ -35,7 +35,7 @@ public class TestCreateCommand {
 		//	public ConstructBuilding(Player p, int playerId, BuildingType bt, int xco,
 		// int yco, GameBoard gb)
 		
-		Command comm = new ConstructBuilding(p,p.getId(),BuildingType.CASTLE,1,1,
+		Command comm = new ConstructBuildingCommand(p,p.getId(),BuildingType.CASTLE,1,1,
 				model.getBoard());
 		controller.addCommand(comm);
 		
@@ -70,7 +70,7 @@ public class TestCreateCommand {
 		// test create for player 2
 		p = model.getPlayer(2);
 			
-		comm = new ConstructBuilding(p,p.getId(),BuildingType.CASTLE,12,12,
+		comm = new ConstructBuildingCommand(p,p.getId(),BuildingType.CASTLE,12,12,
 				model.getBoard());
 		controller.addCommand(comm);
 		

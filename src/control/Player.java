@@ -16,12 +16,10 @@ public class Player {
 
 	private final String name;
 	private int id;
-
 	private PlayerUnits objects; // the objects that the player owns, including
 									// the currently selected units
-
-	public TechnologyTree techTree;
-	public Upgrades upgrades;
+	private TechnologyTree techTree;
+	private Upgrades upgrades;
 	private Resources resources;
 	private Civilization civ;
 	private CommandQueue cq;
@@ -83,10 +81,13 @@ public class Player {
 		return cq;
 	}
 
+	public Upgrades getUpgrades() {
+		return upgrades;
+	}
+
 	public void addActionTo(Unit u, Action a) {
 
 		cq.push(a, u);
-		// u.addAction(a);
 	}
 
 	public Building getBuilding(UUID buildingId) {
@@ -94,7 +95,6 @@ public class Player {
 	}
 
 	public Object getUnit(UUID id2) {
-		// TODO Auto-generated method stub
 		return objects.getUnits().get(id2);
 	}
 

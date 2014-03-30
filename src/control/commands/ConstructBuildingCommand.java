@@ -10,7 +10,7 @@ import entities.buildings.Building;
 import entities.gameboard.GameBoard;
 
 
-public class ConstructBuilding implements Command {
+public class ConstructBuildingCommand implements Command {
 
 	private int playerId;
 	private BuildingType buildingType;
@@ -19,7 +19,7 @@ public class ConstructBuilding implements Command {
 	private Player p;
 	GameBoard gb;
 
-	public ConstructBuilding(Player p, int playerId, BuildingType bt, int xco,
+	public ConstructBuildingCommand(Player p, int playerId, BuildingType bt, int xco,
 			int yco, GameBoard gb) {
 
 		this.p = p;

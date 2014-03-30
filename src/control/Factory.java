@@ -114,7 +114,6 @@ public class Factory {
 
 		default:
 			break;
-		// result = new Infantry(p, 1, 1, uniqueid);
 		}
 		p.getGameObjects().addUnit(result);
 		return result;

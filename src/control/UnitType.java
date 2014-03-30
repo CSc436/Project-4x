@@ -1,6 +1,5 @@
 package control;
 
-// merge with other unittype
 public enum UnitType {
 	// BASE UNITS
 	MILITIA,

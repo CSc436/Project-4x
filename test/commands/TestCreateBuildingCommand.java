@@ -10,7 +10,7 @@ import control.Controller;
 import control.GameModel;
 import control.Player;
 import control.commands.Command;
-import control.commands.ConstructBuilding;
+import control.commands.ConstructBuildingCommand;
 import entities.buildings.Building;
 
 
@@ -29,7 +29,7 @@ public class TestCreateBuildingCommand {
 		Map<UUID, Building> buildings = p.getGameObjects().getBuildings();
 		assertEquals(0, buildings.size());
 
-		Command comm = new ConstructBuilding(p, p.getId(),
+		Command comm = new ConstructBuildingCommand(p, p.getId(),
 				BuildingType.BARRACKS, 1, 1, model.getBoard());
 		controller.addCommand(comm);
 		

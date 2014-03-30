@@ -15,7 +15,6 @@ public class PlayerTextInput implements Runnable {
 		this.instructions = instructions;
 		payload = new ArrayList<Object>();
 		gs = new GameState();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

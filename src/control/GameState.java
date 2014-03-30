@@ -29,4 +29,8 @@ public class GameState {
 
 	}
 
+	public GameBoard getMap() {
+		return map;
+	}
+
 }

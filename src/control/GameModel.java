@@ -20,18 +20,6 @@ public class GameModel {
 
 		map = new GameBoard(500, 500);
 
-		/*
-		 * Building castle = Factory.buildBuilding(players.get(0), 1,
-		 * BuildingType.CASTLE, 0, 0, map);
-		 * players.get(0).getGameObjects().addBuilding(castle);
-		 * map.placeBuildingAt(castle, 0, 0);
-		 * 
-		 * castle = Factory.buildBuilding(players.get(1), 2,
-		 * BuildingType.CASTLE, 100, 100, map);
-		 * players.get(1).getGameObjects().addBuilding(castle);
-		 * map.placeBuildingAt(castle, 100, 100);
-		 */
-
 	}
 
 	public ArrayList<Player> getPlayers() {
