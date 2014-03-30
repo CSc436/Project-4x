@@ -169,9 +169,11 @@ public class Factory {
 			if (gb.placeBuildingAt(result, (int) xco, (int) yco)) {
 				p.getGameObjects().addBuilding(result);
 				System.out.println("Building placement success ");
+			
 			} else
 				System.out
 						.println("Building placement error;  Out of range, or overlap");
+	
 
 		} else
 			System.out
