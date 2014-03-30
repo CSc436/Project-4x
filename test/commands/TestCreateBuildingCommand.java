@@ -42,7 +42,6 @@ public class TestCreateBuildingCommand {
 		}
 		
 		assertEquals(1, buildings.size());
-		Building castle = buildings.values().iterator().next();
 
 
 	}
