@@ -22,7 +22,7 @@ import entities.stats.UnitStats;
 public abstract class Unit extends GameObject {
 
 	private UnitType unitType;
-	private int creationTime;
+	private int creationTime; 
 
 	public Unit(UUID id, int playerId, BaseStatsEnum baseStats,
 			UnitStats new_stats, GameObjectType type, UnitType unitType,
@@ -58,12 +58,31 @@ public abstract class Unit extends GameObject {
 		}
 	}
 
+	/**
+	 * getActionQueue()
+	 * returns the list of actions this unit is in process of doing. 
+	 * @return
+	 */
 	public PriorityQueue<Action> getActionQueue() {
 		return actionQueue;
 	}
 
+	/**
+	 * getCreationTime():
+	 * returns the creation time for this unit.
+	 * @return
+	 */
 	public int getCreationTime() {
 		return this.baseStats.getCreationTime();
 	}
-
+	
+	/**
+	 * decrementCreationTime()
+	 * decrements remaining time for unit production
+	 * @param int timestep - how much to decrement by
+	 */
+	public void decrementCreationTime(int timestep)
+	{
+		this.creationTime -= timestep;
+	}
 }

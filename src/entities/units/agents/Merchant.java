@@ -39,7 +39,7 @@ public class Merchant extends Agent{
 		else
 		{
 			goods.number += numbe;
-			Player.resources.Gold -= numbe * goods.price;
+			//Player.resources.Gold -= numbe * goods.price; // TODO NO STATIC CRAP
 		}
 	}
 

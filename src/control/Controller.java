@@ -90,10 +90,10 @@ public class Controller implements Runnable {
 				if (b.productionQueueEmpty())
 					continue;
 				b.advanceUnitProduction(timestep);
-				Unit u = b.getProducedUnit();
+				Unit u = b.getProducingUnit();
 				if (u != null) {
 					p.getGameObjects().getUnits()
-							.put(u.getId(), b.getProducedUnit());
+							.put(u.getId(), b.getProducingUnit());
 				}
 			}
 		}
