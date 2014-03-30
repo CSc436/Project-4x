@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import control.BuildingType;
 import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
 
 public class Barracks extends Building {
 
@@ -14,14 +13,14 @@ public class Barracks extends Building {
 	int newSoldNum;
 	int capacity;
 	
-	public Barracks(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, 
-		    BuildingType buildingType, float xco,
-			float yco, int height, int width) {
-		super(id, playerId, baseStats, new_stats, buildingType, xco, yco,
-				height, width);
+	public Barracks(UUID id, int playerId, float xco,
+			float yco) {
+		super(id, playerId, BaseStatsEnum.BARRACKS, BaseStatsEnum.BARRACKS.getStats(),
+				BuildingType.BARRACKS, xco, yco,
+				2, 4);
 	}
 
-
+// ???????
 	public int createSoldiers(){
 		switch(level){
 		case(1): return 50;

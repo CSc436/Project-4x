@@ -3,7 +3,6 @@ package entities.buildings;
 import java.util.UUID;
 
 import control.BuildingType;
-import entities.GameObjectType;
 import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;

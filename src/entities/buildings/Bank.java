@@ -4,11 +4,8 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import control.BuildingType;
-import control.Player;
-import entities.gameboard.Resource;
 import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
 
 public class Bank extends ResourceBuilding {
 	// Placeholder bank building dimensions
@@ -33,10 +30,9 @@ public class Bank extends ResourceBuilding {
 	 * @param width
 	 * @param resourceAmount
 	 */
-	public Bank(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, 
-			BuildingType buildingType, float xco,
-			float yco, int height, int width, Resources resourceAmount) {
-		super(id, playerId, baseStats, new_stats, buildingType, xco, yco, height, width, resourceAmount);
+	public Bank(UUID id, int playerId, float xco,
+			float yco, Resources resourceAmount) {
+		super(id, playerId, BaseStatsEnum.BANK, BaseStatsEnum.BANK.getStats(), BuildingType.BANK, xco, yco, 2, 2, resourceAmount);
 	}
 	
 	@Override

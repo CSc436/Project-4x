@@ -62,6 +62,8 @@ public enum BaseStatsEnum {
 
 	TOWN_HALL(new UnitStats(0, 2, 100, 0, 1000, 0, 0)),
 
+	CASTLE(new UnitStats (0, 4, 100, 0, 10000, 0, 0)),
+	
 	// RESOURCE BUILDINGS
 	LUMBER_MILL(new UnitStats(0, 2, 100, 0, 1000, 0, 0)), 
 	STONE_MINE(new UnitStats(0, 2, 100, 0, 1000, 0, 0)), 

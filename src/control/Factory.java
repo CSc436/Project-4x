@@ -5,8 +5,13 @@ import java.util.UUID;
 import entities.GameObjectType;
 import entities.buildings.Barracks;
 import entities.buildings.Building;
+import entities.buildings.Castle;
+import entities.buildings.Farm;
+import entities.buildings.GoldMine;
+import entities.buildings.LumberMill;
+import entities.buildings.StoneMine;
+import entities.buildings.University;
 import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
 import entities.units.Unit;
 import entities.units.pawns.Archer;
 import entities.units.pawns.Battering_Ram;
@@ -128,24 +133,36 @@ public class Factory {
 		switch (buildingType) {
 
 		case BARRACKS:
-			result = new Barracks(newId, playerId, BaseStatsEnum.BARRACKS,
-					BaseStatsEnum.BARRACKS.getStats(),
-					BuildingType.BARRACKS, xco, yco, 2, 4);
+			result = new Barracks(newId, playerId, xco, yco);
 			break;
 
 		case BANK:
-			result = new Barracks(newId, playerId, BaseStatsEnum.BANK,
-					BaseStatsEnum.BANK.getStats(),
-					BuildingType.BANK, xco, yco, 2, 2);
+			result = new Barracks(newId, playerId, xco, yco);
 			break;
 
 		case TOWN_HALL:
-			result = new Barracks(newId, playerId, BaseStatsEnum.TOWN_HALL,
-					BaseStatsEnum.TOWN_HALL.getStats(),
-				    BuildingType.TOWN_HALL, xco, yco,
-					4, 4);
+			result = new Barracks(newId, playerId, xco, yco);
+			break;
+		case CASTLE:
+			result = new Castle(newId, playerId, xco, yco, 100, 100); // last two args are populationCap and influenceArea 
+			break;
+		case LUMBER_MILL:
+			result = new LumberMill(newId, playerId, xco, yco);
+			break;
+		case STONE_MINE:
+			result = new StoneMine(newId, playerId, xco, yco);
+			break;
+		case GOLD_MINE:
+			result = new GoldMine(newId, playerId, xco, yco);
+			break;
+		case FARM:
+			result = new Farm(newId, playerId, xco, yco);
+			break;
+		case UNIVERSITY:
+			result = new University(newId, playerId, xco, yco);
 			break;
 		default:
+			result = null;
 			break;
 
 		// result = new Barracks(p, 1, 1, uniqueid);

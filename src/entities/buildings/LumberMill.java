@@ -4,20 +4,23 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import control.BuildingType;
-import entities.GameObjectType;
 import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
 
 public class LumberMill extends ResourceBuilding{
 
-	public LumberMill(UUID id, int playerId, BaseStatsEnum baseStats,
-			UnitStats new_stats,
-			BuildingType buildingType, float xco, float yco, int height,
-			int width) {
-		super(id, playerId, baseStats, new_stats, buildingType, xco,
-				yco, height, width, new Resources(0, 20, 0, 0, 0));
-		// TODO Auto-generated constructor stub
+	/**
+	 * LumberMill()
+	 * creates a new lumber mill object
+	 * @param id - unique id for this lumber mill
+	 * @param playerId - id of player who owns this lumber mill
+	 * @param xco - x coordinate of this mill
+	 * @param yco - y coordinate of this mill 
+	 */
+	public LumberMill(UUID id, int playerId, float xco, float yco) {
+		super(id, playerId, BaseStatsEnum.LUMBER_MILL, BaseStatsEnum.LUMBER_MILL.getStats(), 
+				BuildingType.LUMBER_MILL, xco,
+				yco, 1, 1, new Resources(0, 20, 0, 0, 0));
 	}
 
 	@Override

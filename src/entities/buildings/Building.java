@@ -4,8 +4,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.UUID;
 
-import com.shared.Model;
-
 import control.BuildingType;
 import control.Tools;
 import entities.GameObject;

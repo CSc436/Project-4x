@@ -6,12 +6,9 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-import control.BuildingType;
+
 import control.Player;
-import entities.GameObjectType;
-import entities.PerfectCivilization;
-import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
+
 
 public class TestBuildings {
 
@@ -19,8 +16,7 @@ public class TestBuildings {
 	public void testBrk() {
 		// TODO Auto-generated method stub
 			Player p = new Player("Xu", 111);
-			Bank bk = new Bank(new UUID(0, 0),1,BaseStatsEnum.BANK,new UnitStats(0, 0, 0, 0, 0, 0, 0), 
-					BuildingType.BANK,1,1,1,1, null);
+			Bank bk = new Bank(new UUID(0, 0),1,1,1, null);
 			bk.gold=100000;
 			p.resources.Gold=0;
 //			bk.withdraw(1000);
