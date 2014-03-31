@@ -3,7 +3,6 @@
 	left: 0;
 	bottom: 0;
 	right: 120px;
-	/*height: 170px;*/
 }
 
 #chat-trigger {
@@ -23,18 +22,17 @@
 	background-image: url('../assets/Panels/chatbox.png');
 	background-size: 100% 100%;
 	border-bottom: none;
-	/* 	border: 1px solid white; */
 }
 
+/* All user chat */
 #messages {
 	height: 115px;
 	padding: 3px;
 	background-color: rgba(25, 25, 25, 0.5);
 	overflow: auto;
-	font-family: 'MedievalSharp', cursive;
-	color: #FCD583 !important;
 }
 
+/* Where user inputs chat text */
 #message {
 	width: 85%;
 	padding-bottom: 0px;
@@ -43,26 +41,32 @@
 	height: 100%;
 	outline: 0;
 	color: #EEEEEE;
+	font-family: 'MedievalSharp', cursive;
+	font-size: 14px;
+	color: #FCD583 !important;
 }
 
+/* Send message button */
 #send-message {
 	width: 12%;
 	padding-bottom: 0px;
 	height: 85%;
 	background: transparent;
 	border: 1px solid #D7C193;
-	color: white;
+	font-family: 'MedievalSharp', cursive;
+	font-size: 14px;
+	color: #FCD583 !important;
 }
 
 #send-message:hover {
 	background-color: #777;
 }
 
-/* message for sending messages */
+/*Div containing user chat message and "send message" button */
 #chat-send-box {
 	height: 25px;
 	background-color: rgba(10, 10, 10, 0.5);
-	background-image: url('assets/Panels/chatbox.png');
+	background-image: url('../assets/Panels/chatbox.png');
 	background-size: 100% 100%;
 	padding-left: 1px;
 }
