@@ -280,7 +280,7 @@ public class Tile {
 		if (newHeight < 132) {
 			return Terrain.WATER;
 		} else if (newHeight < 136) {
-			return Terrain.DIRT;
+			return Terrain.SAND;
 		} else if (newHeight < 140 + 5) {
 			return Terrain.GRASS;
 		} else if (newHeight < 156 + 10) {
