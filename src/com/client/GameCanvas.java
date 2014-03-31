@@ -56,6 +56,7 @@ public class GameCanvas {
 	public static int WIDTH, HEIGHT;
 	private static long startTime;
 	private Camera camera;
+	private Vector3 mouseVector;
 //	private float[] cameraMatrix;
 //	private float camX = 0.0f, camY = -20.0f, camZ = 20.0f;
 	
@@ -63,7 +64,7 @@ public class GameCanvas {
 	
 	private float agentX = 0.0f, agentY = 0.0f, agentZ = -0.1f;
 	private boolean in = false, out = false, up = false, down = false,
-			right = false, left = false, rotateLeft = false, rotateRight = false, center = false;
+			right = false, left = false, rotateLeft = false, rotateRight = false, center = false, move = false;
 	private long time;
 
 	public static final int GRID_WIDTH = 128;
@@ -83,6 +84,7 @@ public class GameCanvas {
 		// CODE FOR MINIMAP DEV/CLICK SELECTING
 		thisCanvas = this;
 		selectedEntities = new ArrayList<Integer>();
+		this.mouseVector = new Vector3(0,0,0);
 		// END OF CODE
 		
 		RootPanel.get("gwtGL").add(webGLCanvas);
@@ -243,8 +245,10 @@ public class GameCanvas {
 			public void onMouseMove(MouseMoveEvent event) {
 				Console.log("X: " + event.getClientX() + ", Y: " + event.getClientY());
 				if (GameCanvas.this.onEdgeOfMap(event)) {
-					Vector3 mouseVector = Vector3.getVectorBetween(GameCanvas.this.getCenterOfMap(), new Vector3(event.getClientX(), event.getClientY(), 0));
-					GameCanvas.this.camera.move(mouseVector);
+					GameCanvas.this.mouseVector = Vector3.getVectorBetween(GameCanvas.this.getCenterOfMap(), new Vector3(event.getClientX(), event.getClientY(), 0));
+					GameCanvas.this.move = true;
+				} else {
+					GameCanvas.this.move = false;
 				}
 			}
 			
@@ -376,6 +380,8 @@ public class GameCanvas {
 			camera.rotateRight();
 		if (center)
 			camera.defaultPosition();
+		if (move)
+			camera.move(mouseVector);
 //		if (debug) 
 //			Console.log("X: " + camera.getX() + ", Y: " + camera.getY() + ", Z: " + camera.getZ());
 	}
