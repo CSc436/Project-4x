@@ -40,33 +40,6 @@
 	opacity: 1.0;
 }
 
-.sidebar-btn {
-	font-family: 'MedievalSharp', cursive;
-	outline: 0;
-	padding: 5px;
-	font-size: 14px;
-	color: #E7CE99 !important;
-}
-
-.btn-red {
-	background-image: url('../assets/Buttons/longButton_pressed.png');
-	background-size: 100% 100%;
-}
-
-.btn-red:hover {
-	background-image: url('../assets/Buttons/longButton_unpressed.png');
-	background-size: 100% 100%;
-}
-
-.btn-green {
-	background-image: url('../assets/Buttons/longButton_Green.png');
-	background-size: 100% 100%;
-}
-
-.btn-green:hover {
-	background-image: url('../assets/Buttons/longButton_Green_hover.png');
-	background-size: 100% 100%;
-}
 
 .sidebar-table {
 	width: 100%;

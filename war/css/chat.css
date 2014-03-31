@@ -9,9 +9,6 @@
 #chat-trigger {
 	background-color: rgba(51, 51, 51, 0.9);
 	border: 1px solid #D7C193;
-/* 	color: #E7CE99 !important; */
-	/* 	border: 1px solid white; */
-/* 	color: #EEEEEE; */
 	height: 20px;
 	background-image: url('../assets/Panels/chatbox.png');
 	background-size: 100% 100%;
@@ -36,10 +33,6 @@
 	overflow: auto;
 	font-family: 'MedievalSharp', cursive;
 	color: #FCD583 !important;
-	/* 	color: #EEEEEE; */
-/*  background-color: transparent; */
-/* 	font-family: 'Arial', sans-serif; */
-/* 	font-size: 14px; */
 }
 
 #message {
@@ -57,7 +50,7 @@
 	padding-bottom: 0px;
 	height: 85%;
 	background: transparent;
-	border: 1px solid white;
+	border: 1px solid #D7C193;
 	color: white;
 }
 
@@ -65,9 +58,11 @@
 	background-color: #777;
 }
 
+/* message for sending messages */
 #chat-send-box {
 	height: 25px;
-	background-color: rgba(51, 51, 51, 0.8);
-	padding-left: 5px;
-	border: 1px solid white;
+	background-color: rgba(10, 10, 10, 0.5);
+	background-image: url('assets/Panels/chatbox.png');
+	background-size: 100% 100%;
+	padding-left: 1px;
 }
