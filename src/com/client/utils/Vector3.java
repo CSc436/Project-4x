@@ -47,4 +47,10 @@ public class Vector3 {
 	public static float dist(float x, float y) {
 		return (float)Math.sqrt(x*x + y*y);
 	}
+
+	public static Vector3 getVectorBetween(Vector3 from, Vector3 to) {
+		// TODO Auto-generated method stub
+		Vector3 deltaVector = new Vector3(from.x - to.x, from.y - to.y, from.z - to.z);
+		return deltaVector;
+	}
 }

@@ -1,12 +1,14 @@
 package com.client;
 
-import java.awt.event.KeyEvent;
+import static com.google.gwt.query.client.GQuery.$;
+
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-import static com.google.gwt.query.client.GQuery.$;
-
+import com.client.utils.Vector3;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -240,10 +242,24 @@ public class GameCanvas {
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
 				Console.log("X: " + event.getClientX() + ", Y: " + event.getClientY());
-				
+				if (GameCanvas.this.onEdgeOfMap(event)) {
+					Vector3 mouseVector = Vector3.getVectorBetween(GameCanvas.this.getCenterOfMap(), new Vector3(event.getClientX(), event.getClientY(), 0));
+					GameCanvas.this.camera.move(mouseVector);
+				}
 			}
 			
 		}, MouseMoveEvent.getType());
+	}
+	
+	private Vector3 getCenterOfMap() {
+		int centerX = webGLCanvas.getAbsoluteLeft() + webGLCanvas.getCoordinateSpaceWidth()/2;
+		int centerY = webGLCanvas.getAbsoluteTop() + webGLCanvas.getCoordinateSpaceHeight()/2;
+		return new Vector3(centerX, centerY, 0);
+	}
+
+	private boolean onEdgeOfMap(MouseMoveEvent event) {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 	private void registerResizeHandler() {

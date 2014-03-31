@@ -111,6 +111,14 @@ public class Camera {
 		camY = GameCanvas.GRID_WIDTH * -1; 
 		camZ = 20.0f;
 	}
+
+	public void move(Vector3 moveVector) {
+		// TODO Auto-generated method stub
+		moveVector.z = camZ;
+		moveVector.normalize();
+		camX += moveVector.x;
+		camY += moveVector.y;
+	}
 	
 // This doesn't work	
 //	public Vector3 getNormalLookAtVector() {
