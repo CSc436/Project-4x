@@ -234,6 +234,16 @@ public class GameCanvas {
 			}
 	
 		}, MouseDownEvent.getType());
+		
+		RootPanel.get().addDomHandler(new MouseMoveHandler() {
+
+			@Override
+			public void onMouseMove(MouseMoveEvent event) {
+				Console.log("X: " + event.getClientX() + ", Y: " + event.getClientY());
+				
+			}
+			
+		}, MouseMoveEvent.getType());
 	}
 
 	private void registerResizeHandler() {
