@@ -57,12 +57,27 @@ public interface ClientResources extends ClientBundle{
     @Source(value={"meshTextured.fs"})
     TextResource texturedMeshFS();
     
+    @Source(value={"meshTexturedPhong.fs"})
+    TextResource texturedMeshPhongFS();
+    
     // OBJ definitions
     @Source(value={"barrel.obj"})
     TextResource barrelOBJ();
     
     @Source(value={"cube.obj"})
     TextResource cubeOBJ();
+    
+    @Source(value={"castle.obj"})
+    TextResource castleOBJ();
+    
+    @Source(value={"cannon.obj"})
+    TextResource cannonOBJ();
+    
+	@Source("castle_base_colors_medium.png")
+	ImageResource castleTexture();
+	
+	@Source("cannon_base_colors_medium.png")
+	ImageResource cannonTexture();
     
 	@Source("genericTexture.png")
 	ImageResource genericTexture();

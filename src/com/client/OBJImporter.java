@@ -72,8 +72,8 @@ public class OBJImporter {
 				Console.log("Found a face!");
 				String[] split = tokens[++i].split("/");
 				i1 = Integer.parseInt(split[0]);
-				i2 = Integer.parseInt(split[0]);
-				i3 = Integer.parseInt(split[0]);
+				i2 = Integer.parseInt(split[1]);
+				i3 = Integer.parseInt(split[2]);
 				Console.log("FACE: " + i1 + ", " + i2 + ", " + i3 + "\n");
 				// Get vert
 				vs.add(vertList.get((i1-1)*3));
@@ -95,8 +95,8 @@ public class OBJImporter {
 				Console.log("Found a face!");
 				split = tokens[++i].split("/");
 				i1 = Integer.parseInt(split[0]);
-				i2 = Integer.parseInt(split[0]);
-				i3 = Integer.parseInt(split[0]);
+				i2 = Integer.parseInt(split[1]);
+				i3 = Integer.parseInt(split[2]);
 				Console.log("FACE: " + i1 + ", " + i2 + ", " + i3 + "\n");
 				// Get vert
 				vs.add(vertList.get((i1-1)*3));
@@ -119,8 +119,8 @@ public class OBJImporter {
 				Console.log("Found a face!");
 				split = tokens[++i].split("/");
 				i1 = Integer.parseInt(split[0]);
-				i2 = Integer.parseInt(split[0]);
-				i3 = Integer.parseInt(split[0]);
+				i2 = Integer.parseInt(split[1]);
+				i3 = Integer.parseInt(split[2]);
 				Console.log("FACE: " + i1 + ", " + i2 + ", " + i3 + "\n");
 				// Get vert
 				vs.add(vertList.get((i1-1)*3));
