@@ -13,13 +13,14 @@
 	margin: 0;
 	z-index: 999;
 	font-size: 16px;
-	overflow-y: scroll;
+	overflow-y: auto;
 	overflow-x: hidden;
 }
 
+/*
 #sidebar-hide {
 	position: absolute;
-	top: 45%; /*Not correct*/
+	top: 45%;
 	left: 100%;
 	padding: 5px;
 	float: right;
@@ -34,6 +35,7 @@
 #sidebar-hide:hover {
 	background-color: rgba(255, 255, 255, 0.4);
 }
+*/
 
 .sidebar-menu {
 	display: none;

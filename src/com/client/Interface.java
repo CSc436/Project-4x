@@ -17,8 +17,8 @@ public class Interface {
 	public static void init() {
 		// Change sidebar left value to calculated value
 		int width = $("#sidebar").outerWidth(true);
-		int closeWidth = $("#sidebar-hide").outerWidth(true);
-		$("#sidebar").css("left", "-"+ (width + closeWidth));
+		//int closeWidth = $("#sidebar-hide").outerWidth(true);
+		$("#sidebar").css("left", "-"+ width);
 		initClickHandlers();
 		Console.log("hello");
 	}
@@ -158,6 +158,7 @@ public class Interface {
 		});
 
 		// Sidebar close/open
+		/*
 		$("#sidebar-hide").click(new Function() {
 			public boolean f(Event e) {
 				// Hide sidebar
@@ -166,6 +167,7 @@ public class Interface {
 				return true; // Default return true
 			}
 		});
+		*/
 
 		$("#chat-trigger").click(new Function() {
 			public boolean f(Event e) {
@@ -199,11 +201,11 @@ public class Interface {
 	private static void toggleSidebar(boolean hideIfShowing) {
 		String left = $("#sidebar").css("left");
 		int width = $("#sidebar").outerWidth(true);
-		int closeWidth = $("#sidebar-hide").outerWidth(true);
+		//int closeWidth = $("#sidebar-hide").outerWidth(true);
 		if (left.equals("0px")) {
 			// Hide only if param is true
 			if (hideIfShowing) {
-				$("#sidebar").stop().animate("left:-" + (width + closeWidth));
+				$("#sidebar").stop().animate("left:-" + width);
 				$("#chat-container").stop().animate("left:0");
 			}
 		} else {
@@ -230,7 +232,7 @@ public class Interface {
 			GQuery children = $("#sidebar").children();
 			for (int i = 0; i < children.length(); i++) {
 				String id = children.get(i).getAttribute("id");
-				if (id.equals(toShow) || id.equals("sidebar-hide")) {
+				if (id.equals(toShow)) {
 					// Always show sidebar-hide and the menu to show
 					$("#" + id).show();
 				} else {
