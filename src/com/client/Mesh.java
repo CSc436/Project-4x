@@ -24,6 +24,8 @@ public class Mesh //implements Renderable {
 	private WebGLBuffer triangleBuffer;
 	//private WebGLBuffer colorBuffer;
 	private WebGLTexture texture;
+	
+	private final ImageResource image;
 
 	public float[] verts,texcoords,normals,colors;
 	public int[] triangles;
@@ -34,11 +36,12 @@ public class Mesh //implements Renderable {
 	public float scaleX, scaleY, scaleZ;
 	public float scale;
 	public int id;
+	public int type;
 	
 	private FloatMatrix modelMatrix;
 	
 	private WebGLUniformLocation texUniform, resolutionUniform, timeUniform,
-	matrixUniform, camPosUniform, idUniform;
+	matrixUniform, camPosUniform, cameraPosUniform, idUniform;
 	
 	public Mesh(float[] vs, float[] ts, float[] ns, int tris, WebGLRenderingContext glContext) {
 		
@@ -51,17 +54,20 @@ public class Mesh //implements Renderable {
 		scaleX = 1.0f;
 		scaleY = 1.0f;
 		scaleZ = 1.0f;
-		scale = 0.1f;
+		scale = 1.0f;
 		id = 0;
+		
+		image = ClientResources.INSTANCE.genericTexture();
 		
 		updateModelMatrix();
 		
-		float[] temp = scale(vs,scale);
+		float[] temp = flipZ(vs);
 //		System.out.println("**********VERTS*************");
 //		System.out.println(temp.length);
 //		printArray(temp);
 		verts = temp;
-		texcoords = scale(ts,1.0f);
+		//texcoords = scale(ts,1.0f);
+		texcoords = flipTextureY(ts);
 //		System.out.println("***********TEXCOORDS***********");
 //		System.out.println(texcoords.length);
 //		printArray(texcoords);
@@ -84,7 +90,7 @@ public class Mesh //implements Renderable {
 //		System.out.println("Initializing Mesh buffers...");
 		
 		initBuffers(glContext);
-		initTexture(glContext);
+		initTexture(glContext, image);
 		
 //		System.out.println("Mesh with id " + id + " initialized!");
 	}
@@ -121,6 +127,28 @@ public class Mesh //implements Renderable {
 	private float[] scale(float[] arr, float percent) {
 		for(int i = 0; i < arr.length; i++)
 			arr[i] = arr[i] * percent;
+		return arr;
+	}
+	
+	/**
+	 * Flips all elements along the Z-axis.
+	 * @param arr
+	 * @return
+	 */
+	private float[] flipZ(float[] arr) {
+		for(int i = 2; i < arr.length; i+=3)
+			arr[i] = -1 * arr[i];
+		return arr;
+	}
+	
+	/**
+	 * Flips all texture coordinates along the Y-axis
+	 * @param arr
+	 * @return
+	 */
+	private float[] flipTextureY(float[] arr) {
+		for(int i = 1; i < arr.length; i+=3)
+			arr[i] = 1.0f - arr[i];
 		return arr;
 	}
 	
@@ -197,15 +225,22 @@ public class Mesh //implements Renderable {
 		return 0;
 	}
 	
-	private void initTexture(WebGLRenderingContext glContext) {
+	public int setTexture(WebGLRenderingContext glContext, final ImageResource imageResource)
+	{
+		initTexture(glContext, imageResource);
+		return 0;
+	}
+	
+	private void initTexture(WebGLRenderingContext glContext, final ImageResource imageResource) {
 		texture = glContext.createTexture();
 
 		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
 		glContext.texImage2D(WebGLRenderingContext.TEXTURE_2D, 0,
 				WebGLRenderingContext.RGB, WebGLRenderingContext.RGB,
 				WebGLRenderingContext.UNSIGNED_BYTE, ImageElement.as(getImage(
-						ClientResources.INSTANCE.genericTexture())
+						imageResource)
 						.getElement()));
+		//EXAMPLE: ClientResources.INSTANCE.genericTexture()
 		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
 				WebGLRenderingContext.TEXTURE_MAG_FILTER,
 				WebGLRenderingContext.NEAREST);
@@ -257,6 +292,10 @@ public class Mesh //implements Renderable {
 		// Set the uniform variable for the camera position
 		camPosUniform = glContext.getUniformLocation(shader.shaderProgram, "camPos");
 		glContext.uniform3f(camPosUniform, cam.getX(), cam.getY(), cam.getZ());
+		
+		// Set the uniform variable for the camera position
+		cameraPosUniform = glContext.getUniformLocation(shader.shaderProgram, "cameraPos");
+		glContext.uniform3f(cameraPosUniform, cam.getX(), cam.getY(), cam.getZ());
 		
 		// Set the uniform variable for the vec4 of the color components of the mesh.
 		// This is derived from the id given to the mesh. Unclickable meshes will generally

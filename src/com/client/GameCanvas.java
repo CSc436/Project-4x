@@ -64,7 +64,7 @@ public class GameCanvas {
 			right = false, left = false, rotateLeft = false, rotateRight = false, center = false;
 	private long time;
 
-	public static final int GRID_WIDTH = 128;
+	public static final int GRID_WIDTH = 16;
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
 	private final boolean debug = true;
 
@@ -118,16 +118,33 @@ public class GameCanvas {
 	// CLICKSELECTOR STUFF
 	private void initEntities() {
 		entities = new HashMap<Integer,Mesh>();
-		final Mesh ent1 = OBJImporter.objToMesh(ClientResources.INSTANCE.barrelOBJ().getText(), glContext);
-		ent1.posX = 10.0f;
-		ent1.posY = 10.0f;
-		ent1.posZ = -5.0f;
-		ent1.id = 11111;
+//		final Mesh ent1 = OBJImporter.objToMesh(ClientResources.INSTANCE.barrelOBJ().getText(), glContext);
+//		ent1.posX = 10.0f;
+//		ent1.posY = 10.0f;
+//		ent1.posZ = -5.0f;
+//		ent1.id = 11111;
+//		entities.put(ent1.id, ent1);
+		
 		final Mesh ent2 = OBJImporter.objToMesh(ClientResources.INSTANCE.cubeOBJ().getText(), glContext);
 		ent2.posX = 20.0f;
 		ent2.id = 65432;
-		entities.put(ent1.id, ent1);
 		entities.put(ent2.id, ent2);
+		
+		final Mesh castle1 = OBJImporter.objToMesh(ClientResources.INSTANCE.castleOBJ().getText(), glContext);
+		castle1.setTexture(glContext, ClientResources.INSTANCE.castleTexture());
+		castle1.posX = 2.5f;
+		castle1.posY = 2.5f;
+		castle1.posZ = 0.0f;
+		castle1.id = 123321;
+		entities.put(castle1.id, castle1);
+		
+		final Mesh cannon1 = OBJImporter.objToMesh(ClientResources.INSTANCE.cannonOBJ().getText(), glContext);
+		cannon1.setTexture(glContext, ClientResources.INSTANCE.cannonTexture());
+		cannon1.posX = 4.5f;
+		cannon1.posY = 4.5f;
+		cannon1.posZ = 0.0f;
+		cannon1.id = 777777;
+		entities.put(cannon1.id, cannon1);
 	}
 	
 	// CLICKSELECTOR STUFF
@@ -372,6 +389,10 @@ public class GameCanvas {
 				.simpleMeshVS().getText(),ClientResources.INSTANCE
 				.texturedMeshFS().getText());
 		
+		final Shader texturedPhongMeshShader = new Shader(glContext,ClientResources.INSTANCE
+				.simpleMeshVS().getText(),ClientResources.INSTANCE
+				.texturedMeshPhongFS().getText());
+		
 		final Shader normalShader = new Shader(glContext,ClientResources.INSTANCE
 				.simpleMeshVS().getText(),ClientResources.INSTANCE
 				.normalsMeshFS().getText());
@@ -401,13 +422,13 @@ public class GameCanvas {
 				updateCamera();
 				drawScene();
 				
-				barrel.render(glContext, normalShader, camera);
+				//barrel.render(glContext, normalShader, camera);
 				barrel.posX = agentX;
 				barrel.posY = agentY;
-				barrel.posZ = agentZ;
+				barrel.posZ = (float) (agentZ + Math.sin(time/300));
 				barrel.rotX = barrel.rotX + 0.01f;
 				
-				renderEntities(texturedMeshShader);
+				renderEntities(texturedPhongMeshShader);
 				renderSelectedEntities(selectedShader);
 			}
 		};
