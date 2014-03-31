@@ -50,7 +50,7 @@ public class Vector3 {
 
 	public static Vector3 getVectorBetween(Vector3 from, Vector3 to) {
 		// TODO Auto-generated method stub
-		Vector3 deltaVector = new Vector3(from.x - to.x, from.y - to.y, from.z - to.z);
+		Vector3 deltaVector = new Vector3(to.x - from.x, to.y - from.y, to.z - from.z);
 		return deltaVector;
 	}
 }
