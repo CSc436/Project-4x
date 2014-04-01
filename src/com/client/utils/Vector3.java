@@ -1,5 +1,6 @@
 package com.client.utils;
 
+
 public class Vector3 {
 	public float x;
 	public float y;
@@ -13,6 +14,8 @@ public class Vector3 {
 	
 	public void normalize() {
 		float length = (float) Math.sqrt(x*x + y*y + z*z);
+		if (length == 0)
+			return;
 		x /= length;
 		y /= length;
 		z /= length;
@@ -46,5 +49,11 @@ public class Vector3 {
 	
 	public static float dist(float x, float y) {
 		return (float)Math.sqrt(x*x + y*y);
+	}
+
+	public static Vector3 getVectorBetween(Vector3 from, Vector3 to) {
+		// TODO Auto-generated method stub
+		Vector3 deltaVector = new Vector3(to.x - from.x, to.y - from.y, to.z - from.z);
+		return deltaVector;
 	}
 }

@@ -1,12 +1,14 @@
 package com.client;
 
-import java.awt.event.KeyEvent;
+import static com.google.gwt.query.client.GQuery.$;
+
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-import static com.google.gwt.query.client.GQuery.$;
-
+import com.client.utils.Vector3;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -54,6 +56,7 @@ public class GameCanvas {
 	public static int WIDTH, HEIGHT;
 	private static long startTime;
 	private Camera camera;
+	private Vector3 mouseVector;
 //	private float[] cameraMatrix;
 //	private float camX = 0.0f, camY = -20.0f, camZ = 20.0f;
 	
@@ -61,7 +64,7 @@ public class GameCanvas {
 	
 	private float agentX = 0.0f, agentY = 0.0f, agentZ = -0.1f;
 	private boolean in = false, out = false, up = false, down = false,
-			right = false, left = false, rotateLeft = false, rotateRight = false, center = false;
+			right = false, left = false, rotateLeft = false, rotateRight = false, center = false, move = false;
 	private long time;
 
 	public static final int GRID_WIDTH = 256;
@@ -81,6 +84,7 @@ public class GameCanvas {
 		// CODE FOR MINIMAP DEV/CLICK SELECTING
 		thisCanvas = this;
 		selectedEntities = new ArrayList<Integer>();
+		this.mouseVector = new Vector3(0,0,0);
 		// END OF CODE
 		
 		RootPanel.get("gwtGL").add(webGLCanvas);
@@ -251,6 +255,32 @@ public class GameCanvas {
 			}
 	
 		}, MouseDownEvent.getType());
+		
+		RootPanel.get().addDomHandler(new MouseMoveHandler() {
+
+			@Override
+			public void onMouseMove(MouseMoveEvent event) {
+				Console.log("X: " + event.getClientX() + ", Y: " + event.getClientY());
+				if (GameCanvas.this.onEdgeOfMap(event)) {
+					GameCanvas.this.mouseVector = Vector3.getVectorBetween(GameCanvas.this.getCenterOfMap(), new Vector3(event.getClientX(), event.getClientY(), 0));
+					GameCanvas.this.move = true;
+				} else {
+					GameCanvas.this.move = false;
+				}
+			}
+			
+		}, MouseMoveEvent.getType());
+	}
+	
+	private Vector3 getCenterOfMap() {
+		int centerX = webGLCanvas.getAbsoluteLeft() + webGLCanvas.getCoordinateSpaceWidth()/2;
+		int centerY = webGLCanvas.getAbsoluteTop() + webGLCanvas.getCoordinateSpaceHeight()/2;
+		return new Vector3(centerX, centerY, 0);
+	}
+
+	private boolean onEdgeOfMap(MouseMoveEvent event) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	private void registerResizeHandler() {
@@ -367,6 +397,8 @@ public class GameCanvas {
 			camera.rotateRight();
 		if (center)
 			camera.defaultPosition();
+		if (move)
+			camera.move(mouseVector);
 //		if (debug) 
 //			Console.log("X: " + camera.getX() + ", Y: " + camera.getY() + ", Z: " + camera.getZ());
 	}

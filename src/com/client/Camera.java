@@ -41,8 +41,8 @@ public class Camera {
 		// TODO Auto-generated method stub
 		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 10/camZ);
 		temp.normalize();
-		camX += temp.x;
-		camY += temp.y;
+		camX += temp.x * delta;
+		camY += temp.y * delta;
 		return Vector3.dist(temp.x, temp.y);
 	}
 
@@ -52,8 +52,8 @@ public class Camera {
 		temp.left();
 		temp.left();
 		temp.normalize();
-		camX += temp.x;
-		camY += temp.y;
+		camX += temp.x * delta;
+		camY += temp.y * delta;
 		return Vector3.dist(temp.x, temp.y);
 	}
 
@@ -62,8 +62,8 @@ public class Camera {
 		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 10/camZ);
 		temp.right(); // the map starts off backwards...
 		temp.normalize();
-		camX += temp.x;
-		camY += temp.y;
+		camX += temp.x * delta;
+		camY += temp.y * delta;
 		
 	}
 
@@ -72,8 +72,8 @@ public class Camera {
 		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 10/camZ);
 		temp.left();
 		temp.normalize();
-		camX += temp.x;
-		camY += temp.y;
+		camX += temp.x * delta;
+		camY += temp.y * delta;
 	}
 
 	private float getSign(float yaw) {
@@ -110,6 +110,13 @@ public class Camera {
 		camX = GameCanvas.GRID_WIDTH/2 * -1;
 		camY = GameCanvas.GRID_WIDTH * -1; 
 		camZ = 20.0f;
+	}
+
+	public void move(Vector3 moveVector) {
+		// TODO Auto-generated method stub 
+		moveVector.normalize();
+		this.down(moveVector.y);
+		this.right(moveVector.x);
 	}
 	
 // This doesn't work	
