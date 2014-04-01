@@ -1,0 +1,5 @@
+/test-classes
+/gwt-unitCache
+/war/game
+*~
+/war/WEB-INF/deploy/game/symbolMaps
