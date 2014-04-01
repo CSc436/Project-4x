@@ -263,7 +263,7 @@ public class GameCanvas {
 
 	private boolean onEdgeOfMap(MouseMoveEvent event) {
 		// TODO Auto-generated method stub
-		return true;
+		return false;
 	}
 
 	private void registerResizeHandler() {
