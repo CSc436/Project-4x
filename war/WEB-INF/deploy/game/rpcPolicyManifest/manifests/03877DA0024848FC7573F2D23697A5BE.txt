@@ -1,0 +1,2 @@
+serviceClass: com.client.SimpleSimulator
+path: 0870C652B45369091EA1D37DA903554E.gwt.rpc
