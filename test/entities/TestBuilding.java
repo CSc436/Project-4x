@@ -25,7 +25,7 @@ public class TestBuilding {
 		assertEquals(4, b.getWidth());
 		assertEquals(1.0, 0, b.getY());
 		assertEquals(1.0, 0, b.getX());
-		b.getProducedUnit();
+		b.getProducingUnit();
 		System.out.println(b.getCastleId());
 
 	}

@@ -4,16 +4,13 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import control.UnitType;
-import entities.GameObjectType;
 import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
 import entities.units.Unit;
 
 public class Infantry extends Unit {
 
-	public Infantry(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, GameObjectType type, UnitType unitType, float xco,
-			float yco) {
-		super(id, playerId,  baseStats, new_stats, type, unitType, xco, yco);
+	public Infantry(UUID id, int playerId, float xco, float yco) {
+		super(id, playerId, BaseStatsEnum.INFANTRY, BaseStatsEnum.INFANTRY.getStats(), UnitType.INFANTRY, xco, yco);
 	}
 
 	@Override

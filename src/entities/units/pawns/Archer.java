@@ -4,17 +4,13 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import control.UnitType;
-import entities.GameObjectType;
 import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
 import entities.units.Unit;
 
 public class Archer extends Unit{
 
-	public Archer(UUID id, int playerId, BaseStatsEnum baseStats,
-			UnitStats new_stats, GameObjectType type, UnitType unitType,
-			float xco, float yco) {
-		super(id, playerId, baseStats, new_stats, type, unitType, xco, yco);
+	public Archer(UUID id, int playerId, float xco, float yco) {
+		super(id, playerId, BaseStatsEnum.ARCHER, BaseStatsEnum.ARCHER.getStats(), UnitType.ARCHER, xco, yco);
 		// TODO Auto-generated constructor stub
 	}
 

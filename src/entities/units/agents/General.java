@@ -3,7 +3,9 @@ package entities.units.agents;
 import java.util.UUID;
 
 import control.AIControl;
+import control.Player;
 import entities.units.Agent;
+import entities.gameboard.GameBoard;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 import entities.GameObjectType;
@@ -17,7 +19,6 @@ public class General extends Agent {
 
 	private int range;
 	private AIControl brain;
-
 	/**
 	 * General():
 	 * @param id       - unique id for this General object
@@ -31,11 +32,28 @@ public class General extends Agent {
 				 yco);
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	public String acceptCommandByPrestige(int i){
+		switch(i/50){
+		case(0):return "nothing";
+		case(1):return "no";
+		case(2):return "maybe no";
+		case(3):return "yes";
+		default:return "nothing";
+		}
+	}
+	
 	public String decision() {
 		return "NO";
 	}
-
+	
+	public int getPrestige(Player p){
+		return p.prestige.get(this);
+	}
+	
+	public void addPrestige(int i,Player p){
+		p.prestige.put(this, this.getPrestige(p)+i);
+	}
 	// add unit to collection
 
 	// make decision command
@@ -52,5 +70,10 @@ public class General extends Agent {
 	 *      lead troops to city and invade.  
 	 * TODO add option to 'defend', send troops to ward off enemies at a city (an ally's or your own)
 	 */
+	
+	public void update(Player p, GameBoard gb)
+	{
+		// TODO implements
+	}
 
 }

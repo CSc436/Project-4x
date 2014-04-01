@@ -8,9 +8,9 @@ public class BuildingHealth extends Technology {
 		// SUPER constructor takes max level of research.
 		super(3);
 
-		costs[0] = new Resources(50, 50, 50, 50);
-		costs[1] = new Resources(100, 100, 100, 100);
-		costs[2] = new Resources(150, 150, 150, 150);
+		costs[0] = new Resources(50, 50, 50,50,  50);
+		costs[1] = new Resources(100, 100, 100, 100, 100);
+		costs[2] = new Resources(150, 150, 150, 150, 150);
 		
 		buffstats[0].max_health = 100;
 		buffstats[0].actionSpeed = 0.02f;

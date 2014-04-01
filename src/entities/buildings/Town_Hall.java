@@ -4,10 +4,8 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import control.BuildingType;
-import entities.GameObjectType;
 import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
 import entities.units.pawns.Trade_Cart;
 
 public class Town_Hall extends ResourceBuilding {
@@ -21,12 +19,10 @@ public class Town_Hall extends ResourceBuilding {
 	 * for allies, perhaps a bonus for trading with the allies capital city
 	 */
 
-	public Town_Hall(UUID id, int playerId, BaseStatsEnum baseStats,
-			UnitStats new_stats, GameObjectType gameObjectType,
-			BuildingType buildingType, float xco, float yco, int height,
-			int width, boolean iscapital) {
-		super(id, playerId, baseStats, new_stats, gameObjectType, buildingType,
-				xco, yco, height, width, new Resources(0, 0, 0, 0));
+	public Town_Hall(UUID id, int playerId, float xco, float yco, boolean iscapital) {
+		super(id, playerId, BaseStatsEnum.TOWN_HALL, BaseStatsEnum.TOWN_HALL.getStats(), 
+				BuildingType.TOWN_HALL,
+				xco, yco, 4, 4, new Resources(0, 0, 0, 0, 0));
 
 		this.iscapital = iscapital;
 

@@ -3,9 +3,9 @@ package entities.units.agents;
 import java.util.UUID;
 
 import entities.units.Agent;
+import entities.gameboard.GameBoard;
 import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
-import entities.GameObjectType;
+import control.Player;
 import control.UnitType;
 
 /**
@@ -31,15 +31,24 @@ public class Prospector extends Agent{
 	 * @param xco  - initial x coordinate on gameboard of Prospector object. 
 	 * @param yco  - initial y coordinate on gameboard of Prospector object. 
 	 */
-	public Prospector(UUID id, int playerid, UnitStats stats, float xco, float yco) {
-		super(id,  playerid, BaseStatsEnum.PROSPECTOR, stats, GameObjectType.UNIT, UnitType.PROSPECTOR, xco,
+	public Prospector(UUID id, int playerid, float xco, float yco) {
+		super(id,  playerid, BaseStatsEnum.PROSPECTOR, BaseStatsEnum.PROSPECTOR.getStats(), null, UnitType.PROSPECTOR, xco,
 			 yco);
 		// TODO Auto-generated constructor stub
 	}
+
+	@Override
+	public void update(Player p, GameBoard gb) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 	
 	/*
 	 * TODO use an A*-esque algorithm to find path to desired resource. Once path is found (location of tile)
 	 * Send villagers to mine resource. Villagers may have to build new building etc.  
 	 */
+	
+	
 }

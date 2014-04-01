@@ -9,9 +9,9 @@ public class InfantryDamage extends Technology {
 		// SUPER constructor takes max level of research.
 		super(3);
 
-		costs[0] = new Resources(50, 50, 50, 50);
-		costs[1] = new Resources(100, 100, 100, 100);
-		costs[2] = new Resources(150, 150, 150, 150);
+		costs[0] = new Resources(50, 50, 50, 50, 50);
+		costs[1] = new Resources(100, 100, 100, 100, 100);
+		costs[2] = new Resources(150, 150, 150, 150, 150);
 		
 		buffstats[0].damage = 1;
 		buffstats[1].damage = 10;

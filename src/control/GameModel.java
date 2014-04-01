@@ -44,7 +44,7 @@ public class GameModel {
 	private void placeNewUnits() {
 		for (Player p : players) {
 			for (Building b : p.getGameObjects().getBuildings().values()) {
-				Unit potentialUnit = b.advanceUnitProduction();
+				Unit potentialUnit = b.advanceUnitProduction(1); // Adjust time step in future 
 				if (potentialUnit != null) {
 					Tile t = map.getTileAt(0, 0);
 					t.addUnit(potentialUnit);

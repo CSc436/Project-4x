@@ -1,5 +1,11 @@
 package control;
 
+
+/**
+ * UnitType
+ * @author NRTop
+ * The more specific type of unit 
+ */
 public enum UnitType {
 	// BASE UNITS
 	MILITIA,
@@ -33,5 +39,7 @@ public enum UnitType {
 	// AGENTS
 	GENERAL,
 	
-	PROSPECTOR
+	PROSPECTOR, 
+	
+	MERCHANT
 }

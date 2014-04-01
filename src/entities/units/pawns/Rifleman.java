@@ -4,17 +4,13 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import control.UnitType;
-import entities.GameObjectType;
 import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
 import entities.units.Unit;
 
 public class Rifleman extends Unit{
 
-	public Rifleman(UUID id, int playerId, BaseStatsEnum baseStats,
-			UnitStats new_stats, GameObjectType type, UnitType unitType,
-			float xco, float yco) {
-		super(id, playerId, baseStats, new_stats, type, unitType, xco, yco);
+	public Rifleman(UUID id, int playerId,float xco, float yco) {
+		super(id, playerId, BaseStatsEnum.RIFLEMAN, BaseStatsEnum.RIFLEMAN.getStats(), UnitType.RIFLEMAN, xco, yco);
 		// TODO Auto-generated constructor stub
 	}
 

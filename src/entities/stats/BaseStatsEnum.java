@@ -1,5 +1,13 @@
 package entities.stats;
 
+/**
+ * Base Stats Enum
+ * @author NRTop
+ * @summary
+ * Provides the base statistics for a given unit, agent, or building. Specifies things such as 
+ * damage, range, armor, health regenerations, max health, movememnt speed, and action speed. 
+ * 
+ */
 public enum BaseStatsEnum {
 
 	/*
@@ -42,7 +50,9 @@ public enum BaseStatsEnum {
 	// AGENTS 
 	GENERAL(new UnitStats(9, 1, 3, 60f, 10, 6, 3.0f)),
 	
-	PROSPECTOR(new UnitStats(1, 1, 2, .5f, 6, 6, 3.0f)), 
+	PROSPECTOR(new UnitStats(1, 1, 2, .5f, 6, 6, 3.0f)),
+	
+	MERCHANT(new UnitStats(1, 1, 2, .5f, 6, 6, 3.0f)),
 	
 	// BUILDINGS
 	
@@ -52,8 +62,17 @@ public enum BaseStatsEnum {
 
 	BANK(new UnitStats(0, 2, 100, 0, 1000, 0, 0)),
 
-	TOWN_HALL(new UnitStats(0, 2, 100, 0, 1000, 0, 0));
+	TOWN_HALL(new UnitStats(0, 2, 100, 0, 1000, 0, 0)),
 
+	
+	// RESOURCE BUILDINGS
+	LUMBER_MILL(new UnitStats(0, 2, 100, 0, 1000, 0, 0)), 
+	STONE_MINE(new UnitStats(0, 2, 100, 0, 1000, 0, 0)), 
+	GOLD_MINE(new UnitStats(0, 2, 100, 0, 1000, 0, 0)), 
+	FARM(new UnitStats(0, 2, 100, 0, 1000, 0, 0)), 
+	UNIVERSITY(new UnitStats(0, 2, 100, 0, 1000, 0, 0));
+	
+	
 	private UnitStats stats;
 	private int baseCreationTime;
 

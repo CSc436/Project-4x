@@ -5,8 +5,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import control.CommandQueue;
+import control.Player;
 import control.UnitType;
 import entities.GameObjectType;
+import entities.gameboard.GameBoard;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 
@@ -23,8 +25,8 @@ import entities.stats.UnitStats;
 public abstract class Agent extends Unit {
 	private Map<String, Unit> underlings; // TODO possibly replace Unit or String with their unique ID's (UUID?)
 	private CommandQueue cq; // list of current commnands to issue.
-
-	/**
+	
+	/*
 	 * Agent():
 	 * Description:
 	 * Base constructor for and Agent object. Calls the Unit constructor, 
@@ -43,11 +45,12 @@ public abstract class Agent extends Unit {
 	 */
 	public Agent(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, GameObjectType type, UnitType unitType, float xco,
 			float yco) {
-		super(id, playerId,  baseStats, new_stats, type, unitType, xco, yco);
+		super(id, playerId,  baseStats, new_stats, unitType, xco, yco);
 		underlings = new HashMap<String, Unit>();
 		cq = new CommandQueue();
 	}
-
+	
+	
 	@Override
 	protected void setActions() {
 		// TODO Auto-generated method stub
@@ -59,4 +62,11 @@ public abstract class Agent extends Unit {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	/*
+	 * To be implemented by all agents, update the agents status 
+	 * once every turn/couple of turns based on the status of the
+	 * player and the GameBoard.
+	 */
+	public abstract void update(Player p, GameBoard gb);
 }

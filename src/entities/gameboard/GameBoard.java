@@ -6,6 +6,7 @@ import java.util.Random;
 import com.shared.Terrain;
 
 import entities.buildings.Building;
+import entities.units.Unit;
 import entities.util.Point;
 
 /* 
@@ -230,6 +231,26 @@ public class GameBoard {
 		return terrainList;
 	}
 
+
+	/*
+	 * resourceDistStoneMountain(): Description: Another resource distribution
+	 * function, this one makes a majority of the Mountain terrain type stone
+	 */
+	public void resourceDistStoneMountain() {
+		// TODO make all of mountain area stone, distrubite some of other
+		// resources
+	}
+
+    /*
+	 * resourceDistGoldRush(): Description: Another resource distribution
+	 * function, this one makes a majority of the snow and mountain terrain
+	 * gold.
+	 */
+	public void resourceDistGoldRush() {
+		// TODO make all of snow/ a lot of mountain gold resources, have gold in
+		// water too?
+	}
+
 	/*
 	 * getRows(): Description: returns the number of rows this gameboard object
 	 * has
@@ -326,6 +347,16 @@ public class GameBoard {
 
 	}
 
+
+	/*
+	 * removeBuilding(): Description: removes a given building from the board
+	 * and sets the tiles that were occupied by the building to vacant. Note:
+	 * Building must be within range
+	 * 
+	 * Parameters:
+	 * 
+	 * @param Building b - building to remove from this gameboard.
+	 */
 	public void removeBuilding(Building b) {
 
 		Point pos = b.getPosition();

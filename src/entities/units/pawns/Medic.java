@@ -11,10 +11,8 @@ import entities.units.Unit;
 
 public class Medic extends Unit{
 
-	public Medic(UUID id, int playerId, BaseStatsEnum baseStats,
-			UnitStats new_stats, GameObjectType type, UnitType unitType,
-			float xco, float yco) {
-		super(id, playerId, baseStats, new_stats, type, unitType, xco, yco);
+	public Medic(UUID id, int playerId, float xco, float yco) {
+		super(id, playerId, BaseStatsEnum.MEDIC, BaseStatsEnum.MEDIC.getStats(), UnitType.MEDIC, xco, yco);
 		// TODO Auto-generated constructor stub
 	}
 
