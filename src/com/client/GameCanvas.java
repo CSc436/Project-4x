@@ -544,7 +544,7 @@ public class GameCanvas {
 		glContext.texImage2D(WebGLRenderingContext.TEXTURE_2D, 0,
 				WebGLRenderingContext.RGB, WebGLRenderingContext.RGB,
 				WebGLRenderingContext.UNSIGNED_BYTE, ImageElement.as(getImage(
-						ClientResources.INSTANCE.terrainTextures())
+						ClientResources.INSTANCE.terrainTexture())
 						.getElement()));
 		glContext.texParameteri(WebGLRenderingContext.TEXTURE_2D,
 				WebGLRenderingContext.TEXTURE_MAG_FILTER,
@@ -734,24 +734,15 @@ public class GameCanvas {
 	private void makeTiles() {
 		System.out.println("Generating Tiles:");
 
-		float[][] heightmap = DiamondSquare.DSGen(GRID_WIDTH,
-				System.currentTimeMillis(), 0.2f);
-		Terrain type;
-
 		vertexData = Float32Array.create(NUM_TILES * 6 * 3);
 		texCoordData = Float32Array.create(NUM_TILES * 6 * 2);
+		
+		RenderTile[][] map = RenderTile.makeMap(System.currentTimeMillis(), GRID_WIDTH);
+		
 		int index = 0;
 		for (int x = 0; x < GRID_WIDTH; x++)
 			for (int y = 0; y < GRID_WIDTH; y++) {
-				int val = (int) (255 * heightmap[x][y]);
-				type = (val < 100 ? Terrain.WATER : val < 132 ? Terrain.DIRT: Terrain.GRASS);
-				RenderTile.addTileToBuffer(x, y, 1.0f, index++, type,
-						glContext, vertexData, texCoordData);
-				if (index % 10 == 0) {
-					float percent = (100 * index) / (float) NUM_TILES;
-					percent = ((int) (100 * percent)) / 100.0f;
-					System.out.println(percent + "%");
-				}
+				map[x][y].addToBuffer(index++, glContext, vertexData, texCoordData);
 			}
 	}
 

@@ -135,7 +135,7 @@ public class GameBoard {
 		System.out.println("Distributing food...");
 		int numFood = (int) (foodMult * (terrainList.get(
 				Terrain.WATER.ordinal()).size()
-				+ terrainList.get(Terrain.DIRT.ordinal()).size() + terrainList
+				+ terrainList.get(Terrain.SAND.ordinal()).size() + terrainList
 				.get(Terrain.GRASS.ordinal()).size()));
 		// food can exist in lists 0,1,2
 		while (numFood > 0) {
@@ -251,7 +251,7 @@ public class GameBoard {
 		// good amount of stone
 		// limited gold
 		// Distribution
-		// Food concentrated in grass lands /Dirt
+		// Food concentrated in grass lands /SAND
 		// wood concentrated in grasslands/hills
 		// Stone concentrated in hills/mountains/snow
 		// Gold concentrated in hills/mountains/snow

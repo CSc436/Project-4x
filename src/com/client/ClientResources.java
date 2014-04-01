@@ -81,5 +81,8 @@ public interface ClientResources extends ClientBundle{
     
 	@Source("genericTexture.png")
 	ImageResource genericTexture();
+	
+	@Source("terrains.png")
+	ImageResource terrainTexture();
 }
 
