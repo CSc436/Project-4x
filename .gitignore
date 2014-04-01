@@ -1,17 +1,5 @@
 /test-classes
-
-*.pydevproject
-.metadata
-.gradle
-bin/
-tmp/
-*.tmp
-*.bak
-*.swp
-*~.nib
-local.properties
-.settings/
-.loadpath
-
-#Everyone will have to compile their own WAR
-#war/
+/gwt-unitCache
+/war/game
+*~
+/war/WEB-INF/deploy/game/symbolMaps
