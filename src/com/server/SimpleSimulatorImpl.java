@@ -3,9 +3,10 @@ package com.server;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 import com.client.SimpleSimulator;
-import com.shared.FieldVerifier;
-import com.shared.Request;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.shared.Model;
+import com.shared.MovingUnit;
+import com.shared.Request;
 
 /**
  * The server-side implementation of the RPC service.
@@ -52,12 +53,13 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 
 	@Override
 	public String startSimulation() {
-		modelThread.start();
+		if(!modelThread.isAlive())
+			modelThread.start();
 		return null;
 	}
 
 	@Override
-	public MovingNumber getSimulationState() {
-		return m.getNumber();
+	public MovingUnit getSimulationState() {
+		return m.getUnit();
 	}
 }

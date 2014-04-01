@@ -2,10 +2,13 @@ package com;
 
 import java.awt.Color;
 import java.awt.Graphics;
+
 import javax.swing.*;
+
+import com.shared.Terrain;
+
 import entities.gameboard.GameBoard;
 import entities.gameboard.Resource;
-import entities.gameboard.Terrain;
 
 public class RunGame {
 
@@ -61,7 +64,7 @@ class draw extends JPanel {
 					g.setColor(new Color(55, 91, 67));
 				} else // Resource is none or does not change color.
 				{
-					if (game.getTileAt(r, c).getTerrainType() == Terrain.DIRT)
+					if (game.getTileAt(r, c).getTerrainType() == Terrain.SAND)
 						g.setColor(new Color(255, 241, 212));
 					else if (game.getTileAt(r, c).getTerrainType() == Terrain.WATER)
 						g.setColor(new Color(51, 126, 255));

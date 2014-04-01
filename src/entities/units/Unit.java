@@ -3,6 +3,7 @@ package entities.units;
 import java.util.PriorityQueue;
 
 import com.fourx.buffs.UnitType;
+import com.fourx.util.Point;
 
 import control.Player;
 import entities.Action;
@@ -36,6 +37,8 @@ public abstract class Unit {
 
 	private int x;
 	private int y;
+	private Point location;
+	private Point targetLocation;
 	private PriorityQueue<Action> actionQueue;
 
 	public Unit(Player p, BaseStatsEnum baseStats, UnitType type, int xco,
@@ -145,7 +148,6 @@ public abstract class Unit {
 	 */
 	public void addAction(Action a) {
 		actionQueue.add(a);
-		//TODO: This line will be modified by Ben so the action is sorted into the correct place.
 		getOwner().getCommandQueue().push(a, this);
 	}
 

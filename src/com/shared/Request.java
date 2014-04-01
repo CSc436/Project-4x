@@ -2,8 +2,6 @@ package com.shared;
 
 import java.io.Serializable;
 
-import com.server.Model;
-
 public class Request implements Serializable {
 	
 	private int scheduledTurn;
