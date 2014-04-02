@@ -2,17 +2,13 @@ package com.client;
 
 import static com.google.gwt.query.client.GQuery.$;
 
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.client.utils.Vector3;
-import static com.google.gwt.query.client.GQuery.$;
-
 import com.client.model.ClientModel;
+import com.client.utils.Vector3;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.NativeEvent;
@@ -25,6 +21,8 @@ import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.query.client.Function;
@@ -42,7 +40,6 @@ import com.googlecode.gwtgl.binding.WebGLShader;
 import com.googlecode.gwtgl.binding.WebGLTexture;
 import com.googlecode.gwtgl.binding.WebGLUniformLocation;
 import com.shared.EntityModel;
-import com.shared.Terrain;
 
 public class GameCanvas {
 	private GameCanvas thisCanvas;

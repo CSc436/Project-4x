@@ -68,7 +68,7 @@ class draw2 extends JPanel {
 					g.setColor(new Color(55, 91, 67));
 				} else // Resource is none or does not change color.
 				{
-					if (game.getTileAt(r, c).getTerrainType() == Terrain.DIRT)
+					if (game.getTileAt(r, c).getTerrainType() == Terrain.SAND)
 						g.setColor(new Color(255, 241, 212));
 					else if (game.getTileAt(r, c).getTerrainType() == Terrain.WATER)
 						g.setColor(new Color(51, 126, 255));
