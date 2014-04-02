@@ -19,8 +19,8 @@ public abstract class GameObject implements Locatable {
 	protected Point position;
 	protected PriorityQueue<Action> actionQueue;
 
-	public GameObject(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, GameObjectType type, float xco,
-			float yco) {
+	public GameObject(UUID id, int playerId, BaseStatsEnum baseStats,
+			UnitStats new_stats, GameObjectType type, float xco, float yco) {
 		this.id = id;
 		this.playerId = playerId;
 		this.baseStats = baseStats;
@@ -31,15 +31,17 @@ public abstract class GameObject implements Locatable {
 		actionQueue = new PriorityQueue<Action>();
 
 	}
-	
-	protected abstract void setActions();//might get rid 
-	
-	public abstract HashMap<String, String> getActions();//might get rid of
-	
+
+	protected abstract void setActions();// might get rid
+
+	public abstract HashMap<String, String> getActions();// might get rid of
+
 	public UUID getId() {
 		return id;
 	}
-	public int getPlayerId() {
+
+	
+	public int getPlayerID() {
 		return playerId;
 	}
 
@@ -58,11 +60,11 @@ public abstract class GameObject implements Locatable {
 	public Point getPosition() {
 		return position;
 	}
-	
+
 	public float getX() {
 		return getPosition().x;
 	}
-	
+
 	public float getY() {
 		return getPosition().y;
 	}
@@ -73,28 +75,39 @@ public abstract class GameObject implements Locatable {
 	 *            - x coordinate of the unit.
 	 * @param y
 	 *            - y coordinate of the unit.
+	 * @return - true on success ( in range)
 	 */
-	public void setLocation(int x, int y) {
-		position.x = x;
-		position.y = y;
+	public boolean setLocation(float x, float y) {
+
+		if (x >= 0 && y >= 0) {
+			position.x = x;
+			position.y = y;
+			return true;
+		} else
+			return false;
 	}
 
 	/**
 	 * 
 	 * @param n
-	 *            - set the health of the Unit to the specified amount.
+	 *            - set the health of the Unit to the specified amount. - n must
+	 *            be a positive number 0 <= n <= max_health - if n < max_health,
+	 *            n = max_health
 	 * @return - whether the unit is still alive.
 	 */
-	public boolean setHealth(int n) {
-		stats.health = n;
-		if (stats.health > stats.max_health)
-			stats.health = stats.max_health;
+	public boolean setHealth(float n) {
+
+		if (n >= 0) {
+			stats.health = n;
+			if (stats.health > stats.max_health)
+				stats.health = stats.max_health;
+
+		}
 
 		if (stats.health <= 0)
 			return false;
 		else
 			return true;
-
 	}
 
 	/**
@@ -104,7 +117,7 @@ public abstract class GameObject implements Locatable {
 	 *            negative amount to specify damage.
 	 * @return - whether the unit is still alive.
 	 */
-	public boolean modifyHealth(int n) {
+	public boolean modifyHealthBy(float n) {
 
 		stats.health = stats.health + n;
 		if (stats.health > stats.max_health)
@@ -125,24 +138,24 @@ public abstract class GameObject implements Locatable {
 		return stats.health;
 	}
 
-	public int getOwner() {
-		return playerId;
+	public UnitStats getStats() {
+		return stats;
 	}
 
-//	/**
-//	 * 
-//	 * @param a
-//	 *            - add an action to the PriorityQueue to be performed during
-//	 *            the turn.
-//	 */
-//	public void addAction(Action a) {
-//		actionQueue.add(a);
-//		getOwner().getCommandQueue().push(a, this);
-//	}
+	// /**
+	// *
+	// * @param a
+	// * - add an action to the PriorityQueue to be performed during
+	// * the turn.
+	// */
+	// public void addAction(Action a) {
+	// actionQueue.add(a);
+	// getOwner().getCommandQueue().push(a, this);
+	// }
 
-//	/**
-//	 * Logic to handle actions that the Unit may do. TODO: add all necessary
-//	 * actions
-//	 */
-//	public void performActions()
+	// /**
+	// * Logic to handle actions that the Unit may do. TODO: add all necessary
+	// * actions
+	// */
+	// public void performActions()
 }

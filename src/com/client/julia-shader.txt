@@ -3,9 +3,7 @@
 
 precision mediump float;
 
-uniform vec2 resolution;
 uniform float time;
-
 varying vec2 texCoord;
 
 const int MAX_ITER = 256;

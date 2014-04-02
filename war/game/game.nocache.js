@@ -1,5 +1,9 @@
 function game(){
+<<<<<<< HEAD
   var $intern_14 = '', $intern_11 = ' top: -1000px;', $intern_37 = '" for "gwt:onLoadErrorFn"', $intern_35 = '" for "gwt:onPropertyErrorFn"', $intern_20 = '");', $intern_38 = '#', $intern_65 = '.cache.js', $intern_40 = '/', $intern_46 = '//', $intern_59 = '3932004612F145A03FFCB6F3C1982F83', $intern_60 = '44FE8C94D047E98817B22DFA08D884E3', $intern_61 = '5F110BF428C2C2347B5C442CBA0981C0', $intern_62 = '7DF24C73A1567A2C68DF7A26765EC3AD', $intern_64 = ':', $intern_29 = '::', $intern_72 = ':moduleBase', $intern_13 = '<!doctype html>', $intern_15 = '<html><head><\/head><body><\/body><\/html>', $intern_32 = '=', $intern_39 = '?', $intern_34 = 'Bad handler "', $intern_12 = 'CSS1Compat', $intern_18 = 'Chrome', $intern_17 = 'DOMContentLoaded', $intern_6 = 'DUMMY', $intern_63 = 'E0184E350E31B37F4D40AF6BD3BD26B5', $intern_71 = 'Ignoring non-whitelisted Dev Mode URL: ', $intern_70 = '__gwtDevModeHook:game', $intern_45 = 'base', $intern_43 = 'baseUrl', $intern_1 = 'begin', $intern_7 = 'body', $intern_0 = 'bootstrap', $intern_42 = 'clear.cache.gif', $intern_31 = 'content', $intern_67 = 'end', $intern_19 = 'eval("', $intern_69 = 'file:', $intern_4 = 'game', $intern_58 = 'game.devmode.js', $intern_44 = 'game.nocache.js', $intern_28 = 'game::', $intern_54 = 'gecko', $intern_55 = 'gecko1_8', $intern_2 = 'gwt.codesvr.game=', $intern_3 = 'gwt.codesvr=', $intern_36 = 'gwt:onLoadErrorFn', $intern_33 = 'gwt:onPropertyErrorFn', $intern_30 = 'gwt:property', $intern_25 = 'head', $intern_68 = 'http:', $intern_51 = 'ie10', $intern_53 = 'ie8', $intern_52 = 'ie9', $intern_8 = 'iframe', $intern_41 = 'img', $intern_22 = 'javascript', $intern_9 = 'javascript:""', $intern_66 = 'loadExternalRefs', $intern_26 = 'meta', $intern_24 = 'moduleRequested', $intern_23 = 'moduleStartup', $intern_50 = 'msie', $intern_27 = 'name', $intern_10 = 'position:absolute; width:0; height:0; border:none; left: -1000px;', $intern_49 = 'safari', $intern_21 = 'script', $intern_57 = 'selectingPermutation', $intern_5 = 'startup', $intern_16 = 'undefined', $intern_56 = 'unknown', $intern_47 = 'user.agent', $intern_48 = 'webkit';
+=======
+  var $intern_14 = '', $intern_11 = ' top: -1000px;', $intern_37 = '" for "gwt:onLoadErrorFn"', $intern_35 = '" for "gwt:onPropertyErrorFn"', $intern_20 = '");', $intern_38 = '#', $intern_65 = '.cache.js', $intern_40 = '/', $intern_46 = '//', $intern_59 = '4297F47D4BF308F3B61EBE8C7D255A2D', $intern_60 = '5ED2987DB14613729CADEB0B8143398C', $intern_61 = '5F3BD7295C5710EE79C27918BC27F897', $intern_64 = ':', $intern_29 = '::', $intern_72 = ':moduleBase', $intern_13 = '<!doctype html>', $intern_15 = '<html><head><\/head><body><\/body><\/html>', $intern_32 = '=', $intern_39 = '?', $intern_34 = 'Bad handler "', $intern_12 = 'CSS1Compat', $intern_18 = 'Chrome', $intern_17 = 'DOMContentLoaded', $intern_6 = 'DUMMY', $intern_62 = 'E95C0861B6800AAC968520A7CB188E28', $intern_63 = 'F0D56F797496F84DE0B32BEFB54D0694', $intern_71 = 'Ignoring non-whitelisted Dev Mode URL: ', $intern_70 = '__gwtDevModeHook:game', $intern_45 = 'base', $intern_43 = 'baseUrl', $intern_1 = 'begin', $intern_7 = 'body', $intern_0 = 'bootstrap', $intern_42 = 'clear.cache.gif', $intern_31 = 'content', $intern_67 = 'end', $intern_19 = 'eval("', $intern_69 = 'file:', $intern_4 = 'game', $intern_58 = 'game.devmode.js', $intern_44 = 'game.nocache.js', $intern_28 = 'game::', $intern_54 = 'gecko', $intern_55 = 'gecko1_8', $intern_2 = 'gwt.codesvr.game=', $intern_3 = 'gwt.codesvr=', $intern_36 = 'gwt:onLoadErrorFn', $intern_33 = 'gwt:onPropertyErrorFn', $intern_30 = 'gwt:property', $intern_25 = 'head', $intern_68 = 'http:', $intern_51 = 'ie10', $intern_53 = 'ie8', $intern_52 = 'ie9', $intern_8 = 'iframe', $intern_41 = 'img', $intern_22 = 'javascript', $intern_9 = 'javascript:""', $intern_66 = 'loadExternalRefs', $intern_26 = 'meta', $intern_24 = 'moduleRequested', $intern_23 = 'moduleStartup', $intern_50 = 'msie', $intern_27 = 'name', $intern_10 = 'position:absolute; width:0; height:0; border:none; left: -1000px;', $intern_49 = 'safari', $intern_21 = 'script', $intern_57 = 'selectingPermutation', $intern_5 = 'startup', $intern_16 = 'undefined', $intern_56 = 'unknown', $intern_47 = 'user.agent', $intern_48 = 'webkit';
+>>>>>>> d7a8d0e30f5789d9c920b62cb031f308a212409d
   var $wnd = window;
   var $doc = document;
   sendStats($intern_0, $intern_1);
@@ -390,11 +394,19 @@ function game(){
     }
     var strongName;
     try {
+<<<<<<< HEAD
       unflattenKeylistIntoAnswers([$intern_49], $intern_59);
       unflattenKeylistIntoAnswers([$intern_52], $intern_60);
       unflattenKeylistIntoAnswers([$intern_55], $intern_61);
       unflattenKeylistIntoAnswers([$intern_53], $intern_62);
       unflattenKeylistIntoAnswers([$intern_51], $intern_63);
+=======
+      unflattenKeylistIntoAnswers([$intern_51], $intern_59);
+      unflattenKeylistIntoAnswers([$intern_53], $intern_60);
+      unflattenKeylistIntoAnswers([$intern_55], $intern_61);
+      unflattenKeylistIntoAnswers([$intern_49], $intern_62);
+      unflattenKeylistIntoAnswers([$intern_52], $intern_63);
+>>>>>>> d7a8d0e30f5789d9c920b62cb031f308a212409d
       strongName = answers[computePropValue($intern_47)];
       var idx = strongName.indexOf($intern_64);
       if (idx != -1) {

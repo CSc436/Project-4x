@@ -45,7 +45,7 @@ public class Shader {
 		glContext.attachShader(shaderProgram, vertexShader);
 		glContext.attachShader(shaderProgram, fragmentShader);
 		glContext.linkProgram(shaderProgram);
-
+		
 		if (!glContext.getProgramParameterb(shaderProgram,
 				WebGLRenderingContext.LINK_STATUS)) {
 			throw new RuntimeException("Could not initialise shaders");

@@ -1,0 +1,434 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<!-- CSS -->
+<link type="text/css" rel="stylesheet" href="main.css">
+<link type="text/css" rel="stylesheet" href="sidebar.css">
+<link type="text/css" rel="stylesheet" href="toolbar.css">
+<link type="text/css" rel="stylesheet" href="minimap.css">
+<link type="text/css" rel="stylesheet" href="chat.css">
+<link type="text/css" rel="stylesheet" href="menu.css">
+
+<!-- Fonts -->
+<link href='http://fonts.googleapis.com/css?family=MedievalSharp'
+	rel='stylesheet' type='text/css'>
+
+<title>Legacy of Kings</title>
+
+<script type="text/javascript" language="javascript"
+	src="game/game.nocache.js"></script>
+</head>
+
+<body>
+	<noscript>
+		<div
+			style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
+			Your web browser must have JavaScript enabled in order for this
+			application to display correctly.</div>
+	</noscript>
+	<div id="toolbar-div">
+		<span id="banner">Legacy of Kings</span>
+		<ul id="toolbar">
+			<li><a href="#" id="agent-button" title="Agents"><img
+					src="assets/Icons/AgentsIcon.png" /></a></li>
+			<li><a href="#" id="cities-button" title="Cities"><img
+					src="assets/Icons/CitiesIcon.png" /></a></li>
+			<li><a href="#" id="diplomacy-button" title="Diplomacy"><img
+					src="assets/Icons/DiplomacyIcon.png" /></a></li>
+			<li><a href="#" id="economies-button" title="Economies"><img
+					src="assets/Icons/EconomyIcon.ico" /></a></li>
+
+			<!-- Goes from right -> left -->
+			<li id="menu" class="toolbar-right"><a href="#" id="menu-button"
+				title="Menu">Menu</a></li>
+			<!-- These could be icons and then be on 1 line -->
+			<li id="game-resources" class="toolbar-right"><span>Gold:
+					100 Wood: 200 Food: 350 </span> <br /> <span>Stone: 79 Research:
+					1000</span></li>
+		</ul>
+	</div>
+	<div id="sidebar">
+		<!-- AGENT MENU -->
+		<div id="agent-menu" class="sidebar-menu">
+			<div class="text-center">
+				<h2>Agents</h2>
+			</div>
+			<div>
+				<button type="button" id="agent-create"
+					class="sidebar-btn btn-green full-size">Create Agent</button>
+			</div>
+			<hr>
+			<table class="sidebar-table">
+				<tbody>
+					<tr>
+						<td>
+							<div>Kelsey</div>
+							<div>General</div>
+							<button type="button"
+								class="sidebar-btn btn-green agent-view-button">View</button>
+						</td>
+						<td>
+							<button type="button" class="sidebar-btn btn-green">Goto</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div>Mike</div>
+							<div>Banker</div>
+							<button type="button"
+								class="sidebar-btn btn-green agent-view-button">View</button>
+						</td>
+						<td>
+							<button type="button" class="sidebar-btn btn-green">Goto</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div>Porkins</div>
+							<div>Prospector</div>
+							<button type="button"
+								class="sidebar-btn btn-green agent-view-button">View</button>
+						</td>
+						<td>
+							<button type="button" class="sidebar-btn btn-green">Goto</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- AGENT MENU DETAIL -->
+		<div id="agent-menu-detail" class="sidebar-menu">
+			<div class="text-center">
+				<h2>Kelsey</h2>
+			</div>
+			<div class="text-center">
+				<div>General</div>
+				<div>Current Action</div>
+				<div>
+					<button type="button" class="sidebar-btn btn-green">Goto</button>
+				</div>
+			</div>
+			<div class="text-center">
+				<button type="button" class="sidebar-btn btn-red">Dismiss</button>
+				<button type="button" class="sidebar-btn btn-red detail-return"
+					data-return="agent-menu">Back</button>
+			</div>
+		</div>
+		<!-- AGENT MENU CREATE -->
+		<div id="agent-menu-create" class="sidebar-menu">
+			<div class="text-center">
+				<h2>Create an Agent</h2>
+			</div>
+			<hr>
+			<div>
+				<label class="form-label" for="agent-name">Name:</label><input
+					type="text" id="agent-name" />
+			</div>
+			<div>
+				<label class="form-label" for="agent-type">Type:</label> <select
+					id="agent-type">
+					<option value="Banker">Banker</option>
+					<option value="General">General</option>
+					<option value="Infantry">Infantry</option>
+					<option value="Prospector">Prospector</option>
+				</select>
+			</div>
+			<div>
+				<label class="form-label" for="agent-action">Set Action:</label> <select
+					id="agent-action">
+					<option value="?">?</option>
+					<option value="?">?</option>
+					<option value="?">?</option>
+				</select>
+			</div>
+			<div class="text-center">
+				<button type="button" class="sidebar-btn btn-red"
+					id="agent-create-confirm">Create Agent</button>
+				<button type="button" class="sidebar-btn btn-red detail-return"
+					data-return="agent-menu">Back</button>
+			</div>
+		</div>
+		<!-- CITIES MENU -->
+		<div id="cities-menu" class="sidebar-menu">
+			<div class="text-center">
+				<h2>Cities</h2>
+			</div>
+			<hr>
+			<table class="sidebar-table">
+				<tbody>
+					<tr>
+						<td>
+							<div>Metropolis</div>
+							<button type="button"
+								class="sidebar-btn btn-green cities-view-button">View</button>
+						</td>
+						<td>
+							<button type="button" class="sidebar-btn btn-green">Goto</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div>Mike</div>
+							<button type="button"
+								class="sidebar-btn btn-green cities-view-button">View</button>
+						</td>
+						<td>
+							<button type="button" class="sidebar-btn btn-green">Goto</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div>Porkins</div>
+							<button type="button"
+								class="sidebar-btn btn-green cities-view-button">View</button>
+						</td>
+						<td>
+							<button type="button" class="sidebar-btn btn-green">Goto</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- CITIES MENU DETAIL -->
+		<div id="cities-menu-detail" class="sidebar-menu">
+			<div class="text-center">
+				<h2>Metropolis</h2>
+			</div>
+			<div class="text-center">
+				<div>Days Since Creation</div>
+				<div>Population</div>
+				<div>Resource info</div>
+				<div>
+					<button type="button" class="sidebar-btn btn-green">Goto</button>
+				</div>
+			</div>
+			<div class="text-center">
+				<button type="button" class="sidebar-btn btn-red">Destroy</button>
+				<button type="button" class="sidebar-btn btn-red detail-return"
+					data-return="cities-menu">Back</button>
+			</div>
+		</div>
+		<!-- DIPLOMACY MENU -->
+		<div id="diplomacy-menu" class="sidebar-menu">
+			<div class="text-center">
+				<h2>Diplomacy</h2>
+			</div>
+			<div>
+				<button type="button" id="diplomacy-create"
+					class="sidebar-btn btn-green full-size">Create Agreement</button>
+			</div>
+			<hr>
+			<div>
+				<h3 class="text-center">Sent Agreements</h3>
+				<hr>
+				<table class="sidebar-table">
+					<tbody>
+						<tr>
+							<td>
+								<div>Corn for Sheep</div>
+							</td>
+							<td>
+								<button type="button"
+									class="sidebar-btn btn-green diplomacy-view-button">View</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div>Halp give me gold</div>
+							</td>
+							<td>
+								<button type="button"
+									class="sidebar-btn btn-green diplomacy-view-button">View</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div>
+				<h3 class="text-center">Received Agreements</h3>
+				<hr>
+				<table class="sidebar-table">
+					<tbody>
+						<tr>
+							<td>
+								<div>Need Fish plz</div>
+							</td>
+							<td>
+								<button type="button" class="sidebar-btn btn-green">A</button>
+								<button type="button" class="sidebar-btn btn-red">R</button>
+								<button type="button"
+									class="sidebar-btn btn-green diplomacy-view-button">View</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div>Help me Obi-Wan</div>
+							</td>
+							<td>
+								<button type="button" class="sidebar-btn btn-green">A</button>
+								<button type="button" class="sidebar-btn btn-red">R</button>
+								<button type="button"
+									class="sidebar-btn btn-green diplomacy-view-button">View</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div>
+				<h3 class="text-center">Accepted Agreements</h3>
+				<hr>
+				<table class="sidebar-table">
+					<tbody>
+						<tr>
+							<td>
+								<div>Need Hard Wood</div>
+							</td>
+							<td>
+								<button type="button"
+									class="sidebar-btn btn-green diplomacy-view-button">View</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div>Need Hard Wood</div>
+							</td>
+							<td>
+								<button type="button"
+									class="sidebar-btn btn-green diplomacy-view-button">View</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div>Need Hard Wood</div>
+							</td>
+							<td>
+								<button type="button"
+									class="sidebar-btn btn-green diplomacy-view-button">View</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- DIPLOMACY MENU DETAIL -->
+		<div id="diplomacy-menu-detail" class="sidebar-menu">
+			<div class="text-center">
+				<h2>Agreement: Help me Obi-Wan</h2>
+			</div>
+			<hr>
+			<div class="text-center">
+				<div>Agreement With</div>
+				<div>They Receive</div>
+				<div>You Receive</div>
+				<div>Time Unit</div>
+				<div>Expires in</div>
+			</div>
+			<div class="text-center">
+				<button type="button" class="sidebar-btn btn-red">Cancel Agreement</button>
+				<button type="button" class="sidebar-btn btn-red detail-return"
+					data-return="diplomacy-menu">Back</button>
+			</div>
+		</div>
+		<!-- DIPLOMACY MENY CREATE -->
+		<div id="diplomacy-menu-create" class="sidebar-menu">
+			<div class="text-center">
+				<h2>Propose Agreement</h2>
+			</div>
+			<hr>
+			<div>
+				<label class="form-label" for="diplomacy-name">Name:</label><input
+					type="text" id="diplomacy-name" />
+			</div>
+			<div>
+				<label class="form-label" for="diplomacy-send-quantity">They Receive:</label>
+				<input type="text" id="diplomacy-send-quantity"/>
+				<select
+					id="diplomacy-send-type">
+					<option value="Gold">Gold</option>
+					<option value="Wood">Wood</option>
+					<option value="Food">Food</option>
+					<option value="Stone">Stone</option>
+				</select>
+			</div>
+			<div>
+				<label class="form-label" for="diplomacy-receive-quantity">You Receive:</label>
+				<input type="text" id="diplomacy-receive-quantity"/>
+				<select
+					id="diplomacy-receive-type">
+					<option value="Gold">Gold</option>
+					<option value="Wood">Wood</option>
+					<option value="Food">Food</option>
+					<option value="Stone">Stone</option>
+				</select>
+			</div>
+			<div>
+				<label class="form-label" for="diplomacy-time-unit">Trade Every:</label>
+				<input type="text" id="diplomacy-time-unit" /> Time Units
+			</div>
+			<div>
+				<label class="form-label" for="diplomacy-expire">Expires In:</label>
+				<input type="text" id="diplomacy-expire" /> Time Units
+			</div>
+			<div class="text-center">
+				<button type="button" class="sidebar-btn btn-red"
+					id="diplomacy-create-confirm">Send</button>
+				<button type="button" class="sidebar-btn btn-red detail-return"
+					data-return="diplomacy-menu">Back</button>
+			</div>
+		</div>
+		<!-- ECONOMIES MENU -->
+		<div id="economies-menu" class="sidebar-menu">Economies menu</div>
+		<!-- ECONOMIES MENU DETAIL -->
+		<div id="economies-menu-detail" class="sidebar-menu">Economies
+			Detail Menu</div>
+
+		<div id="sidebar-hide">&lt;&lt;</div>
+	</div>
+
+	<div id="gwtGL"></div>
+	<div id="game-menu">
+		<div id="menu-content">Menu content here</div>
+		<div id="menu-actions" class="text-center">
+			<button type="button" id="close-menu" class="sidebar-btn btn-red">Close</button>
+		</div>
+	</div>
+
+	<div id="chat-container">
+		<div id="chat-trigger" class="full-size text-center">Chat</div>
+		<div id="chat-box" class="full-size">
+			<div id="messages">
+				<!-- Messages go here -->
+				test<br /> test<br /> test<br /> test<br /> test<br /> test<br />
+				test<br /> test<br /> test<br /> test<br /> test<br /> test<br />
+
+			</div>
+			<div id="chat-send-box" class="text-center">
+				<input type="text" id="message" autocomplete="off"
+					placeholder="Press Enter to send">
+				<button type="button" id="send-message">Send</button>
+			</div>
+		</div>
+	</div>
+	<div id="tile-info">
+		Tile info <br> More info
+	</div>
+	<div id="minimap"></div>
+
+	<script
+		src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			
+			// Prevents '#' from appending to url when
+			// clicking menu icons
+			$("#toolbar > li > a").click(function(e) {
+				e.preventDefault();
+			});
+			
+		});
+	</script>
+</body>
+</html>

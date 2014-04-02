@@ -1,39 +1,37 @@
 package com;
-
 import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.*;
 
-import control.Controller;
+import com.shared.Terrain;
+
 import entities.gameboard.GameBoard;
 import entities.gameboard.Resource;
-import entities.gameboard.Terrain;
 
-public class RunGame extends Thread {
+public class RunGame {
+
+	// controller class!
 
 	public static void main(String[] args) {
 
-		String h;
-		String w;
-		String pl;
-
-		h = JOptionPane.showInputDialog("Enter height");
-		w = JOptionPane.showInputDialog("Enter width");
-		pl = JOptionPane.showInputDialog("Enter player amount");
-
-		int x = Integer.parseInt(w);
-		int y = Integer.parseInt(h);
-		int p = Integer.parseInt(pl);
-
-		GameBoard game = new GameBoard(x, y, p);
+		GameBoard game = new GameBoard(800, 800);
+		game.resourceDistNatural();
 
 		JFrame frame = new JFrame("display");
 		frame.setVisible(true);
-		frame.setSize(x, y);
+		frame.setSize(800, 800);
 		JPanel test = new draw(game);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		frame.setContentPane(test);
+
+		if (args.length == 3) {
+
+		} else {
+
+			System.out.println("usage");
+		}
 
 	}
 
@@ -51,16 +49,20 @@ class draw extends JPanel {
 	}
 
 	public void paintComponent(Graphics g) {
-		long start = System.currentTimeMillis();
+
 		for (int r = 0; r < game.getRows(); r++) {
 			for (int c = 0; c < game.getCols(); c++) {
-				if (game.getTileAt(r, c).getResource() == Resource.FOOD) {
-					g.setColor(new Color(186, 57, 57));
-				} else if (game.getTileAt(r, c).getResource() == Resource.GOLD) {
+				if (game.getTileAt(r, c).getResource() == Resource.FOOD)
+				{
+					g.setColor(new Color(186,57,57));
+				} else if (game.getTileAt(r, c).getResource() == Resource.GOLD)
+				{
 					g.setColor(new Color(240, 188, 16));
-				} else if (game.getTileAt(r, c).getResource() == Resource.STONE) {
+				} else if (game.getTileAt(r, c).getResource() == Resource.STONE)
+				{
 					g.setColor(new Color(129, 133, 146));
-				} else if (game.getTileAt(r, c).getResource() == Resource.WOOD) {
+				} else if (game.getTileAt(r, c).getResource() == Resource.WOOD)
+				{
 					g.setColor(new Color(55, 91, 67));
 				} else // Resource is none or does not change color.
 				{
@@ -75,13 +77,13 @@ class draw extends JPanel {
 					else if (game.getTileAt(r, c).getTerrainType() == Terrain.SNOW)
 						g.setColor(new Color(255, 255, 255));
 					else
-						g.setColor(new Color(118, 208, 108));
+						g.setColor(new Color(118,208,108));
 				}
 				g.fillRect(r * 1, c * 1, 1, 1);
 
 			}
 		}
-		long end = System.currentTimeMillis();
-		System.out.println("JPanel Setup Time: " + (end - start));
+
 	}
+
 }

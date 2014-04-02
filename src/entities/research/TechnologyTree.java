@@ -89,7 +89,7 @@ public class TechnologyTree {
 		if (value - time <= 0) {
 			// complete the research.
 			Technology t = technologies.get(key);
-			p.upgrades.addTechnology(t);
+			p.getUpgrades().addTechnology(t);
 			researched.put(key, t.current_level);
 			t.completeResearch(p);
 

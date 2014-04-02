@@ -4,7 +4,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.TextResource;
-import com.google.gwt.resources.client.ClientBundle.Source;
 
 public interface ClientResources extends ClientBundle{
 	public static final ClientResources INSTANCE = GWT.create(ClientResources.class);
@@ -15,7 +14,10 @@ public interface ClientResources extends ClientBundle{
 	@Source("6terrains.png")
 	ImageResource terrainTextures();
 	
-    @Source(value={"fs_red.txt"})
+	@Source("32pxterrains.png")
+	ImageResource textureAtlas();
+	
+    @Source(value={"simple_colors.fs"})
     TextResource fragmentShader();
     
     @Source(value={"texture-shader.txt"})
@@ -28,7 +30,7 @@ public interface ClientResources extends ClientBundle{
     TextResource redShader();
     
     @Source(value={"vs_simple.txt"})
-    TextResource simpleVertexShader();
+    TextResource agentVertexShader();
     
     @Source(value={"simple_colors.vs"})
     TextResource simpleColorsVS();
@@ -38,4 +40,33 @@ public interface ClientResources extends ClientBundle{
     
     @Source(value={"simple_outline.fs"})
     TextResource simpleOutlineFS();
+    
+    @Source(value={"simple_mesh.vs"})
+    TextResource simpleMeshVS();
+    
+    @Source(value={"normals_mesh.fs"})
+    TextResource normalsMeshFS();
+    
+    @Source(value={"id.fs"})
+    TextResource idFS();
+    
+    @Source(value={"selected.fs"})
+    TextResource selectedFS();
+    
+    @Source(value={"meshTextured.fs"})
+    TextResource texturedMeshFS();
+    
+    // OBJ definitions
+    @Source(value={"barrel.obj"})
+    TextResource barrelOBJ();
+    
+    @Source(value={"cube.obj"})
+    TextResource cubeOBJ();
+    
+    @Source(value={"tile.obj"})
+    TextResource tileOBJ();
+    
+	@Source("genericTexture.png")
+	ImageResource genericTexture();
 }
+
