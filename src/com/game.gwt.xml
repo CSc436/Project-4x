@@ -21,6 +21,8 @@
   <inherits name='com.googlecode.gwtgl.binding'/>
   <!-- GQuery -->
   <inherits name='com.google.gwt.query.Query'/>
+  <!-- WebSockets Wrapper, credit to sksamuel -->
+  <inherits name="com.sksamuel.gwt.GwtWebsockets" />
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.client.PlayGame'/>
 
