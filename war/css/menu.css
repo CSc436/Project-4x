@@ -1,3 +1,4 @@
+/* Entire menu div */
 #game-menu {
 	display: none;
 	position: absolute;
@@ -14,11 +15,7 @@
 	z-index: 1000;
 }
 
+/* Main div to hold buttons excluding the Close button */
 #menu-content {
 	height: 85%;
-}
-
-.menu-table {
-	width: 100%;
-	table-layout: fixed;
 }

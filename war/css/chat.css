@@ -1,3 +1,4 @@
+/* Div containing chat-trigger and chat-box */
 #chat-container {
 	position: fixed;
 	left: 0;
@@ -5,6 +6,7 @@
 	right: 120px;
 }
 
+/* Div that is always showing, you click it to show/hide the chat menu */
 #chat-trigger {
 	background-color: rgba(51, 51, 51, 0.9);
 	border: 1px solid #D7C193;
@@ -17,6 +19,7 @@
 	background-color: #777;
 }
 
+/* Contains everything except the chat trigger */
 #chat-box {
 	display: none; /*Initially hidden*/
 	background-image: url('../assets/Panels/chatbox.png');
@@ -24,7 +27,7 @@
 	border-bottom: none;
 }
 
-/* All user chat */
+/* All user messages */
 #messages {
 	height: 115px;
 	padding: 3px;
@@ -62,7 +65,7 @@
 	background-color: #777;
 }
 
-/*Div containing user chat message and "send message" button */
+/* Div containing user chat message and "send message" button */
 #chat-send-box {
 	height: 25px;
 	background-color: rgba(10, 10, 10, 0.5);

@@ -1,3 +1,4 @@
+/* Tile info div */
 #tile-info {
 	position: fixed;
 	right: 0;
@@ -12,6 +13,7 @@
 	border: 1px solid white;
 }
 
+/* Minimap div */
 #minimap {
 	position: fixed;
 	bottom: 0;
