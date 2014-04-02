@@ -58,8 +58,6 @@ public class GameCanvas {
 	private static long startTime;
 	private Camera camera;
 	private Vector3 mouseVector;
-//	private float[] cameraMatrix;
-//	private float camX = 0.0f, camY = -20.0f, camZ = 20.0f;
 	
 	private Float32Array agentVertData, agentTexData;
 	
@@ -68,7 +66,7 @@ public class GameCanvas {
 			right = false, left = false, rotateLeft = false, rotateRight = false, center = false, move = false;
 	private long time;
 
-	public static final int GRID_WIDTH = 256;
+	public static final int GRID_WIDTH = 16;
 
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
 	private final boolean debug = true;
