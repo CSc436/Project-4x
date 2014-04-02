@@ -1,84 +1,96 @@
 package control;
 
-import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
-import com.shared.MovingUnit;
-
-import entities.buildings.ResourceBuilding;
-import entities.gameboard.GameBoard;
-import entities.units.Unit;
+import control.commands.Command;
+import entities.gameboard.Tile;
 
 public class Controller implements Runnable {
-	List<Player> players;
-	GameBoard map;
-	MovingUnit number;
+
+	private GameModel model;
+	private ConcurrentLinkedDeque<Command> commandQueue;
+	private int turnWaitTime;// in ms
 
 	public Controller() {
 
-		map = new GameBoard(5, 5, 2);
-		players = map.getPlayerList();
-		//number = new MovingUnit(0.0, 1.0);
+		model = new GameModel();
+		commandQueue = new ConcurrentLinkedDeque<Command>();
+		turnWaitTime = 100;
+
 	}
 
 	@Override
 	public void run() {
-		int turnNum = 0;
-		// call to timer thread
-		while (turnNum < 20) {
+		model.modelState();
 
-			for (Player player : players) {
-				produceResources(player);
-				unitInteraction(player);
+		// actual game execution
+		boolean gameRunning = true;
+		while (gameRunning) {
 
-				agentDecision(player);
-
-				playerCommands(player);
-
+			try {
+				Thread.sleep(turnWaitTime);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+			while (!commandQueue.isEmpty()) {
+				Command comm = commandQueue.poll();
+				comm.performCommand(model);
+			}
+			model.advanceTimeStep();
+			// produceGameObjects
+			// agentDecision();
+			// unitInteraction();
+			// When the timer on a unit in the production queue hits 0, add the
+			// unit to the player's unit list.
+
+			// TODO: change timestep to what we really want
+			// checkBuildingProductionQueue(10);
+
+			// gameRunning = playerCommands();
+
 		}
+	}
+
+	private void checkBuildingProductionQueue(int timestep) {
 
 	}
 
-	/**
-	 * Get the commands from the client and add them to each player's respective action queue
-	 */
-	private void playerCommands(Player p) {
-	
+	private boolean playerCommands() {
+
+		return true;
 	}
 
-	/**
-	 * @param p the player whose actionQueue to pop.
+	/*
+	 * TODO implement - or move somewhere better. pathFinding() Description:
+	 * General pathfinding algorithm for units, somehow need to view the map.
+	 * uses A*.
 	 * 
+	 * since in controller both have access to map and to
 	 */
-	private void unitInteraction(Player p) {
-		// get command queue from the player
-		// perform unit actions for each unit on the player's commandqueue
-		
-		CommandQueue q = p.getCommandQueue();
-		Unit u = null;
-		while((u = q.pop()) != null) {
-			u.performActions();
-		}
+	public Queue<Tile> pathFinding() {
+		return null;
 	}
 
-	/**
-	 * 
-	 * @param p - the player to whom each agent may add their actions to.
-	 */
-	private void agentDecision(Player p) {
-		// TODO Auto-generated method stub
-		// 
+	private void unitInteraction() {
 
 	}
 
-	private void produceResources(Player player) {
+	private void agentDecision() {
 
-		for (ResourceBuilding building : player.getUnits()
-				.getResourceBuildings()) {
-			// TODO: building.gen
-			
-		}
+	}
 
+	private void produceResources() {
+
+	}
+
+	public void addCommand(Command c) {
+		commandQueue.add(c);
+	}
+
+	public GameModel getGameModel() {
+		return model;
 	}
 
 }

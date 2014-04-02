@@ -4,7 +4,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.TextResource;
-import com.google.gwt.resources.client.ClientBundle.Source;
 
 public interface ClientResources extends ClientBundle{
 	public static final ClientResources INSTANCE = GWT.create(ClientResources.class);
@@ -18,8 +17,8 @@ public interface ClientResources extends ClientBundle{
 	@Source("32pxterrains.png")
 	ImageResource textureAtlas();
 	
-    @Source(value={"simple_colors.fs"})
-    TextResource fragmentShader();
+   	@Source(value={"simple_colors.fs"})
+    	TextResource fragmentShader();
     
     @Source(value={"texture-shader.txt"})
     TextResource textureShader();
@@ -73,16 +72,19 @@ public interface ClientResources extends ClientBundle{
     @Source(value={"cannon.obj"})
     TextResource cannonOBJ();
     
-	@Source("castle_base_colors_medium.png")
-	ImageResource castleTexture();
+    @Source("castle_base_colors_medium.png")
+    ImageResource castleTexture();
 	
-	@Source("cannon_base_colors_medium.png")
-	ImageResource cannonTexture();
+    @Source("cannon_base_colors_medium.png")
+    ImageResource cannonTexture();
     
-	@Source("genericTexture.png")
-	ImageResource genericTexture();
+    @Source(value={"tile.obj"})
+    TextResource tileOBJ();
+    
+    @Source("genericTexture.png")
+    ImageResource genericTexture();
 	
-	@Source("terrains.png")
-	ImageResource terrainTexture();
+    @Source("terrains.png")
+    ImageResource terrainTexture();
 }
 

@@ -3,3 +3,6 @@
 war/game
 *~
 war/WEB-INF/deploy/game/symbolMaps
+/war/WEB-INF/classes
+*.symbolMap
+*.cache.*

@@ -8,3 +8,4 @@
 - generate minimap image (second render pass?) (Alex)
 - tile selection highlight (Sonia)
 - tile information in panel (Sonia)
+- be better at front end (Gabe)

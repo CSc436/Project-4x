@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 public class Request implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6473064780643204773L;
 	private int scheduledTurn;
 	private int lastTurnReceived;
 	
@@ -12,11 +16,11 @@ public class Request implements Serializable {
 		lastTurnReceived = 0;
 	}
 	
-	private void setScheduledTurn(int scheduledTurn) {
+	public void setScheduledTurn(int scheduledTurn) {
 		this.scheduledTurn = scheduledTurn;
 	}
 	
-	private void setLastTurnReceived(int lastTurnReceived) {
+	public void setLastTurnReceived(int lastTurnReceived) {
 		this.lastTurnReceived = lastTurnReceived;
 	}	
 	
@@ -36,7 +40,7 @@ public class Request implements Serializable {
 		return r;
 	}
 	
-	public boolean executeOn(Model m) {
+	public boolean executeOn(SimpleGameModel m) {
 		return false;
 	}
 	

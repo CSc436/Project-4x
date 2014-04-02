@@ -1,21 +1,87 @@
 package entities.buildings;
 
-import com.fourx.buffs.UnitType;
-import com.fourx.resources.Resources;
+import java.util.HashMap;
+import java.util.UUID;
 
-import control.Player;
-import entities.BaseStatsEnum;
+import control.BuildingType;
+import entities.resources.Resources;
+import entities.stats.BaseStatsEnum;
 
 public class Bank extends ResourceBuilding {
 	// Placeholder bank building dimensions
-	private static final int bank_Height = 4;
-	private static final int bank_Width = 4;
-	private static final int bank_BaseGenAmt = 100; // Base amount that banks
-													// will generate for the
-													// user
+	private static final int Height = 4;
+	private static final int Width = 4;
+	private static final int BaseGenAmt = 100; // Base amount that banks will generate for the user
+	int gold;
+	
+	/**
+	 * Bank():
+	 * Creates a new Bank Building. 
+	 * 
+	 * @param id
+	 * @param playerId
+	 * @param baseStats
+	 * @param new_stats
+	 * @param gameObjectType
+	 * @param buildingType
+	 * @param xco
+	 * @param yco
+	 * @param height
+	 * @param width
+	 * @param resourceAmount
+	 */
+	public Bank(UUID id, int playerId, float xco,
+			float yco, Resources resourceAmount) {
+		super(id, playerId, BaseStatsEnum.BANK, BaseStatsEnum.BANK.getStats(), BuildingType.BANK, xco, yco, 2, 2, resourceAmount);
+	}
+	
+	@Override
+	public String toString() {
+		return "GameObject type: Bank; Player owner Id: " + this.getPlayerID() + "; Castle id: " + this.getCastleId() 
+				+ "; GameObject id: " + this.getId();
+	}
 
-	public Bank(Player p, BaseStatsEnum baseStats, UnitType type, int xco,
-			int yco, int height, int width) {
-		super(p, baseStats, type, xco, yco, bank_Height, bank_Width, new Resources(0,bank_BaseGenAmt,0,0));
+	/**
+	 * widthdraw():
+	 * allows user to withdraw an amount of gold from the bank, 
+	 * only if the bank has that much gold 
+	 * 
+	 * TODO this method DOES NOT WORK, resources was changed to static so all players cshare the same resources.
+	 * 
+	 * @param gold - amount of gold to withdraw 
+	 * @return true if we can make the withdraw 
+	 */
+	// TODO Reimplement sans static variable. 
+	public boolean withdraw(int gold) {
+	/*	if(this.gold<gold)
+			return false;
+		Player.resources.Gold+=gold; // WHAT THE FUCK
+		this.gold-=gold;*/
+		return true; 
+	}
+		
+	/**
+	 * Same as withdraw, DOES NOT WORK.
+	 * @param gold
+	 * @return
+	 */
+	public boolean deposit(int gold) {
+		/*if(Player.resources.Gold<gold)
+			return false;
+		Player.resources.Gold-=gold;
+		this.gold+=gold;*/
+		return true;
+	}
+	
+	@Override
+	protected void setActions() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public HashMap<String, String> getActions() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -1,28 +1,47 @@
 package entities.buildings;
 
-import com.fourx.buffs.UnitType;
+import java.util.HashMap;
+import java.util.UUID;
 
-import control.Player;
-import entities.BaseStatsEnum;
+import control.BuildingType;
+import entities.stats.BaseStatsEnum;
 
 public class Castle extends Building {
 
 	// main hub
-	private int castleLevel;
+
 	private int populationCap;
 	private int influenceArea;
 
-	public Castle(Player p, int xco, int yco) {
-		/*
-		 * 
-		 * public Building(Player p, BaseStatsEnum baseStats, UnitType type, int
-		 * xco, int yco) {
-		 */
+	public Castle(UUID id, int playerId, float xco,
+			float yco, int populationCap, int influenceArea) {
+		super(id, playerId, BaseStatsEnum.CASTLE, BaseStatsEnum.CASTLE.getStats(), 
+				BuildingType.CASTLE, xco,
+				yco, 2, 2);
+		this.populationCap = populationCap;
+		this.influenceArea = influenceArea;
+	}
 
-		super(p, BaseStatsEnum.CASTLE, UnitType.BUILDING, xco, yco);
-		castleLevel = 1;
-		populationCap = 100; // Random number for now.
-		influenceArea = 2; // a nxn radius from the row and column of its board
-							// tile.
+	public int getPopulationCap()
+	{
+		return populationCap;
+	}
+	
+	public int getInfluenceArea()
+	{
+		return influenceArea;
+	}
+	
+	
+	@Override
+	protected void setActions() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public HashMap<String, String> getActions() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

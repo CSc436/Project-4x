@@ -1,21 +1,10 @@
 package com.client;
 
-import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.event.dom.client.LoadEvent;
-import com.google.gwt.event.dom.client.LoadHandler;
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.googlecode.gwtgl.array.Float32Array;
-import com.googlecode.gwtgl.array.Int16Array;
-import com.googlecode.gwtgl.array.Int32Array;
 import com.googlecode.gwtgl.array.Uint16Array;
-import com.googlecode.gwtgl.array.Uint32Array;
-import com.googlecode.gwtgl.array.Int8Array;
 import com.googlecode.gwtgl.binding.WebGLBuffer;
 import com.googlecode.gwtgl.binding.WebGLProgram;
 import com.googlecode.gwtgl.binding.WebGLRenderingContext;
-import com.googlecode.gwtgl.binding.WebGLTexture;
 import com.googlecode.gwtgl.binding.WebGLUniformLocation;
 
 /* Tile

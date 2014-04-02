@@ -9,8 +9,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.googlecode.gwtgl.array.Float32Array;
 import com.googlecode.gwtgl.array.Int16Array;
-import com.googlecode.gwtgl.array.Int32Array;
-import com.googlecode.gwtgl.array.Uint16Array;
 import com.googlecode.gwtgl.binding.WebGLBuffer;
 import com.googlecode.gwtgl.binding.WebGLRenderingContext;
 import com.googlecode.gwtgl.binding.WebGLTexture;

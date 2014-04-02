@@ -1,160 +1,39 @@
 package entities.units;
 
 import java.util.PriorityQueue;
-
-import com.fourx.buffs.UnitType;
-import com.fourx.util.Point;
-
-import control.Player;
+import java.util.UUID;
+import control.UnitType;
 import entities.Action;
-import entities.BaseStatsEnum;
-import entities.PlayerUnits;
-import entities.UnitStats;
+import entities.stats.BaseStatsEnum;
+import entities.GameObject;
+import entities.GameObjectType;
+import entities.stats.UnitStats;
 
 /*
- * Programmer:  Benjamin Deininger
+ * 
  * 
  * Purpose:  This abstract class defines the concept of a unit.  Every unit will atleast have the following 
  * information known about itself.  
  */
 
-// infantry
-// calvary
-// ranged
-// water?
-// transport?
-// trade cart
-// settler / worker
-// healing unit
+// TODO add A* path finding, use diagonals to make nice looking paths
+// returns a queue/list of tiles that it needs to go to, at each turn pop one off and move player there. 
 
-public abstract class Unit {
+public abstract class Unit extends GameObject {
 
-	private Player owner;
+	private UnitType unitType;
+	private int creationTime;
 
-	protected UnitType type = UnitType.INFANTRY;
-	private UnitStats stats;
-	protected BaseStatsEnum baseStats;
-
-	private int x;
-	private int y;
-	private Point location;
-	private Point targetLocation;
-	private PriorityQueue<Action> actionQueue;
-
-	public Unit(Player p, BaseStatsEnum baseStats, UnitType type, int xco,
-			int yco) {
-		this.baseStats = baseStats;
-		this.type = type;
-
-		owner = p;
-		System.out.println(this.getClass());
-		PlayerUnits pu = p.getUnits();
-
-		if (this instanceof Agent) {
-			pu.addAgent((Agent) this);
-		} else {
-			pu.addUnit(this);
-		}
-
-		updateStats();
-		actionQueue = new PriorityQueue<Action>();
-		x = xco;
-		y = yco;
+	public Unit(UUID id, int playerId, BaseStatsEnum baseStats,
+			UnitStats new_stats, UnitType unitType,
+			float xco, float yco) {
+		super(id, playerId, baseStats, new_stats, GameObjectType.UNIT, xco, yco);
+		this.unitType = unitType;
+		this.creationTime = baseStats.getCreationTime();
 
 	}
 
-	/**
-	 * called to reset the stats of the unit to (basestats + upgrades)
-	 */
-	public void updateStats() {
-		stats = baseStats.augment(stats, type.getStats(owner));
-	}
-
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	/**
-	 * 
-	 * @param b
-	 *            - x coordinate of the unit.
-	 * @param c
-	 *            - y coordinate of the unit.
-	 */
-	public void setLocation(int b, int c) {
-		x = b;
-		y = c;
-	}
-
-	/**
-	 * 
-	 * @param n
-	 *            - set the health of the Unit to the specified amount.
-	 * @return - whether the unit is still alive.
-	 */
-	public boolean setHealth(int n) {
-		stats.health = n;
-		if (stats.health > stats.max_health)
-			stats.health = stats.max_health;
-
-		if (stats.health <= 0)
-			return false;
-		else
-			return true;
-
-	}
-
-	/**
-	 * 
-	 * @param n
-	 *            - the amount of health to modify the unit by. can be a
-	 *            negative amount to specify damage.
-	 * @return - whether the unit is still alive.
-	 */
-	public boolean modifyHealth(int n) {
-
-		stats.health = stats.health + n;
-		if (stats.health > stats.max_health)
-			stats.health = stats.max_health;
-
-		if (stats.health <= 0)
-			return false;
-		else
-			return true;
-
-	}
-
-	/**
-	 * 
-	 * @return - the current health of the Unit.
-	 */
-	public float getHealth() {
-		return stats.health;
-	}
-
-	public Player getOwner() {
-		return owner;
-	}
-
-	/**
-	 * 
-	 * @param a
-	 *            - add an action to the PriorityQueue to be performed during
-	 *            the turn.
-	 */
-	public void addAction(Action a) {
-		actionQueue.add(a);
-		getOwner().getCommandQueue().push(a, this);
-	}
-
-	/**
-	 * Logic to handle actions that the Unit may do. TODO: add all necessary
-	 * actions
-	 */
+	// not sure if needed
 	public void performActions() {
 		while (!actionQueue.isEmpty()) {
 			Action a = actionQueue.poll();
@@ -167,8 +46,9 @@ public abstract class Unit {
 				break;
 			case DEATH:
 				// I DIED
-				System.out.println("death at :" + x + " " + y);
-				getOwner().getUnits().removeUnit(this);
+				System.out
+						.println("death at :" + position.x + " " + position.y);
+				// getOwner().getUnits().removeUnit(this);
 				while (!actionQueue.isEmpty())
 					actionQueue.poll();
 				break;
@@ -179,7 +59,35 @@ public abstract class Unit {
 		}
 	}
 
+	/**
+	 * getActionQueue()
+	 * returns the list of actions this unit is in process of doing. 
+	 * @return
+	 */
 	public PriorityQueue<Action> getActionQueue() {
 		return actionQueue;
+	}
+
+	/**
+	 * getCreationTime():
+	 * returns the creation time for this unit.
+	 * @return
+	 */
+	public int getCreationTime() {
+		return this.baseStats.getCreationTime();
+	}
+	
+	public UnitType getUnitType() {
+		return unitType;
+	}
+	
+	/**
+	 * decrementCreationTime()
+	 * decrements remaining time for unit production
+	 * @param int timestep - how much to decrement by
+	 */
+	public void decrementCreationTime(int timestep)
+	{
+		this.creationTime -= timestep;
 	}
 }
