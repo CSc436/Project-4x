@@ -66,7 +66,7 @@ public class GameCanvas {
 			right = false, left = false, rotateLeft = false, rotateRight = false, center = false, move = false;
 	private long time;
 
-	public static final int GRID_WIDTH = 16;
+	public static final int GRID_WIDTH = 256;
 
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
 	private final boolean debug = true;
@@ -172,7 +172,8 @@ public class GameCanvas {
 		entities.put(4, unit4);
 		entities.put(5, unit5);
 		
-		for(int i = 0; i < GRID_WIDTH; i++) {
+		
+/*		for(int i = 0; i < GRID_WIDTH; i++) {
 			for(int j = 0; j < GRID_WIDTH; j++) {
 				final Mesh tile = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
 				tile.posX = i;
@@ -181,7 +182,7 @@ public class GameCanvas {
 				tile.id = 100 + i*GRID_WIDTH + j;
 				entities.put(tile.id, tile);
 			}
-		}
+		}*/
 	}
 	
 	// CLICKSELECTOR STUFF
