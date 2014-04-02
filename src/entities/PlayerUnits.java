@@ -1,7 +1,8 @@
 package entities;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import entities.buildings.Building;
 import entities.buildings.ResourceBuilding;
@@ -9,89 +10,111 @@ import entities.units.Agent;
 import entities.units.Unit;
 
 public class PlayerUnits {
-	private List<Unit> units;
-	private List<Unit> selectedUnits;
+	// change to hashmaps, id->object
+	private HashMap<UUID, GameObject> gameObjects;
+	private HashMap<UUID, Building> buildings;
+	private HashMap<UUID, ResourceBuilding> resourceBuildings;
+	private HashMap<UUID, Unit> units;
+	private HashMap<UUID, Agent> agents;
+	private int playerId;
 
-	private List<Building> buildings;
-	private List<Building> selectedBuildings;
-	private List<ResourceBuilding> resourceBuildings;
-
-	private List<Agent> agents;
-
-	public PlayerUnits() {
-		units = new ArrayList<Unit>();
-		buildings = new ArrayList<Building>();
-		selectedUnits = new ArrayList<Unit>();
-		selectedBuildings = new ArrayList<Building>();
-		resourceBuildings = new ArrayList<ResourceBuilding>();
-		agents = new ArrayList<Agent>();
+	public PlayerUnits(int id) {
+		playerId = id;
+		gameObjects = new HashMap<UUID, GameObject>();
+		units = new HashMap<UUID, Unit>();
+		buildings = new HashMap<UUID, Building>();
+		resourceBuildings = new HashMap<UUID, ResourceBuilding>();
+		agents = new HashMap<UUID, Agent>();
 	}
 
-	public void selectUnit(Unit unit) {
-		selectedUnits.add(unit);
+	public Map<UUID, GameObject> getGameObjects() {
+		return gameObjects;
 	}
 
-	public void addBuilding(Building building) {
-		buildings.add(building);
+	public Map<UUID, Building> getBuildings() {
+		return buildings;
 	}
 
-	public void selectBuilding(Building building) {
-		selectedBuildings.add(building);
-	}
-
-	public List<ResourceBuilding> getResourceBuildings() {
+	public Map<UUID, ResourceBuilding> getResourceBuildings() {
 		return resourceBuildings;
 	}
 
-	public void removeUnit(Unit u) {
-		units.remove(u);
-	}
-
-	public void removeBuilding(Building b) {
-		buildings.remove(b);
-	}
-
-	public boolean hasUnitAt(int x, int y) {
-		for (int c = 0; c < units.size(); c++) {
-			if (units.get(c).getX() == x && units.get(c).getY() == y)
-				return true;
-		}
-		return false;
-	}
-
-	public boolean hasBuildingAt(int x, int y) {
-		for (int c = 0; c < buildings.size(); c++) {
-			if (buildings.get(c).getX() == x && buildings.get(c).getY() == y)
-				return true;
-		}
-		return false;
-	}
-
-	public void addUnit(Unit u) {
-		units.add(u);
-
-	}
-
-	public List<Unit> getSelectedUnitList() {
-		return selectedUnits;
-	}
-
-	public List<Unit> getUnitList() {
+	public Map<UUID, Unit> getUnits() {
 		return units;
 	}
 
-	public void addAgent(Agent a) {
-
-		agents.add(a);
-	}
-
-	public void removeAgent(Agent a) {
-		agents.remove(a);
-	}
-
-	public List<Agent> getAgentList() {
-
+	public Map<UUID, Agent> getAgents() {
 		return agents;
 	}
 
+	public void addGameObject(GameObject gameObject) {
+		gameObjects.put(gameObject.getId(), gameObject);
+	}
+
+	public void addUnit(Unit unit) {
+		units.put(unit.getId(), unit);
+	}
+
+	public void addBuilding(Building building) {
+		buildings.put(building.getId(), building);
+		addGameObject(building);
+	}
+
+	public void addAgent(Agent a) {
+		agents.put(a.getId(), a);
+		addUnit(a);
+	}
+
+	public GameObject removeGameObject(UUID id) {
+		return gameObjects.remove(id);
+	}
+
+	public Building removeBuilding(UUID id) {
+		removeGameObject(id);
+		return buildings.remove(id);
+	}
+
+	public ResourceBuilding removeResourceBuilding(UUID id) {
+		removeGameObject(id);
+		removeBuilding(id);
+		return resourceBuildings.remove(id);
+	}
+
+	public Unit removeUnit(UUID id) {
+		return units.remove(id);
+	}
+
+	public Agent removeAgent(UUID id) {
+		units.remove(id);
+		return agents.remove(id);
+	}
+
+	@Override
+	public String toString() {
+		String returnStr = "Player " + playerId + "'s gameObjects:\n";
+		for (UUID id : gameObjects.keySet()) {
+			returnStr += gameObjects.get(id).toString();// responsibility of
+														// leaf class to write
+														// out one line toString
+		}
+
+		returnStr += "\n";
+		return returnStr;
+	}
+
+	// public boolean hasUnitAt(int x, int y) {
+	// for (int c = 0; c < units.size(); c++) {
+	// if (units.get(c).getX() == x && units.get(c).getY() == y)
+	// return true;
+	// }
+	// return false;
+	// }
+
+	// public boolean hasBuildingAt(int x, int y) {
+	// for (int c = 0; c < buildings.size(); c++) {
+	// if (buildings.get(c).getX() == x && buildings.get(c).getY() == y)
+	// return true;
+	// }
+	// return false;
+	// }
 }

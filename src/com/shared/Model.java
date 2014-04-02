@@ -2,12 +2,13 @@ package com.shared;
 
 
 public class Model implements Runnable {
-	public MovingUnit unit;
+	public MovingNumber number;
 	public boolean isBlack;
 	public int timeStep = 200; // Number of milliseconds per simulation step
+	public int noise = 200;
 	
 	public Model() {
-		unit = new MovingUnit( 0.0, 0.0, 1.0 );
+		number = new MovingNumber(0.0,1.0);
 		isBlack = false;
 	}
 	
@@ -17,25 +18,37 @@ public class Model implements Runnable {
 			long startTime = lastEndTime;
 			
 			simulateFrame();
+			int randNoise = (int) (Math.random() * noise); // See how timestep averaging works
+			randNoise = 0;
 			
-			//System.out.println(unit.location.x + " " + unit.location.y);
-			
-			while(System.currentTimeMillis() < startTime + timeStep);
-			lastEndTime = lastEndTime + timeStep;
+			while(System.currentTimeMillis() < startTime + timeStep + randNoise);
+			lastEndTime = System.currentTimeMillis();
 		}
 		
 	}
 	
 	public void simulateFrame() {
-		unit.simulateTimeStep(timeStep);
+		number.simulateTimeStep(timeStep);
 	}
 
-	public void setTarget( double x, double y ) {
-		unit.setTarget(x, y);
+	public void increment() {
+		number.increment();
+	}
+
+	public boolean canIncrement() {
+		return number.canIncrement();
 	}
 	
-	public MovingUnit getUnit() {
-		return unit;
+	public boolean canDecrement() {
+		return number.canDecrement();
+	}
+
+	public void decrement() {
+		number.decrement();
+	}
+	
+	public MovingNumber getNumber() {
+		return number;
 	}
 	
 }

@@ -1,9 +1,6 @@
 package com.client;
 
-import java.util.Arrays;
-
 import com.googlecode.gwtgl.array.Float32Array;
-import com.googlecode.gwtgl.binding.WebGLBuffer;
 import com.googlecode.gwtgl.binding.WebGLRenderingContext;
 import com.shared.Terrain;
 
