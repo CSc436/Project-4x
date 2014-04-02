@@ -7,3 +7,4 @@ war/WEB-INF/deploy/game/symbolMaps
 *.symbolMap
 *.cache.*
 /target
+/pom.xml
