@@ -53,10 +53,12 @@ public class Controller implements Runnable {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void checkBuildingProductionQueue(int timestep) {
 
 	}
 
+	@SuppressWarnings("unused")
 	private boolean playerCommands() {
 
 		return true;
@@ -72,15 +74,18 @@ public class Controller implements Runnable {
 	public Queue<Tile> pathFinding() {
 		return null;
 	}
-
+	
+	@SuppressWarnings("unused")
 	private void unitInteraction() {
 
 	}
 
+	@SuppressWarnings("unused")
 	private void agentDecision() {
 
 	}
 
+	@SuppressWarnings("unused")
 	private void produceResources() {
 
 	}

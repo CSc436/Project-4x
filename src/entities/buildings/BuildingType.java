@@ -1,5 +1,10 @@
-package control;
+package entities.buildings;
 
+/**
+ * BuildingType
+ * @author NRTop
+ * Specifies the type of building, or resource building 
+ */
 public enum BuildingType {
 	BARRACKS, CASTLE, BANK, TOWN_HALL,
 	

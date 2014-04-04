@@ -6,12 +6,14 @@ import entities.buildings.Barracks;
 import entities.buildings.Building;
 import entities.buildings.Castle;
 import entities.gameboard.GameBoard;
+import entities.buildings.BuildingType;
 import entities.buildings.Farm;
 import entities.buildings.GoldMine;
 import entities.buildings.LumberMill;
 import entities.buildings.StoneMine;
 import entities.buildings.University;
 import entities.units.Unit;
+import entities.units.UnitType;
 import entities.units.pawns.Archer;
 import entities.units.pawns.Battering_Ram;
 import entities.units.pawns.Cannon;
@@ -26,12 +28,36 @@ import entities.units.pawns.Rifleman;
 import entities.units.pawns.Skirmisher;
 import entities.units.pawns.Transport;
 
+/**
+ * Factory
+ * @author NRTop, Ben D, etc.
+ * This class allows for easy creation of unit, building, agent, etc. objects
+ * User needs to only pass a the player who will own the object, type of object, 
+ * and where object will be spawned. 
+ *
+ */
 public class Factory {
 
+	/**
+	 * getId():
+	 * generates a UUID which will be associated with a constructed object
+	 * @return a UUID to be associated with a GameObject
+	 */
 	private static synchronized UUID getId() {
 		return UUID.randomUUID();
 	}
 
+	/**
+	 * buildUnit():
+	 * builds a new unit object based on the given UnitType
+	 * 
+	 * @param p - player who will own the object, so object can be added to their PlayerUnits objects.
+	 * @param playerId - id of player 
+	 * @param unitType - type of unit to construct
+	 * @param xco - x coordinate on gameboard of unit to be constructed
+	 * @param yco - y coordinate on gameboard of unit to be constructed 
+	 * @return
+	 */
 	public static Unit buildUnit(Player p, int playerId, UnitType unitType,
 			float xco, float yco) {
 
@@ -96,6 +122,17 @@ public class Factory {
 	// Do not remove Player p arg. It is needed to maintain the collection of
 	// buildings for the player
 
+	/**
+	 * buildBuilding()
+	 * builds a new building object based on the specified BuildingType
+	 * @param p - PLayer who will own constructed building, needed to add to player's collection of buildings
+	 * @param playerId - id of player who will own buildingd
+	 * @param buildingType - type of building to construct 
+	 * @param xco - x coordinate on gameboard where building will be constructed
+	 * @param yco - y coordinate on gameboard where building will be constructed 
+	 * @param gb - gameboard on which building will be placed. 
+	 * @return
+	 */
 	public static Building buildBuilding(Player p, int playerId,
 			BuildingType buildingType, float xco, float yco, GameBoard gb) {
 		UUID newId = getId();

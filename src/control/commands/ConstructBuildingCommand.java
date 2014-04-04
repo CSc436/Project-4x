@@ -2,11 +2,11 @@ package control.commands;
 
 import java.util.UUID;
 
-import control.BuildingType;
 import control.Factory;
 import control.GameModel;
 import control.Player;
 import entities.buildings.Building;
+import entities.buildings.BuildingType;
 import entities.gameboard.GameBoard;
 
 

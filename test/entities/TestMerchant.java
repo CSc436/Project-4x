@@ -1,4 +1,4 @@
-package entities.units.agents;
+package entities;
 import static org.junit.Assert.*;
 
 import org.junit.Assert.*;
@@ -12,6 +12,9 @@ import org.junit.Test;
 import control.Player;
 import entities.stats.UnitStats;
 import entities.units.Agent;
+import entities.units.agents.General;
+import entities.units.agents.Goods;
+import entities.units.agents.Merchant;
 
 public class TestMerchant {
 

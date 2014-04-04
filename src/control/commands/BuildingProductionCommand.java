@@ -5,9 +5,9 @@ import java.util.UUID;
 import control.Factory;
 import control.GameModel;
 import control.Player;
-import control.UnitType;
 import entities.buildings.Building;
 import entities.units.Unit;
+import entities.units.UnitType;
 
 public class BuildingProductionCommand implements Command{
 	private int playerId;

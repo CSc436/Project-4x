@@ -3,7 +3,6 @@ package entities.buildings;
 import java.util.HashMap;
 import java.util.UUID;
 
-import control.BuildingType;
 import entities.stats.BaseStatsEnum;
 
 public class Barracks extends Building {
