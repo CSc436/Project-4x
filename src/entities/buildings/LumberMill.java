@@ -3,10 +3,14 @@ package entities.buildings;
 import java.util.HashMap;
 import java.util.UUID;
 
-import control.BuildingType;
 import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
 
+/**
+ * LumberMill
+ * @author NR Top
+ * The lumberMill allows the user to generate wood resources 
+ */
 public class LumberMill extends ResourceBuilding{
 
 	/**

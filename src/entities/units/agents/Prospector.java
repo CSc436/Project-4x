@@ -3,10 +3,10 @@ package entities.units.agents;
 import java.util.UUID;
 
 import entities.units.Agent;
+import entities.units.UnitType;
 import entities.gameboard.GameBoard;
 import entities.stats.BaseStatsEnum;
 import control.Player;
-import control.UnitType;
 
 /**
  * 

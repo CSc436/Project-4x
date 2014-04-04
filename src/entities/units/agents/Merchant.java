@@ -3,13 +3,13 @@ package entities.units.agents;
 import java.util.UUID;
 
 import control.Player;
-import control.UnitType;
 import entities.GameObjectType;
 import entities.gameboard.GameBoard;
 import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 import entities.units.Agent;
+import entities.units.UnitType;
 
 public class Merchant extends Agent{
 

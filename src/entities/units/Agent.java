@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import control.CommandQueue;
 import control.Player;
-import control.UnitType;
 import entities.GameObjectType;
 import entities.gameboard.GameBoard;
 import entities.stats.BaseStatsEnum;

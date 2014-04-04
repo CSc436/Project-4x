@@ -4,11 +4,11 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import control.BuildingType;
 import control.Factory;
 import control.Player;
 import entities.buildings.Barracks;
 import entities.buildings.Building;
+import entities.buildings.BuildingType;
 import entities.gameboard.GameBoard;
 
 public class testPlayer {

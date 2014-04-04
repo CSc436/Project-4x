@@ -6,8 +6,8 @@ import org.junit.Test;
 
 import control.Factory;
 import control.Player;
-import control.UnitType;
 import entities.units.Unit;
+import entities.units.UnitType;
 
 public class TestUnit {
 	Player p = new Player("meathook", 0);

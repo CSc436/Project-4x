@@ -3,10 +3,10 @@ package entities.units.pawns;
 import java.util.HashMap;
 import java.util.UUID;
 
-import control.UnitType;
 import entities.buildings.Town_Hall;
 import entities.stats.BaseStatsEnum;
 import entities.units.Unit;
+import entities.units.UnitType;
 
 public class Trade_Cart extends Unit{
 	
