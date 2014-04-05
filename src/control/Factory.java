@@ -157,10 +157,12 @@ public class Factory {
 		Resources buildingCost = BaseStatsEnum.valueOf(enumString)
 				.getProductionCost();
 
-		// if the tile is not occupied and the player has the available
+		
+
+		// if the tile is not occupied, can be placed on the map, and the player has the available
 		// resources to spend
 		if (!gb.getTileAt((int) xco, (int) yco).isOccupiedByBuilding()
-				&& p.resources.can_spend(buildingCost)) {
+				&& p.resources.can_spend(buildingCost) && gb.canPlaceBuildingAt(buildingType, (int) xco, (int) yco)) {
 
 			switch (buildingType) {
 			case TOWN_HALL:
@@ -213,6 +215,7 @@ public class Factory {
 			result.setOwner(p);
 			p.getGameObjects().addBuilding(result);
 			p.resources.spend(buildingCost);
+			gb.placeBuildingAt(result, (int) xco, (int) yco);
 
 		} else {
 

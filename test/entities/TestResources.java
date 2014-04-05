@@ -100,7 +100,7 @@ public class TestResources {
 		assertEquals(0,p.resources.getResearchPts());
 		assertEquals(0,p.resources.getFood());
 		
-		Building c = Factory.buildBuilding(p, p.getId(), BuildingType.BARRACKS, 1, 1, model.getBoard());
+		Building c = Factory.buildBuilding(p, p.getId(), BuildingType.BARRACKS, 10, 10, model.getBoard());
 		
 	
 		

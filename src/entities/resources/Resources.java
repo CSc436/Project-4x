@@ -243,4 +243,9 @@ public class Resources {
 		return ResearchPts;
 	}
 
+	public void setGold(int i) {
+		Gold = i;
+
+	}
+
 }
