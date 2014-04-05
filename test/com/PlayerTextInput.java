@@ -1,9 +1,11 @@
-package control;
+package com;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
+import control.Controller;
+import control.GameState;
+import control.PlayerCommands;
 
 //might break this into two threads. one for input, one for update
 public class PlayerTextInput implements Runnable {
@@ -30,7 +32,7 @@ public class PlayerTextInput implements Runnable {
 			String name = keyboard.next();
 			payload.add(name);
 			payload.add(count);
-			
+
 			payload.clear();
 		}
 

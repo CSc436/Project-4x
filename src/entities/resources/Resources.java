@@ -8,7 +8,7 @@ package entities.resources;
  */
 public class Resources {
 	// Tentative resource types suggested during planning
-	public int Gold;
+	private int Gold;
 	private int Wood;
 	private int Food;
 	private int Stone;
@@ -222,4 +222,30 @@ public class Resources {
 		return (Gold == other.Gold && Wood == other.Wood && Food == other.Food
 				&& Stone == other.Stone && ResearchPts == other.ResearchPts);
 	}
+
+	public int getGold() {
+		return Gold;
+	}
+
+	public int getFood() {
+		return Food;
+	}
+
+	public int getStone() {
+		return Stone;
+	}
+
+	public int getWood() {
+		return Wood;
+	}
+
+	public int getResearchPts() {
+		return ResearchPts;
+	}
+
+	public void setGold(int i) {
+		Gold = i;
+
+	}
+
 }

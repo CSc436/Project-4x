@@ -3,7 +3,9 @@ package entities.units;
 import java.util.PriorityQueue;
 import java.util.UUID;
 
+import control.Player;
 import entities.Action;
+import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
 import entities.GameObject;
 import entities.GameObjectType;
@@ -25,8 +27,7 @@ public abstract class Unit extends GameObject {
 	private int creationTime;
 
 	public Unit(UUID id, int playerId, BaseStatsEnum baseStats,
-			UnitStats new_stats, UnitType unitType,
-			float xco, float yco) {
+			UnitStats new_stats, UnitType unitType, float xco, float yco) {
 		super(id, playerId, baseStats, new_stats, GameObjectType.UNIT, xco, yco);
 		this.unitType = unitType;
 		this.creationTime = baseStats.getCreationTime();
@@ -60,8 +61,9 @@ public abstract class Unit extends GameObject {
 	}
 
 	/**
-	 * getActionQueue()
-	 * returns the list of actions this unit is in process of doing. 
+	 * getActionQueue() returns the list of actions this unit is in process of
+	 * doing.
+	 * 
 	 * @return
 	 */
 	public PriorityQueue<Action> getActionQueue() {
@@ -69,25 +71,29 @@ public abstract class Unit extends GameObject {
 	}
 
 	/**
-	 * getCreationTime():
-	 * returns the creation time for this unit.
+	 * getCreationTime(): returns the creation time for this unit.
+	 * 
 	 * @return
 	 */
 	public int getCreationTime() {
 		return this.baseStats.getCreationTime();
 	}
-	
+
 	public UnitType getUnitType() {
 		return unitType;
 	}
-	
+
 	/**
-	 * decrementCreationTime()
-	 * decrements remaining time for unit production
+	 * decrementCreationTime() decrements remaining time for unit production
+	 * 
 	 * @param int timestep - how much to decrement by
 	 */
-	public void decrementCreationTime(int timestep)
-	{
+	public void decrementCreationTime(int timestep) {
 		this.creationTime -= timestep;
+	}
+
+	public Resources getProductionCost() {
+
+		return this.baseStats.getProductionCost();
 	}
 }

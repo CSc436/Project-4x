@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.UUID;
 
+import control.Player;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 import entities.util.Point;
@@ -15,7 +16,7 @@ public abstract class GameObject implements Locatable {
 	protected GameObjectType type;
 	private UnitStats stats;
 	protected BaseStatsEnum baseStats;
-
+	private Player owner;
 	protected Point position;
 	protected PriorityQueue<Action> actionQueue;
 
@@ -32,19 +33,6 @@ public abstract class GameObject implements Locatable {
 
 	}
 
-	protected abstract void setActions();// might get rid
-
-	public abstract HashMap<String, String> getActions();// might get rid of
-
-	public UUID getId() {
-		return id;
-	}
-
-	
-	public int getPlayerID() {
-		return playerId;
-	}
-
 	/**
 	 * called to reset the stats of the unit to (basestats + upgrades)
 	 */
@@ -57,19 +45,8 @@ public abstract class GameObject implements Locatable {
 		}
 	}
 
-	public Point getPosition() {
-		return position;
-	}
-
-	public float getX() {
-		return getPosition().x;
-	}
-
-	public float getY() {
-		return getPosition().y;
-	}
-
 	/**
+	 * setLocation(float x,float y):
 	 * 
 	 * @param x
 	 *            - x coordinate of the unit.
@@ -88,6 +65,7 @@ public abstract class GameObject implements Locatable {
 	}
 
 	/**
+	 * setHealth(float n):
 	 * 
 	 * @param n
 	 *            - set the health of the Unit to the specified amount. - n must
@@ -110,7 +88,12 @@ public abstract class GameObject implements Locatable {
 			return true;
 	}
 
+	public void setOwner(Player p) {
+		this.owner = p;
+	}
+
 	/**
+	 * modifyHealthBy(float n):
 	 * 
 	 * @param n
 	 *            - the amount of health to modify the unit by. can be a
@@ -131,6 +114,7 @@ public abstract class GameObject implements Locatable {
 	}
 
 	/**
+	 * getHealth():
 	 * 
 	 * @return - the current health of the Unit.
 	 */
@@ -138,9 +122,37 @@ public abstract class GameObject implements Locatable {
 		return stats.health;
 	}
 
+	public Player getPlayer() {
+		return owner;
+	}
+
 	public UnitStats getStats() {
 		return stats;
 	}
+
+	public Point getPosition() {
+		return position;
+	}
+
+	public float getX() {
+		return getPosition().x;
+	}
+
+	public float getY() {
+		return getPosition().y;
+	}
+
+	public UUID getId() {
+		return id;
+	}
+
+	public int getPlayerID() {
+		return playerId;
+	}
+
+	protected abstract void setActions();// might get rid
+
+	public abstract HashMap<String, String> getActions();// might get rid of
 
 	// /**
 	// *
