@@ -1,7 +1,5 @@
 package control.commands;
 
-import java.util.UUID;
-
 import control.Factory;
 import control.GameModel;
 import control.Player;
@@ -9,6 +7,15 @@ import entities.buildings.Building;
 import entities.buildings.BuildingType;
 import entities.gameboard.GameBoard;
 
+/**
+ * Programmer : Ben Deininger
+ * 
+ * Purpose : This class implements the Command class and builds a building at a
+ * specified location on the GameBoard. The command requires the arguments in
+ * the constructor, and will then call the factory to create and place the unit
+ * on board, after first checking if it is possible.
+ * 
+ */
 public class ConstructBuildingCommand implements Command {
 
 	private int playerId;

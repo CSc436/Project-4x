@@ -129,9 +129,6 @@ public class Factory {
 
 	}
 
-	// Do not remove Player p arg. It is needed to maintain the collection of
-	// buildings for the player
-
 	/**
 	 * buildBuilding() builds a new building object based on the specified
 	 * BuildingType
@@ -203,7 +200,6 @@ public class Factory {
 			default:
 				result = null;
 				break;
-			// result = new Barracks(p, 1, 1, uniqueid);
 			}
 
 			// Deleting the following 3 lines will break test cases. Its
@@ -219,8 +215,13 @@ public class Factory {
 			p.resources.spend(buildingCost);
 
 		} else {
-			System.out
-					.println("Building placement error;  Out of range, or overlap");
+
+			if (!p.resources.can_spend(buildingCost))
+				System.out
+						.println("Building placement error; Not enough resources to build!");
+			else
+				System.out
+						.println("Building placement error;  Out of range, or overlap");
 			result = null;
 		}
 		return result;
