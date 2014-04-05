@@ -30,17 +30,19 @@ import entities.units.pawns.Transport;
 
 /**
  * Factory
- * @author NRTop, Ben D, etc.
- * This class allows for easy creation of unit, building, agent, etc. objects
- * User needs to only pass a the player who will own the object, type of object, 
- * and where object will be spawned. 
- *
+ * 
+ * @author NRTop, Ben D, etc. This class allows for easy creation of unit,
+ *         building, agent, etc. objects User needs to only pass a the player
+ *         who will own the object, type of object, and where object will be
+ *         spawned.
+ * 
  */
 public class Factory {
 
 	/**
-	 * getId():
-	 * generates a UUID which will be associated with a constructed object
+	 * getId(): generates a UUID which will be associated with a constructed
+	 * object
+	 * 
 	 * @return a UUID to be associated with a GameObject
 	 */
 	private static synchronized UUID getId() {
@@ -48,14 +50,19 @@ public class Factory {
 	}
 
 	/**
-	 * buildUnit():
-	 * builds a new unit object based on the given UnitType
+	 * buildUnit(): builds a new unit object based on the given UnitType
 	 * 
-	 * @param p - player who will own the object, so object can be added to their PlayerUnits objects.
-	 * @param playerId - id of player 
-	 * @param unitType - type of unit to construct
-	 * @param xco - x coordinate on gameboard of unit to be constructed
-	 * @param yco - y coordinate on gameboard of unit to be constructed 
+	 * @param p
+	 *            - player who will own the object, so object can be added to
+	 *            their PlayerUnits objects.
+	 * @param playerId
+	 *            - id of player
+	 * @param unitType
+	 *            - type of unit to construct
+	 * @param xco
+	 *            - x coordinate on gameboard of unit to be constructed
+	 * @param yco
+	 *            - y coordinate on gameboard of unit to be constructed
 	 * @return
 	 */
 	public static Unit buildUnit(Player p, int playerId, UnitType unitType,
@@ -115,6 +122,7 @@ public class Factory {
 			break;
 		}
 		p.getGameObjects().addUnit(result);
+		result.setOwner(p);
 		return result;
 
 	}
@@ -123,14 +131,22 @@ public class Factory {
 	// buildings for the player
 
 	/**
-	 * buildBuilding()
-	 * builds a new building object based on the specified BuildingType
-	 * @param p - PLayer who will own constructed building, needed to add to player's collection of buildings
-	 * @param playerId - id of player who will own buildingd
-	 * @param buildingType - type of building to construct 
-	 * @param xco - x coordinate on gameboard where building will be constructed
-	 * @param yco - y coordinate on gameboard where building will be constructed 
-	 * @param gb - gameboard on which building will be placed. 
+	 * buildBuilding() builds a new building object based on the specified
+	 * BuildingType
+	 * 
+	 * @param p
+	 *            - PLayer who will own constructed building, needed to add to
+	 *            player's collection of buildings
+	 * @param playerId
+	 *            - id of player who will own buildingd
+	 * @param buildingType
+	 *            - type of building to construct
+	 * @param xco
+	 *            - x coordinate on gameboard where building will be constructed
+	 * @param yco
+	 *            - y coordinate on gameboard where building will be constructed
+	 * @param gb
+	 *            - gameboard on which building will be placed.
 	 * @return
 	 */
 	public static Building buildBuilding(Player p, int playerId,
@@ -145,17 +161,21 @@ public class Factory {
 			case TOWN_HALL:
 				result = new Barracks(newId, playerId, xco, yco);
 				break;
-				
+
 			case BARRACKS:
-				result = new Barracks(newId, playerId, xco,
-						yco);
+				result = new Barracks(newId, playerId, xco, yco);
 				break;
 			case BANK:
-				result = new Barracks(newId, playerId,
-						 xco, yco);
+				result = new Barracks(newId, playerId, xco, yco);
 				break;
 			case CASTLE:
-				result = new Castle(newId, playerId, xco, yco, 100, 100); // last two args are populationCap and influenceArea 
+				result = new Castle(newId, playerId, xco, yco, 100, 100); // last
+																			// two
+																			// args
+																			// are
+																			// populationCap
+																			// and
+																			// influenceArea
 				break;
 			case LUMBER_MILL:
 				result = new LumberMill(newId, playerId, xco, yco);
@@ -175,12 +195,19 @@ public class Factory {
 			default:
 				result = null;
 				break;
-				// result = new Barracks(p, 1, 1, uniqueid);
+			// result = new Barracks(p, 1, 1, uniqueid);
 			}
+
+			// Deleting the following 2 lines will break test cases. Its
+			// probably not a good idea to delete them
+			// The player needs to know what buildings it has. This is the
+			// purpose of the playerUnits class.
+			result.setOwner(p);
+			p.getGameObjects().addBuilding(result);
 		} else {
-				System.out
-						.println("Building placement error;  Out of range, or overlap");
-				result = null;
+			System.out
+					.println("Building placement error;  Out of range, or overlap");
+			result = null;
 		}
 		return result;
 
