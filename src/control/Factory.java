@@ -12,6 +12,8 @@ import entities.buildings.GoldMine;
 import entities.buildings.LumberMill;
 import entities.buildings.StoneMine;
 import entities.buildings.University;
+import entities.resources.Resources;
+import entities.stats.BaseStatsEnum;
 import entities.units.Unit;
 import entities.units.UnitType;
 import entities.units.pawns.Archer;
@@ -154,8 +156,14 @@ public class Factory {
 		UUID newId = getId();
 		Building result = null;
 
-		// if the tile is not occupied
-		if (!gb.getTileAt((int) xco, (int) yco).isOccupiedByBuilding()) {
+		String enumString = (buildingType.name());
+		Resources buildingCost = BaseStatsEnum.valueOf(enumString)
+				.getProductionCost();
+
+		// if the tile is not occupied and the player has the available
+		// resources to spend
+		if (!gb.getTileAt((int) xco, (int) yco).isOccupiedByBuilding()
+				&& p.resources.can_spend(buildingCost)) {
 
 			switch (buildingType) {
 			case TOWN_HALL:
@@ -198,12 +206,18 @@ public class Factory {
 			// result = new Barracks(p, 1, 1, uniqueid);
 			}
 
-			// Deleting the following 2 lines will break test cases. Its
+			// Deleting the following 3 lines will break test cases. Its
 			// probably not a good idea to delete them
+			// The building needs a reference to its owner
 			// The player needs to know what buildings it has. This is the
 			// purpose of the playerUnits class.
+			// The player needs to be charged the resources for building the
+			// unit
+			//
 			result.setOwner(p);
 			p.getGameObjects().addBuilding(result);
+			p.resources.spend(buildingCost);
+
 		} else {
 			System.out
 					.println("Building placement error;  Out of range, or overlap");

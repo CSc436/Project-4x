@@ -9,7 +9,6 @@ import entities.buildings.Building;
 import entities.buildings.BuildingType;
 import entities.gameboard.GameBoard;
 
-
 public class ConstructBuildingCommand implements Command {
 
 	private int playerId;
@@ -19,8 +18,8 @@ public class ConstructBuildingCommand implements Command {
 	private Player p;
 	GameBoard gb;
 
-	public ConstructBuildingCommand(Player p, int playerId, BuildingType bt, int xco,
-			int yco, GameBoard gb) {
+	public ConstructBuildingCommand(Player p, int playerId, BuildingType bt,
+			int xco, int yco, GameBoard gb) {
 
 		this.p = p;
 		this.playerId = playerId;
@@ -42,6 +41,7 @@ public class ConstructBuildingCommand implements Command {
 
 		Building b = Factory.buildBuilding(p, playerId, buildingType, xco, yco,
 				gb);
+
 		if (b == null)
 			return false;
 		else

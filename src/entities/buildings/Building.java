@@ -86,6 +86,8 @@ public abstract class Building extends GameObject {
 	 * When a unit is ordered to be produced, the player is charged the
 	 * production costs. If the player decides to cancel the order, he is
 	 * refunded.
+	 * 
+	 * If the unit costs more resources than the player has, the unit is not queued, and false is returned
 	 */
 	public boolean queueUnit(Unit u) {
 
