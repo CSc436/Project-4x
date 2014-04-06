@@ -1,11 +1,11 @@
 package entities.units;
 
+import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.UUID;
 
-import control.Player;
+import control.UnitType;
 import entities.Action;
-import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
 import entities.GameObject;
 import entities.GameObjectType;
@@ -21,14 +21,15 @@ import entities.stats.UnitStats;
 // TODO add A* path finding, use diagonals to make nice looking paths
 // returns a queue/list of tiles that it needs to go to, at each turn pop one off and move player there. 
 
-public abstract class Unit extends GameObject {
+public class Unit extends GameObject {
 
 	private UnitType unitType;
 	private int creationTime;
 
 	public Unit(UUID id, int playerId, BaseStatsEnum baseStats,
-			UnitStats new_stats, UnitType unitType, float xco, float yco) {
-		super(id, playerId, baseStats, new_stats, GameObjectType.UNIT, xco, yco);
+			UnitStats new_stats, GameObjectType type, UnitType unitType,
+			float xco, float yco) {
+		super(id, playerId, baseStats, new_stats, type, xco, yco);
 		this.unitType = unitType;
 		this.creationTime = baseStats.getCreationTime();
 
@@ -59,41 +60,47 @@ public abstract class Unit extends GameObject {
 			// TODO: do stuff
 		}
 	}
-
-	/**
-	 * getActionQueue() returns the list of actions this unit is in process of
-	 * doing.
-	 * 
-	 * @return
-	 */
+	
+	public double distance(Unit u){
+		return Math.sqrt(Math.pow(u.getX()+this.getX(),2)-Math.pow(u.getY()-this.getY(),2));
+	}
+	
+	//attack & heal (medic will heal in an attack way, with damage below 0)
+	public void attack(Unit u){
+		if(this.getStats().range<this.distance(u))
+			System.out.println("Out of range");
+		else if(this.getUnitType()!=unitType.MEDIC && this==u)
+			System.out.println("You cannot attack yourself...");
+		else if(this.getUnitType()!=unitType.MEDIC && this.getPlayerID()==u.getPlayerID())
+			System.out.println("You cannot attack your teammate!");
+		else if(this.getUnitType()==unitType.MEDIC && this.getPlayerID()!=u.getPlayerID())
+			System.out.println("You cannot heal your enemies!");
+		else
+			u.getStats().health-=this.getStats().damage;
+	}
+	
 	public PriorityQueue<Action> getActionQueue() {
 		return actionQueue;
 	}
 
-	/**
-	 * getCreationTime(): returns the creation time for this unit.
-	 * 
-	 * @return
-	 */
 	public int getCreationTime() {
 		return this.baseStats.getCreationTime();
 	}
-
+	
 	public UnitType getUnitType() {
 		return unitType;
 	}
 
-	/**
-	 * decrementCreationTime() decrements remaining time for unit production
-	 * 
-	 * @param int timestep - how much to decrement by
-	 */
-	public void decrementCreationTime(int timestep) {
-		this.creationTime -= timestep;
+	@Override
+	protected void setActions() {
+		// TODO Auto-generated method stub
+		
 	}
 
-	public Resources getProductionCost() {
-
-		return this.baseStats.getProductionCost();
+	@Override
+	public HashMap<String, String> getActions() {
+		// TODO Auto-generated method stub
+		return null;
 	}
+
 }
