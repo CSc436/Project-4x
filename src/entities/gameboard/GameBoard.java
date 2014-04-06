@@ -294,6 +294,16 @@ public class GameBoard {
 	public Tile getTileAt(int x, int y) {
 		return map[x][y];
 	}
+	
+	/**
+	 * Provides a means to convert between the float coordinates and their int equivalents.
+	 * @param f the floating point X or Y coordinate to convert
+	 * @return an int representing the same location on the GameBoard, albeit less precise.
+	 */
+	public static int getCoordEquivalent(float f) {
+		//This is the same as floor(f) because (int)f truncates the decimal places.
+		return (int)f;
+	}
 
 	/*
 	 * placeBuildingAt(): Description: Places a building object at the location

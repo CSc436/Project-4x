@@ -2,6 +2,7 @@ package control;
 
 import java.util.ArrayList;
 
+import entities.GameObject;
 import entities.buildings.Building;
 import entities.gameboard.GameBoard;
 import entities.gameboard.Tile;
@@ -82,5 +83,32 @@ public class GameModel {
 	public GameBoard getBoard() {
 
 		return map;
+	}
+	
+	/**
+	 * Line-of-sight: used to obtain a listing of all objects visible to this object.
+	 * Standards for visibility are defined within this method to allow for trivial changes, such as sight range,
+	 * and may eventually be defined elsewhere; for the time being that problem was too subtle and tricky.
+	 * @param viewingObject The object (unit, building) which sees other buildings/units (or doesn't).
+	 * @return A list containing references to the objects which are within visibility of viewingObject. This list will contain
+	 * 			viewingObject unless it has been modified to use .equals (must be supported) AND IFF viewingObject != sameObject.
+	 */
+	public ArrayList<GameObject> getVisibleUnits(GameObject viewingObject) {
+		//Change these to change what can be visible.
+		int sightRange = 10;
+		
+		ArrayList<GameObject> visibles = new ArrayList<GameObject>();
+		ArrayList<GameObject> inSquare = new ArrayList<GameObject>();
+		
+		int baseX = GameBoard.getCoordEquivalent(viewingObject.getX());
+		int baseY = GameBoard.getCoordEquivalent(viewingObject.getY());
+		
+		int minX = baseX - sightRange;
+		int maxX = baseX + sightRange;
+		int minY = baseY - sightRange;
+		int maxY = baseY + sightRange;
+		
+		
+		
 	}
 }
