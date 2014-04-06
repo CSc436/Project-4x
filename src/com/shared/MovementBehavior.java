@@ -28,9 +28,9 @@ public class MovementBehavior implements Serializable {
 		this.accel = accel;
 	}
 	
-	public void simulateTimeStep(int timeStep) {
+	public double[] simulateTimeStep(int timeStep) {
 		
-		if(position.equals(targetPosition)) return;
+		if(position.equals(targetPosition)) return position.toArray();
 		
 		double timeSeconds = timeStep / 1000.0;
 		targetVelocity = targetPosition.sub(position).normalize(maxVelocity);
@@ -55,8 +55,15 @@ public class MovementBehavior implements Serializable {
 		} else {
 			position = position.add(avgVelocity.multiply(timeSeconds));
 		}
+		
+		return position.toArray();
 	}
 	
+	/**
+	 * Returns the extrapolated position, but doesn't update the model.
+	 * @param timeSinceUpdate - time (in milliseconds) to extrapolate from current state
+	 * @return An array containing the x and y position
+	 */
 	public double[] deadReckonPosition( long timeSinceUpdate ) {
 		
 		double timeSeconds = timeSinceUpdate / 1000.0;

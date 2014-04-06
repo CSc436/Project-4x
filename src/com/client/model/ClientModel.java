@@ -14,6 +14,8 @@ import com.shared.Request;
 import com.shared.SetTargetRequest;
 import com.shared.SimpleGameModel;
 
+import de.csenk.gwt.ws.client.js.JavaScriptWebSocket;
+
 public class ClientModel {
 	
 	private int turnNumber = -1;
@@ -38,14 +40,16 @@ public class ClientModel {
 			@Override
 			public void onWindowClosing(ClosingEvent event) {
 				simpleSimulator.exitGame(playerNumber, null);
-				
+
 			}
 		});
+
 		
+
 	}
-	
+
 	public void setTarget( int unitID, double x, double y ) {
-		
+
 		Request r = new SetTargetRequest( unitID, x, y );
 		
 		//requestQueue.add(r);

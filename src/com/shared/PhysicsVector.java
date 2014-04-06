@@ -113,4 +113,9 @@ public class PhysicsVector implements Serializable{
 	public boolean equals( PhysicsVector other ) {
 		return other.x == x && other.y == y;
 	}
+
+	public double[] toArray() {
+		// TODO Auto-generated method stub
+		return new double[] {x,y};
+	}
 }
