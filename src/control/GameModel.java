@@ -1,6 +1,10 @@
 package control;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 import entities.GameObject;
 import entities.buildings.Building;
@@ -94,21 +98,46 @@ public class GameModel {
 	 * 			viewingObject unless it has been modified to use .equals (must be supported) AND IFF viewingObject != sameObject.
 	 */
 	public ArrayList<GameObject> getVisibleUnits(GameObject viewingObject) {
-		//Change these to change what can be visible.
+		//Change this to change what can be visible.
 		int sightRange = 10;
 		
+		//This method first determines all units which are within a large square
+		//containing the viewingObject at its center, then refines this list based
+		//on real distance.
 		ArrayList<GameObject> visibles = new ArrayList<GameObject>();
 		ArrayList<GameObject> inSquare = new ArrayList<GameObject>();
 		
 		int baseX = GameBoard.getCoordEquivalent(viewingObject.getX());
 		int baseY = GameBoard.getCoordEquivalent(viewingObject.getY());
 		
+		//Define the square with viewingObject at its center.
 		int minX = baseX - sightRange;
 		int maxX = baseX + sightRange;
 		int minY = baseY - sightRange;
 		int maxY = baseY + sightRange;
 		
+		//Retrieve all GameObjects within the square.
+		for (Player p : players) {
+			Map<UUID, GameObject> goMap = p.getGameObjects().getGameObjects();
+			for (UUID u : goMap.keySet()) {
+				GameObject go = goMap.get(u);
+				int goX = GameBoard.getCoordEquivalent(go.getX());
+				int goY = GameBoard.getCoordEquivalent(go.getY());
+				
+				boolean isInSquareX = (minX <= goX) && (goX <= maxX);
+				boolean isInSquareY = (minY <= goY) && (goY <= maxY);
+				
+				if (isInSquareX && isInSquareY)
+					inSquare.add(go);
+			}
+		}
+		
+		//Remove self from the list.
+		
+		//Iterate over the game objects in the square and using pythagorean
+		//distance calculations, see if they're visible based on float coords.
 		
 		
+		//Return the final list.
 	}
 }
