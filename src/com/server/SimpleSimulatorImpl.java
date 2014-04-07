@@ -4,24 +4,16 @@ import java.util.HashMap;
 import java.util.Queue;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.eclipse.jetty.websocket.WebSocket;
-import org.eclipse.jetty.websocket.WebSocketServlet;
-
 import com.client.SimpleSimulator;
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.shared.Request;
 import com.shared.SimpleGameModel;
-
-import de.csenk.gwt.ws.server.jetty.JettyWebSocketConnection;
-import de.csenk.gwt.ws.shared.Connection;
-import de.csenk.gwt.ws.shared.Handler;
 
 /**
  * The server-side implementation of the RPC service.
  */
 @SuppressWarnings("serial")
-public class SimpleSimulatorImpl extends WebSocketServlet implements
+public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 		SimpleSimulator {
 	
 	ModelController m = new ModelController();
@@ -112,38 +104,4 @@ public class SimpleSimulatorImpl extends WebSocketServlet implements
 
 	}
 
-	@Override
-	public WebSocket doWebSocketConnect( HttpServletRequest arg0, String arg1) {
-		return new JettyWebSocketConnection( new Handler() {
-
-			@Override
-			public void onConnectionOpened(Connection connection)
-					throws Throwable {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onConnectionClosed(Connection connection)
-					throws Throwable {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onExceptionCaught(Connection connection,
-					Throwable caught) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onMessageReceived(Connection connection, Object message)
-					throws Throwable {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
-	}
 }

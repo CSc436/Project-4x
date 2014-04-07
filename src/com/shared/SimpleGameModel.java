@@ -5,11 +5,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 public class SimpleGameModel implements Serializable {
 	
 	/**
 	 * 
 	 */
+	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+	
 	private static final long serialVersionUID = 8880929617458008388L;
 	Map<Integer, EntityModel> entityMap = new HashMap<Integer, EntityModel>();
 	public int turnNumber = 0;
@@ -47,6 +52,10 @@ public class SimpleGameModel implements Serializable {
 	
 	public Map<Integer,EntityModel> getEntities() {
 		return entityMap;
+	}
+	
+	public String toJSON() {
+		return GSON.toJson(this, SimpleGameModel.class);
 	}
 	
 }
