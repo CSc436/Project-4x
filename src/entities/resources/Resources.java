@@ -1,12 +1,18 @@
 package entities.resources;
 
+import java.io.Serializable;
+
 /**
  * Resources
  * @author NRTop
  * This class keeps track of how many resource the player currently has, 
  * also allows resource buildings to generate a resource. 
  */
-public class Resources {
+public class Resources implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5238901473592664603L;
 	// Tentative resource types suggested during planning
 	public int Gold;
 	private int Wood;

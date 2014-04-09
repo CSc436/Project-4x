@@ -1,5 +1,6 @@
 package entities.research;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -7,7 +8,7 @@ import java.util.Set;
 import control.Player;
 import entities.annotations.TechDisabledByDefault;
 
-public class TechnologyTree {
+public class TechnologyTree implements Serializable {
 	private Player p;
 
 	public HashMap<String, Technology> technologies;

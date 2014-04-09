@@ -1,5 +1,6 @@
 package control;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import entities.buildings.Barracks;
@@ -26,10 +27,16 @@ import entities.units.pawns.Rifleman;
 import entities.units.pawns.Skirmisher;
 import entities.units.pawns.Transport;
 
-public class Factory {
+public class Factory implements Serializable {
+	
+	private static int id = 1;
 
 	private static synchronized UUID getId() {
 		return UUID.randomUUID();
+	}
+	
+	private static int getUniqueInt() {
+		return id++;
 	}
 
 	public static Unit buildUnit(Player p, int playerId, UnitType unitType,

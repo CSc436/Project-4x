@@ -1,5 +1,6 @@
 package entities;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.UUID;
@@ -8,7 +9,11 @@ import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 import entities.util.Point;
 
-public abstract class GameObject implements Locatable {
+public abstract class GameObject implements Locatable, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -449525545957280452L;
 	private final UUID id;
 	private final int playerId;
 	protected HashMap<String, String> allActions;

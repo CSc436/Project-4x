@@ -1,6 +1,8 @@
 package entities.research;
 
-public enum TechnologyEnum {
+import java.io.Serializable;
+
+public enum TechnologyEnum implements Serializable {
 	INFANTRYDAMAGE1(InfantryDamage.class), DISABLEDTECHNOLOGY(
 			DisabledTechnology.class);
 
