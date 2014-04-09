@@ -24,7 +24,7 @@ import entities.stats.UnitStats;
 public abstract class Unit extends GameObject {
 
 	private UnitType unitType;
-	private int creationTime;
+	private int creationTime; // this is used...
 
 	public Unit(UUID id, int playerId, BaseStatsEnum baseStats,
 			UnitStats new_stats, UnitType unitType, float xco, float yco) {
