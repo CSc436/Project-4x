@@ -1,15 +1,25 @@
 package control;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
+import entities.GameObject;
 import entities.buildings.Building;
 import entities.gameboard.GameBoard;
 import entities.gameboard.Tile;
 import entities.units.Unit;
 
-public class GameModel {
+public class GameModel implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3911016502183103473L;
 	private ArrayList<Player> players;
 	private GameBoard map;
+	// Hashmap of all gameObjects
+	private HashMap<UUID, GameObject> gameObjects;
 
 	// simple test model start up.
 	// A different constructor should be used for different
@@ -17,6 +27,8 @@ public class GameModel {
 		players = new ArrayList<Player>();
 		players.add(new Player("Player 1", 1));
 		players.add(new Player("Player 2", 2));
+		
+		gameObjects = new HashMap<UUID, GameObject>();
 
 		map = new GameBoard(500, 500);
 

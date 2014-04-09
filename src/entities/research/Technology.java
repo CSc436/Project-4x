@@ -1,5 +1,6 @@
 package entities.research;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import control.Player;
@@ -7,7 +8,7 @@ import entities.GameObjectType;
 import entities.resources.Resources;
 import entities.stats.BuffStats;
 
-public abstract class Technology {
+public abstract class Technology implements Serializable {
 	protected ArrayList<TechnologyEnum> requirements;
 	protected ArrayList<GameObjectType> appliesTo;
 	

@@ -1,12 +1,13 @@
 package entities.research;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import entities.GameObjectType;
 import entities.stats.BuffStats;
 
-public class Upgrades {
+public class Upgrades implements Serializable {
 	public HashMap<String, BuffStats> mapping;
 	
 	public Upgrades() {
