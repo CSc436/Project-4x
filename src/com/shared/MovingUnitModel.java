@@ -7,11 +7,11 @@ public class MovingUnitModel extends EntityModel {
 	private static final long serialVersionUID = -3036643547617800286L;
 	
 	public MovingUnitModel() {
-		movementBehavior = new MovementBehavior( new PhysicsVector(0,0), 1, 3 );
+		movementBehavior = new MoveBehavior( new PhysicsVector(0,0), 1, 3 );
 	}
 	
 	public MovingUnitModel( double initX, double initY, double maxVel, double maxAccel ) {
-		movementBehavior = new MovementBehavior( new PhysicsVector( initX, initY ), maxVel, maxAccel );
+		movementBehavior = new MoveBehavior( new PhysicsVector( initX, initY ), maxVel, maxAccel );
 	}
 	
 	public void simulateTimeStep(int timeStep) {
@@ -19,7 +19,7 @@ public class MovingUnitModel extends EntityModel {
 	}
 	
 	public double[] deadReckonPosition( long timeSinceUpdate ) {
-		return movementBehavior.deadReckonPosition(timeSinceUpdate);
+		return movementBehavior.extrapolatePosition(timeSinceUpdate);
 	}
 	
 	public void setTarget(double x, double y) {

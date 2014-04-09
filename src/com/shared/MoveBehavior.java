@@ -2,7 +2,9 @@ package com.shared;
 
 import java.io.Serializable;
 
-public class MovementBehavior implements Serializable {
+import entities.ObjectBehavior;
+
+public class MoveBehavior implements ObjectBehavior {
 	/**
 	 * 
 	 */
@@ -14,23 +16,23 @@ public class MovementBehavior implements Serializable {
 	public PhysicsVector targetVelocity = new PhysicsVector(0,0);
 	public double accel = 3.0; // Maximum velocity change allowable, in units per second per second
 	
-	public MovementBehavior() {
+	public MoveBehavior() {
 		this.position = new PhysicsVector(0,0);
 		this.targetPosition = new PhysicsVector(0,0);
 		this.maxVelocity = 5;
 		this.accel = 5;
 	}
 	
-	public MovementBehavior( PhysicsVector initPosition, double maxVelocity, double accel ) {
+	public MoveBehavior( PhysicsVector initPosition, double maxVelocity, double accel ) {
 		this.position = initPosition.copy();
 		this.targetPosition = initPosition.copy();
 		this.maxVelocity = maxVelocity;
 		this.accel = accel;
 	}
 	
-	public double[] simulateTimeStep(int timeStep) {
+	public void simulateTimeStep(int timeStep) {
 		
-		if(position.equals(targetPosition)) return position.toArray();
+		if(position.equals(targetPosition)) return;
 		
 		double timeSeconds = timeStep / 1000.0;
 		targetVelocity = targetPosition.sub(position).normalize(maxVelocity);
@@ -56,7 +58,6 @@ public class MovementBehavior implements Serializable {
 			position = position.add(avgVelocity.multiply(timeSeconds));
 		}
 		
-		return position.toArray();
 	}
 	
 	/**
@@ -64,7 +65,7 @@ public class MovementBehavior implements Serializable {
 	 * @param timeSinceUpdate - time (in milliseconds) to extrapolate from current state
 	 * @return An array containing the x and y position
 	 */
-	public double[] deadReckonPosition( long timeSinceUpdate ) {
+	public double[] extrapolatePosition( long timeSinceUpdate ) {
 		
 		double timeSeconds = timeSinceUpdate / 1000.0;
 		PhysicsVector tempTargetVelocity = targetPosition.sub(position).normalize(maxVelocity);

@@ -43,7 +43,7 @@ public class SimpleGameModel implements Serializable {
 	}
 	
 	public double[] deadReckonEntityPosition( int unitID, long timeSinceUpdate ) {
-		return entityMap.get(unitID).getMovementBehavior().deadReckonPosition(timeSinceUpdate);
+		return entityMap.get(unitID).getMovementBehavior().extrapolatePosition(timeSinceUpdate);
 	}
 	
 	public EntityModel get(int entityID) {

@@ -2,9 +2,13 @@ package entities.units;
 
 import java.util.PriorityQueue;
 import java.util.UUID;
+
+import com.shared.MoveBehavior;
+
 import control.UnitType;
 import entities.Action;
 import entities.stats.BaseStatsEnum;
+import entities.AttackBehavior;
 import entities.GameObject;
 import entities.GameObjectType;
 import entities.stats.UnitStats;
@@ -23,6 +27,8 @@ public abstract class Unit extends GameObject {
 
 	private UnitType unitType;
 	private int creationTime;
+	private MoveBehavior moveBehavior;
+	private AttackBehavior attackBehavior;
 
 	public Unit(UUID id, int playerId, BaseStatsEnum baseStats,
 			UnitStats new_stats, UnitType unitType,

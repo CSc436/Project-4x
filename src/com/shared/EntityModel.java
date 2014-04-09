@@ -8,13 +8,13 @@ public abstract class EntityModel implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -6408658237353388571L;
-	protected MovementBehavior movementBehavior;
+	protected MoveBehavior movementBehavior;
 	
 	public EntityModel() {
-		movementBehavior = new MovementBehavior( new PhysicsVector(0,0), 5, 5 );
+		movementBehavior = new MoveBehavior( new PhysicsVector(0,0), 5, 5 );
 	}
 	
-	public MovementBehavior getMovementBehavior() {
+	public MoveBehavior getMovementBehavior() {
 		return movementBehavior;
 	}
 	

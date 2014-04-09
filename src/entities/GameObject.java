@@ -20,6 +20,7 @@ public abstract class GameObject implements Locatable, Serializable {
 	protected GameObjectType type;
 	private UnitStats stats;
 	protected BaseStatsEnum baseStats;
+	protected HealthBehavior healthBehavior;
 
 	protected Point position;
 	protected PriorityQueue<Action> actionQueue;
@@ -60,6 +61,10 @@ public abstract class GameObject implements Locatable, Serializable {
 			stats = new_stats.clone();
 			stats.health = stats.max_health * percentage_health;
 		}
+	}
+	
+	public HealthBehavior getHealthBehavior() {
+		return healthBehavior;
 	}
 
 	public Point getPosition() {

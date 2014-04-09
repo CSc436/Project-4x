@@ -30,10 +30,6 @@ import entities.units.pawns.Transport;
 public class Factory implements Serializable {
 	
 	private static int id = 1;
-
-	private static synchronized UUID getId() {
-		return UUID.randomUUID();
-	}
 	
 	private static int getUniqueInt() {
 		return id++;
