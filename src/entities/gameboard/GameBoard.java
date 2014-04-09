@@ -279,7 +279,7 @@ public class GameBoard {
 			    map[r][c].getTerrainType() == Terrain.SNOW || map[r][c].getTerrainType() == Terrain.FOREST))
 			{
 				map[r][c].setResource(Resource.STONE);
-				stoneCount -= (resourceClump(r, c, 2, Resource.STONE) + 1);
+				stoneCount -= (resourceClump(r, c, 3, Resource.STONE) + 1);
 			} else
 			{
 				continue;
@@ -295,7 +295,7 @@ public class GameBoard {
 			    (map[r][c].getTerrainType() == Terrain.MOUNTAIN || map[r][c].getTerrainType() == Terrain.FOREST))
 			{
 				map[r][c].setResource(Resource.WOOD);
-				woodCount -= (resourceClump(r, c, 4, Resource.WOOD) + 1);
+				woodCount -= (resourceClump(r, c, 10, Resource.WOOD) + 1);
 				// Attempt clumping 
 			} else
 			{
@@ -312,7 +312,7 @@ public class GameBoard {
 			    map[r][c].getTerrainType() == Terrain.SNOW))
 			{
 				map[r][c].setResource(Resource.GOLD);
-				goldCount -= (resourceClump(r, c, 0, Resource.GOLD) + 1);
+				goldCount -= (resourceClump(r, c, 1, Resource.GOLD) + 1);
 				// Attempt clumping 
 			} else
 			{
@@ -337,9 +337,38 @@ public class GameBoard {
 	 */
 	private int resourceClump(int r, int c, int clump, Resource res)
 	{
-		// allow for two falses 
 		int count = 0; 
-		// spiral outward from source, TODO 
+		int d1, d2; // values to add to current positions (r and c) -1 to 1. 
+		
+		while (clump >= 0)
+		{
+			d1 = rand.nextInt(2) - 2; 
+			d2 = rand.nextInt(2) - 2; 
+			r +=  d1; 
+			c +=  d2; 
+			if (r >= 0 && r < rows && c >= 0 && c < cols) // check within bounds
+			{
+				if (map[r][c].getResource() == Resource.NONE)
+				{
+					if (rand.nextBoolean())
+					{
+						count++; // increment number of resources placed
+						map[r][c].setResource(res); // set resource
+					} else // failed to place, decrement clump
+					{
+						clump--;
+					}
+				} else 
+				{
+					//System.out.println("Has resource");
+					continue;
+				}
+			} else  // out of bounds of map, break loop. 
+			{
+				break;
+			}
+		}
+		
 		return count;
 	}
 	
