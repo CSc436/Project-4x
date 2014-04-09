@@ -326,8 +326,6 @@ public class GameBoard {
 	 * resourceClump()
 	 * Helper method used to clump resources, spirals out from source. 
 	 * 
-	 * 
-	 * 
 	 * @param r - source location row
 	 * @param c - source location column 
 	 * @param clump - how many chances clumper can fail. (random boolean return false x number of times)
@@ -342,8 +340,8 @@ public class GameBoard {
 		
 		while (clump >= 0)
 		{
-			d1 = rand.nextInt(2) - 2; 
-			d2 = rand.nextInt(2) - 2; 
+			d1 = (int) ((rand.nextInt() % 131) % 2 - 2); // come up with better way, get rid of diagonal. 
+			d2 = (int) ((rand.nextInt() % 131) % 2 - 2); 
 			r +=  d1; 
 			c +=  d2; 
 			if (r >= 0 && r < rows && c >= 0 && c < cols) // check within bounds
