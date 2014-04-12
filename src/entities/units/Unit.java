@@ -10,6 +10,7 @@ import entities.stats.BaseStatsEnum;
 import entities.GameObject;
 import entities.GameObjectType;
 import entities.stats.UnitStats;
+import entities.units.behavior.UnitBehavior;
 
 /*
  * 
@@ -25,6 +26,7 @@ public class Unit extends GameObject {
 
 	private UnitType unitType;
 	private int creationTime; // this is used...
+	private UnitBehavior currentBehavior;
 
 	public Unit(UUID id, int playerId, BaseStatsEnum baseStats,
 			UnitStats new_stats, GameObjectType type, UnitType unitType,
