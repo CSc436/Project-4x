@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.UUID;
 
+import control.GameModel;
 import control.Player;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
@@ -153,6 +154,8 @@ public abstract class GameObject implements Locatable {
 	protected abstract void setActions();// might get rid
 
 	public abstract HashMap<String, String> getActions();// might get rid of
+	
+	public abstract void tick(int timeScale, GameModel model);
 
 	// /**
 	// *
