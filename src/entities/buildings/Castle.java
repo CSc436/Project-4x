@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import entities.stats.BaseStatsEnum;
 
-public class Castle extends Building {
+public class Castle extends ProductionBuilding {
 
 	// main hub
 

@@ -3,6 +3,8 @@ package control;
 import java.util.ArrayList;
 
 import entities.buildings.Building;
+import entities.buildings.ProductionBuilding;
+import entities.buildings.ResearchBuilding;
 import entities.gameboard.GameBoard;
 import entities.gameboard.Tile;
 import entities.units.Unit;
@@ -44,11 +46,22 @@ public class GameModel {
 	private void placeNewUnits() {
 		for (Player p : players) {
 			for (Building b : p.getGameObjects().getBuildings().values()) {
-				Unit potentialUnit = b.advanceUnitProduction(1); // Adjust time step in future 
-				if (potentialUnit != null) {
-					Tile t = map.getTileAt(0, 0);
-					t.addUnit(potentialUnit);
-					p.getGameObjects().addUnit(potentialUnit);
+
+				if (b.getClass() == ProductionBuilding.class) {
+
+					Unit potentialUnit = ((ProductionBuilding) b)
+							.advanceUnitProduction(1); // Adjust time step in
+														// future
+					if (potentialUnit != null) {
+						Tile t = map.getTileAt(0, 0);
+						t.addUnit(potentialUnit);
+						p.getGameObjects().addUnit(potentialUnit);
+					}
+
+				} else if(b.getClass() == ResearchBuilding.class) {
+					((ResearchBuilding)b).advanceProduction(1);
+					
+					
 				}
 			}
 		}

@@ -6,6 +6,7 @@ import entities.buildings.Barracks;
 import entities.buildings.Building;
 import entities.buildings.Castle;
 import entities.gameboard.GameBoard;
+import entities.buildings.Blacksmith;
 import entities.buildings.BuildingType;
 import entities.buildings.Farm;
 import entities.buildings.GoldMine;
@@ -157,12 +158,12 @@ public class Factory {
 		Resources buildingCost = BaseStatsEnum.valueOf(enumString)
 				.getProductionCost();
 
-		
-
-		// if the tile is not occupied, can be placed on the map, and the player has the available
+		// if the tile is not occupied, can be placed on the map, and the player
+		// has the available
 		// resources to spend
 		if (!gb.getTileAt((int) xco, (int) yco).isOccupiedByBuilding()
-				&& p.resources.can_spend(buildingCost) && gb.canPlaceBuildingAt(buildingType, (int) xco, (int) yco)) {
+				&& p.resources.can_spend(buildingCost)
+				&& gb.canPlaceBuildingAt(buildingType, (int) xco, (int) yco)) {
 
 			switch (buildingType) {
 			case TOWN_HALL:
@@ -198,6 +199,9 @@ public class Factory {
 				break;
 			case UNIVERSITY:
 				result = new University(newId, playerId, xco, yco);
+				break;
+			case BLACKSMITH:
+				result = new Blacksmith(newId, playerId, xco, yco);
 				break;
 			default:
 				result = null;

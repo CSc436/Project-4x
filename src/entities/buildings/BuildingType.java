@@ -10,7 +10,11 @@ public enum BuildingType {
 
 	// Resource Buildings
 	LUMBER_MILL(1, 1), STONE_MINE(1, 1), GOLD_MINE(1, 1), FARM(1, 1), UNIVERSITY(
-			3, 3);
+			3, 3),
+
+	// Research Buildings
+
+	BLACKSMITH(2, 2);
 
 	int x;
 	int y;

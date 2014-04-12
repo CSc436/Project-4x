@@ -6,6 +6,7 @@ import control.Factory;
 import control.GameModel;
 import control.Player;
 import entities.buildings.Building;
+import entities.buildings.ProductionBuilding;
 import entities.units.Unit;
 import entities.units.UnitType;
 
@@ -31,7 +32,7 @@ public class BuildingProductionCommand implements Command {
 	public boolean performCommand(GameModel model) {
 		// Find the building's location so we can spawn a unit there
 		Player player = model.getPlayer(playerId);
-		Building thisBuilding = player.getGameObjects().getBuildings()
+		ProductionBuilding thisBuilding = (ProductionBuilding) player.getGameObjects().getBuildings()
 				.get(buildingId);
 
 		Unit u = Factory.buildUnit(player, playerId, unitType,
