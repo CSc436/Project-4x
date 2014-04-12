@@ -1,14 +1,12 @@
 package entities.buildings;
 
 import entities.resources.Resources;
-import entities.units.Unit;
+
 
 // TODO for construction, need to add check to make sure resource building is 
 // being placed on correct tile type (food on food, gold on gold, etc.)
 
 public interface ResourceBuilding {
-
-	public static Resources globalRateModifier = new Resources(1, 1, 1, 1, 1);
 
 	/**
 	 * ResourceBuidling(): Base constructor for Resource Type buildings, calls
@@ -38,12 +36,8 @@ public interface ResourceBuilding {
 	 */
 
 	/* Setters and Getters */
-	public void setGlobalRateModifier(Resources newRate);
-
-	public Resources getGlobalRateModifier();
-
 	public Resources generateResource();
 
-	public Unit advanceResourceProduction(int timestep);
+	public void advanceResourceProduction();
 
 }

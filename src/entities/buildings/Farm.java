@@ -3,7 +3,6 @@ package entities.buildings;
 import java.util.UUID;
 import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
-import entities.units.Unit;
 
 /**
  * Farm
@@ -12,8 +11,7 @@ import entities.units.Unit;
  */
 public class Farm extends Building implements ResourceBuilding {
 
-	protected final Resources baseResourceAmount = new Resources(0, 100, 0, 0,
-			0);
+	protected Resources baseResourceAmount;
 	protected Resources resourceAmount;
 
 	// Global resource rate modifier that affects all resource buildings
@@ -33,27 +31,29 @@ public class Farm extends Building implements ResourceBuilding {
 	public Farm(UUID id, int playerId, float xco, float yco) {
 		super(id, playerId, BaseStatsEnum.FARM, BaseStatsEnum.FARM.getStats(),
 				BuildingType.FARM, xco, yco, 1, 1);
-
+		baseResourceAmount = new Resources(0, 0, 100, 0, 0);
+		resourceAmount = new Resources(0, 0, 10, 0, 0);
 	}
 
-	/* Setters and Getters */
-	public void setGlobalRateModifier(Resources newRate) {
-		globalRateModifier.scale(newRate);
-		resourceAmount = baseResourceAmount.scale(globalRateModifier);
-	}
+	public Resources generateResource() {
 
-	public Resources getGlobalRateModifier() {
-		return globalRateModifier;
-	}
-
-	public final Resources generateResource() {
 		return resourceAmount;
 	}
 
 	@Override
-	public Unit advanceResourceProduction(int timestep) {
-		// TODO Auto-generated method stub
-		return null;
+	public void advanceResourceProduction() {
+
+		if (baseResourceAmount.spend(0, 0, 10, 0, 0)) {
+
+			this.getPlayer().addResources(resourceAmount);
+		}
+
+		return;
+	}
+
+	public Resources getBaseResources() {
+
+		return baseResourceAmount;
 	}
 
 }

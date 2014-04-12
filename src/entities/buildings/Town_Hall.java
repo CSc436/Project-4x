@@ -1,6 +1,9 @@
 package entities.buildings;
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.UUID;
+
 import entities.stats.BaseStatsEnum;
 import entities.units.Unit;
 import entities.units.pawns.Trade_Cart;
@@ -9,6 +12,7 @@ public class Town_Hall extends Building implements ProductionBuilding {
 
 	Trade_Cart trader;
 	boolean iscapital;
+	private Queue<Unit> buildingQ = new LinkedList<Unit>();
 
 	/*
 	 * trading : 1 trade cart per town hall, each trade cart will autonomously
@@ -25,34 +29,35 @@ public class Town_Hall extends Building implements ProductionBuilding {
 
 	}
 
-	@Override
 	public Unit advanceUnitProduction(int timestep) {
-		// TODO Auto-generated method stub
+
+		if (!productionQueueEmpty()) {
+			Unit u = buildingQ.peek();
+			u.decrementCreationTime(timestep);
+			if (u.getCreationTime() <= 0) {
+
+				return buildingQ.poll();
+			}
+		}
 		return null;
 	}
 
-	@Override
 	public boolean queueUnit(Unit u) {
-		// TODO Auto-generated method stub
-		return false;
+		return buildingQ.add(u);
+
 	}
 
-	@Override
 	public Unit dequeueUnit() {
-		// TODO Auto-generated method stub
-		return null;
+		return buildingQ.poll();
 	}
 
-	@Override
 	public boolean productionQueueEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+
+		return buildingQ.isEmpty();
 	}
 
-	@Override
 	public Unit getProducingUnit() {
-		// TODO Auto-generated method stub
-		return null;
+		return buildingQ.peek();
 	}
 
 }
