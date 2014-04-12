@@ -59,7 +59,7 @@ public class GameModel {
 					}
 
 				} else if(b.getClass() == ResearchBuilding.class) {
-					((ResearchBuilding)b).advanceProduction(1);
+					((ResearchBuilding)b).advanceResearchProduction(1);
 					
 					
 				}

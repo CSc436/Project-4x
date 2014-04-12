@@ -5,6 +5,7 @@ import java.util.UUID;
 import control.Factory;
 import control.GameModel;
 import control.Player;
+import entities.GameObject;
 import entities.buildings.Building;
 import entities.buildings.ProductionBuilding;
 import entities.units.Unit;
@@ -32,11 +33,12 @@ public class BuildingProductionCommand implements Command {
 	public boolean performCommand(GameModel model) {
 		// Find the building's location so we can spawn a unit there
 		Player player = model.getPlayer(playerId);
-		ProductionBuilding thisBuilding = (ProductionBuilding) player.getGameObjects().getBuildings()
-				.get(buildingId);
+		ProductionBuilding thisBuilding = (ProductionBuilding) player
+				.getGameObjects().getBuildings().get(buildingId);
 
 		Unit u = Factory.buildUnit(player, playerId, unitType,
-				thisBuilding.getX(), thisBuilding.getY());
+				((GameObject) thisBuilding).getX(),
+				((GameObject) thisBuilding).getY());
 
 		// Add this unit to the player's queue
 		thisBuilding.queueUnit(u);

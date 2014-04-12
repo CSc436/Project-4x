@@ -40,10 +40,10 @@ public class TestGameBoard {
 		assertTrue(board.getTileAt(2, 2).isOccupiedByBuilding());
 		assertTrue(board.getTileAt(1, 3).isOccupiedByBuilding());
 		assertTrue(board.getTileAt(2, 3).isOccupiedByBuilding());
-		assertTrue(board.getTileAt(1, 4).isOccupiedByBuilding());
-		assertTrue(board.getTileAt(2, 4).isOccupiedByBuilding());
-		assertTrue(board.getTileAt(1, 5).isOccupiedByBuilding());
-		assertTrue(board.getTileAt(2, 5).isOccupiedByBuilding());
+		assertFalse(board.getTileAt(1, 4).isOccupiedByBuilding());
+		assertFalse(board.getTileAt(2, 4).isOccupiedByBuilding());
+		assertFalse(board.getTileAt(1, 5).isOccupiedByBuilding());
+		assertFalse(board.getTileAt(2, 5).isOccupiedByBuilding());
 
 		for (int r = 2; r < 200; r++) {
 			for (int c = 6; c < 200; c++) {

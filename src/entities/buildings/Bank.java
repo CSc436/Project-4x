@@ -6,9 +6,7 @@ import entities.stats.BaseStatsEnum;
 import entities.units.Unit;
 
 public class Bank extends Building implements ResourceBuilding {
-	// Placeholder bank building dimensions
-	private static final int Height = 4;
-	private static final int Width = 4;
+
 	private static final int BaseGenAmt = 100; // Base amount that banks will
 												// generate for the user
 	int gold;
@@ -31,7 +29,8 @@ public class Bank extends Building implements ResourceBuilding {
 	public Bank(UUID id, int playerId, float xco, float yco,
 			Resources resourceAmount) {
 		super(id, playerId, BaseStatsEnum.BANK, BaseStatsEnum.BANK.getStats(),
-				BuildingType.BANK, xco, yco, 2, 2);
+				BuildingType.BANK, xco, yco, BuildingType.BANK.getX(),
+				BuildingType.BANK.getY());
 	}
 
 	@Override
