@@ -35,31 +35,8 @@ public class ResearchTechnologyCommand implements Command {
 	public boolean performCommand(GameModel model) {
 		// if the building is owned by the calling player, add the technology to
 		// the buildings tech list
-		if (b.getPlayer() == p) {
-
-			switch (t) {
-
-			case INFANTRYDAMAGE:
-				b.addTechnology(new InfantryDamage());
-				break;
-			case DISABLEDTECHNOLOGY:
-				b.addTechnology(new DisabledTechnology());
-				break;
-			case RANGEDDAMAGE:
-				b.addTechnology(new RangedDamage());
-				break;
-			case RANGEDLOS:
-				b.addTechnology(new RangedLOS());
-				break;
-			case INFANTRYARMOR:
-				b.addTechnology(new InfantryArmor());
-				break;
-			default:
-				break;
-
-			}
-
-		}
+		if (p.getTechTree().can_research(t.toString()))
+			p.getTechTree().research(t.toString());
 		return false;
 	}
 

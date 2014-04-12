@@ -1,16 +1,11 @@
 package entities.buildings;
 
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.UUID;
-
-import control.Player;
 import control.Tools;
 import entities.GameObject;
 import entities.GameObjectType;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
-import entities.units.Unit;
 
 public abstract class Building extends GameObject {
 
@@ -20,8 +15,6 @@ public abstract class Building extends GameObject {
 														// knows what 'city' it
 														// belongs to
 	private BuildingType buildingType;
-
-
 
 	// private int turnsToExecute = 5; // Incase new implementation does not
 	// work.
@@ -78,7 +71,6 @@ public abstract class Building extends GameObject {
 		return width;
 	}
 
-	
 	/**
 	 * getCastleID() Returns the castle ID that is associated with this building
 	 * 
@@ -88,20 +80,9 @@ public abstract class Building extends GameObject {
 		return castleId;
 	}
 
-	
-
-
-
-
-
-
-
 	public BuildingType getBuildingType() {
 
 		return buildingType;
 	}
-	
-	
-	
 
 }

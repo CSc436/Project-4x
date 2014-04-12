@@ -1,17 +1,18 @@
 package entities.buildings;
 
-import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.UUID;
-
 import entities.stats.BaseStatsEnum;
 import entities.units.Unit;
 
-public class Barracks extends ProductionBuilding {
+public class Barracks extends Building implements ProductionBuilding {
 
 	int level;
 	int soldierNum;
 	int newSoldNum;
 	int capacity;
+	private Queue<Unit> buildingQ = new LinkedList<Unit>();
 
 	public Barracks(UUID id, int playerId, float xco, float yco) {
 		super(id, playerId, BaseStatsEnum.BARRACKS, BaseStatsEnum.BARRACKS
@@ -61,17 +62,35 @@ public class Barracks extends ProductionBuilding {
 		}
 	}
 
-	@Override
-	protected void setActions() {
-		// TODO Auto-generated method stub
+	public Unit advanceUnitProduction(int timestep) {
 
-	}
+		if (!productionQueueEmpty()) {
+			Unit u = buildingQ.peek();
+			u.decrementCreationTime(timestep);
+			if (u.getCreationTime() <= 0) {
 
-	@Override
-	public HashMap<String, String> getActions() {
-		// TODO Auto-generated method stub
+				return buildingQ.poll();
+			}
+		}
 		return null;
 	}
 
+	public boolean queueUnit(Unit u) {
+		return buildingQ.add(u);
+
+	}
+
+	public Unit dequeueUnit() {
+		return buildingQ.poll();
+	}
+
+	public boolean productionQueueEmpty() {
+
+		return buildingQ.isEmpty();
+	}
+
+	public Unit getProducingUnit() {
+		return buildingQ.peek();
+	}
 
 }

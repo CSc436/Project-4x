@@ -1,23 +1,14 @@
 package entities.buildings;
 
-import java.util.HashMap;
-import java.util.UUID;
-
 import entities.resources.Resources;
-import entities.stats.BaseStatsEnum;
-import entities.stats.UnitStats;
 import entities.units.Unit;
 
 // TODO for construction, need to add check to make sure resource building is 
 // being placed on correct tile type (food on food, gold on gold, etc.)
 
-public class ResourceBuilding extends Building {
+public interface ResourceBuilding {
 
-	protected final Resources baseResourceAmount;
-	protected Resources resourceAmount;
-
-	// Global resource rate modifier that affects all resource buildings
-	private static Resources globalRateModifier = new Resources(1, 1, 1, 1, 1);
+	public static Resources globalRateModifier = new Resources(1, 1, 1, 1, 1);
 
 	/**
 	 * ResourceBuidling(): Base constructor for Resource Type buildings, calls
@@ -45,44 +36,14 @@ public class ResourceBuilding extends Building {
 	 *            resourceAmount - base amount of resource building generates
 	 * 
 	 */
-	public ResourceBuilding(UUID id, int playerId, BaseStatsEnum baseStats,
-			UnitStats new_stats, BuildingType buildingType, float xco,
-			float yco, int height, int width, Resources resourceAmount) {
-		super(id, playerId, baseStats, new_stats, buildingType, xco, yco,
-				height, width);
-		baseResourceAmount = resourceAmount;
-		this.resourceAmount = resourceAmount;
-
-	}
 
 	/* Setters and Getters */
-	public void setGlobalRateModifier(Resources newRate) {
-		globalRateModifier = newRate;
-		resourceAmount = baseResourceAmount.scale(globalRateModifier);
-	}
+	public void setGlobalRateModifier(Resources newRate);
 
-	public Resources getGlobalRateModifier() {
-		return globalRateModifier;
-	}
+	public Resources getGlobalRateModifier();
 
-	public final Resources generateResource() {
-		return resourceAmount;
-	}
+	public Resources generateResource();
 
-	public Unit advanceProduction(int timestep) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Unit advanceResourceProduction(int timestep);
 
-	@Override
-	protected void setActions() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public HashMap<String, String> getActions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
