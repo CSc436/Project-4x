@@ -36,21 +36,23 @@ public class TestBuildings {
 	@Test
 	public void testResourceBuildings() {
 		Player p = new Player("Xu", 111);
+
+		/* TEST FARM */
 		Farm farm = new Farm(new UUID(0, 0), 1, 1, 1);
 		farm.setOwner(p);
 		assertEquals(0, p.getResources().getFood());
 		assertEquals(100, farm.getBaseResources().getFood());
-				
+
 		farm.advanceResourceProduction();
-		
+
 		assertEquals(10, p.getResources().getFood());
 		assertEquals(90, farm.getBaseResources().getFood());
-				
+
 		farm.advanceResourceProduction();
-		
+
 		assertEquals(20, p.getResources().getFood());
 		assertEquals(80, farm.getBaseResources().getFood());
-				
+
 		farm.advanceResourceProduction();
 		farm.advanceResourceProduction();
 		farm.advanceResourceProduction();
@@ -59,17 +61,34 @@ public class TestBuildings {
 		farm.advanceResourceProduction();
 		farm.advanceResourceProduction();
 		farm.advanceResourceProduction();
-		
+
 		assertEquals(100, p.getResources().getFood());
 		assertEquals(0, farm.getBaseResources().getFood());
 
 		farm.advanceResourceProduction();
-		
+
 		assertEquals(100, p.getResources().getFood());
 		assertEquals(0, farm.getBaseResources().getFood());
-				
 
-		
+		/* TEST GOLD MINE */
+		GoldMine gm = new GoldMine(new UUID(0, 0), 1, 1, 1);
+		gm.setOwner(p);
+		assertEquals(100, p.getResources().getFood());
+		assertEquals(0, p.getResources().getGold());
+		assertEquals(10000, gm.getBaseResources().getGold());
+
+		gm.advanceResourceProduction();
+
+		assertEquals(100, p.getResources().getFood());
+		assertEquals(20, p.getResources().getGold());
+		assertEquals(9980, gm.getBaseResources().getGold());
+
+		gm.advanceResourceProduction();
+
+		assertEquals(100, p.getResources().getFood());
+		assertEquals(40, p.getResources().getGold());
+		assertEquals(9960, gm.getBaseResources().getGold());
+
 	}
 
 }
