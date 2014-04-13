@@ -1,4 +1,4 @@
-package entities.buildings;
+package entities;
 
 import static org.junit.Assert.*;
 
@@ -7,9 +7,15 @@ import java.util.UUID;
 import org.junit.Test;
 
 import control.Player;
+import entities.buildings.Bank;
+import entities.buildings.Farm;
+import entities.buildings.GoldMine;
+import entities.buildings.LumberMill;
+import entities.buildings.StoneMine;
+import entities.buildings.University;
 import entities.resources.Resources;
 
-public class TestBuildings {
+public class TestBuildingInterfaces {
 
 	@Test
 	public void testBrk() {
@@ -36,6 +42,7 @@ public class TestBuildings {
 	@Test
 	public void testResourceBuildings() {
 		Player p = new Player("Xu", 111);
+		Player p2 = new Player("MEATWAD", 69);
 
 		/* TEST FARM */
 		Farm farm = new Farm(new UUID(0, 0), 1, 1, 1);
@@ -61,6 +68,35 @@ public class TestBuildings {
 		farm.advanceResourceProduction();
 		farm.advanceResourceProduction();
 		farm.advanceResourceProduction();
+
+		/* TEST STONE MINE */
+
+		StoneMine sm = new StoneMine(new UUID(0, 0), 1, 1, 1);
+		sm.setOwner(p2);
+
+		assertEquals(0, p2.getResources().getStone());
+		assertEquals(1000, sm.getBaseResources().getStone());
+
+		sm.advanceResourceProduction();
+
+		assertEquals(10, p2.getResources().getStone());
+		assertEquals(990, sm.getBaseResources().getStone());
+
+		/* TEST UNIVERSITY */
+
+		University uv = new University(new UUID(0, 0), 1, 1, 1);
+		uv.setOwner(p2);
+
+		assertEquals(10, p2.getResources().getStone());
+		assertEquals(0, p2.getResources().getResearchPts());
+		assertEquals(990, sm.getBaseResources().getStone());
+		assertEquals(5000, uv.getBaseResources().getResearchPts());
+
+		uv.advanceResourceProduction();
+		assertEquals(20, p2.getResources().getResearchPts());
+		assertEquals(10, p2.getResources().getStone());
+		assertEquals(990, sm.getBaseResources().getStone());
+		assertEquals(4980, uv.getBaseResources().getResearchPts());
 
 		assertEquals(100, p.getResources().getFood());
 		assertEquals(0, farm.getBaseResources().getFood());

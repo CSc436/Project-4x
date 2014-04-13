@@ -9,7 +9,7 @@ public class Bank extends Building implements ResourceBuilding {
 
 	private static final int BaseGenAmt = 100; // Base amount that banks will
 												// generate for the user
-	int gold;
+	public int gold;
 
 	/**
 	 * Bank(): Creates a new Bank Building.
@@ -75,25 +75,7 @@ public class Bank extends Building implements ResourceBuilding {
 	}
 
 	@Override
-	public void setGlobalRateModifier(Resources newRate) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Resources getGlobalRateModifier() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Resources generateResource() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Unit advanceResourceProduction(int timestep) {
 		// TODO Auto-generated method stub
 		return null;
 	}
