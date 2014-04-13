@@ -15,10 +15,8 @@ public class University extends Building implements ResourceBuilding {
 	protected Resources baseResourceAmount;
 	protected Resources resourceAmount;
 
-	// Global resource rate modifier that affects all resource buildings
-
 	/**
-	 * Farm() creates a new farm, must be placed on a food tile.
+	 * University() creates a University
 	 * 
 	 * @param id
 	 *            - UUID of this building
@@ -32,6 +30,8 @@ public class University extends Building implements ResourceBuilding {
 	public University(UUID id, int playerId, float xco, float yco) {
 		super(id, playerId, BaseStatsEnum.STONE_MINE, BaseStatsEnum.STONE_MINE
 				.getStats(), BuildingType.STONE_MINE, xco, yco, 1, 1);
+
+		/* University will start with 5000 research points and deal 20 each tick */
 		baseResourceAmount = new Resources(0, 0, 0, 0, 5000);
 		resourceAmount = new Resources(0, 0, 0, 0, 20);
 	}

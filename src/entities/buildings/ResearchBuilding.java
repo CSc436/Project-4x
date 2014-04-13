@@ -5,19 +5,28 @@ import entities.research.TechnologyEnum;
 
 public interface ResearchBuilding {
 
-	/*
-	 * ArrayList<TechnologyEnum> researchables;
+	/**
+	 * getTechnologyList(): will return a reference to the building's list of
+	 * researchable technologies. For example, a Barracks will have a list of
+	 * Technologies that the building can research.
 	 * 
-	 * public ResearchBuilding(UUID id, int playerId, BaseStatsEnum baseStats,
-	 * UnitStats new_stats, BuildingType buildingType, float xco, float yco, int
-	 * height, int width) { super(id, playerId, baseStats, new_stats,
-	 * buildingType, xco, yco, height, width); researchables = new
-	 * ArrayList<TechnologyEnum>(); }
+	 * @return
 	 */
-
 	public ArrayList<TechnologyEnum> getTechnologyList();;
 
+	/**
+	 * addTechnology(): will add a technology to the building's tech list based
+	 * on the specified TechnologyEnum t given.
+	 * 
+	 * @return
+	 */
 	public void addTechnology(TechnologyEnum t);
 
+	/**
+	 * advanceResearchProduction(): reduces the time to complete research by
+	 * timestep
+	 * 
+	 * @return
+	 */
 	public void advanceResearchProduction(int timestep);
 }
