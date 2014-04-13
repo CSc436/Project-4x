@@ -187,6 +187,41 @@ public class Tile {
 	}
 
 	/**
+	 * setTerrainType():
+	 * Changes the terrain type of this tile, also modifies the height
+	 * of the tile to reflect the new terrain. Method mainly used 
+	 * when wanting to adjust terrain to make it more cooperative with 
+	 * the tiles
+	 * @param t - new terrain type to set. 
+	 */
+	public void setTerrainType(Terrain t)
+	{	
+		this.terrain = t;
+		// need to adjust height to reflect new terrain type
+		switch (t)
+		{
+		case WATER:
+			this.height = (float)(131/255);
+			break;
+		case SAND:
+			this.height = (float)(135/255);
+			break;
+		case GRASS:
+			this.height = (float)(139/255);
+			break;
+		case FOREST:
+			this.height = (float)(155/255);
+			break;
+		case MOUNTAIN:
+			this.height = (float)(183/255);
+			break;
+		case SNOW:
+			this.height = (float)(200/255);
+			break;
+		}
+	}
+	
+	/**
 	 * setPassable(): Description: Sets the passable value of the tile. I.E. If
 	 * player places a building or wall on a tile, it will become impassable.
 	 * 

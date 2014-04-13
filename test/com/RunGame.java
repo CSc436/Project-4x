@@ -15,13 +15,13 @@ public class RunGame {
 
 	public static void main(String[] args) {
 
-		GameBoard game = new GameBoard(800, 800);
-		game.resourceDistNat();
+		GameBoard game = new GameBoard(1000, 1000);
+		//game.resourceDistNat();
 
 		JFrame frame = new JFrame("display");
 		frame.setVisible(true);
-		frame.setSize(800, 800);
-		JPanel test = new draw(game);
+		frame.setSize(1000, 1000);
+		JPanel test = new draw(game, (int)(frame.getWidth() / game.getCols()) );
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		frame.setContentPane(test);
@@ -42,10 +42,11 @@ public class RunGame {
 class draw extends JPanel {
 
 	GameBoard game;
+	int mult; 
 
-	public draw(GameBoard g) {
+	public draw(GameBoard g, int m) {
 		game = g;
-
+		mult = m;
 	}
 
 	public void paintComponent(Graphics g) {
@@ -79,7 +80,7 @@ class draw extends JPanel {
 					else
 						g.setColor(new Color(118,208,108));
 				}
-				g.fillRect(r * 1, c * 1, 1, 1);
+				g.fillRect(r * mult, c * mult, mult, mult);
 
 			}
 		}
