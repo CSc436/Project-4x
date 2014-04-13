@@ -47,7 +47,7 @@ public class GameModel {
 		for (Player p : players) {
 			for (Building b : p.getGameObjects().getBuildings().values()) {
 
-				if (b.getClass() == ProductionBuilding.class) {
+				if (b instanceof ProductionBuilding) {
 
 					Unit potentialUnit = ((ProductionBuilding) b)
 							.advanceUnitProduction(1); // Adjust time step in
@@ -58,10 +58,9 @@ public class GameModel {
 						p.getGameObjects().addUnit(potentialUnit);
 					}
 
-				} else if(b.getClass() == ResearchBuilding.class) {
-					((ResearchBuilding)b).advanceResearchProduction(1);
-					
-					
+				} else if (b instanceof ResearchBuilding) {
+					((ResearchBuilding) b).advanceResearchProduction(1);
+
 				}
 			}
 		}

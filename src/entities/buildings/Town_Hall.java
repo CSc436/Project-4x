@@ -4,14 +4,18 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.UUID;
 
+import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
 import entities.units.Unit;
 import entities.units.pawns.Trade_Cart;
 
-public class Town_Hall extends Building implements ProductionBuilding {
+public class Town_Hall extends Building implements ProductionBuilding,
+		ResourceBuilding {
 
 	Trade_Cart trader;
 	boolean iscapital;
+	protected Resources baseResourceAmount;
+	protected Resources resourceAmount;
 	private Queue<Unit> buildingQ = new LinkedList<Unit>();
 
 	/*
@@ -26,7 +30,8 @@ public class Town_Hall extends Building implements ProductionBuilding {
 				.getStats(), BuildingType.TOWN_HALL, xco, yco, 4, 4);
 
 		this.iscapital = iscapital;
-
+		baseResourceAmount = new Resources(0, 0, 0, 0, 1000);
+		resourceAmount = new Resources(0, 0, 0, 0, 1);
 	}
 
 	public Unit advanceUnitProduction(int timestep) {
@@ -58,6 +63,27 @@ public class Town_Hall extends Building implements ProductionBuilding {
 
 	public Unit getProducingUnit() {
 		return buildingQ.peek();
+	}
+
+	public Resources generateResource() {
+
+		return resourceAmount;
+	}
+
+	@Override
+	public void advanceResourceProduction() {
+
+		if (baseResourceAmount.spend(0, 0, 0, 0, 1)) {
+
+			this.getPlayer().addResources(resourceAmount);
+		}
+
+		return;
+	}
+
+	public Resources getBaseResources() {
+
+		return baseResourceAmount;
 	}
 
 }

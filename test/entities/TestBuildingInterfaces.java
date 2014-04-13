@@ -12,6 +12,7 @@ import entities.buildings.Farm;
 import entities.buildings.GoldMine;
 import entities.buildings.LumberMill;
 import entities.buildings.StoneMine;
+import entities.buildings.Town_Hall;
 import entities.buildings.University;
 import entities.resources.Resources;
 
@@ -139,6 +140,18 @@ public class TestBuildingInterfaces {
 		assertEquals(40, p.getResources().getGold());
 		assertEquals(10, p.getResources().getWood());
 		assertEquals(990, lm.getBaseResources().getWood());
+
+	}
+
+	@Test
+	public void testMultipleInterfaces() {
+
+		Player p = new Player("Xu", 111);
+		Town_Hall th = new Town_Hall(new UUID(0, 0), 1, 1, 1, false);
+		th.setOwner(p);
+		
+		th.advanceResourceProduction();
+		th.advanceUnitProduction(1);
 
 	}
 
