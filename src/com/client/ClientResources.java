@@ -59,6 +59,12 @@ public interface ClientResources extends ClientBundle{
     @Source(value={"meshTexturedPhong.fs"})
     TextResource texturedMeshPhongFS();
     
+    @Source(value={"tileId.fs"})
+    TextResource tileIdFS();
+    
+    @Source(value={"tileId.vs"})
+    TextResource tileIdVS();
+    
     // OBJ definitions
     @Source(value={"barrel.obj"})
     TextResource barrelOBJ();
@@ -86,5 +92,7 @@ public interface ClientResources extends ClientBundle{
 	
     @Source("terrains.png")
     ImageResource terrainTexture();
+    
+
 }
 

@@ -49,10 +49,10 @@ public class GameCanvas {
 	private int vertexPositionAttribute, vertexTexCoordAttrib;
 	private int agentVertAttrib, agentTexAttrib;
 	private WebGLUniformLocation texUniform, matrixUniform, camPosUniform;
-	private WebGLBuffer vertexBuffer, texCoordBuffer;
-	private WebGLBuffer agentVertBuffer, agentTexBuffer;
+	private WebGLBuffer tileVertexBuffer, tileTexCoordBuffer, tileSelectBuffer;
+	private WebGLBuffer entityVertBuffer, entityTexBuffer;
 	
-	private Float32Array vertexData, texCoordData;
+	private Float32Array tileVertexData, tileTexCoordData, tileSelectData;
 	private Float32Array agentVertData, agentTexData;
 	
 	public static int WIDTH, HEIGHT;
@@ -73,7 +73,7 @@ public class GameCanvas {
 	private final ClientModel theModel;
 	private final Canvas webGLCanvas = Canvas.createIfSupported();
 	
-	private ClickSelector objectSelector;
+	private Selector objectSelector;
 	private HashMap<Integer,Mesh> entities;
 	public ArrayList<Integer> selectedEntities;
 
@@ -103,7 +103,7 @@ public class GameCanvas {
 		glContext.viewport(0, 0, WIDTH, HEIGHT);
 		
 		// MORE CLICK CODE
-		objectSelector = new ClickSelector(glContext, this);
+		objectSelector = new Selector(glContext, this);
 		initEntities();
 		
 		this.theModel = theModel;
@@ -179,6 +179,42 @@ public class GameCanvas {
 	}
 	
 	/**
+	 * 
+	 */
+	public void renderTiles(Shader shader){
+		int tileSelectAttrib = glContext.getAttribLocation(shader.shaderProgram, "tileSelectColor");
+		
+		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT
+				| WebGLRenderingContext.DEPTH_BUFFER_BIT);
+
+		glContext.useProgram(shaderProgram);
+
+		glContext.enableVertexAttribArray(vertexPositionAttribute);
+		glContext.enableVertexAttribArray(tileSelectAttrib);
+
+		// vertices
+		glContext.uniformMatrix4fv(matrixUniform, false, camera.getCameraMatrix());
+		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileVertexBuffer);
+		glContext.vertexAttribPointer(vertexPositionAttribute, 3,
+				WebGLRenderingContext.FLOAT, false, 0, 0);
+
+		// select color
+		glContext
+				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileSelectBuffer);
+		glContext.vertexAttribPointer(tileSelectAttrib , 2,
+				WebGLRenderingContext.FLOAT, false, 0, 0);
+
+		// uniforms
+		glContext.uniform3f(camPosUniform, camera.getX(), camera.getY(), camera.getZ());
+
+		// draw geometry
+		glContext.drawArrays(WebGLRenderingContext.TRIANGLES, 0, NUM_TILES * 6);
+		
+		glContext.disableVertexAttribArray(vertexPositionAttribute);
+		glContext.disableVertexAttribArray(tileSelectAttrib);
+	}
+	
+	/**
 	 * Renders selected entities with the selection shader
 	 * @param selectedShader
 	 */
@@ -198,6 +234,7 @@ public class GameCanvas {
 
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
+				objectSelector.invalidMap = true;
 				if (debug) Console.log("Pressed: " + event.getNativeKeyCode());
 				switch (event.getNativeKeyCode()) {
 				case KeyCodes.KEY_UP:
@@ -260,7 +297,7 @@ public class GameCanvas {
 				switch(event.getNativeButton()) {
 				case NativeEvent.BUTTON_LEFT:
 					if(event.isShiftKeyDown()) {
-						int targetID = objectSelector.pick(event.getClientX(), event.getClientY());
+						int targetID = objectSelector.pickEntity(event.getClientX(), event.getClientY());
 						System.out.println("Selected entity with ID " + targetID + ".");
 						if (entities.containsKey(targetID)) {
 							System.out.println("This entity exists! Adding to selected entities...");
@@ -275,7 +312,7 @@ public class GameCanvas {
 						}
 					} else {
 						if(!event.isControlKeyDown()) selectedEntities.clear();
-						int selectedID = objectSelector.pick(event.getClientX(), event.getClientY());
+						int selectedID = objectSelector.pickEntity(event.getClientX(), event.getClientY());
 						if(selectedID < 50) {
 							System.out.println("Selected entity with ID " + selectedID + ".");
 							if (entities.containsKey(selectedID)) {
@@ -298,13 +335,16 @@ public class GameCanvas {
 
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
-				Console.log("X: " + event.getClientX() + ", Y: " + event.getClientY());
+				//Console.log("X: " + event.getClientX() + ", Y: " + event.getClientY());
 				if (GameCanvas.this.onEdgeOfMap(event)) {
 					GameCanvas.this.mouseVector = Vector3.getVectorBetween(GameCanvas.this.getCenterOfMap(), new Vector3(event.getClientX(), event.getClientY(), 0));
 					GameCanvas.this.move = true;
 				} else {
 					GameCanvas.this.move = false;
 				}
+				Coordinate c = objectSelector.pickTile(event.getClientX(), event.getClientX());
+				$("tile-Info").text(c.toString());
+				Console.log("TILE: " + c.toString());
 			}
 			
 		}, MouseMoveEvent.getType());
@@ -631,17 +671,24 @@ public class GameCanvas {
 	 * Creates the vertex and texture coordinate buffer for  rendering
 	 */
 	private void initBuffers() {
-		vertexBuffer = glContext.createBuffer();
-		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, vertexBuffer);
+		tileVertexBuffer = glContext.createBuffer();
+		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileVertexBuffer);
 
-		glContext.bufferData(glContext.ARRAY_BUFFER, vertexData,
+		glContext.bufferData(glContext.ARRAY_BUFFER, tileVertexData,
 				WebGLRenderingContext.DYNAMIC_DRAW);
 
-		texCoordBuffer = glContext.createBuffer();
+		tileTexCoordBuffer = glContext.createBuffer();
 		glContext
-				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, texCoordBuffer);
+				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileTexCoordBuffer);
 
-		glContext.bufferData(glContext.ARRAY_BUFFER, texCoordData,
+		glContext.bufferData(glContext.ARRAY_BUFFER, tileTexCoordData,
+				WebGLRenderingContext.DYNAMIC_DRAW);
+		
+		tileSelectBuffer = glContext.createBuffer();
+		glContext
+				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileSelectBuffer);
+
+		glContext.bufferData(glContext.ARRAY_BUFFER, tileSelectData,
 				WebGLRenderingContext.DYNAMIC_DRAW);
 	}
 	
@@ -669,15 +716,15 @@ public class GameCanvas {
 		agentVertData = Float32Array.create(verts);
 		agentTexData = Float32Array.create(texs);
 		
-		agentVertBuffer = glContext.createBuffer();
-		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, agentVertBuffer);
+		entityVertBuffer = glContext.createBuffer();
+		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, entityVertBuffer);
 
 		glContext.bufferData(glContext.ARRAY_BUFFER, agentVertData,
 				WebGLRenderingContext.DYNAMIC_DRAW);
 
-		agentTexBuffer = glContext.createBuffer();
+		entityTexBuffer = glContext.createBuffer();
 		glContext
-				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, agentTexBuffer);
+				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, entityTexBuffer);
 
 
 		glContext.bufferData(glContext.ARRAY_BUFFER, agentTexData,
@@ -692,13 +739,13 @@ public class GameCanvas {
 
 		// vertices
 		glContext.uniformMatrix4fv(glContext.getUniformLocation(agentShader, "perspectiveMatrix"), false, camera.getCameraMatrix());
-		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, agentVertBuffer);
+		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, entityVertBuffer);
 		glContext.vertexAttribPointer(agentVertAttrib, 3,
 				WebGLRenderingContext.FLOAT, false, 0, 0);
 
 		// texture coordinates
 		glContext
-				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, agentTexBuffer);
+				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, entityTexBuffer);
 		glContext.vertexAttribPointer(agentTexAttrib, 2,
 				WebGLRenderingContext.FLOAT, false, 0, 0);
 
@@ -718,15 +765,16 @@ public class GameCanvas {
 	private void makeTiles() {
 		System.out.println("Generating Tiles:");
 
-		vertexData = Float32Array.create(NUM_TILES * 6 * 3);
-		texCoordData = Float32Array.create(NUM_TILES * 6 * 2);
+		tileVertexData = Float32Array.create(NUM_TILES * 6 * 3);
+		tileTexCoordData = Float32Array.create(NUM_TILES * 6 * 2);
+		tileSelectData = Float32Array.create(NUM_TILES * 6 * 2);
 		
 		RenderTile[][] map = RenderTile.makeMap(System.currentTimeMillis(), GRID_WIDTH);
 		
 		int index = 0;
 		for (int x = 0; x < GRID_WIDTH; x++)
 			for (int y = 0; y < GRID_WIDTH; y++) {
-				map[x][y].addToBuffer(index++, glContext, vertexData, texCoordData);
+				map[x][y].addToBuffer(index++, tileVertexData, tileTexCoordData, tileSelectData);
 			}
 	}
 
@@ -741,13 +789,13 @@ public class GameCanvas {
 
 		// vertices
 		glContext.uniformMatrix4fv(matrixUniform, false, camera.getCameraMatrix());
-		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, vertexBuffer);
+		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileVertexBuffer);
 		glContext.vertexAttribPointer(vertexPositionAttribute, 3,
 				WebGLRenderingContext.FLOAT, false, 0, 0);
 
 		// texture coordinates
 		glContext
-				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, texCoordBuffer);
+				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileTexCoordBuffer);
 		glContext.vertexAttribPointer(vertexTexCoordAttrib, 2,
 				WebGLRenderingContext.FLOAT, false, 0, 0);
 
@@ -769,4 +817,5 @@ public class GameCanvas {
 		
 		glContext.flush();
 	}
+	
 }
