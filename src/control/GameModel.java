@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import entities.buildings.Building;
 import entities.buildings.ProductionBuilding;
 import entities.buildings.ResearchBuilding;
+import entities.buildings.ResourceBuilding;
 import entities.gameboard.GameBoard;
 import entities.gameboard.Tile;
 import entities.units.Unit;
@@ -33,17 +34,17 @@ public class GameModel {
 	}
 
 	public void advanceTimeStep() {
-		produceResources();
-		placeNewUnits();
+
+		tickBuildings();
 
 	}
 
-	private void produceResources() {
-		// TODO Auto-generated method stub
+	/*
+	 * tickBuildings will iterate through a player's building list and execute
+	 * timestep advances according to what building interfaces it uses.
+	 */
 
-	}
-
-	private void placeNewUnits() {
+	private void tickBuildings() {
 		for (Player p : players) {
 			for (Building b : p.getGameObjects().getBuildings().values()) {
 
@@ -58,9 +59,12 @@ public class GameModel {
 						p.getGameObjects().addUnit(potentialUnit);
 					}
 
-				} else if (b instanceof ResearchBuilding) {
-					((ResearchBuilding) b).advanceResearchProduction(1);
-
+					if (b instanceof ResearchBuilding) {
+						((ResearchBuilding) b).advanceResearchProduction(1);
+					}
+					if (b instanceof ResourceBuilding) {
+						((ResourceBuilding) b).generateResource();
+					}
 				}
 			}
 		}
