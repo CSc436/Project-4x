@@ -184,8 +184,8 @@ public class GameCanvas {
 	public void renderTiles(Shader shader){
 		int tileSelectAttrib = glContext.getAttribLocation(shader.shaderProgram, "tileSelectColor");
 		
-		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT
-				| WebGLRenderingContext.DEPTH_BUFFER_BIT);
+//		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT
+//				| WebGLRenderingContext.DEPTH_BUFFER_BIT);
 
 		glContext.useProgram(shaderProgram);
 

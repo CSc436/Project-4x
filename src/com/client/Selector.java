@@ -54,8 +54,8 @@ public class Selector {
 	public Coordinate pickTile(int x, int y){
 		if (invalidMap)
 			renderTileFrameBuffer();
-		else
-			glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, tileFrameBuffer);
+		
+		glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, tileFrameBuffer);
 		
 		Uint8Array pixelData = Uint8Array.create(4);
 		glContext.readPixels(x, canvas.HEIGHT - y, 1, 1, WebGLRenderingContext.RGBA,WebGLRenderingContext.UNSIGNED_BYTE, pixelData);
@@ -80,7 +80,8 @@ public class Selector {
 		// Bind our framebuffer so that we can render these entities off screen
 		glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, tileFrameBuffer);
 		// Clear the current framebuffer 
-		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT);
+		glContext.clearColor(1, 2, 3, 4);
+		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT | WebGLRenderingContext.DEPTH_BUFFER_BIT);
 		// Reset the clearColor back to black in case the clear color ever changes
 		glContext.clearColor(0, 0, 0, 255);
 		// Render the list of entities attached to the canvas
@@ -102,7 +103,7 @@ public class Selector {
 		// Bind our framebuffer so that we can render these entities off screen
 		glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, entityFramebuffer);
 		// Clear the current framebuffer 
-		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT);
+		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT | WebGLRenderingContext.DEPTH_BUFFER_BIT);
 		// Reset the clearColor back to black in case the clear color ever changes
 		glContext.clearColor(0, 0, 0, 255);
 		// Render the list of entities attached to the canvas
