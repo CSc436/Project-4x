@@ -89,6 +89,21 @@ public class TestBuildings {
 		assertEquals(40, p.getResources().getGold());
 		assertEquals(9960, gm.getBaseResources().getGold());
 
+		/* TEST LUMBERMILL */
+		LumberMill lm = new LumberMill(new UUID(0, 0), 1, 1, 1);
+		lm.setOwner(p);
+
+		assertEquals(100, p.getResources().getFood());
+		assertEquals(40, p.getResources().getGold());
+		assertEquals(9960, gm.getBaseResources().getGold());
+
+		lm.advanceResourceProduction();
+
+		assertEquals(100, p.getResources().getFood());
+		assertEquals(40, p.getResources().getGold());
+		assertEquals(10, p.getResources().getWood());
+		assertEquals(990, lm.getBaseResources().getWood());
+
 	}
 
 }

@@ -30,8 +30,8 @@ public class GoldMine extends Building implements ResourceBuilding {
 	 *            - y coordinate of the building
 	 */
 	public GoldMine(UUID id, int playerId, float xco, float yco) {
-		super(id, playerId, BaseStatsEnum.FARM, BaseStatsEnum.FARM.getStats(),
-				BuildingType.FARM, xco, yco, 1, 1);
+		super(id, playerId, BaseStatsEnum.GOLD_MINE, BaseStatsEnum.GOLD_MINE
+				.getStats(), BuildingType.GOLD_MINE, xco, yco, 1, 1);
 		baseResourceAmount = new Resources(10000, 0, 0, 0, 0);
 		resourceAmount = new Resources(20, 0, 0, 0, 0);
 	}
