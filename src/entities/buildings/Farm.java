@@ -17,7 +17,7 @@ public class Farm extends ResourceBuilding{
 	 * @param xco
 	 * @param yco
 	 */
-	public Farm(UUID id, int playerId, float xco, float yco) {
+	public Farm(int id, int playerId, float xco, float yco) {
 		super(id, playerId, BaseStatsEnum.FARM, BaseStatsEnum.FARM.getStats(), 
 				BuildingType.FARM, xco,
 				yco, 1, 1, new Resources(0, 0, 20, 0, 0));

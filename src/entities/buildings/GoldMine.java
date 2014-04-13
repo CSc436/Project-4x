@@ -17,7 +17,7 @@ public class GoldMine extends ResourceBuilding{
 	 * @param xco - xcoordinate of this mine
 	 * @param yco = y coordinate of this mine
 	 */
-	public GoldMine(UUID id, int playerId, float xco, float yco) {
+	public GoldMine(int id, int playerId, float xco, float yco) {
 		super(id, playerId, BaseStatsEnum.GOLD_MINE, BaseStatsEnum.GOLD_MINE.getStats(), 
 				BuildingType.GOLD_MINE, xco,
 				yco, 1, 1, new Resources(20, 0, 0, 0, 0));

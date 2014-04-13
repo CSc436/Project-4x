@@ -1,7 +1,5 @@
 package entities.units.agents;
 
-import java.util.UUID;
-
 import entities.units.Agent;
 import entities.gameboard.GameBoard;
 import entities.stats.BaseStatsEnum;
@@ -24,6 +22,11 @@ public class Prospector extends Agent{
 
 	
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3335242018122152581L;
+
+	/**
 	 * General():
 	 * @param id       - unique id for this Prospector object
 	 * @param playerId - id of player that owns this general
@@ -31,11 +34,13 @@ public class Prospector extends Agent{
 	 * @param xco  - initial x coordinate on gameboard of Prospector object. 
 	 * @param yco  - initial y coordinate on gameboard of Prospector object. 
 	 */
-	public Prospector(UUID id, int playerid, float xco, float yco) {
+	public Prospector(int id, int playerid, float xco, float yco) {
 		super(id,  playerid, BaseStatsEnum.PROSPECTOR, BaseStatsEnum.PROSPECTOR.getStats(), null, UnitType.PROSPECTOR, xco,
 			 yco);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public Prospector() {}
 
 	@Override
 	public void update(Player p, GameBoard gb) {

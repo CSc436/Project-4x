@@ -1,7 +1,5 @@
 package com.shared;
 
-import java.io.Serializable;
-
 import entities.ObjectBehavior;
 
 public class MoveBehavior implements ObjectBehavior {
@@ -30,7 +28,11 @@ public class MoveBehavior implements ObjectBehavior {
 		this.accel = accel;
 	}
 	
-	public void simulateTimeStep(int timeStep) {
+	public PhysicsVector getPosition() {
+		return position;
+	}
+	
+	public void advanceTimeStep(int timeStep) {
 		
 		if(position.equals(targetPosition)) return;
 		

@@ -37,7 +37,7 @@ public class SimpleGameModel implements Serializable {
 	public void simulateTimeStep(int timeStep) {
 		Set<Integer> keySet = entityMap.keySet();
 		for(Integer i : keySet) {
-			entityMap.get(i).getMovementBehavior().simulateTimeStep(timeStep);
+			entityMap.get(i).getMovementBehavior().advanceTimeStep(timeStep);
 		}
 		turnNumber++;
 	}

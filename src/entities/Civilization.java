@@ -1,5 +1,6 @@
 package entities;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -7,8 +8,12 @@ import java.util.Set;
 import entities.research.Technology;
 import entities.research.TechnologyEnum;
 
-public abstract class Civilization {
+public abstract class Civilization implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4980684434586151255L;
 	HashMap<String, Integer> research_max_level;
 
 	public Civilization() {

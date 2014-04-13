@@ -3,29 +3,43 @@ package entities;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.PriorityQueue;
-import java.util.UUID;
+
+import com.shared.MoveBehavior;
+import com.shared.PhysicsVector;
 
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
-import entities.util.Point;
 
-public abstract class GameObject implements Locatable, Serializable {
+public abstract class GameObject implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -449525545957280452L;
-	private final UUID id;
+	private final int id;
 	private final int playerId;
 	protected HashMap<String, String> allActions;
 	protected GameObjectType type;
-	private UnitStats stats;
+	protected UnitStats stats;
 	protected BaseStatsEnum baseStats;
+	protected MoveBehavior moveBehavior;
 	protected HealthBehavior healthBehavior;
 
-	protected Point position;
 	protected PriorityQueue<Action> actionQueue;
+	
+	public GameObject() {
+		this.id = 0;
+		this.playerId = 0;
+		this.baseStats = BaseStatsEnum.INFANTRY;
+		stats = baseStats.getStats();
+		updateStats(baseStats, stats);
+		this.type = GameObjectType.ALL;
+		actionQueue = new PriorityQueue<Action>();
+		PhysicsVector position = new PhysicsVector(0,0);
+		moveBehavior = new MoveBehavior( position, stats.movementSpeed, stats.movementSpeed / 2.0 );
+		healthBehavior = new HealthBehavior( stats.health, stats.health_regen, stats.armor );
+	}
 
-	public GameObject(UUID id, int playerId, BaseStatsEnum baseStats,
+	public GameObject(int id, int playerId, BaseStatsEnum baseStats,
 			UnitStats new_stats, GameObjectType type, float xco, float yco) {
 		this.id = id;
 		this.playerId = playerId;
@@ -33,16 +47,17 @@ public abstract class GameObject implements Locatable, Serializable {
 		stats = baseStats.getStats();
 		updateStats(baseStats, new_stats);
 		this.type = type;
-		position = new Point(xco, yco);
 		actionQueue = new PriorityQueue<Action>();
-
+		PhysicsVector position = new PhysicsVector(xco,yco);
+		moveBehavior = new MoveBehavior( position, stats.movementSpeed, stats.movementSpeed / 2.0 );
+		healthBehavior = new HealthBehavior( stats.health, stats.health_regen, stats.armor );
 	}
 
 	protected abstract void setActions();// might get rid
 
 	public abstract HashMap<String, String> getActions();// might get rid of
 
-	public UUID getId() {
+	public int getId() {
 		return id;
 	}
 
@@ -63,61 +78,17 @@ public abstract class GameObject implements Locatable, Serializable {
 		}
 	}
 	
+	public MoveBehavior getMoveBehavior() {
+		return moveBehavior;
+	}
+	
 	public HealthBehavior getHealthBehavior() {
 		return healthBehavior;
 	}
 
-	public Point getPosition() {
-		return position;
-	}
-
-	public float getX() {
-		return getPosition().x;
-	}
-
-	public float getY() {
-		return getPosition().y;
-	}
-
-	/**
-	 * 
-	 * @param x
-	 *            - x coordinate of the unit.
-	 * @param y
-	 *            - y coordinate of the unit.
-	 * @return - true on success ( in range)
-	 */
-	public boolean setLocation(float x, float y) {
-
-		if (x >= 0 && y >= 0) {
-			position.x = x;
-			position.y = y;
-			return true;
-		} else
-			return false;
-	}
-
-	/**
-	 * 
-	 * @param n
-	 *            - set the health of the Unit to the specified amount. - n must
-	 *            be a positive number 0 <= n <= max_health - if n < max_health,
-	 *            n = max_health
-	 * @return - whether the unit is still alive.
-	 */
-	public boolean setHealth(float n) {
-
-		if (n >= 0) {
-			stats.health = n;
-			if (stats.health > stats.max_health)
-				stats.health = stats.max_health;
-
-		}
-
-		if (stats.health <= 0)
-			return false;
-		else
-			return true;
+	public void advanceTimeStep( int timeStep ) {
+		moveBehavior.advanceTimeStep(timeStep);
+		healthBehavior.advanceTimeStep(timeStep);
 	}
 
 	/**
@@ -152,20 +123,4 @@ public abstract class GameObject implements Locatable, Serializable {
 		return stats;
 	}
 
-	// /**
-	// *
-	// * @param a
-	// * - add an action to the PriorityQueue to be performed during
-	// * the turn.
-	// */
-	// public void addAction(Action a) {
-	// actionQueue.add(a);
-	// getOwner().getCommandQueue().push(a, this);
-	// }
-
-	// /**
-	// * Logic to handle actions that the Unit may do. TODO: add all necessary
-	// * actions
-	// */
-	// public void performActions()
 }

@@ -16,7 +16,7 @@ public class TestBuildings {
 	public void testBrk() {
 		// TODO Auto-generated method stub
 			Player p = new Player("Xu", 111);
-			Bank bk = new Bank(new UUID(0, 0),1,1,1, null);
+			Bank bk = new Bank(0,1,1,1, null);
 			bk.gold=100000;
 			p.resources.Gold=0;
 //			bk.withdraw(1000);

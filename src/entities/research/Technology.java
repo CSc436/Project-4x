@@ -9,6 +9,10 @@ import entities.resources.Resources;
 import entities.stats.BuffStats;
 
 public abstract class Technology implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -637698458101892878L;
 	protected ArrayList<TechnologyEnum> requirements;
 	protected ArrayList<GameObjectType> appliesTo;
 	
@@ -17,6 +21,8 @@ public abstract class Technology implements Serializable {
 	protected Resources[] costs;
 	protected BuffStats[] buffstats;
 	protected int[] time;
+	
+	public Technology() {}
 	
 	public Technology(int max_levels) {
 		requirements = new ArrayList<TechnologyEnum>();

@@ -3,7 +3,7 @@ package control;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
+import java.util.Set;
 
 import entities.GameObject;
 import entities.buildings.Building;
@@ -19,7 +19,8 @@ public class GameModel implements Serializable {
 	private ArrayList<Player> players;
 	private GameBoard map;
 	// Hashmap of all gameObjects
-	private HashMap<UUID, GameObject> gameObjects;
+	private HashMap<Integer, GameObject> gameObjects;
+	private int turnNumber = 0;
 
 	// simple test model start up.
 	// A different constructor should be used for different
@@ -28,7 +29,7 @@ public class GameModel implements Serializable {
 		players.add(new Player("Player 1", 1));
 		players.add(new Player("Player 2", 2));
 		
-		gameObjects = new HashMap<UUID, GameObject>();
+		gameObjects = new HashMap<Integer, GameObject>();
 
 		map = new GameBoard(500, 500);
 
@@ -41,11 +42,23 @@ public class GameModel implements Serializable {
 	public Player getPlayer(int playerId) {
 		return players.get(playerId - 1);
 	}
-
-	public void advanceTimeStep() {
+	
+	/**
+	 * Move the simulate forward by a certain number of milliseconds
+	 * @param timeStep - number of milliseconds to advance the simulation
+	 */
+	public void advanceTimeStep( int timeStep ) {
+		turnNumber++;
+		for( Player p : players ) {
+			HashMap<Integer, GameObject> playerObjects = p.getGameObjects().getGameObjects();
+			Set<Integer> keySet = playerObjects.keySet();
+			for( int i : keySet ) {
+				GameObject object = playerObjects.get(i);
+				object.advanceTimeStep( timeStep );
+			}
+		}
 		produceResources();
 		placeNewUnits();
-
 	}
 
 	private void produceResources() {
@@ -94,5 +107,14 @@ public class GameModel implements Serializable {
 	public GameBoard getBoard() {
 
 		return map;
+	}
+
+	public GameObject getGameObject(int entityID) {
+		// TODO Auto-generated method stub
+		return gameObjects.get(entityID);
+	}
+	
+	public int getTurnNumber() {
+		return turnNumber;
 	}
 }

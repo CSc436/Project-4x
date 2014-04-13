@@ -9,12 +9,21 @@ import control.Player;
 import entities.annotations.TechDisabledByDefault;
 
 public class TechnologyTree implements Serializable {
+
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9027010150167051838L;
+
 	private Player p;
 
 	public HashMap<String, Technology> technologies;
 	private HashMap<String, Integer> currently_researching;
 	private HashMap<String, Integer> researched;
-
+	
+	public TechnologyTree() {}
+	
 	public TechnologyTree(Player player) {
 		p = player;
 

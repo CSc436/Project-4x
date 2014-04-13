@@ -17,6 +17,10 @@ import control.UnitType;
 
 public class General extends Agent {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8790107618851657532L;
 	private int range;
 	private AIControl brain;
 	/**
@@ -27,11 +31,13 @@ public class General extends Agent {
 	 * @param xco  - initial x coordinate on gameboard of general object. 
 	 * @param yco  - initial y coordinate on gameboard of genera object. 
 	 */
-	public General(UUID id, int playerId, UnitStats new_stats, float xco, float yco) {
+	public General(int id, int playerId, UnitStats new_stats, float xco, float yco) {
 		super( id, playerId, BaseStatsEnum.GENERAL, new_stats, GameObjectType.UNIT, UnitType.GENERAL,  xco,
 				 yco);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public General() {}
 	
 	public String acceptCommandByPrestige(int i){
 		switch(i/50){

@@ -4,21 +4,21 @@ import java.util.Queue;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.shared.Request;
-import com.shared.SimpleGameModel;
+import control.GameModel;
+import control.commands.Command;
 
 /**
  * The async counterpart of <code>GreetingService</code>.
  */
 public interface SimpleSimulatorAsync {
-	void sendRequest(Request input, AsyncCallback<Request[]> callback)
+	void sendCommand(Command input, AsyncCallback<Void> callback)
 			throws IllegalArgumentException;
 	
-	void sendRequests( Queue<Request> requestQueue, AsyncCallback<SimpleGameModel> callback);
+	void sendCommands( Queue<Command> commandQueue, AsyncCallback<GameModel> callback);
 	
 	void startSimulation(AsyncCallback<String> callback);
 	
-	void getSimulationState(int playerNumber, int lastTurnReceived, AsyncCallback<SimpleGameModel> callback);
+	void getSimulationState(int playerNumber, int lastTurnReceived, AsyncCallback<GameModel> callback);
 	
 	void confirmReceipt(int playerNumber, int turnNumber, AsyncCallback<String> callback);
 	

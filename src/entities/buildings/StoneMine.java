@@ -9,7 +9,7 @@ import entities.stats.BaseStatsEnum;
 
 public class StoneMine extends ResourceBuilding{
 
-	public StoneMine(UUID id, int playerId, float xco, float yco) {
+	public StoneMine(int id, int playerId, float xco, float yco) {
 		super(id, playerId, BaseStatsEnum.STONE_MINE, BaseStatsEnum.STONE_MINE.getStats(), 
 				BuildingType.STONE_MINE, xco,
 				yco, 1, 1, new Resources(0, 0, 0, 20, 0));

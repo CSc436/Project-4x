@@ -11,6 +11,7 @@ import entities.GameObjectType;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 import entities.units.Unit;
+import entities.util.Point;
 
 public abstract class Building extends GameObject {
 
@@ -47,7 +48,7 @@ public abstract class Building extends GameObject {
 	 * @param int height - how many tiles high building takes up
 	 * @param int width - how many tiles wide the building takes up
 	 */
-	public Building(UUID id, int playerId, BaseStatsEnum baseStats,
+	public Building(int id, int playerId, BaseStatsEnum baseStats,
 			UnitStats new_stats,
 			BuildingType buildingType, float xco, float yco, int height,
 			int width) {
@@ -161,5 +162,11 @@ public abstract class Building extends GameObject {
 	public BuildingType getBuildingType() {
 
 		return buildingType;
+	}
+
+	public Point getPosition() {
+		float x = (float) moveBehavior.position.getX();
+		float y = (float) moveBehavior.position.getY();
+		return new Point(x,y);
 	}
 }

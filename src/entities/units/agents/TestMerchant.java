@@ -17,8 +17,8 @@ public class TestMerchant {
 
 	@Test
 	public void testgp(){
-		Merchant mch = new Merchant(new UUID(0, 0),111, new UnitStats(0, 0, 0, 0, 0, 0, 0), 0, 0, 0, 0, 0);
-		General gr = new General(new UUID(0, 0),111, new UnitStats(0, 0, 0, 0, 0, 0, 0), 0, 0);
+		Merchant mch = new Merchant(0,111, new UnitStats(0, 0, 0, 0, 0, 0, 0), 0, 0, 0, 0, 0);
+		General gr = new General(0,111, new UnitStats(0, 0, 0, 0, 0, 0, 0), 0, 0);
 		Player p = new Player("Xu",111);
 		Player q = new Player("Graham",222);
 		p.prestige = new HashMap<Agent,Integer>();

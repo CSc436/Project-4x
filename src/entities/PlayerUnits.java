@@ -1,49 +1,52 @@
 package entities;
 
+import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 import entities.buildings.Building;
 import entities.buildings.ResourceBuilding;
 import entities.units.Agent;
 import entities.units.Unit;
 
-public class PlayerUnits {
+public class PlayerUnits implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3305847733108811659L;
 	// change to hashmaps, id->object
-	private HashMap<UUID, GameObject> gameObjects;
-	private HashMap<UUID, Building> buildings;
-	private HashMap<UUID, ResourceBuilding> resourceBuildings;
-	private HashMap<UUID, Unit> units;
-	private HashMap<UUID, Agent> agents;
+	private HashMap<Integer, GameObject> gameObjects;
+	private HashMap<Integer, Building> buildings;
+	private HashMap<Integer, ResourceBuilding> resourceBuildings;
+	private HashMap<Integer, Unit> units;
+	private HashMap<Integer, Agent> agents;
 	private int playerId;
 
 	public PlayerUnits(int id) {
 		playerId = id;
-		gameObjects = new HashMap<UUID, GameObject>();
-		units = new HashMap<UUID, Unit>();
-		buildings = new HashMap<UUID, Building>();
-		resourceBuildings = new HashMap<UUID, ResourceBuilding>();
-		agents = new HashMap<UUID, Agent>();
+		gameObjects = new HashMap<Integer, GameObject>();
+		units = new HashMap<Integer, Unit>();
+		buildings = new HashMap<Integer, Building>();
+		resourceBuildings = new HashMap<Integer, ResourceBuilding>();
+		agents = new HashMap<Integer, Agent>();
 	}
 
-	public Map<UUID, GameObject> getGameObjects() {
+	public HashMap<Integer, GameObject> getGameObjects() {
 		return gameObjects;
 	}
 
-	public Map<UUID, Building> getBuildings() {
+	public HashMap<Integer, Building> getBuildings() {
 		return buildings;
 	}
 
-	public Map<UUID, ResourceBuilding> getResourceBuildings() {
+	public HashMap<Integer, ResourceBuilding> getResourceBuildings() {
 		return resourceBuildings;
 	}
 
-	public Map<UUID, Unit> getUnits() {
+	public HashMap<Integer, Unit> getUnits() {
 		return units;
 	}
 
-	public Map<UUID, Agent> getAgents() {
+	public HashMap<Integer, Agent> getAgents() {
 		return agents;
 	}
 
@@ -65,26 +68,26 @@ public class PlayerUnits {
 		addUnit(a);
 	}
 
-	public GameObject removeGameObject(UUID id) {
+	public GameObject removeGameObject(Integer id) {
 		return gameObjects.remove(id);
 	}
 
-	public Building removeBuilding(UUID id) {
+	public Building removeBuilding(Integer id) {
 		removeGameObject(id);
 		return buildings.remove(id);
 	}
 
-	public ResourceBuilding removeResourceBuilding(UUID id) {
+	public ResourceBuilding removeResourceBuilding(Integer id) {
 		removeGameObject(id);
 		removeBuilding(id);
 		return resourceBuildings.remove(id);
 	}
 
-	public Unit removeUnit(UUID id) {
+	public Unit removeUnit(Integer id) {
 		return units.remove(id);
 	}
 
-	public Agent removeAgent(UUID id) {
+	public Agent removeAgent(Integer id) {
 		units.remove(id);
 		return agents.remove(id);
 	}
@@ -92,7 +95,7 @@ public class PlayerUnits {
 	@Override
 	public String toString() {
 		String returnStr = "Player " + playerId + "'s gameObjects:\n";
-		for (UUID id : gameObjects.keySet()) {
+		for (Integer id : gameObjects.keySet()) {
 			returnStr += gameObjects.get(id).toString();// responsibility of
 														// leaf class to write
 														// out one line toString
@@ -102,19 +105,4 @@ public class PlayerUnits {
 		return returnStr;
 	}
 
-	// public boolean hasUnitAt(int x, int y) {
-	// for (int c = 0; c < units.size(); c++) {
-	// if (units.get(c).getX() == x && units.get(c).getY() == y)
-	// return true;
-	// }
-	// return false;
-	// }
-
-	// public boolean hasBuildingAt(int x, int y) {
-	// for (int c = 0; c < buildings.size(); c++) {
-	// if (buildings.get(c).getX() == x && buildings.get(c).getY() == y)
-	// return true;
-	// }
-	// return false;
-	// }
 }

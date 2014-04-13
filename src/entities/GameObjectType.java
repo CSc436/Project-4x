@@ -2,8 +2,10 @@
 
 package entities;
 
+import java.io.Serializable;
 
-public enum GameObjectType {
+
+public enum GameObjectType implements Serializable {
 	ALL, WALL, BUILDING, UNIT;
 	
 //	public BuffStats getStats(Player p) {

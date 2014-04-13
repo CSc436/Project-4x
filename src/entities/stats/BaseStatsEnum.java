@@ -1,5 +1,7 @@
 package entities.stats;
 
+import java.io.Serializable;
+
 /**
  * Base Stats Enum
  * @author NRTop
@@ -8,7 +10,7 @@ package entities.stats;
  * damage, range, armor, health regenerations, max health, movememnt speed, and action speed. 
  * 
  */
-public enum BaseStatsEnum {
+public enum BaseStatsEnum implements Serializable {
 
 	/*
 	 * Each enumeration contains a UnitsStats object, which defines the stats

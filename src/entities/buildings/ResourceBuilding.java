@@ -37,7 +37,7 @@ public abstract class ResourceBuilding extends Building {
 	 * @param Reosources resourceAmount - base amount of resource building generates
 	 * 
 	 */
-	public ResourceBuilding(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, 
+	public ResourceBuilding(int id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, 
 		    BuildingType buildingType, float xco,
 			float yco, int height, int width, Resources resourceAmount) {
 		super(id,playerId, baseStats, new_stats, 

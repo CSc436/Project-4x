@@ -1,7 +1,5 @@
 package control.commands;
 
-import java.util.UUID;
-
 import control.Factory;
 import control.GameModel;
 import control.Player;
@@ -10,11 +8,15 @@ import entities.buildings.Building;
 import entities.units.Unit;
 
 public class BuildingProductionCommand implements Command{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1803484539458784096L;
 	private int playerId;
-	private UUID buildingId;
+	private int buildingId;
 	private UnitType unitType;
 	
-	public BuildingProductionCommand(int playerId, UUID buildingId, UnitType unitType) {
+	public BuildingProductionCommand(int playerId, int buildingId, UnitType unitType) {
 		this.playerId = playerId;
 		this.buildingId = buildingId;
 		this.unitType = unitType;
@@ -31,8 +33,9 @@ public class BuildingProductionCommand implements Command{
 		//Find the building's location so we can spawn a unit there
 		Player player = model.getPlayer(playerId);
 		Building thisBuilding = player.getGameObjects().getBuildings().get(buildingId);
-		
-		Unit u = Factory.buildUnit(player,playerId, unitType, thisBuilding.getX(), thisBuilding.getY());
+		float x = (float) thisBuilding.getMoveBehavior().getPosition().getX();
+		float y = (float) thisBuilding.getMoveBehavior().getPosition().getY();
+		Unit u = Factory.buildUnit(player, playerId, unitType, x, y);
 		
 		//Add this unit to the player's queue
 		thisBuilding.queueUnit(u);

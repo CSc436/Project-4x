@@ -30,7 +30,7 @@ public class Bank extends ResourceBuilding {
 	 * @param width
 	 * @param resourceAmount
 	 */
-	public Bank(UUID id, int playerId, float xco,
+	public Bank(int id, int playerId, float xco,
 			float yco, Resources resourceAmount) {
 		super(id, playerId, BaseStatsEnum.BANK, BaseStatsEnum.BANK.getStats(), BuildingType.BANK, xco, yco, 2, 2, resourceAmount);
 	}

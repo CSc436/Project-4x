@@ -1,6 +1,7 @@
 package entities.gameboard;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.shared.Terrain;
@@ -20,8 +21,12 @@ import entities.units.Unit;
  *          GameBoard object, in order to create the field of play for a 4X
  *          Game.
  */
-public class Tile {
+public class Tile implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 83679166031526641L;
 	private boolean passable; // Boolean representing whether or not units can
 								// pass over/through a terrain tile.
 	private Resource resource; // Resource that populates this tile.

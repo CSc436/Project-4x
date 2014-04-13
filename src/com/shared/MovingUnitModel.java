@@ -15,7 +15,7 @@ public class MovingUnitModel extends EntityModel {
 	}
 	
 	public void simulateTimeStep(int timeStep) {
-		movementBehavior.simulateTimeStep(timeStep);
+		movementBehavior.advanceTimeStep(timeStep);
 	}
 	
 	public double[] deadReckonPosition( long timeSinceUpdate ) {

@@ -13,8 +13,14 @@ import entities.stats.BaseStatsEnum;
  * building to generate research points
  */
 public class University extends ResourceBuilding{
-
-	public University(UUID id, int playerId, float xco, float yco) {
+	
+	public University() {
+		super(0, 0, BaseStatsEnum.UNIVERSITY, BaseStatsEnum.UNIVERSITY.getStats(), 
+				BuildingType.UNIVERSITY, 0,
+				0, 2, 2, new Resources(0, 0, 0, 0, 10));
+	}
+	
+	public University(int id, int playerId, float xco, float yco) {
 		super(id, playerId, BaseStatsEnum.UNIVERSITY, BaseStatsEnum.UNIVERSITY.getStats(), 
 				BuildingType.UNIVERSITY, xco,
 				yco, 2, 2, new Resources(0, 0, 0, 0, 10));

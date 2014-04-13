@@ -1,5 +1,6 @@
 package entities.gameboard;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -18,8 +19,12 @@ import entities.util.Point;
  * 
  */
 
-public class GameBoard {
+public class GameBoard implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8680753973688110861L;
 	private Tile[][] map;
 	private int rows;
 	private int cols;

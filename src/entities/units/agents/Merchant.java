@@ -1,24 +1,28 @@
 package entities.units.agents;
 
-import java.util.UUID;
-
 import control.Player;
 import control.UnitType;
 import entities.GameObjectType;
 import entities.gameboard.GameBoard;
-import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 import entities.units.Agent;
 
 public class Merchant extends Agent{
 
-	public Merchant(UUID id, int playerId, UnitStats new_stats, float xco, float yco, 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8984570260940183249L;
+
+	public Merchant(int id, int playerId, UnitStats new_stats, float xco, float yco, 
 			int price, int number, int currency) {
 		super(id, playerId, BaseStatsEnum.MERCHANT, new_stats, GameObjectType.UNIT, UnitType.MERCHANT,  xco,
 				 yco);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public Merchant() {}
 	
 	@Override
 	public void update(Player p, GameBoard gb) {

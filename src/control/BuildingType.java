@@ -1,6 +1,8 @@
 package control;
 
-public enum BuildingType {
+import java.io.Serializable;
+
+public enum BuildingType implements Serializable {
 	BARRACKS, CASTLE, BANK, TOWN_HALL,
 	
 	// Resource Buildings

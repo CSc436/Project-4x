@@ -19,7 +19,7 @@ public class Town_Hall extends ResourceBuilding {
 	 * for allies, perhaps a bonus for trading with the allies capital city
 	 */
 
-	public Town_Hall(UUID id, int playerId, float xco, float yco, boolean iscapital) {
+	public Town_Hall(int id, int playerId, float xco, float yco, boolean iscapital) {
 		super(id, playerId, BaseStatsEnum.TOWN_HALL, BaseStatsEnum.TOWN_HALL.getStats(), 
 				BuildingType.TOWN_HALL,
 				xco, yco, 4, 4, new Resources(0, 0, 0, 0, 0));

@@ -506,7 +506,7 @@ public class GameCanvas {
 				agentX = 0;
 				agentY = 0;
 				
-				Map<Integer,EntityModel> modelEntities = theModel.getGameModel().getEntities();
+				Map<Integer, EntityModel> modelEntities = theModel.getGameModel().getEntities();
 				Set<Integer> keySet = modelEntities.keySet();
 				for(Integer i : keySet) {
 					Mesh currMesh = entities.get(i);

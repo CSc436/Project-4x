@@ -19,6 +19,9 @@ import com.shared.SimpleGameModel;
 import com.sksamuel.gwt.websockets.Websocket;
 import com.sksamuel.gwt.websockets.WebsocketListener;
 
+import control.GameModel;
+import control.commands.Command;
+
 public class ClientModel {
 	
 	private int turnNumber = -1;
@@ -26,15 +29,15 @@ public class ClientModel {
 	float[] position = { 0.0F, 0.0F };
 	private long lastUpdateTime;
 	private final SimpleSimulatorAsync simpleSimulator;
-	private SimpleGameModel lastModel;
-	private SimpleGameModel nextModel = new SimpleGameModel(5);
+	private GameModel lastModel;
+	private GameModel nextModel;
 	private int averageTurnInterval = 200;
 	private boolean readyForNext = true;
 	private int cycleTime = 100;
 	
 	private Websocket socket;
 	
-	private Queue<Request> requestQueue = new LinkedList<Request>();
+	private Queue<Command> commandQueue = new LinkedList<Command>();
 	
 	public ClientModel() {
 		
@@ -49,32 +52,32 @@ public class ClientModel {
 			}
 		});
 		
-		String webSocketURL = GWT.getModuleBaseURL().replace("http", "ws") + "webSocket";
-		socket = new Websocket(webSocketURL);
-		socket.addListener(new WebsocketListener() {
-
-			@Override
-			public void onClose() {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onMessage(String msg) {
-				// TODO Auto-generated method stub
-				AutoBean<SimpleGameModel> bean = AutoBeanCodex.decode(myFactory, SimpleGameModel.class, msg);     
-			    nextModel = bean.as(); 
-			}
-
-			@Override
-			public void onOpen() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
-		
-		AutoBean<Request> bean = AutoBeanUtils.getAutoBean(delegate)
+//		String webSocketURL = GWT.getModuleBaseURL().replace("http", "ws") + "webSocket";
+//		socket = new Websocket(webSocketURL);
+//		socket.addListener(new WebsocketListener() {
+//
+//			@Override
+//			public void onClose() {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//
+//			@Override
+//			public void onMessage(String msg) {
+//				// TODO Auto-generated method stub
+//				AutoBean<SimpleGameModel> bean = AutoBeanCodex.decode(myFactory, SimpleGameModel.class, msg);     
+//			    nextModel = bean.as(); 
+//			}
+//
+//			@Override
+//			public void onOpen() {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//		});
+//		
+//		AutoBean<Request> bean = AutoBeanUtils.getAutoBean(delegate)
 
 	}
 
@@ -118,7 +121,7 @@ public class ClientModel {
 		*/
 		
 		// Dead-Reckoning System
-		double[] positionDouble = nextModel.deadReckonEntityPosition( unitID, currentTime - lastUpdateTime );
+		double[] positionDouble = nextModel.getGameObject(unitID).getMoveBehavior().extrapolatePosition( currentTime - lastUpdateTime );
 		position[0] = (float) positionDouble[0];
 		position[1] = (float) positionDouble[1];
 		
@@ -169,11 +172,10 @@ public class ClientModel {
 				readyForNext = false;
 				System.out.println("Requesting simulation state...");
 				
-				Queue<Request> tempQueue = requestQueue;
-				requestQueue = new LinkedList<Request>();
+				Queue<Command> tempQueue = commandQueue;
+				commandQueue = new LinkedList<Command>();
 				
-				simpleSimulator.getSimulationState( playerNumber, turnNumber, new AsyncCallback<SimpleGameModel>() {
-
+				simpleSimulator.sendCommands(tempQueue, new AsyncCallback<GameModel>() {
 					@Override
 					public void onFailure(Throwable caught) {
 						System.out.println("    Unable to receive simulation state");
@@ -181,21 +183,18 @@ public class ClientModel {
 					}
 
 					@Override
-					public void onSuccess(SimpleGameModel result) {
-						
-						
-						
+					public void onSuccess(GameModel result) {
+
 						lastModel = nextModel;
 						nextModel = result;
 						
 						long currTime = System.currentTimeMillis();
 						cycleTime = (int) (currTime - lastUpdateTime);
 						lastUpdateTime = currTime;
-						turnNumber = result.turnNumber;
+						turnNumber = result.getTurnNumber();
 						System.out.println("    Simulation state received! Cycle time: " + cycleTime + " ms");
 						confirmReceipt();
 					}
-
 				});
 			}
 
@@ -203,16 +202,6 @@ public class ClientModel {
 
 		pollTimer.scheduleRepeating(20);
 		
-		Timer setTargetTimer = new Timer() {
-
-			@Override
-			public void run() {
-				//setTarget( (int) (1 + nextModel.numEntities * Math.random()), 16*Math.random(), 16*Math.random() );
-			}
-
-		};
-
-		setTargetTimer.scheduleRepeating(2000);
 	}
 	
 	public void confirmReceipt() {
@@ -232,7 +221,7 @@ public class ClientModel {
 		});
 	}
 	
-	public SimpleGameModel getGameModel() {
+	public GameModel getGameModel() {
 		return nextModel;
 	}
 	

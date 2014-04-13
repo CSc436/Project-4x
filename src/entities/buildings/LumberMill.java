@@ -17,7 +17,7 @@ public class LumberMill extends ResourceBuilding{
 	 * @param xco - x coordinate of this mill
 	 * @param yco - y coordinate of this mill 
 	 */
-	public LumberMill(UUID id, int playerId, float xco, float yco) {
+	public LumberMill(int id, int playerId, float xco, float yco) {
 		super(id, playerId, BaseStatsEnum.LUMBER_MILL, BaseStatsEnum.LUMBER_MILL.getStats(), 
 				BuildingType.LUMBER_MILL, xco,
 				yco, 1, 1, new Resources(0, 20, 0, 0, 0));

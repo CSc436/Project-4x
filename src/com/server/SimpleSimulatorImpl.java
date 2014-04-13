@@ -6,8 +6,10 @@ import java.util.Set;
 
 import com.client.SimpleSimulator;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.shared.Request;
-import com.shared.SimpleGameModel;
+
+import control.Controller;
+import control.GameModel;
+import control.commands.Command;
 
 /**
  * The server-side implementation of the RPC service.
@@ -16,7 +18,7 @@ import com.shared.SimpleGameModel;
 public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 		SimpleSimulator {
 	
-	ModelController m = new ModelController();
+	Controller controller = new Controller();
 	int currentTurn;
 	boolean debug = false;
 	
@@ -24,29 +26,28 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 	
 	int nextPlayerSlot = 0;
 
-	public Request[] sendRequest(Request input) throws IllegalArgumentException {
+	public void sendCommand(Command input) throws IllegalArgumentException {
 		
-		m.queueRequest(input);
+		controller.queueCommand(input);
 
-		return new Request[] {input};
 	}
 	
-	public SimpleGameModel sendRequests( Queue<Request> requestQueue ) {
+	public GameModel sendCommands( Queue<Command> commandQueue ) {
 		/*
 		while( !requestQueue.isEmpty() ) {
 			Request r = requestQueue.remove();
 			r.executeOn(m);
 		}
 		*/
-		m.simulateFrame();
-		return m.getGame();
+		controller.simulateFrame();
+		return controller.getGameModel();
 	}
 
 	@Override
 	public String startSimulation() {
 		
-		if(!m.isRunning)
-			m.run();
+		if(!controller.isRunning)
+			controller.run();
 		
 		return null;
 	}
@@ -54,7 +55,7 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 	// Confirm that the most recent simulation state was received, prevents
 	@Override
 	public String confirmReceipt( int playerNumber, int turnNumber ) {
-		if(turnNumber <= m.turnNumber) {
+		if(turnNumber <= controller.turnNumber) {
 			playerTable.put(playerNumber, true);
 			if(debug) System.out.println(">>> Player " + playerNumber + " confirms receipt of turn " + turnNumber);
 		}
@@ -67,7 +68,7 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 			}
 		}
 		
-		m.continueSimulation();
+		controller.continueSimulation();
 		for( Integer key : keySet ) {
 			playerTable.put(key, false);
 		}
@@ -77,8 +78,8 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 
 	@Override
 
-	public SimpleGameModel getSimulationState( int playerNumber, int lastTurnReceived ) {
-		while(!m.sendingGame()) {
+	public GameModel getSimulationState( int playerNumber, int lastTurnReceived ) {
+		while(!controller.sendingGame()) {
 			//System.out.println("    Client already up to date");
 			try {
 				Thread.sleep(10);
@@ -87,11 +88,11 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 			}
 		}
 		//playerTable.put(playerNumber, true);
-		return m.getGame();
+		return controller.getGameModel();
 	}
 	
 	public Integer joinSimulation() {
-		if(!m.isRunning) m.run();
+		if(!controller.isRunning) controller.run();
 		playerTable.put(nextPlayerSlot, true);
 		return nextPlayerSlot++;
 	}
@@ -99,7 +100,7 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 	public Integer exitGame( int playerNumber ) {
 		playerTable.remove(playerNumber);
 		if(playerTable.isEmpty())
-			m.stop();
+			controller.stop();
 		return nextPlayerSlot;
 
 	}

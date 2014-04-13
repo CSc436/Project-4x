@@ -1,5 +1,6 @@
 package control;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,8 +20,12 @@ import entities.units.agents.General;
 import entities.units.agents.Goods;
 import entities.units.agents.Merchant;
 
-public class Player {
+public class Player implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3426296427536759563L;
 	private final String name;
 	private int id;
 	public Map<Agent,Integer> prestige;
@@ -34,9 +39,13 @@ public class Player {
 	private Civilization civ;
 	private CommandQueue cq;
 	
-	private HashMap<UUID, Unit> selectedUnits;
-	private HashMap<UUID, Building> selectedBuildings;
-
+	private HashMap<Integer, Unit> selectedUnits;
+	private HashMap<Integer, Building> selectedBuildings;
+	
+	public Player() {
+		this("", 0, new PerfectCivilization());
+	}
+	
 	// Bare constructor 
 	public Player(String name, int id) {
 		this(name, id, new PerfectCivilization());
@@ -65,8 +74,8 @@ public class Player {
 		this.id = id;
 		
 		// init blabhlahb
-		selectedBuildings = new HashMap<UUID, Building>();
-		selectedUnits = new HashMap<UUID, Unit>();
+		selectedBuildings = new HashMap<Integer, Building>();
+		selectedUnits = new HashMap<Integer, Unit>();
 	}
 
 	public String getAlias() {
@@ -131,8 +140,8 @@ public class Player {
 	}
 
 	public void deselect() {
-		selectedBuildings = new HashMap<UUID, Building>();
-		selectedUnits = new HashMap<UUID, Unit>();
+		selectedBuildings = new HashMap<Integer, Building>();
+		selectedUnits = new HashMap<Integer, Unit>();
 	}
 
 	

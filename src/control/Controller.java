@@ -1,7 +1,9 @@
 package control;
 
+import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import control.commands.Command;
 import entities.gameboard.Tile;
@@ -9,49 +11,89 @@ import entities.gameboard.Tile;
 public class Controller implements Runnable {
 
 	private GameModel model;
-	private ConcurrentLinkedDeque<Command> commandQueue;
-	private int turnWaitTime;// in ms
-
+	private Queue<Command> commandQueue = new LinkedList<Command>();
+	
+	public int timeStep; // Number of milliseconds per simulation step
+	public int turnNumber = 0;
+	public boolean continueSimulation = true;
+	private long lastTime = System.currentTimeMillis();
+	private Queue<Integer> runningAvgQueue = new LinkedList<Integer>();
+	private int movingAverage = timeStep;
+	private int numTimesSaved = 3; // Keep track of the last n cycle times to compute moving average
+	private boolean stop = false;
+	private boolean sendGame = false;
+	public boolean isRunning;
+	
+	/**************************************************************/
+	
 	public Controller() {
-
 		model = new GameModel();
-		commandQueue = new ConcurrentLinkedDeque<Command>();
-		turnWaitTime = 100;
-
+		timeStep = 200;
+		for(int i = 0; i < numTimesSaved; i++)
+			runningAvgQueue.add(timeStep);
 	}
-
-	@Override
+	
 	public void run() {
-		model.modelState();
-
-		// actual game execution
-		boolean gameRunning = true;
-		while (gameRunning) {
-
-			try {
-				Thread.sleep(turnWaitTime);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		isRunning = true;
+		lastTime = System.currentTimeMillis();
+		stop = false;
+		
+		Timer timer = new Timer();
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run() {
+				simulateFrame();
 			}
-			while (!commandQueue.isEmpty()) {
-				Command comm = commandQueue.poll();
-				comm.performCommand(model);
-			}
-			model.advanceTimeStep();
-			// produceGameObjects
-			// agentDecision();
-			// unitInteraction();
-			// When the timer on a unit in the production queue hits 0, add the
-			// unit to the player's unit list.
+		};
 
-			// TODO: change timestep to what we really want
-			// checkBuildingProductionQueue(10);
+		timer.scheduleAtFixedRate(task, 0, 10);
 
-			// gameRunning = playerCommands();
-
-		}
 	}
+	
+	public void simulateFrame() {
+		
+		long currTime = System.currentTimeMillis();
+		//if( !continueSimulation ) return;
+		if( currTime < lastTime + timeStep || !continueSimulation ) return;
+		
+		continueSimulation = false;
+		updateRunningAverage( (int) (currTime - lastTime) );
+		lastTime = currTime;
+		
+		Queue<Command> frameCommandQueue = commandQueue;
+		commandQueue = new LinkedList<Command>();
+		
+		while(!frameCommandQueue.isEmpty()) {
+			Command c = frameCommandQueue.remove();
+			c.performCommand(this.model);
+		}
+		
+		model.advanceTimeStep( movingAverage );
+		//System.out.println("Server >>> "  + unit.position.getX() + " " + unit.position.getY());
+		turnNumber++;
+		sendGame = true; // Game updated, ready to update clients
+		
+	}
+	
+	public void continueSimulation() {
+		//System.out.println(">>> Continuing simulation, turn " + turnNumber + " complete.");
+		continueSimulation = true;
+		sendGame = false;
+	}
+	
+	public void queueCommand( Command c ) {
+		commandQueue.add(c);
+	}
+	
+	public boolean sendingGame() {
+		return sendGame;
+	}
+	
+	public void stop() {
+		stop = true;
+	}
+	
+	/**************************************************************/
 
 	private void checkBuildingProductionQueue(int timestep) {
 
@@ -91,6 +133,16 @@ public class Controller implements Runnable {
 
 	public GameModel getGameModel() {
 		return model;
+	}
+	
+	private void updateRunningAverage(int newTime) {
+		runningAvgQueue.add(newTime);
+		if( runningAvgQueue.size() > numTimesSaved ) {
+			movingAverage += (newTime - runningAvgQueue.remove()) / numTimesSaved;
+		} else {
+			movingAverage += (newTime - movingAverage) / numTimesSaved;
+		}
+		//System.out.println(movingAverage);
 	}
 
 }

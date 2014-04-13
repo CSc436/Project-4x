@@ -1,7 +1,6 @@
 package control;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import entities.buildings.Barracks;
 import entities.buildings.Building;
@@ -12,80 +11,69 @@ import entities.buildings.GoldMine;
 import entities.buildings.LumberMill;
 import entities.buildings.StoneMine;
 import entities.buildings.University;
+import entities.stats.BaseStatsEnum;
 import entities.units.Unit;
-import entities.units.pawns.Archer;
-import entities.units.pawns.Battering_Ram;
-import entities.units.pawns.Cannon;
-import entities.units.pawns.Catapult;
-import entities.units.pawns.Dragoon;
-import entities.units.pawns.Infantry;
-import entities.units.pawns.Knight;
-import entities.units.pawns.Medic;
-import entities.units.pawns.Militia;
-import entities.units.pawns.Ranged_Calvary;
-import entities.units.pawns.Rifleman;
-import entities.units.pawns.Skirmisher;
-import entities.units.pawns.Transport;
 
 public class Factory implements Serializable {
 	
-	private static int id = 1;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8480151288632582040L;
+	private static int nextID = 1;
 	
-	private static int getUniqueInt() {
-		return id++;
+	private static int getUniqueID() {
+		return nextID++;
 	}
 
 	public static Unit buildUnit(Player p, int playerId, UnitType unitType,
 			float xco, float yco) {
 
-		UUID newId = getId();
+		int id = getUniqueID();
 		Unit result = null;
 		switch (unitType) {
 
 		case MILITIA:
-			result = new Militia(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.MILITIA, BaseStatsEnum.MILITIA.getStats(), UnitType.MILITIA, xco, yco);
 			break;
 		case INFANTRY:
-			result = new Infantry(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.INFANTRY, BaseStatsEnum.INFANTRY.getStats(), UnitType.INFANTRY, xco, yco);
 			break;
 		case ARCHER:
-			result = new Archer(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.ARCHER, BaseStatsEnum.ARCHER.getStats(), UnitType.ARCHER, xco, yco);
 			break;
 		case SKIRMISHER:
-			result = new Skirmisher(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.SKIRMISHER, BaseStatsEnum.SKIRMISHER.getStats(), UnitType.SKIRMISHER, xco, yco);
 			break;
 		case KNIGHT:
-			result = new Knight(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.KNIGHT, BaseStatsEnum.KNIGHT.getStats(), UnitType.KNIGHT, xco, yco);
 			break;
 		case RANGED_CALVARY:
-			result = new Ranged_Calvary(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.RANGED_CALVARY, BaseStatsEnum.RANGED_CALVARY.getStats(), UnitType.RANGED_CALVARY, xco, yco);
 			break;
 		case TRANSPORT:
-			result = new Transport(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.TRANSPORT, BaseStatsEnum.TRANSPORT.getStats(), UnitType.TRANSPORT, xco, yco);
 			break;
 		case CATAPULT:
-			result = new Catapult(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.CATAPULT, BaseStatsEnum.CATAPULT.getStats(), UnitType.CATAPULT, xco, yco);
 			break;
 		case BATTERING_RAM:
-			result = new Battering_Ram(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.BATTERING_RAM, BaseStatsEnum.BATTERING_RAM.getStats(), UnitType.BATTERING_RAM, xco, yco);
 			break;
 		case RIFLEMAN:
-			result = new Rifleman(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.RIFLEMAN, BaseStatsEnum.RIFLEMAN.getStats(), UnitType.RIFLEMAN, xco, yco);
 			break;
 		case DRAGOON:
-			result = new Dragoon(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.DRAGOON, BaseStatsEnum.DRAGOON.getStats(), UnitType.DRAGOON, xco, yco);
 			break;
-
 		case CANNON:
-			result = new Cannon(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.CANNON, BaseStatsEnum.CANNON.getStats(), UnitType.CANNON, xco, yco);
 			break;
-
 		case MEDIC:
-			result = new Medic(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.MEDIC, BaseStatsEnum.MEDIC.getStats(), UnitType.MEDIC, xco, yco);
 			break;
-
 		case TRADE_CART:
-			result = new Infantry(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.TRADE_CART, BaseStatsEnum.TRADE_CART.getStats(), UnitType.TRADE_CART, xco, yco);
 			break;
 
 		default:
@@ -101,7 +89,7 @@ public class Factory implements Serializable {
 
 	public static Building buildBuilding(Player p, int playerId,
 			BuildingType buildingType, float xco, float yco, GameBoard gb) {
-		UUID newId = getId();
+		int newId = getUniqueID();
 		Building result = null;
 
 		// if the tile is not occupied
@@ -113,12 +101,10 @@ public class Factory implements Serializable {
 				break;
 				
 			case BARRACKS:
-				result = new Barracks(newId, playerId, xco,
-						yco);
+				result = new Barracks(newId, playerId, xco, yco);
 				break;
 			case BANK:
-				result = new Barracks(newId, playerId,
-						 xco, yco);
+				result = new Barracks(newId, playerId, xco, yco);
 				break;
 			case CASTLE:
 				result = new Castle(newId, playerId, xco, yco, 100, 100); // last two args are populationCap and influenceArea 

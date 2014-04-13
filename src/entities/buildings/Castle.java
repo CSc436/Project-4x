@@ -13,7 +13,7 @@ public class Castle extends Building {
 	private int populationCap;
 	private int influenceArea;
 
-	public Castle(UUID id, int playerId, float xco,
+	public Castle(int id, int playerId, float xco,
 			float yco, int populationCap, int influenceArea) {
 		super(id, playerId, BaseStatsEnum.CASTLE, BaseStatsEnum.CASTLE.getStats(), 
 				BuildingType.CASTLE, xco,

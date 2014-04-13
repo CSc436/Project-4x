@@ -1,8 +1,7 @@
 package entities;
 
-import java.io.Serializable;
-
 import com.shared.MoveBehavior;
+import com.shared.PhysicsVector;
 
 public class AttackBehavior implements ObjectBehavior {
 
@@ -13,7 +12,7 @@ public class AttackBehavior implements ObjectBehavior {
 	private int coolDown; // Number of milliseconds for attack cooldown
 	private int coolDownTimer = 0; // Number of milliseconds since previous attack
 	private GameObject target = null; // Current attack target
-	private double range; // Attack range
+	private float range; // Attack range
 	private int strength; // Attack strength
 	private boolean isAttacking; // Whether or not I am actively attacking my target
 	/*
@@ -24,16 +23,17 @@ public class AttackBehavior implements ObjectBehavior {
 	
 	public AttackBehavior() {
 		this.coolDown = 1000;
-		this.range = 1.0;
+		this.range = 1.0F;
 		this.strength = 1;
 		this.isAttacking = false;
 	}
 	
-	public AttackBehavior(int coolDown, double range, double strength) {
+	public AttackBehavior(int strength, float range, float coolDown, MoveBehavior mb) {
 		this.coolDown = 1000;
-		this.range = 1.0;
+		this.range = range;
 		this.strength = 1;
 		this.isAttacking = false;
+		this.moveBehavior = mb;
 	}
 	
 	public void setTarget( GameObject target ) {
@@ -49,14 +49,29 @@ public class AttackBehavior implements ObjectBehavior {
 	}
 
 	@Override
-	public void simulateTimeStep(int timeStep) {
-		if(moveBehavior.inRange())
-		// TODO Auto-generated method stub
-		coolDownTimer += timeStep;
-		int numAttacks = coolDownTimer / coolDown;
-		coolDownTimer %= coolDown;
+	public void advanceTimeStep(int timeStep) {
+		if(isAttacking) {
+			PhysicsVector targetPosition = target.getMoveBehavior().getPosition();
+			PhysicsVector myPosition = moveBehavior.getPosition();
+			double distanceToTarget = targetPosition.sub(myPosition).magnitude();
+			
+			coolDownTimer += timeStep;
+			int numAttacks = coolDownTimer / coolDown;
+			coolDownTimer %= coolDown;
+			
+			if( distanceToTarget <= range ) {
+				target.getHealthBehavior().takeDamage(numAttacks * strength);
+			} else {
+				double x = targetPosition.getX();
+				double y = targetPosition.getY();
+				moveBehavior.setTarget(x, y);
+			}
+		} else {
+			coolDownTimer = coolDown;
+		}
+
 		
-		target.getHealthBehavior().takeDamage(numAttacks * strength);
+		
 	}
 	
 	

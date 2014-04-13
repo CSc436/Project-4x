@@ -13,7 +13,7 @@ public class Barracks extends Building {
 	int newSoldNum;
 	int capacity;
 	
-	public Barracks(UUID id, int playerId, float xco,
+	public Barracks(int id, int playerId, float xco,
 			float yco) {
 		super(id, playerId, BaseStatsEnum.BARRACKS, BaseStatsEnum.BARRACKS.getStats(),
 				BuildingType.BARRACKS, xco, yco,

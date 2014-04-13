@@ -3,6 +3,11 @@ package entities.stats;
 
 public class BuffStats extends UnitStats {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8351974848059661024L;
+
 	public BuffStats() {
 		super(0, 0, 0, 0, 0, 0, 0);
 	}

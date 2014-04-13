@@ -30,6 +30,8 @@ public class ConstructBuildingCommand implements Command {
 		this.gb = gb;
 
 	}
+	
+	public ConstructBuildingCommand() {}
 
 	@Override
 	public boolean validateCommand(GameModel model) {

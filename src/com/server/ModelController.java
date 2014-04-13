@@ -9,8 +9,8 @@ import com.shared.Request;
 import com.shared.SimpleGameModel;
 
 public class ModelController implements Runnable {
+	
 	public SimpleGameModel game;
-	public boolean isBlack;
 	public int timeStep = 200; // Number of milliseconds per simulation step
 	public int turnNumber = 0;
 	public boolean continueSimulation = true;
@@ -25,7 +25,6 @@ public class ModelController implements Runnable {
 	
 	public ModelController() {
 		game = new SimpleGameModel( 5 );
-		isBlack = false;
 		for(int i = 0; i < numTimesSaved; i++)
 			runningAvgQueue.add(timeStep);
 	}
@@ -79,7 +78,7 @@ public class ModelController implements Runnable {
 		} else {
 			movingAverage += (newTime - movingAverage) / numTimesSaved;
 		}
-		System.out.println(movingAverage);
+		//System.out.println(movingAverage);
 	}
 	
 	public SimpleGameModel getGame() {

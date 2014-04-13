@@ -19,6 +19,15 @@ public class Resources implements Serializable {
 	private int Food;
 	private int Stone;
 	private int ResearchPts;
+	
+	public Resources() {
+		Gold = 0;
+		Stone = 0;
+		Wood = 0;
+		Food = 0;
+		Stone = 0;
+		ResearchPts = 0;
+	}
 
 	/**
 	 * Resources 

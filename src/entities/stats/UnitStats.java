@@ -1,6 +1,12 @@
 package entities.stats;
 
-public class UnitStats {
+import java.io.Serializable;
+
+public class UnitStats implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5798939504989341306L;
 	public int damage;		// how much damage this unit can deal out
 	public float range;		// range of attack for this unit (archers have greater range than knights)
 	public int armor;		// How much armor defends this unit 
