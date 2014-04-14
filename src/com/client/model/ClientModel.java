@@ -3,6 +3,7 @@ package com.client.model;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.client.Console;
 import com.client.SimpleSimulator;
 import com.client.SimpleSimulatorAsync;
 import com.google.gwt.core.client.GWT;
@@ -41,6 +42,7 @@ public class ClientModel {
 				
 			}
 		});
+		Console.log("done with Client Model");
 		
 	}
 	

@@ -28,6 +28,12 @@
 			Your web browser must have JavaScript enabled in order for this
 			application to display correctly.</div>
 	</noscript>
+	<div id="loading-screen" class="text-center">
+		<div>
+			<h1>Loading...</h1>
+			<p id="loading-message"></p>
+		</div>
+	</div>
 	<div id="toolbar-div">
 		<span id="banner">Legacy of Kings</span>
 		<ul id="toolbar">
@@ -507,8 +513,19 @@
 		src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
 	<script type="text/javascript">
+	
+		var loadingHints = [
+			"Blink and you'll miss it",
+			"This isn't your mother's MMORPG",
+			"Hidden Easter Egg: our own version of 'Hall of Tortured Souls'"
+		];
+		
 		$(document).ready(function() {
-
+			
+			// Set loading message
+			var randInt = Math.floor(Math.random() * (loadingHints.length));
+			$("#loading-message").text(loadingHints[randInt]);
+			
 			// Prevents '#' from appending to url when
 			// clicking menu icons
 			$("#toolbar > li > a").click(function(e) {
