@@ -291,7 +291,7 @@ public class Tile {
 			return Terrain.SNOW;
 		}
 	}
-
+	
 	/**
 	 * setBuildingRef(): Description Sets the new building reference for this
 	 * tile (allows tile to see what building is on it) Will also change the
