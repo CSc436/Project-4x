@@ -114,7 +114,7 @@ public class GameBoard {
 		}
 		
 		// massageTerrain so that it will produce a visually pleasing map
-		//massageTerrain();
+		massageTerrain();
 		
 		// Trim off the edges of map, gets rid of left over noise from massage.
 		trimEdges();
@@ -168,9 +168,14 @@ public class GameBoard {
 		// check to see if count of type of terrain of curr tile is only 1. 
 			// add another chekc to mtHomogenize, allow it to see if only 1 of current tile type, if so change to most regardless 
 
-		
-		// Pass 4: Remove Grass-Water Boundaries
-		System.out.println("Pass 4: And God said let their be dirt by the sea, none of this grass shit.");
+		// Transition Analysis 
+		mtShoreAnalysis(Terrain.WATER, Terrain.SAND, Terrain.SAND);
+		mtShoreAnalysis(Terrain.SAND, Terrain.WATER, Terrain.GRASS);
+		mtShoreAnalysis(Terrain.GRASS, Terrain.SAND, Terrain.FOREST);
+		mtShoreAnalysis(Terrain.FOREST, Terrain.GRASS, Terrain.MOUNTAIN);
+		mtShoreAnalysis(Terrain.MOUNTAIN, Terrain.FOREST, Terrain.SNOW);
+		mtShoreAnalysis(Terrain.SNOW, Terrain.MOUNTAIN, Terrain.SNOW);
+		// do diagonal analysis
 		
 		System.out.println("Terrain Massage Complete!");
 	}
@@ -229,6 +234,48 @@ public class GameBoard {
 		}
 	}
 
+	/**
+	 * mtShoreAnalysis():
+	 * This function makes sure that water tiles are either surrounded
+	 * by water tiles, or Dirt. Initially there are some water-grass shores
+	 * which does not work with our current tile set. 
+	 * 
+	 * @param t1, terrain to analyze
+	 * @param t2, terrain this should transition to 
+	 * @param t3, terrain this should transition to 
+	 * 
+	 * TODO need to do for all transitions. 
+	 */
+	private void mtShoreAnalysis(Terrain t1, Terrain t2, Terrain t3)
+	{
+		//int wCount;
+		for (int i = 1; i < map.length - 1; i++)
+		{
+			for (int j = 1; j < map[i].length - 1; j++)
+			{
+				// If terrain type is water, make sure it is surrounded by water
+				// or dirt. Perhaps if fewer than X number of tiles are water, then
+				// change to dirt. 
+				//wCount = 0;
+				if (map[i][j].getTerrainType() == t1)
+				{
+					for (int k = i-1; k < i+2; k++)
+					{
+						for (int l = j-1; l < j+2; l++)
+						{
+							// If tile not a matching transition, switch to transition tile
+							if (map[k][l].getTerrainType() != t1 && 
+								map[k][l].getTerrainType() != t2 &&
+								map[k][l].getTerrainType() != t3)
+							{
+								map[k][l].setTerrainType(t3);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	
 	/** @deprecated use resourceDistNat instead
 	 * resourceDistNatural(): Description: Default resource distribution, uses
