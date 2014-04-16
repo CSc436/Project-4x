@@ -79,7 +79,7 @@ public class Factory implements Serializable {
 		default:
 			break;
 		}
-		p.getGameObjects().addUnit(result);
+		if( p != null) p.getGameObjects().addUnit(result);
 		return result;
 
 	}

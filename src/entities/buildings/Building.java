@@ -2,19 +2,23 @@ package entities.buildings;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.UUID;
 
 import control.BuildingType;
 import control.Tools;
 import entities.GameObject;
 import entities.GameObjectType;
+import entities.Producer;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 import entities.units.Unit;
 import entities.util.Point;
 
-public abstract class Building extends GameObject {
+public abstract class Building extends GameObject implements Producer {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3938726121964982851L;
 	private int height; // height of the structure
 	private int width; // width of the structure
 	private long castleId = Tools.generateUniqueId();// this is how a building
@@ -56,7 +60,6 @@ public abstract class Building extends GameObject {
 		this.buildingType = buildingType;
 		this.height = height;
 		this.width = width;
-
 	}
 
 	/**

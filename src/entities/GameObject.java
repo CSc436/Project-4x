@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 
-import com.shared.MoveBehavior;
 import com.shared.PhysicsVector;
 
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 
-public abstract class GameObject implements Serializable {
+public class GameObject implements Serializable, Movable, Attackable {
+	
 	/**
 	 * 
 	 */
@@ -21,8 +21,8 @@ public abstract class GameObject implements Serializable {
 	protected GameObjectType type;
 	protected UnitStats stats;
 	protected BaseStatsEnum baseStats;
-	protected MoveBehavior moveBehavior;
-	protected HealthBehavior healthBehavior;
+	protected Movable moveBehavior;
+	protected Attackable healthBehavior;
 
 	protected PriorityQueue<Action> actionQueue;
 	
@@ -53,10 +53,6 @@ public abstract class GameObject implements Serializable {
 		healthBehavior = new HealthBehavior( stats.health, stats.health_regen, stats.armor );
 	}
 
-	protected abstract void setActions();// might get rid
-
-	public abstract HashMap<String, String> getActions();// might get rid of
-
 	public int getId() {
 		return id;
 	}
@@ -78,11 +74,11 @@ public abstract class GameObject implements Serializable {
 		}
 	}
 	
-	public MoveBehavior getMoveBehavior() {
+	public Movable getMoveBehavior() {
 		return moveBehavior;
 	}
 	
-	public HealthBehavior getHealthBehavior() {
+	public Attackable getHealthBehavior() {
 		return healthBehavior;
 	}
 
@@ -121,6 +117,21 @@ public abstract class GameObject implements Serializable {
 
 	public UnitStats getStats() {
 		return stats;
+	}
+
+	@Override
+	public void takeDamage(int damage) {
+		healthBehavior.takeDamage(damage);
+	}
+
+	@Override
+	public PhysicsVector getPosition() {
+		return moveBehavior.getPosition();
+	}
+
+	@Override
+	public void setMoveTarget(double x, double y) {
+		moveBehavior.setMoveTarget(x, y);
 	}
 
 }

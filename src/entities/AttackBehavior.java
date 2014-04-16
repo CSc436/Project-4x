@@ -1,9 +1,8 @@
 package entities;
 
-import com.shared.MoveBehavior;
 import com.shared.PhysicsVector;
 
-public class AttackBehavior implements ObjectBehavior {
+public class AttackBehavior implements Attacker {
 
 	/**
 	 * 
@@ -19,7 +18,7 @@ public class AttackBehavior implements ObjectBehavior {
 	 * Must have an associated movementBehavior in order to calculate distance from
 	 * target and in order to perform appropriate attack-move commands
 	 */
-	private MoveBehavior moveBehavior;
+	private Movable moveBehavior;
 	
 	public AttackBehavior() {
 		this.coolDown = 1000;
@@ -28,7 +27,7 @@ public class AttackBehavior implements ObjectBehavior {
 		this.isAttacking = false;
 	}
 	
-	public AttackBehavior(int strength, float range, float coolDown, MoveBehavior mb) {
+	public AttackBehavior(int strength, float range, float coolDown, Movable mb) {
 		this.coolDown = 1000;
 		this.range = range;
 		this.strength = 1;
@@ -64,17 +63,12 @@ public class AttackBehavior implements ObjectBehavior {
 			} else {
 				double x = targetPosition.getX();
 				double y = targetPosition.getY();
-				moveBehavior.setTarget(x, y);
+				moveBehavior.setMoveTarget(x, y);
 			}
 		} else {
 			coolDownTimer = coolDown;
 		}
-
-		
 		
 	}
-	
-	
-	
 	
 }

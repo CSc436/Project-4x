@@ -1,6 +1,6 @@
 package entities;
 
-public class HealthBehavior implements ObjectBehavior {
+public class HealthBehavior implements Attackable {
 
 	/**
 	 * 

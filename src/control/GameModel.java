@@ -65,6 +65,41 @@ public class GameModel implements Serializable {
 		// TODO Auto-generated method stub
 
 	}
+	
+	private void moveObjects( int timeStep ) {
+		for( Player p : players ) {
+			HashMap<Integer, GameObject> playerObjects = p.getGameObjects().getGameObjects();
+			Set<Integer> keySet = playerObjects.keySet();
+			for( int i : keySet ) {
+				GameObject object = playerObjects.get(i);
+				object.getMoveBehavior().advanceTimeStep(timeStep);
+			}
+		}
+	}
+	
+	private void attackObjects( int timeStep ) {
+		for( Player p : players ) {
+			HashMap<Integer, GameObject> playerObjects = p.getGameObjects().getGameObjects();
+			Set<Integer> keySet = playerObjects.keySet();
+			for( int i : keySet ) {
+				GameObject object = playerObjects.get(i);
+				object.getMoveBehavior().advanceTimeStep(timeStep);
+				if( object )
+			}
+		}
+	}
+	
+	private void advanceProduction( int timeStep ) {
+		
+	}
+	
+	private void updateHealth( int timeStep ) {
+		
+	}
+	
+	private void placeProducedUnits( int timeStep ) {
+		
+	}
 
 	private void placeNewUnits() {
 		for (Player p : players) {

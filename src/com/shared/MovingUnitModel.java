@@ -1,5 +1,7 @@
 package com.shared;
 
+import entities.MoveBehavior;
+
 public class MovingUnitModel extends EntityModel {
 	/**
 	 * 

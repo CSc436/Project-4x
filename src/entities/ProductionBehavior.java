@@ -4,17 +4,22 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import control.Factory;
 import control.UnitType;
+import entities.buildings.Building;
 import entities.stats.BaseStatsEnum;
+import entities.units.Unit;
 
-public class ProductionBehavior implements ObjectBehavior {
+public class ProductionBehavior implements Producer {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -445465287510037092L;
-	private UnitType inProduction;
+	private Building producer;
+	private UnitType typeInProduction;
 	private Queue<UnitType> productionQueue = new LinkedList<UnitType>();
+	private Queue<Unit> finishedUnits = new LinkedList<Unit>();
 	private ArrayList<UnitType> producibleUnits;
 	private int productTime;
 	private int timeInProduction;
@@ -30,9 +35,10 @@ public class ProductionBehavior implements ObjectBehavior {
 		activelyProducing = false;
 	}
 	
-	public void produce( UnitType type ) {
+	@Override
+	public void queueProduction( UnitType type ) {
 		if(producibleUnits.contains(type)) {
-			if( inProduction == null ) startProducing(type);
+			if( typeInProduction == null ) startProducing(type);
 			else productionQueue.add(type);
 		}
 	}
@@ -44,6 +50,9 @@ public class ProductionBehavior implements ObjectBehavior {
 			if(timeInProduction >= productTime * 1000) {
 				timeInProduction -= productTime * 1000;
 				// @TODO: create unit and place it on map
+				float x = (float) producer.getMoveBehavior().getPosition().getX();
+				float y = (float) producer.getMoveBehavior().getPosition().getY();
+				finishedUnits.add( Factory.buildUnit(null, 0, typeInProduction, x, y - 1.0F) );
 				if( !productionQueue.isEmpty() )
 					startProducing( productionQueue.remove() );
 				else {
@@ -54,9 +63,9 @@ public class ProductionBehavior implements ObjectBehavior {
 		}
 	}
 	
-	public void startProducing( UnitType type ) {
+	private void startProducing( UnitType type ) {
 		activelyProducing = true;
-		inProduction = type;
+		typeInProduction = type;
 		timeInProduction = 0;
 		
 		switch (type) {
@@ -92,5 +101,14 @@ public class ProductionBehavior implements ObjectBehavior {
 				productTime = 0; break;
 		}
 	}
+
+	@Override
+	public Queue<Unit> getProducedUnits() {
+		Queue<Unit> units = finishedUnits;
+		finishedUnits = new LinkedList<Unit>();
+		return units;
+	}
+	
+	
 
 }

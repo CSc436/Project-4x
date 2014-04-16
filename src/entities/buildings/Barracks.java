@@ -1,13 +1,16 @@
 package entities.buildings;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 import control.BuildingType;
 import entities.stats.BaseStatsEnum;
 
 public class Barracks extends Building {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6343058549434572522L;
 	int level;
 	int soldierNum;
 	int newSoldNum;

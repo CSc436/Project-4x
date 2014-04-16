@@ -2,6 +2,8 @@ package com.shared;
 
 import java.io.Serializable;
 
+import entities.MoveBehavior;
+
 public abstract class EntityModel implements Serializable {
 	
 	/**

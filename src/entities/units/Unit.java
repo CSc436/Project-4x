@@ -4,14 +4,16 @@ import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.UUID;
 
-import com.shared.MoveBehavior;
+import com.shared.PhysicsVector;
 
 import control.UnitType;
 import entities.Action;
 import entities.stats.BaseStatsEnum;
 import entities.AttackBehavior;
+import entities.Attacker;
 import entities.GameObject;
 import entities.GameObjectType;
+import entities.MoveBehavior;
 import entities.stats.UnitStats;
 
 /*
@@ -24,7 +26,7 @@ import entities.stats.UnitStats;
 // TODO add A* path finding, use diagonals to make nice looking paths
 // returns a queue/list of tiles that it needs to go to, at each turn pop one off and move player there. 
 
-public class Unit extends GameObject {
+public class Unit extends GameObject implements Attacker, Producible {
 
 	/**
 	 * 
@@ -32,7 +34,7 @@ public class Unit extends GameObject {
 	private static final long serialVersionUID = -5568927886403172710L;
 	private UnitType unitType;
 	private int creationTime;
-	private AttackBehavior attackBehavior;
+	private Attacker attackBehavior;
 	
 	public Unit() {
 		super();
@@ -49,7 +51,7 @@ public class Unit extends GameObject {
 		attackBehavior = new AttackBehavior( stats.damage, stats.range, stats.actionSpeed, moveBehavior );
 	}
 	
-	public AttackBehavior getAttackBehavior() {
+	public Attacker getAttackBehavior() {
 		return attackBehavior;
 	}
 
@@ -84,21 +86,44 @@ public class Unit extends GameObject {
 	{
 		this.creationTime -= timestep;
 	}
-
-	@Override
-	protected void setActions() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public HashMap<String, String> getActions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	public void advanceTimeStep( int timeStep ) {
 		super.advanceTimeStep(timeStep);
 		attackBehavior.advanceTimeStep(timeStep);
+	}
+
+	@Override
+	public PhysicsVector getPosition() {
+		return super.getPosition();
+	}
+
+	@Override
+	public void setMoveTarget(double x, double y) {
+		super.setMoveTarget(x, y);
+	}
+
+	@Override
+	public void takeDamage(int damage) {
+		super.takeDamage(damage);
+	}
+
+	@Override
+	public void setTarget(GameObject target) {
+		attackBehavior.setTarget(target);
+	}
+
+	@Override
+	public void startAttack() {
+		attackBehavior.startAttack();
+	}
+
+	@Override
+	public void stopAttack() {
+		attackBehavior.stopAttack();
+	}
+
+	@Override
+	public int getProductionTime() {
+		return 0;
 	}
 }

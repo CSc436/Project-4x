@@ -1,8 +1,10 @@
-package com.shared;
+package entities;
 
-import entities.ObjectBehavior;
+import java.io.Serializable;
 
-public class MoveBehavior implements ObjectBehavior {
+import com.shared.PhysicsVector;
+
+public class MoveBehavior implements Serializable, Movable {
 	/**
 	 * 
 	 */
@@ -90,7 +92,7 @@ public class MoveBehavior implements ObjectBehavior {
 		
 	}
 	
-	public void setTarget(double x, double y) {
+	public void setMoveTarget(double x, double y) {
 		targetPosition.set(x, y);
 	}
 }
