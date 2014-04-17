@@ -15,13 +15,13 @@ public class RunGame {
 
 	public static void main(String[] args) {
 
-		GameBoard game = new GameBoard(800, 800);
-		game.resourceDistNat();
+		GameBoard game = new GameBoard(500, 500); // To change resolution, just change two parameters here
+		game.resourceDistNat();				        // must be able to divide 1000 evenly. 
 
 		JFrame frame = new JFrame("display");
 		frame.setVisible(true);
-		frame.setSize(800, 800);
-		JPanel test = new draw(game);
+		frame.setSize(1000, 1000);
+		JPanel test = new draw(game, (int)(frame.getWidth() / game.getCols()) );
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		frame.setContentPane(test);
@@ -42,10 +42,11 @@ public class RunGame {
 class draw extends JPanel {
 
 	GameBoard game;
+	int mult; 
 
-	public draw(GameBoard g) {
+	public draw(GameBoard g, int m) {
 		game = g;
-
+		mult = m;
 	}
 
 	public void paintComponent(Graphics g) {
@@ -71,15 +72,15 @@ class draw extends JPanel {
 					else if (game.getTileAt(r, c).getTerrainType() == Terrain.WATER)
 						g.setColor(new Color(51, 126, 255));
 					else if (game.getTileAt(r, c).getTerrainType() == Terrain.FOREST)
-						g.setColor(new Color(139, 131, 120));
+						g.setColor(new Color(100, 131, 120));
 					else if (game.getTileAt(r, c).getTerrainType() == Terrain.MOUNTAIN)
-						g.setColor(new Color(238, 238, 224));
+						g.setColor(new Color(140, 132, 118));
 					else if (game.getTileAt(r, c).getTerrainType() == Terrain.SNOW)
-						g.setColor(new Color(255, 255, 255));
+						g.setColor(new Color(250, 250, 250));
 					else
 						g.setColor(new Color(118,208,108));
 				}
-				g.fillRect(r * 1, c * 1, 1, 1);
+				g.fillRect(r * mult, c * mult, mult, mult);
 
 			}
 		}
