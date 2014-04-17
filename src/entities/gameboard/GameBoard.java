@@ -37,6 +37,7 @@ public class GameBoard {
 													// support gold have gold
 	private int[] terrainCount = new int[6];		// stores the count of each resource tile type.
 	
+	private int massageEdge = 2; // used to create slightly larger board to massage map first. 
 	/**
 	 * GameBoard(): Description: Constructor for a game board object, requires
 	 * the number of rows and columns for board dimensions - should be equal for
@@ -59,7 +60,7 @@ public class GameBoard {
 	public GameBoard(int row, int col) {
 		rows = row;
 		cols = col;
-		map = new Tile[row][col];
+		map = new Tile[row + massageEdge][col + massageEdge];
 
 		// create players with default "playerIDno" names
 
@@ -101,8 +102,8 @@ public class GameBoard {
 		}
 		System.out.println("Height Adjust: " + heightAdjust);
 
-		for (int r = 0; r < rows; r++) {
-			for (int c = 0; c < cols; c++) {
+		for (int r = 0; r < rows + massageEdge; r++) {
+			for (int c = 0; c < cols + massageEdge; c++) {
 				float height = noisemap[r][c];
 				map[r][c] = new Tile(Resource.NONE, height + heightAdjust,
 						(float) r, (float) c); // Use the adjusted height to
@@ -111,7 +112,13 @@ public class GameBoard {
 				//[0] = Forest, [1] = Water, [2] = Sand, [3] = Grass, [4] = mountain, [5] = snow.
 			}
 		}
-
+		
+		// massageTerrain so that it will produce a visually pleasing map
+		massageTerrain();
+		
+		// Trim off the edges of map, gets rid of left over noise from massage.
+		trimEdges();
+		
 		// TODO distribute players
 		// Based on num players
 		// 1 - place player roughly in center
@@ -127,6 +134,237 @@ public class GameBoard {
 	}
 
 	/**
+	 * trimEdges()
+	 * After massaging the terrain, need to trim off the edges.
+	 */
+	private void trimEdges()
+	{
+		Tile [][] newMap = new Tile [rows][cols];
+		for (int i = 0; i < rows; i++)
+		{
+			for (int j = 0; j < cols; j++)
+			{
+				newMap[i][j] = map[i+1][j+1];
+			}
+		}
+		map = newMap;
+	}
+	
+	
+	/**
+	 * massageTerrain(): 
+	 * Description: 
+	 * Makes sure that terrain generated will produce a visually 
+	 * pleasing map when tiles are used. Called from the constructor, should
+	 * not be called by user.  
+	 */
+	private void massageTerrain()
+	{
+		System.out.println("Massaging Terrain...");
+		// make less random
+		mtHomogenize(4); 
+		
+		// Transition Analysis - ensure that transitions between tile types are correct. 
+		mtShoreAnalysis(Terrain.WATER, Terrain.SAND, Terrain.SAND);
+		mtShoreAnalysis(Terrain.SAND, Terrain.WATER, Terrain.GRASS);
+		mtShoreAnalysis(Terrain.GRASS, Terrain.SAND, Terrain.FOREST);
+		mtShoreAnalysis(Terrain.FOREST, Terrain.GRASS, Terrain.MOUNTAIN);
+		mtShoreAnalysis(Terrain.MOUNTAIN, Terrain.FOREST, Terrain.SNOW);
+		mtShoreAnalysis(Terrain.SNOW, Terrain.MOUNTAIN, Terrain.SNOW);
+		
+		// Diagonal analysis
+		mtDiag();
+		//mtDiag();
+		// Transition Analysis - ensure that transitions between tile types are correct. 
+		mtShoreAnalysis(Terrain.WATER, Terrain.SAND, Terrain.SAND);
+		mtShoreAnalysis(Terrain.SAND, Terrain.WATER, Terrain.GRASS);
+		mtShoreAnalysis(Terrain.GRASS, Terrain.SAND, Terrain.FOREST);
+		mtShoreAnalysis(Terrain.FOREST, Terrain.GRASS, Terrain.MOUNTAIN);
+		mtShoreAnalysis(Terrain.MOUNTAIN, Terrain.FOREST, Terrain.SNOW);
+		mtShoreAnalysis(Terrain.SNOW, Terrain.MOUNTAIN, Terrain.SNOW);
+		
+		
+		// Body Analysis - if a body of a terrain type is smaller than threshold, 
+		// change body to surrounding?
+		mtSingleton();
+		
+		System.out.println("Terrain Massage Complete!");
+	}
+	
+	/**
+	 * checks up, down, left, right of tile. If all the same and 
+	 * not same as curr tile, replace.
+	 */
+	private void mtSingleton()
+	{
+		for (int i = 1; i < map.length-1; i++)
+		{
+			for (int j = 1; j < map[i].length-1; j++)
+			{
+				int ordCount[] = new int [6];
+				ordCount[map[i+1][j].getTerrainType().ordinal()]++;
+				ordCount[map[i][j+1].getTerrainType().ordinal()]++;
+				ordCount[map[i-1][j].getTerrainType().ordinal()]++;
+				ordCount[map[i][j-1].getTerrainType().ordinal()]++;
+				for (int k = 0; k < ordCount.length; k++)
+				{
+					if (ordCount[k] >= 4 && Terrain.values()[k] != map[i][j].getTerrainType())
+					{
+						map[i][j].setTerrainType(Terrain.values()[k]);
+					}
+				}
+					
+			}
+		}
+	}
+	
+	/**
+	 * mtDiag():
+	 * Removes all diagonal tiling errors
+	 * Analyzes left -> Right and Right -> left diagonals on one pass. 
+	 * Upon finding an offending diagonal, the bottom row value is changed 
+	 * to the middle value.
+	 */
+	private void mtDiag()
+	{
+		for (int n = 0; n < 2; n++)
+		{
+			for (int i = 1; i < map.length - 1; i++)
+			{
+				for (int j = 1; j < map[i].length - 1; j++)
+				{
+					// If all three along diagonal are different, change. 
+					// Left -> Right Diagonal 
+					if (map[i-1][j-1].getTerrainType() != map[i][j].getTerrainType() &&
+						map[i-1][j-1].getTerrainType() != map[i+1][j+1].getTerrainType() &&
+						map[i+1][j+1].getTerrainType() != map[i][j].getTerrainType())
+					{
+						// TODO make sure lowest terrain type is replaced?
+						if (map[i-1][j-1].getHeight() > map[i+1][j+1].getHeight())
+						{
+							map[i+1][j+1].setTerrainType(map[i][j].getTerrainType());
+						} else
+						{
+							map[i-1][j-1].setTerrainType(map[i][j].getTerrainType());
+						}
+					}
+					
+					// Right -> Left Diagonal
+					if (map[i-1][j+1].getTerrainType() != map[i][j].getTerrainType() &&
+						map[i+1][j-1].getTerrainType() != map[i-1][j+1].getTerrainType() &&
+						map[i+1][j-1].getTerrainType() != map[i][j].getTerrainType())
+					{
+						if (map[i-1][j+1].getHeight() > map[i+1][j-1].getHeight())
+						{
+							map[i+1][j-1].setTerrainType(map[i][j].getTerrainType());
+						} else
+						{
+							map[i-1][j+1].setTerrainType(map[i][j].getTerrainType());
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * mtHomogenize():
+	 * Used to homogenize terrain, make it less random. 
+	 * @param buf - number of tiles of one type that must appear around tile
+	 *  to change it
+	 */
+	private void mtHomogenize(int buf)
+	{
+		// Pass 1: Make terrain more homogeneous. Remove the noise a bit.
+		int maxCount;
+		for (int m = 0; m < 4; m++)
+		{
+			for (int i = 1; i < map.length - 1; i++)
+			{
+				for (int j = 1; j < map[i].length - 1; j++)
+				{
+					int tCount[] = new int [6]; // counts occurrences of terrain around a tile.
+					
+					// look at surrounding tiles
+					for (int k = i-1; k < i+2; k++)
+					{
+						for (int l = j-1; l < j+2; l++)
+						{
+							tCount[map[k][l].getTerrainType().ordinal()]++;
+						}
+					}
+					
+					maxCount = 0;
+					
+					// Determine which tile occurrs the most. set center to that kind.
+					for (int k = 1; k < tCount.length; k++)
+					{
+						if (tCount[k] > tCount[maxCount])
+						{
+							maxCount = k; 
+						}
+					}
+					// Change middle tile terrain
+					if (tCount[map[i][j].getTerrainType().ordinal()] == 1)
+					{
+						// if current tile is surrounded by no similar tiles. 
+						// change to most common. TODO possibly make it 2, not 1
+						map[i][j].setTerrainType(Terrain.values()[maxCount]);
+						
+					}
+					else if (tCount[maxCount] > buf)
+					{
+						map[i][j].setTerrainType(Terrain.values()[maxCount]);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * mtShoreAnalysis():
+	 * This function makes sure that water tiles are either surrounded
+	 * by water tiles, or Dirt. Initially there are some water-grass shores
+	 * which does not work with our current tile set. 
+	 * 
+	 * @param t1, terrain to analyze
+	 * @param t2, terrain this should transition to 
+	 * @param t3, terrain this should transition to 
+	 * 
+	 * TODO need to do for all transitions. 
+	 */
+	private void mtShoreAnalysis(Terrain t1, Terrain t2, Terrain t3)
+	{
+		//int wCount;
+		for (int i = 1; i < map.length - 1; i++)
+		{
+			for (int j = 1; j < map[i].length - 1; j++)
+			{
+				// If terrain type is water, make sure it is surrounded by water
+				// or dirt. Perhaps if fewer than X number of tiles are water, then
+				// change to dirt. 
+				//wCount = 0;
+				if (map[i][j].getTerrainType() == t1)
+				{
+					for (int k = i-1; k < i+2; k++)
+					{
+						for (int l = j-1; l < j+2; l++)
+						{
+							// If tile not a matching transition, switch to transition tile
+							if (map[k][l].getTerrainType() != t1 && 
+								map[k][l].getTerrainType() != t2 &&
+								map[k][l].getTerrainType() != t3)
+							{
+								map[k][l].setTerrainType(t3);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	/** @deprecated use resourceDistNat instead
 	 * resourceDistNatural(): Description: Default resource distribution, uses
 	 * constants at top of file. Allocates tile types into a variety of
 	 * linkedlists, attempts to perform 'realistic' resource distribution
@@ -181,7 +419,7 @@ public class GameBoard {
 				Resource.GOLD, 3, 3);
 	}
 
-	/**
+	/** @deprecated use resourceDistNat
 	 * resourceDistNaturalHelp(): Description: Distributes one given resource.
 	 * 
 	 * Parameters:
@@ -346,6 +584,10 @@ public class GameBoard {
 			c +=  d2; 
 			if (r >= 0 && r < rows && c >= 0 && c < cols) // check within bounds
 			{
+				if (map[r][c].getTerrainType() == Terrain.WATER)
+				{
+					break;
+				}
 				if (map[r][c].getResource() == Resource.NONE)
 				{
 					if (rand.nextBoolean())
@@ -368,25 +610,6 @@ public class GameBoard {
 		}
 		
 		return count;
-	}
-	
-	/**
-	 * resourceDistStoneMountain(): Description: Another resource distribution
-	 * function, this one makes a majority of the Mountain terrain type stone
-	 */
-	public void resourceDistStoneMountain() {
-		// TODO make all of mountain area stone, distrubite some of other
-		// resources
-	}
-
-	/**
-	 * resourceDistGoldRush(): Description: Another resource distribution
-	 * function, this one makes a majority of the snow and mountain terrain
-	 * gold.
-	 */
-	public void resourceDistGoldRush() {
-		// TODO make all of snow/ a lot of mountain gold resources, have gold in
-		// water too?
 	}
 
 	/**
@@ -433,6 +656,13 @@ public class GameBoard {
 		return map[x][y];
 	}
 
+	/**
+	 * canPlaceBuildingAt(): returns true if a building can be placed at the tile of the given coordinate 
+	 * @param buildingType - type of building to place
+	 * @param x - x coordinate of tile
+	 * @param y - y coordinate of tile
+	 * @return true if building can be placed, false if not. 
+	 */
 	public boolean canPlaceBuildingAt(BuildingType buildingType, int x, int y) {
 
 		int dc = (cols - (x + buildingType.getX() - 1));
