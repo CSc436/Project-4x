@@ -164,20 +164,107 @@ public class GameBoard {
 		// make less random
 		mtHomogenize(4); 
 		
-		// Loner tile removal should follow same format as mtHomogenize, only 
-		// check to see if count of type of terrain of curr tile is only 1. 
-			// add another chekc to mtHomogenize, allow it to see if only 1 of current tile type, if so change to most regardless 
-
-		// Transition Analysis 
+		// Transition Analysis - ensure that transitions between tile types are correct. 
 		mtShoreAnalysis(Terrain.WATER, Terrain.SAND, Terrain.SAND);
 		mtShoreAnalysis(Terrain.SAND, Terrain.WATER, Terrain.GRASS);
 		mtShoreAnalysis(Terrain.GRASS, Terrain.SAND, Terrain.FOREST);
 		mtShoreAnalysis(Terrain.FOREST, Terrain.GRASS, Terrain.MOUNTAIN);
 		mtShoreAnalysis(Terrain.MOUNTAIN, Terrain.FOREST, Terrain.SNOW);
 		mtShoreAnalysis(Terrain.SNOW, Terrain.MOUNTAIN, Terrain.SNOW);
-		// do diagonal analysis
+		
+		// Diagonal analysis
+		mtDiag();
+		//mtDiag();
+		// Transition Analysis - ensure that transitions between tile types are correct. 
+		mtShoreAnalysis(Terrain.WATER, Terrain.SAND, Terrain.SAND);
+		mtShoreAnalysis(Terrain.SAND, Terrain.WATER, Terrain.GRASS);
+		mtShoreAnalysis(Terrain.GRASS, Terrain.SAND, Terrain.FOREST);
+		mtShoreAnalysis(Terrain.FOREST, Terrain.GRASS, Terrain.MOUNTAIN);
+		mtShoreAnalysis(Terrain.MOUNTAIN, Terrain.FOREST, Terrain.SNOW);
+		mtShoreAnalysis(Terrain.SNOW, Terrain.MOUNTAIN, Terrain.SNOW);
+		
+		
+		// Body Analysis - if a body of a terrain type is smaller than threshold, 
+		// change body to surrounding?
+		mtSingleton();
 		
 		System.out.println("Terrain Massage Complete!");
+	}
+	
+	/**
+	 * checks up, down, left, right of tile. If all the same and 
+	 * not same as curr tile, replace.
+	 */
+	private void mtSingleton()
+	{
+		for (int i = 1; i < map.length-1; i++)
+		{
+			for (int j = 1; j < map[i].length-1; j++)
+			{
+				int ordCount[] = new int [6];
+				ordCount[map[i+1][j].getTerrainType().ordinal()]++;
+				ordCount[map[i][j+1].getTerrainType().ordinal()]++;
+				ordCount[map[i-1][j].getTerrainType().ordinal()]++;
+				ordCount[map[i][j-1].getTerrainType().ordinal()]++;
+				for (int k = 0; k < ordCount.length; k++)
+				{
+					if (ordCount[k] >= 4 && Terrain.values()[k] != map[i][j].getTerrainType())
+					{
+						map[i][j].setTerrainType(Terrain.values()[k]);
+					}
+				}
+					
+			}
+		}
+	}
+	
+	/**
+	 * mtDiag():
+	 * Removes all diagonal tiling errors
+	 * Analyzes left -> Right and Right -> left diagonals on one pass. 
+	 * Upon finding an offending diagonal, the bottom row value is changed 
+	 * to the middle value.
+	 */
+	private void mtDiag()
+	{
+		for (int n = 0; n < 2; n++)
+		{
+			for (int i = 1; i < map.length - 1; i++)
+			{
+				for (int j = 1; j < map[i].length - 1; j++)
+				{
+					// If all three along diagonal are different, change. 
+					// Left -> Right Diagonal 
+					if (map[i-1][j-1].getTerrainType() != map[i][j].getTerrainType() &&
+						map[i-1][j-1].getTerrainType() != map[i+1][j+1].getTerrainType() &&
+						map[i+1][j+1].getTerrainType() != map[i][j].getTerrainType())
+					{
+						// TODO make sure lowest terrain type is replaced?
+						if (map[i-1][j-1].getHeight() > map[i+1][j+1].getHeight())
+						{
+							map[i+1][j+1].setTerrainType(map[i][j].getTerrainType());
+						} else
+						{
+							map[i-1][j-1].setTerrainType(map[i][j].getTerrainType());
+						}
+					}
+					
+					// Right -> Left Diagonal
+					if (map[i-1][j+1].getTerrainType() != map[i][j].getTerrainType() &&
+						map[i+1][j-1].getTerrainType() != map[i-1][j+1].getTerrainType() &&
+						map[i+1][j-1].getTerrainType() != map[i][j].getTerrainType())
+					{
+						if (map[i-1][j+1].getHeight() > map[i+1][j-1].getHeight())
+						{
+							map[i+1][j-1].setTerrainType(map[i][j].getTerrainType());
+						} else
+						{
+							map[i-1][j+1].setTerrainType(map[i][j].getTerrainType());
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	/**
