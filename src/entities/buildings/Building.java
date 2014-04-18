@@ -16,9 +16,6 @@ public abstract class Building extends GameObject {
 														// belongs to
 	private BuildingType buildingType;
 
-	// private int turnsToExecute = 5; // Incase new implementation does not
-	// work.
-
 	/**
 	 * ResourceBuidling(): Base constructor for Resource Type buildings, calls
 	 * super building constructor and sets base amount of resources.
@@ -84,7 +81,5 @@ public abstract class Building extends GameObject {
 
 		return buildingType;
 	}
-
-
 
 }

@@ -1,14 +1,7 @@
 package entities.buildings;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
-
-import entities.research.InfantryArmor;
-import entities.research.InfantryDamage;
-import entities.research.RangedDamage;
-import entities.research.RangedLOS;
-import entities.research.Technology;
 import entities.research.TechnologyEnum;
 import entities.stats.BaseStatsEnum;
 
@@ -31,7 +24,6 @@ public class Blacksmith extends Building implements ResearchBuilding {
 
 	@Override
 	public ArrayList<TechnologyEnum> getTechnologyList() {
-		// TODO Auto-generated method stub
 		return techlist;
 	}
 
@@ -43,7 +35,6 @@ public class Blacksmith extends Building implements ResearchBuilding {
 
 	@Override
 	public boolean hasTechnologyInList(TechnologyEnum t) {
-
 		return techlist.contains(t);
 	}
 

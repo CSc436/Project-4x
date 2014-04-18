@@ -6,6 +6,9 @@ package entities.buildings;
  * @author NRTop Specifies the type of building, or resource building
  */
 public enum BuildingType {
+	
+	// Production
+	
 	BARRACKS(2, 2), CASTLE(4, 4), BANK(2, 2), TOWN_HALL(4, 4),
 
 	// Resource Buildings

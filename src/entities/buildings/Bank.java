@@ -3,7 +3,6 @@ package entities.buildings;
 import java.util.UUID;
 import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
-import entities.units.Unit;
 
 public class Bank extends Building implements ResourceBuilding {
 

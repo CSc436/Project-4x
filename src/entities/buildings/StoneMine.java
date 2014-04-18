@@ -29,20 +29,7 @@ public class StoneMine extends Building implements ResourceBuilding {
 	protected Resources baseResourceAmount;
 	protected Resources resourceAmount;
 
-	// Global resource rate modifier that affects all resource buildings
 
-	/**
-	 * Farm() creates a new farm, must be placed on a food tile.
-	 * 
-	 * @param id
-	 *            - UUID of this building
-	 * @param playerId
-	 *            - id of the player who own's this building
-	 * @param xco
-	 *            - x coordinate of the building
-	 * @param yco
-	 *            - y coordinate of the building
-	 */
 	public StoneMine(UUID id, int playerId, float xco, float yco) {
 		super(id, playerId, BaseStatsEnum.STONE_MINE, BaseStatsEnum.STONE_MINE
 				.getStats(), BuildingType.STONE_MINE, xco, yco, 1, 1);

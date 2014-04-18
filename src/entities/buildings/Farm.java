@@ -14,7 +14,6 @@ public class Farm extends Building implements ResourceBuilding {
 	protected Resources baseResourceAmount;
 	protected Resources resourceAmount;
 
-	// Global resource rate modifier that affects all resource buildings
 
 	/**
 	 * Farm() creates a new farm, must be placed on a food tile.

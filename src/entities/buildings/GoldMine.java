@@ -15,20 +15,6 @@ public class GoldMine extends Building implements ResourceBuilding {
 	protected Resources baseResourceAmount;
 	protected Resources resourceAmount;
 
-	// Global resource rate modifier that affects all resource buildings
-
-	/**
-	 * Farm() creates a new farm, must be placed on a food tile.
-	 * 
-	 * @param id
-	 *            - UUID of this building
-	 * @param playerId
-	 *            - id of the player who own's this building
-	 * @param xco
-	 *            - x coordinate of the building
-	 * @param yco
-	 *            - y coordinate of the building
-	 */
 	public GoldMine(UUID id, int playerId, float xco, float yco) {
 		super(id, playerId, BaseStatsEnum.GOLD_MINE, BaseStatsEnum.GOLD_MINE
 				.getStats(), BuildingType.GOLD_MINE, xco, yco, 1, 1);
