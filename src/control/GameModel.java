@@ -1,9 +1,7 @@
 package control;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import entities.GameObject;
@@ -133,11 +131,22 @@ public class GameModel {
 		}
 		
 		//Remove self from the list.
+		for (GameObject go : inSquare)
+			if (go == viewingObject)
+				inSquare.remove(go);
 		
 		//Iterate over the game objects in the square and using pythagorean
 		//distance calculations, see if they're visible based on float coords.
-		
+		for (GameObject go : inSquare) {
+			float dx = go.getX() - viewingObject.getX();
+			float dy = go.getY() - viewingObject.getY();
+			double dist = Math.sqrt((dx * dx) + (dy * dy));
+			
+			if (dist <= sightRange)
+				visibles.add(go);
+		}
 		
 		//Return the final list.
+		return visibles;
 	}
 }
