@@ -1,6 +1,8 @@
 package entities.buildings;
 
 import java.util.ArrayList;
+
+import control.Player;
 import entities.research.TechnologyEnum;
 
 public interface ResearchBuilding {
@@ -28,5 +30,10 @@ public interface ResearchBuilding {
 	 * 
 	 * @return
 	 */
-	public void advanceResearchProduction(int timestep);
+	
+
+	public boolean hasTechnologyInList(TechnologyEnum t);
+
+	public Player getPlayer();
+
 }

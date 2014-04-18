@@ -2,10 +2,12 @@ package commands;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 import org.junit.Test;
+
 import control.Controller;
 import control.GameModel;
 import control.Player;
@@ -15,6 +17,7 @@ import control.commands.ResearchTechnologyCommand;
 import entities.buildings.Building;
 import entities.buildings.BuildingType;
 import entities.buildings.ResearchBuilding;
+import entities.research.Technology;
 import entities.research.TechnologyEnum;
 import entities.resources.Resources;
 
@@ -33,6 +36,10 @@ public class TestResearchCommand {
 		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));
 		Map<UUID, Building> buildings = p.getGameObjects().getBuildings();
 		assertEquals(0, buildings.size());
+
+		p = model.getPlayer(1);
+		HashMap<String, Integer> temp = p.getTechTree().currently_researching;
+		assertEquals(0, temp.size());
 
 		Command comm = new ConstructBuildingCommand(p, p.getId(),
 				BuildingType.BLACKSMITH, 1, 1, model.getBoard());
@@ -70,8 +77,9 @@ public class TestResearchCommand {
 		}
 
 		p = model.getPlayer(1);
-		// HashMap<String,Technology> temp = p.getTechTree();
-
+		temp = p.getTechTree().currently_researching;
+		assertEquals(1, temp.size());
+		
 	}
 
 }

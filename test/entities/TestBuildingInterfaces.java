@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import control.Player;
 import entities.buildings.Bank;
+import entities.buildings.Blacksmith;
 import entities.buildings.Farm;
 import entities.buildings.GoldMine;
 import entities.buildings.LumberMill;
@@ -40,6 +41,23 @@ public class TestBuildingInterfaces {
 
 	}
 
+	
+	
+	
+	@Test
+	public void testResearchBuildings() {
+		Player p = new Player("Xu", 111);
+		Player p2 = new Player("MEATWAD", 69);
+		
+		Blacksmith bs = new Blacksmith(new UUID(0, 0), 1, 1, 1);
+		assertEquals(4,bs.getTechnologyList().size());
+		
+		
+	}
+	
+	
+	
+	
 	@Test
 	public void testResourceBuildings() {
 		Player p = new Player("Xu", 111);

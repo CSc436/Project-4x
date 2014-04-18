@@ -85,4 +85,6 @@ public abstract class Building extends GameObject {
 		return buildingType;
 	}
 
+
+
 }

@@ -2,6 +2,8 @@ package control.commands;
 
 import control.GameModel;
 import control.Player;
+import entities.GameObject;
+import entities.buildings.Building;
 import entities.buildings.ResearchBuilding;
 import entities.research.DisabledTechnology;
 import entities.research.InfantryArmor;
@@ -33,10 +35,18 @@ public class ResearchTechnologyCommand implements Command {
 
 	@Override
 	public boolean performCommand(GameModel model) {
-		// if the building is owned by the calling player, add the technology to
-		// the buildings tech list
-		if (p.getTechTree().can_research(t.toString()))
-			p.getTechTree().research(t.toString());
+		// building must be owned by the player
+		// the building must have the technology in its list
+		// the player must be able to research the technology
+		// if these conditions are true, the research is added to the player
+		if (p == b.getPlayer()) {
+			if (b.hasTechnologyInList(t)) {
+				if (p.getTechTree().can_research(t.toString())) {
+					p.getTechTree().research(t.name());
+				}
+			}
+		}
+
 		return false;
 	}
 

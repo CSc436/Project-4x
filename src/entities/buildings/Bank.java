@@ -80,4 +80,10 @@ public class Bank extends Building implements ResourceBuilding {
 		return null;
 	}
 
+	@Override
+	public void advanceResourceProduction() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

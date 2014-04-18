@@ -10,7 +10,7 @@ import entities.buildings.BuildingType;
 import entities.util.Point;
 
 /**
- * Programmer : Ben Deininger & Nick Topping
+ * Programmerr : Ben Deininger & Nick Topping
  * 
  * Purpose : This class creates an instance of a game board, which is a 2d array
  * of Tile objects. A tile object will tentatively contain simple ownership and

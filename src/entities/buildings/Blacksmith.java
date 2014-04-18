@@ -14,8 +14,8 @@ import entities.stats.BaseStatsEnum;
 
 public class Blacksmith extends Building implements ResearchBuilding {
 
-	ArrayList<Technology> techlist = new ArrayList<Technology>();
-	
+	ArrayList<TechnologyEnum> techlist = new ArrayList<TechnologyEnum>();
+
 	public Blacksmith(UUID id, int playerId, float xco, float yco) {
 		super(id, playerId, BaseStatsEnum.BLACKSMITH, BaseStatsEnum.BLACKSMITH
 				.getStats(), BuildingType.BLACKSMITH, xco, yco,
@@ -32,19 +32,19 @@ public class Blacksmith extends Building implements ResearchBuilding {
 	@Override
 	public ArrayList<TechnologyEnum> getTechnologyList() {
 		// TODO Auto-generated method stub
-		return null;
+		return techlist;
 	}
 
 	@Override
 	public void addTechnology(TechnologyEnum t) {
-		// TODO Auto-generated method stub
+		techlist.add(t);
 
 	}
 
 	@Override
-	public void advanceResearchProduction(int timestep) {
-		// TODO Auto-generated method stub
+	public boolean hasTechnologyInList(TechnologyEnum t) {
 
+		return techlist.contains(t);
 	}
 
 }
