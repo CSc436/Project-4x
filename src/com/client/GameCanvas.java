@@ -397,6 +397,11 @@ public class GameCanvas {
 					GameCanvas.this.move = false;
 				}
 				Coordinate c = objectSelector.pickTile(event.getClientX(), event.getClientY());
+				// A quick check to make sure that we did not miss the map
+				if(c.x >= 0.0) {
+					c.x = (int)(c.x / (255/GRID_WIDTH));
+					c.y = (int)(c.y / (255/GRID_WIDTH));
+				}
 				$("tile-Info").text(c.toString());
 				Console.log("TILE: " + c.toString());
 			}

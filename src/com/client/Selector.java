@@ -56,7 +56,7 @@ public class Selector {
 		if (invalidMap)
 			renderTileFrameBuffer();
 		
-		Console.log("Picking at (" + x + ", " + y + ")");
+		//Console.log("Picking at (" + x + ", " + y + ")");
 		
 		glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, tileFrameBuffer);
 		
@@ -74,6 +74,9 @@ public class Selector {
 		
 		glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, null);
 		
+		// Return -1,-1 if we picked the clear color (ie, hit nothing)
+		if (pixelData.get(2) > 0.0)
+			return new Coordinate(-1.0f, -1.0f);
 		return new Coordinate(pixelData.get(0), pixelData.get(1));
 	}
 	
