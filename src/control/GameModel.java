@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import entities.GameObject;
 import entities.buildings.Building;
+import entities.diplomacy.trading.TradeManager;
 import entities.gameboard.GameBoard;
 import entities.gameboard.Tile;
 import entities.units.Unit;
@@ -13,6 +14,7 @@ import entities.units.Unit;
 public class GameModel {
 	private ArrayList<Player> players;
 	private GameBoard map;
+	private TradeManager tradeManager;
 
 	// simple test model start up.
 	// A different constructor should be used for different
@@ -22,7 +24,7 @@ public class GameModel {
 		players.add(new Player("Player 2", 2));
 
 		map = new GameBoard(500, 500);
-
+		tradeManager = new TradeManager(this);
 	}
 
 	public ArrayList<Player> getPlayers() {
@@ -37,6 +39,8 @@ public class GameModel {
 		produceResources();
 		placeNewUnits();
 
+		// Lets just say 200 time units (ms) passes each step
+		tradeManager.update(200);
 	}
 
 	private void produceResources() {
@@ -148,5 +152,9 @@ public class GameModel {
 		
 		//Return the final list.
 		return visibles;
+	}
+
+	public TradeManager getTradeManager() {
+		return tradeManager;
 	}
 }
