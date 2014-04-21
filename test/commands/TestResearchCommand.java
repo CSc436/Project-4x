@@ -52,10 +52,18 @@ public class TestResearchCommand {
 			e.printStackTrace();
 		}
 
+		
+		
+		p = model.getPlayer(1);
+		temp = p.getTechTree().currently_researching;
+		assertEquals(0, temp.size());
+		
 		assertEquals(1, buildings.size());
 
 		buildings = p.getGameObjects().getBuildings();
 		ResearchBuilding b = (ResearchBuilding) buildings.values().toArray()[0];
+
+		
 		comm = new ResearchTechnologyCommand(p, b, TechnologyEnum.INFANTRYARMOR);
 		controller.addCommand(comm);
 
@@ -79,6 +87,13 @@ public class TestResearchCommand {
 		p = model.getPlayer(1);
 		temp = p.getTechTree().currently_researching;
 		assertEquals(1, temp.size());
+		assertEquals((Integer)10,temp.get("INFANTRYARMOR"));
+		model.advanceTimeStep();
+
+		p = model.getPlayer(1);
+		temp = p.getTechTree().currently_researching;
+		assertEquals(1, temp.size());
+		assertEquals((Integer)9,temp.get("INFANTRYARMOR"));
 		
 	}
 
