@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.UUID;
 
-import control.UnitType;
+import control.GameModel;
 import entities.Action;
 import entities.stats.BaseStatsEnum;
 import entities.GameObject;
@@ -103,6 +103,12 @@ public class Unit extends GameObject {
 	public HashMap<String, String> getActions() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void tick(int timeScale, GameModel model) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

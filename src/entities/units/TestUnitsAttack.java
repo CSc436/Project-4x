@@ -7,7 +7,6 @@ import java.util.UUID;
 import org.junit.Test;
 
 import control.Player;
-import control.UnitType;
 import entities.GameObjectType;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
