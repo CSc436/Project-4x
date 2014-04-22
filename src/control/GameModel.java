@@ -3,11 +3,15 @@ package control;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Set;
 
 import entities.GameObject;
 import entities.buildings.Building;
+import entities.buildings.ProductionBuilding;
+import entities.buildings.ResourceBuilding;
 import entities.gameboard.GameBoard;
 import entities.gameboard.Tile;
+import entities.research.TechnologyTree;
 import entities.units.Unit;
 
 public class GameModel {
@@ -23,6 +27,8 @@ public class GameModel {
 
 		map = new GameBoard(500, 500);
 
+		players.get(0).getTechTree().research("INFANTRYDAMAGE");
+		
 	}
 
 	public ArrayList<Player> getPlayers() {
@@ -34,24 +40,39 @@ public class GameModel {
 	}
 
 	public void advanceTimeStep() {
-		produceResources();
-		placeNewUnits();
+
+		tickBuildings();
 
 	}
 
-	private void produceResources() {
-		// TODO Auto-generated method stub
+	/*
+	 * tickBuildings will iterate through a player's building list and execute
+	 * timestep advances according to what building interfaces it uses.
+	 */
 
-	}
-
-	private void placeNewUnits() {
+	private void tickBuildings() {
 		for (Player p : players) {
+
+			// advance the timestep for all technologies being researched by
+			// player
+			p.getTechTree().researchStep(1); // Adjust time step in future
+
 			for (Building b : p.getGameObjects().getBuildings().values()) {
-				Unit potentialUnit = b.advanceUnitProduction(1); // Adjust time step in future 
-				if (potentialUnit != null) {
-					Tile t = map.getTileAt(0, 0);
-					t.addUnit(potentialUnit);
-					p.getGameObjects().addUnit(potentialUnit);
+
+				if (b instanceof ProductionBuilding) {
+
+					Unit potentialUnit = ((ProductionBuilding) b)
+							.advanceUnitProduction(1); // Adjust time step in
+														// future
+					if (potentialUnit != null) {
+						Tile t = map.getTileAt(0, 0);
+						t.addUnit(potentialUnit);
+						p.getGameObjects().addUnit(potentialUnit);
+					}
+
+					if (b instanceof ResourceBuilding) {
+						((ResourceBuilding) b).generateResource();
+					}
 				}
 			}
 		}
@@ -70,6 +91,15 @@ public class GameModel {
 			System.out.println(player.getAlias() + "'s Resources:");
 			System.out.println(player.getResources().toString());
 			System.out.println(player.getAlias() + "'s Units: ");
+		
+			TechnologyTree t = player.getTechTree();
+			Set<String> as = t.currently_researching.keySet();
+			
+			for(String s : as) {
+				
+				System.out.println("Curr research : " + s);
+			}
+			
 			for (Unit u : player.getGameObjects().getUnits().values()) {
 				System.out.println(u.toString());
 			}

@@ -1,10 +1,12 @@
-package entities.buildings;
+package entities;
 
 import static org.junit.Assert.*;
 
 import java.util.UUID;
 
 import org.junit.Test;
+
+import entities.buildings.Barracks;
 
 // import control.Player;
 
