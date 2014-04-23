@@ -142,11 +142,10 @@ public class RenderTile {
 	/**
 	 * Adds the current tile's data to the given buffers
 	 * @param index				index of the buffers to write data to
-	 * @param gl				gl context
 	 * @param vertexBuffer		vertex buffer to write to
 	 * @param texCoordBuffer	tex coord buffer to write to
 	 */
-	public void addToBuffer(int index, WebGLRenderingContext gl, Float32Array vertexBuffer, Float32Array texCoordBuffer){
+	public void addToBuffer(int index, Float32Array vertexBuffer, Float32Array texCoordBuffer, Float32Array  selectColorBuffer){
 		
 		float startx = (iter < 0 ? 15 : flagVals()) / 16.0f, starty = (iter < 0 ? 0 : iter) / 16.0f;
 		float delta = 32.0f / 512.0f;
@@ -175,5 +174,21 @@ public class RenderTile {
 				position.x + size, position.y, depth
 		};
 		vertexBuffer.set(verts, index*verts.length);
+		
+		float R = position.x / ((float)GameCanvas.GRID_WIDTH);
+		float G = position.y / ((float)GameCanvas.GRID_WIDTH);
+		Console.log("R: " + R + ", G: " + G);
+		
+		float[] selectColor = new float[] {
+				R, G,
+				R, G,
+				R, G,
+				
+				R, G,
+				R, G,
+				R, G
+		};
+
+		selectColorBuffer.set(selectColor, index*selectColor.length);
 	}
 }
