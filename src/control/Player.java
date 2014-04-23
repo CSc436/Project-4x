@@ -350,4 +350,8 @@ public class Player {
 		return resources.spend(productionCost);
 
 	}
+
+	public void addResources(Resources r) {
+		this.getResources().receive(r);
+	}
 }
