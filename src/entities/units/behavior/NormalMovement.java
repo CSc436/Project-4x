@@ -7,14 +7,20 @@ import entities.units.Unit;
 import entities.util.Point;
 
 public class NormalMovement extends MoveBehavior{
+	
 	private PhysicsVector targetPosition;
 	private PhysicsVector targetVelocity;
+	private PhysicsVector position;
+	private PhysicsVector velocity;
 	private int maxVelocity = 5;  // these are defaults... can add things later
 	private int accel = 3;
 	
-	public NormalMovement(Point targetLocation) {
+	public NormalMovement(Unit m, Point targetLocation) {
 		targetPosition = new PhysicsVector(targetLocation);
 		targetVelocity = new PhysicsVector(0,0);
+		position = m.getUnitPosition();
+		velocity = m.getUnitVelocity();
+		
 	}
 
 	/**
@@ -24,10 +30,9 @@ public class NormalMovement extends MoveBehavior{
 	 * @param m - Unit moving
 	 * @param timeStep - unit of time to move in
 	 */
-	public void move(Unit m, int timeStep) {
+	@Override
+	public void move(int timeStep) {
 		// Get the required fields from Movable object
-		PhysicsVector position = m.getUnitPosition();
-		PhysicsVector velocity = m.getUnitVelocity();
 
 		/* This code was taken straight verbatum from MovementBehavior in com.shared
 		 * Original code by Sean Topping */
@@ -57,18 +62,10 @@ public class NormalMovement extends MoveBehavior{
 			position = position.add(avgVelocity.multiply(timeSeconds));
 		}
 
-		// Added to make sure the Unit m's position gets updated
-		m.setUnitPosition(position.getX(), position.getY());
-		m.setUnitVelocity(velocity);
+		
 	}
 
-
-	@Override
-	public boolean move(GameModel model, int timeScale) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
+	
 	@Override
 	public boolean canMove(GameModel model) {
 		// TODO Auto-generated method stub
@@ -77,8 +74,10 @@ public class NormalMovement extends MoveBehavior{
 
 	@Override
 	public boolean setTargetLocation(Point newTarget) {
-		// TODO Auto-generated method stub
-		return false;
+		if (newTarget.x < 0 || newTarget.y < 0)
+			return false;
+		targetPosition.set(newTarget.x, newTarget.y);
+		return true;
 	}
 
 }

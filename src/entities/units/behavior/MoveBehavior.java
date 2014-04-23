@@ -6,7 +6,7 @@ import entities.util.Point;
 public abstract class MoveBehavior {
 	protected Point targetLocation;
 	
-	public abstract boolean move(GameModel model, int timeScale);
+	public abstract void move(int timeScale);
 	
 	//dependent on behavior
 	public abstract boolean canMove(GameModel model);
