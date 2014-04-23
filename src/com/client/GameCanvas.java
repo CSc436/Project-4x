@@ -411,7 +411,7 @@ public class GameCanvas {
 					c.x = (int)(c.x / (255/GRID_WIDTH));
 					c.y = (int)(c.y / (255/GRID_WIDTH));
 				}
-				$("tile-Info").text(c.toString());
+				RootPanel.get("tile-info").getElement().setInnerHTML(c.toString());
 				Console.log("TILE: " + c.toString());
 			}
 			
