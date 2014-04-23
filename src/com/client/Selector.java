@@ -52,8 +52,11 @@ public class Selector {
 	}
 	
 	public Coordinate pickTile(int x, int y){
+		
 		if (invalidMap)
 			renderTileFrameBuffer();
+		
+		//Console.log("Picking at (" + x + ", " + y + ")");
 		
 		glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, tileFrameBuffer);
 		
@@ -65,27 +68,38 @@ public class Selector {
 		Console.log(s + "]");
 		
 		if (invalidMap){
-			resetFramebuffer();
+			//resetFramebuffer();
 			invalidMap = false;
 		}
 		
 		glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, null);
 		
+		// Return -1,-1 if we picked the clear color (ie, hit nothing)
+		if (pixelData.get(2) > 0.0)
+			return new Coordinate(-1.0f, -1.0f);
 		return new Coordinate(pixelData.get(0), pixelData.get(1));
 	}
 	
 	private void renderTileFrameBuffer() {
-		Console.log("Rendering tile frame buffer");
-		// TODO Auto-generated method stub
+		Console.log("Rendering tile frame buffe");
 		// Bind our framebuffer so that we can render these entities off screen
 		glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, tileFrameBuffer);
 		// Clear the current framebuffer 
-		glContext.clearColor(1, 2, 3, 4);
+		glContext.clearColor(0.0f, 0.0f, 1.0f, 1.0f);
 		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT | WebGLRenderingContext.DEPTH_BUFFER_BIT);
-		// Reset the clearColor back to black in case the clear color ever changes
-		glContext.clearColor(0, 0, 0, 255);
+		
 		// Render the list of entities attached to the canvas
 		canvas.renderTiles(tileIdShader);
+		
+		// UNCOMMENT TO RENDER TO SCREEN AS WELL
+		// Note that this step ONLY occurs when a map is considered invalid, so frequently
+		// it will only render for a single frame.
+		//glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, null);
+		//glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT | WebGLRenderingContext.DEPTH_BUFFER_BIT);
+		//canvas.renderTiles(tileIdShader);
+		
+		// Reset the clearColor back to black in case the clear color ever changes
+		glContext.clearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	}
 
 	/**
@@ -226,6 +240,8 @@ public class Selector {
 	    		WebGLRenderingContext.DEPTH_ATTACHMENT, WebGLRenderingContext.RENDERBUFFER,
 	    		entityRenderbuffer);
 	    
+	    
+	    // Create a new empty framebuffer
 	    tileFrameBuffer = glContext.createFramebuffer();
 		
 		//Create a new empty renderbuffer

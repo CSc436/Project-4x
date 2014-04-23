@@ -64,7 +64,7 @@ public class GameCanvas {
 	
 	private float agentX = 0.0f, agentY = 0.0f, agentZ = -0.1f;
 
-	public static final int GRID_WIDTH = 256;
+	public static final int GRID_WIDTH = 12;
 	private long time;
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
 	
@@ -182,18 +182,27 @@ public class GameCanvas {
 	 * 
 	 */
 	public void renderTiles(Shader shader){
-		int tileSelectAttrib = glContext.getAttribLocation(shader.shaderProgram, "tileSelectColor");
-		
 //		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT
 //				| WebGLRenderingContext.DEPTH_BUFFER_BIT);
 
-		glContext.useProgram(shaderProgram);
-
-		glContext.enableVertexAttribArray(vertexPositionAttribute);
+		glContext.useProgram(shader.shaderProgram);
+		
+		// These attribute locations are hard coded. I don't know if they change on
+		//different hardware though, so be wary of that.
+		int tileSelectAttrib = 0;
+		int vertexPositionAttribute = 1;
+		
+		// These keeps returning -1 meaning it could not find the attributes. No clue why.
+		//int tileSelectAttrib = glContext.getAttribLocation(shader.shaderProgram, "tileSelectColor");
+		//Console.log("tileSelectAttrib = " + tileSelectAttrib);
+		//int vertexPositionAttribute = glContext.getAttribLocation(shader.shaderProgram, "vertexPositoin");
+		//Console.log("vertexPositionAttribute = " + vertexPositionAttribute);
+		
+		Console.log("Rendering tile selection");
 		glContext.enableVertexAttribArray(tileSelectAttrib);
-
+		glContext.enableVertexAttribArray(vertexPositionAttribute);
+		
 		// vertices
-		glContext.uniformMatrix4fv(matrixUniform, false, camera.getCameraMatrix());
 		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileVertexBuffer);
 		glContext.vertexAttribPointer(vertexPositionAttribute, 3,
 				WebGLRenderingContext.FLOAT, false, 0, 0);
@@ -203,15 +212,60 @@ public class GameCanvas {
 				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileSelectBuffer);
 		glContext.vertexAttribPointer(tileSelectAttrib , 2,
 				WebGLRenderingContext.FLOAT, false, 0, 0);
-
+		
 		// uniforms
+		WebGLUniformLocation camPosUniform = glContext.getUniformLocation(shader.shaderProgram, "camPos");
 		glContext.uniform3f(camPosUniform, camera.getX(), camera.getY(), camera.getZ());
+		
+		WebGLUniformLocation matrixUniform = glContext.getUniformLocation(shader.shaderProgram, "perspectiveMatrix");
+		glContext.uniformMatrix4fv(matrixUniform, false, camera.getCameraMatrix());
 
 		// draw geometry
 		glContext.drawArrays(WebGLRenderingContext.TRIANGLES, 0, NUM_TILES * 6);
 		
 		glContext.disableVertexAttribArray(vertexPositionAttribute);
 		glContext.disableVertexAttribArray(tileSelectAttrib);
+		
+		//glContext.flush();
+
+		//-------------------------------------------
+//		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT
+//				| WebGLRenderingContext.DEPTH_BUFFER_BIT);
+//
+//		glContext.useProgram(shaderProgram);
+//
+//		glContext.enableVertexAttribArray(vertexPositionAttribute);
+//		glContext.enableVertexAttribArray(vertexTexCoordAttrib);
+//
+//		// vertices
+//		glContext.uniformMatrix4fv(matrixUniform, false, camera.getCameraMatrix());
+//		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileVertexBuffer);
+//		glContext.vertexAttribPointer(vertexPositionAttribute, 3,
+//				WebGLRenderingContext.FLOAT, false, 0, 0);
+//
+//		// texture coordinates
+//		glContext
+//				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileTexCoordBuffer);
+//		glContext.vertexAttribPointer(vertexTexCoordAttrib, 2,
+//				WebGLRenderingContext.FLOAT, false, 0, 0);
+//
+//		// uniforms
+//		glContext.uniform3f(camPosUniform, camera.getX(), camera.getY(), camera.getZ());
+//
+//		// texture
+//		glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
+//		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
+//		glContext.uniform1i(texUniform, 0);
+//
+//		// draw geometry
+//		glContext.drawArrays(WebGLRenderingContext.TRIANGLES, 0, NUM_TILES * 6);
+//		
+//		glContext.disableVertexAttribArray(vertexPositionAttribute);
+//		glContext.disableVertexAttribArray(vertexTexCoordAttrib);
+//
+//		renderAgent();
+//		
+//		glContext.flush();
 	}
 	
 	/**
@@ -313,7 +367,7 @@ public class GameCanvas {
 					} else {
 						if(!event.isControlKeyDown()) selectedEntities.clear();
 						int selectedID = objectSelector.pickEntity(event.getClientX(), event.getClientY());
-						if(selectedID < 50) {
+						if(selectedID < 50 || true) {
 							System.out.println("Selected entity with ID " + selectedID + ".");
 							if (entities.containsKey(selectedID)) {
 								System.out.println("This entity exists! Adding to selected entities...");
@@ -342,7 +396,12 @@ public class GameCanvas {
 				} else {
 					GameCanvas.this.move = false;
 				}
-				Coordinate c = objectSelector.pickTile(event.getClientX(), event.getClientX());
+				Coordinate c = objectSelector.pickTile(event.getClientX(), event.getClientY());
+				// A quick check to make sure that we did not miss the map
+				if(c.x >= 0.0) {
+					c.x = (int)(c.x / (255/GRID_WIDTH));
+					c.y = (int)(c.y / (255/GRID_WIDTH));
+				}
 				$("tile-Info").text(c.toString());
 				Console.log("TILE: " + c.toString());
 			}

@@ -178,7 +178,7 @@ public class RenderTile {
 		float R = position.x / ((float)GameCanvas.GRID_WIDTH);
 		float G = position.y / ((float)GameCanvas.GRID_WIDTH);
 		Console.log("R: " + R + ", G: " + G);
-			
+		
 		float[] selectColor = new float[] {
 				R, G,
 				R, G,
@@ -188,6 +188,7 @@ public class RenderTile {
 				R, G,
 				R, G
 		};
+
 		selectColorBuffer.set(selectColor, index*selectColor.length);
 	}
 }
