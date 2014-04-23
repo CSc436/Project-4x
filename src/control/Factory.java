@@ -119,9 +119,9 @@ public class Factory {
 		case TRADE_CART:
 			result = new Infantry(newId, playerId, xco, yco);
 			break;
-
+/*
 		default:
-			break;
+			break;*/
 		}
 		p.getGameObjects().addUnit(result);
 		result.setOwner(p);
