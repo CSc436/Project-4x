@@ -53,6 +53,7 @@ public class PlayerUnits {
 
 	public void addUnit(Unit unit) {
 		units.put(unit.getId(), unit);
+		addGameObject(unit);
 	}
 
 	public void addBuilding(Building building) {
@@ -81,11 +82,12 @@ public class PlayerUnits {
 	}
 
 	public Unit removeUnit(UUID id) {
+		removeGameObject(id);
 		return units.remove(id);
 	}
 
 	public Agent removeAgent(UUID id) {
-		units.remove(id);
+		removeUnit(id);
 		return agents.remove(id);
 	}
 

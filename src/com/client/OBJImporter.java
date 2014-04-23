@@ -35,33 +35,33 @@ public class OBJImporter {
 			switch(token) {
 			// Found vertex: read the next three floats
 			case "v":
-				Console.log("Found a vert!");
+				//Console.log("Found a vert!");
 				f1 = Float.parseFloat(tokens[++i]); //scanner.nextFloat();
 				f2 = Float.parseFloat(tokens[++i]);
 				f3 = Float.parseFloat(tokens[++i]);
-				Console.log("VERTEX: " + f1 + ", " + f2 + ", " + f3 + "\n");
+				//Console.log("VERTEX: " + f1 + ", " + f2 + ", " + f3 + "\n");
 				vertList.add(f1);
 				vertList.add(f2);
 				vertList.add(f3);
 				break;
 			// Found vertex normal: read the next three floats
 			case "vn":
-				Console.log("Found a vert normal!");
+				//Console.log("Found a vert normal!");
 				f1 = Float.parseFloat(tokens[++i]);
 				f2 = Float.parseFloat(tokens[++i]);
 				f3 = Float.parseFloat(tokens[++i]);
-				Console.log("NORMAL: " + f1 + ", " + f2 + ", " + f3 + "\n");
+				//Console.log("NORMAL: " + f1 + ", " + f2 + ", " + f3 + "\n");
 				normalList.add(f1);
 				normalList.add(f2);
 				normalList.add(f3);
 				break;
 			// Found vertex texture coordinate: read the next three floats
 			case "vt":
-				Console.log("Found a texture coordinate!");
+				//Console.log("Found a texture coordinate!");
 				f1 = Float.parseFloat(tokens[++i]);
 				f2 = Float.parseFloat(tokens[++i]);
 				f3 = Float.parseFloat(tokens[++i]);
-				Console.log("TEXCOORD: " + f1 + ", " + f2 + ", " + f3 + "\n");
+				//Console.log("TEXCOORD: " + f1 + ", " + f2 + ", " + f3 + "\n");
 				texcoordList.add(f1);
 				texcoordList.add(f2);
 				texcoordList.add(f3);
@@ -69,17 +69,17 @@ public class OBJImporter {
 			// Found a face definition: read the next three ints
 			case "f":
 				// Get components of first vertex
-				Console.log("Found a face!");
+				//Console.log("Found a face!");
 				String[] split = tokens[++i].split("/");
 				i1 = Integer.parseInt(split[0]);
 				i2 = Integer.parseInt(split[1]);
 				i3 = Integer.parseInt(split[2]);
-				Console.log("FACE: " + i1 + ", " + i2 + ", " + i3 + "\n");
+				//Console.log("FACE: " + i1 + ", " + i2 + ", " + i3 + "\n");
 				// Get vert
 				vs.add(vertList.get((i1-1)*3));
 				vs.add(vertList.get(((i1-1)*3)+1));
 				vs.add(vertList.get(((i1-1)*3)+2));
-				Console.log("V1: " + vertList.get((i1-1)*3) + ", " + vertList.get(((i1-1)*3)+1) + ", " + vertList.get(((i1-1)*3)+2));
+				//Console.log("V1: " + vertList.get((i1-1)*3) + ", " + vertList.get(((i1-1)*3)+1) + ", " + vertList.get(((i1-1)*3)+2));
 				
 				// Get texcoord
 				ts.add(texcoordList.get((i2-1)*3));
@@ -92,17 +92,17 @@ public class OBJImporter {
 				ns.add(normalList.get(((i3-1)*3)+2));
 				
 				// Get components of second vertex
-				Console.log("Found a face!");
+				//Console.log("Found a face!");
 				split = tokens[++i].split("/");
 				i1 = Integer.parseInt(split[0]);
 				i2 = Integer.parseInt(split[1]);
 				i3 = Integer.parseInt(split[2]);
-				Console.log("FACE: " + i1 + ", " + i2 + ", " + i3 + "\n");
+				//Console.log("FACE: " + i1 + ", " + i2 + ", " + i3 + "\n");
 				// Get vert
 				vs.add(vertList.get((i1-1)*3));
 				vs.add(vertList.get(((i1-1)*3)+1));
 				vs.add(vertList.get(((i1-1)*3)+2));
-				Console.log("V2: " + vertList.get((i1-1)*3) + ", " + vertList.get(((i1-1)*3)+1) + ", " + vertList.get(((i1-1)*3)+2));
+				//Console.log("V2: " + vertList.get((i1-1)*3) + ", " + vertList.get(((i1-1)*3)+1) + ", " + vertList.get(((i1-1)*3)+2));
 				
 				// Get texcoord
 				ts.add(texcoordList.get((i2-1)*3));
@@ -116,17 +116,17 @@ public class OBJImporter {
 				
 				// Get components of third vertex
 				//Console.log("Found a face!");
-				Console.log("Found a face!");
+				//Console.log("Found a face!");
 				split = tokens[++i].split("/");
 				i1 = Integer.parseInt(split[0]);
 				i2 = Integer.parseInt(split[1]);
 				i3 = Integer.parseInt(split[2]);
-				Console.log("FACE: " + i1 + ", " + i2 + ", " + i3 + "\n");
+				//Console.log("FACE: " + i1 + ", " + i2 + ", " + i3 + "\n");
 				// Get vert
 				vs.add(vertList.get((i1-1)*3));
 				vs.add(vertList.get(((i1-1)*3)+1));
 				vs.add(vertList.get(((i1-1)*3)+2));
-				Console.log("V3: " + vertList.get((i1-1)*3) + ", " + vertList.get(((i1-1)*3)+1) + ", " + vertList.get(((i1-1)*3)+2));
+				//Console.log("V3: " + vertList.get((i1-1)*3) + ", " + vertList.get(((i1-1)*3)+1) + ", " + vertList.get(((i1-1)*3)+2));
 				
 				// Get texcoord
 				ts.add(texcoordList.get((i2-1)*3));
@@ -142,7 +142,7 @@ public class OBJImporter {
 
 				break;
 			default:
-				Console.log("Found something else!");
+				//Console.log("Found something else!");
 				break;
 			}
 		}

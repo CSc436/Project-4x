@@ -112,6 +112,7 @@ public class GameCanvas {
 		registerResizeHandler();
 		camera.makeCameraMatrix();
 		start();
+		Console.log("done with Game Canvas");
 	}
 	
 	/**
