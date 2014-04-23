@@ -2,6 +2,8 @@ package com.shared;
 
 import java.io.Serializable;
 
+import entities.util.Point;
+
 public class PhysicsVector implements Serializable{
 
 	/**
@@ -20,6 +22,10 @@ public class PhysicsVector implements Serializable{
 		this.y = y;
 	}
 	
+	public PhysicsVector(Point p){
+		this.x = p.x;
+		this.y = p.y;
+	}
 	public PhysicsVector add(PhysicsVector other) {
 		return new PhysicsVector(x + other.x, y + other.y);
 	}

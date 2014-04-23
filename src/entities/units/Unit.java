@@ -7,6 +7,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
+import com.shared.PhysicsVector;
+
 import control.GameModel;
 import entities.Action;
 import entities.stats.BaseStatsEnum;
@@ -27,6 +29,9 @@ import entities.units.behavior.UnitBehavior;
 
 public class Unit extends GameObject {
 
+	public PhysicsVector unitPosition;
+	public PhysicsVector velocity = new PhysicsVector(0,0);
+	
 	private UnitType unitType;
 	private int creationTime; // this is used...
 	private UnitBehavior currentBehavior;
@@ -138,6 +143,29 @@ public class Unit extends GameObject {
 	public void tick(int timeScale, GameModel model) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	/*=============================
+	 * Getters for physicsVectors req for Movent of Units
+	 ==============================*/
+	public PhysicsVector getUnitPosition(){
+		if (unitPosition == null){
+			unitPosition = new PhysicsVector(position);
+		}
+		return this.unitPosition;
+	}
+
+	public PhysicsVector getUnitVelocity(){
+		return this.velocity;
+	}
+
+
+	public void setUnitPosition(double x, double y){
+		this.unitPosition.set(x, y);
+	}
+
+	public void setUnitVelocity(PhysicsVector p){
+		this.velocity.set(p.getX(), p.getY());
 	}
 
 }
