@@ -11,6 +11,7 @@ import com.shared.PhysicsVector;
 
 import control.GameModel;
 import entities.Action;
+import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
 import entities.GameObject;
 import entities.GameObjectType;
@@ -38,9 +39,9 @@ public class Unit extends GameObject {
 	public  GameObject target;
 	
 	public Unit(UUID id, int playerId, BaseStatsEnum baseStats,
-			UnitStats new_stats, GameObjectType type, UnitType unitType,
+			UnitStats new_stats, UnitType unitType,
 			float xco, float yco) {
-		super(id, playerId, baseStats, new_stats, type, xco, yco);
+		super(id, playerId, baseStats, new_stats, GameObjectType.UNIT, xco, yco);
 		this.unitType = unitType;
 		this.creationTime = baseStats.getCreationTime();
 
@@ -94,6 +95,7 @@ public class Unit extends GameObject {
 	}
 	
 	//attack & heal (medic will heal in an attack way, with damage below 0)
+
 	public void canAttack(){
 		if(this.target==null)
 			System.out.println("You must select a target");
@@ -166,6 +168,19 @@ public class Unit extends GameObject {
 
 	public void setUnitVelocity(PhysicsVector p){
 		this.velocity.set(p.getX(), p.getY());
+	}
+	/**
+	 * decrementCreationTime() decrements remaining time for unit production
+	 * 
+	 * @param int timestep - how much to decrement by
+	 */
+	public void decrementCreationTime(int timestep) {
+		this.creationTime -= timestep;
+	}
+
+	public Resources getProductionCost() {
+
+		return this.baseStats.getProductionCost();
 	}
 
 }

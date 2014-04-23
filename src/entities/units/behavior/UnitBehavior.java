@@ -5,6 +5,7 @@ import entities.units.Unit;
 import entities.util.Point;
 
 public abstract class UnitBehavior {
+	protected Unit currentUnit;
 	protected AttackBehavior attackBehavior;
 	protected MoveBehavior movementBehavior;
 	

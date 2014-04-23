@@ -2,12 +2,16 @@ package entities.units.behavior;
 
 import control.GameModel;
 import entities.GameObject;
+import entities.units.Unit;
 
 public abstract class AttackBehavior {
 	protected GameObject target;
+	protected int coolDown; // Number of milliseconds for attack cooldown
+	protected int coolDownTimer = 0; // Number of milliseconds since previous attack
+
 	
 	//Use graham's stuff
-	public abstract boolean attack(GameModel model);
+	public abstract void attack(Unit currentUnit);
 	
 	/**
 	 * depended on LOS, range, and 'desire' to attack
@@ -16,7 +20,7 @@ public abstract class AttackBehavior {
 	 * @param model
 	 * @return
 	 */
-	public abstract boolean canAttack(GameModel model);
+	public abstract boolean canAttack(GameModel model, Unit currentUnit);
 	
 	//must be called before attack
 	public abstract void setAttackTarget(GameObject newTarget);
@@ -26,9 +30,5 @@ public abstract class AttackBehavior {
 	 */
 	public abstract void resetAttackTarget();
 
-	public boolean enemyInSight(GameModel model) {
-		//or if enemy already selected
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public abstract boolean enemyInSight(GameModel model, Unit currentUnit);
 }

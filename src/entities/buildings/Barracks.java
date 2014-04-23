@@ -3,6 +3,7 @@ package entities.buildings;
 import java.util.HashMap;
 import java.util.UUID;
 
+import control.GameModel;
 import entities.stats.BaseStatsEnum;
 
 public class Barracks extends Building {
@@ -60,5 +61,11 @@ public class Barracks extends Building {
 	public HashMap<String, String> getActions() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void tick(int timeScale, GameModel model) {
+		// TODO Auto-generated method stub
+		
 	}
 }

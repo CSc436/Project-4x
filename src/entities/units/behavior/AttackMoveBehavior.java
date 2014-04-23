@@ -23,9 +23,9 @@ public class AttackMoveBehavior extends UnitBehavior{
 	@Override
 	public boolean performBehavior(GameModel model, Unit currUnit, int timeScale) {
 		//TODO: needs Ben's line of sight stuff
-		if (attackBehavior.enemyInSight(model)) {
-			if (attackBehavior.canAttack(model)) {
-				
+		if (attackBehavior.enemyInSight(model, currentUnit)) {
+			if (attackBehavior.canAttack(model, currentUnit)) {
+				attackBehavior.attack(currentUnit);
 			}
 		}
 		return false;
