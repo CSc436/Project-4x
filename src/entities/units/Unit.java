@@ -1,7 +1,10 @@
 package entities.units;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.PriorityQueue;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 import control.GameModel;
@@ -27,7 +30,8 @@ public class Unit extends GameObject {
 	private UnitType unitType;
 	private int creationTime; // this is used...
 	private UnitBehavior currentBehavior;
-
+	public  GameObject target;
+	
 	public Unit(UUID id, int playerId, BaseStatsEnum baseStats,
 			UnitStats new_stats, GameObjectType type, UnitType unitType,
 			float xco, float yco) {
@@ -63,22 +67,47 @@ public class Unit extends GameObject {
 		}
 	}
 	
-	public double distance(Unit u){
+	public double distance(GameObject u){
 		return Math.sqrt(Math.pow(u.getX()+this.getX(),2)-Math.pow(u.getY()-this.getY(),2));
 	}
 	
-	//attack & heal (medic will heal in an attack way, with damage below 0)
-	public void attack(Unit u){
-		if(this.getStats().range<this.distance(u))
-			System.out.println("Out of range");
-		else if(this.getUnitType()!=unitType.MEDIC && this==u)
-			System.out.println("You cannot attack yourself...");
-		else if(this.getUnitType()!=unitType.MEDIC && this.getPlayerID()==u.getPlayerID())
-			System.out.println("You cannot attack your teammate!");
-		else if(this.getUnitType()==unitType.MEDIC && this.getPlayerID()!=u.getPlayerID())
-			System.out.println("You cannot heal your enemies!");
+	public void setTarget(GameObject u){
+		this.target=u;
+	}
+	
+	public void clearTarget(GameObject u){
+		this.target=null;
+	}
+	
+	public void attack(){
+		if(this.target.getHealth()>0){
+			this.target.getStats().health-=this.getStats().damage;
+			System.out.println(this.target.getHealth());
+		}
 		else
-			u.getStats().health-=this.getStats().damage;
+			System.out.println("The enemy is dead");
+	}
+	
+	//attack & heal (medic will heal in an attack way, with damage below 0)
+	public void canAttack(){
+		if(this.target==null)
+			System.out.println("You must select a target");
+		else if(this.getStats().range<this.distance(this.target))
+			System.out.println("Out of range");
+		else if(this.getUnitType()!=unitType.MEDIC && this==this.target)
+			System.out.println("You cannot attack yourself...");
+		else if(this.getUnitType()!=unitType.MEDIC && this.getPlayerID()==this.target.getPlayerID())
+			System.out.println("You cannot attack your teammate!");
+		else if(this.getUnitType()==unitType.MEDIC && this.getPlayerID()!=this.target.getPlayerID())
+			System.out.println("You cannot heal your enemies!");
+		else{
+			new Timer().schedule(new TimerTask(){
+				@Override
+				public void run() {
+					attack();
+				}
+			}, 1000);
+		}
 	}
 	
 	public PriorityQueue<Action> getActionQueue() {
@@ -92,7 +121,7 @@ public class Unit extends GameObject {
 	public UnitType getUnitType() {
 		return unitType;
 	}
-
+	
 	@Override
 	protected void setActions() {
 		// TODO Auto-generated method stub
