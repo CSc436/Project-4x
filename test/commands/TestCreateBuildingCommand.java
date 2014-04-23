@@ -7,14 +7,14 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-import control.Controller;
-import control.GameModel;
-import control.Player;
-import control.commands.Command;
-import control.commands.ConstructBuildingCommand;
-import entities.buildings.Building;
-import entities.buildings.BuildingType;
-import entities.resources.Resources;
+import com.shared.model.buildings.Building;
+import com.shared.model.buildings.BuildingType;
+import com.shared.model.commands.Command;
+import com.shared.model.commands.ConstructBuildingCommand;
+import com.shared.model.control.Controller;
+import com.shared.model.control.GameModel;
+import com.shared.model.control.Player;
+import com.shared.model.resources.Resources;
 
 public class TestCreateBuildingCommand {
 

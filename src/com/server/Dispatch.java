@@ -1,7 +1,7 @@
 package com.server;
 
-import control.Player;
-import entities.units.Agent;
+import com.shared.model.control.Player;
+import com.shared.model.units.Agent;
 
 public class Dispatch implements ModelEventListener {
 	
@@ -18,8 +18,8 @@ public class Dispatch implements ModelEventListener {
 	@Override
 	public void onModelEvent(ModelEvent me) {
 		// TODO Auto-generated method stub
-		switch (me.type) {
-		case UNIT:
+		//switch (me.type) {
+		/*case UNIT:
 			
 			Agent a = (Agent)me.getPayload();
 			
@@ -38,7 +38,7 @@ public class Dispatch implements ModelEventListener {
 			
 		default:
 			throw new IllegalArgumentException("A valid Target was not specified.");
-		}
+		}*/
 		
 		
 		

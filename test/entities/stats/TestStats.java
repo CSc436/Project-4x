@@ -4,10 +4,11 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import control.Factory;
-import control.Player;
-import entities.units.Unit;
-import entities.units.UnitType;
+import com.shared.model.control.Factory;
+import com.shared.model.control.Player;
+import com.shared.model.stats.UnitStats;
+import com.shared.model.units.Unit;
+import com.shared.model.units.UnitType;
 
 public class TestStats {
 	Player p = new Player("meathook", 0);

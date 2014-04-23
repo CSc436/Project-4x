@@ -5,10 +5,9 @@ import java.util.Queue;
 import java.util.Set;
 
 import com.client.SimpleSimulator;
-
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.shared.Request;
-import com.shared.SimpleGameModel;
+import com.shared.model.Request;
+import com.shared.model.SimpleGameModel;
 
 /**
  * The server-side implementation of the RPC service.

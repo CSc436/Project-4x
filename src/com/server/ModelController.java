@@ -5,8 +5,8 @@ import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.shared.Request;
-import com.shared.SimpleGameModel;
+import com.shared.model.Request;
+import com.shared.model.SimpleGameModel;
 
 public class ModelController implements Runnable {
 	public SimpleGameModel game;

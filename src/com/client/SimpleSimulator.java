@@ -4,9 +4,8 @@ import java.util.Queue;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-
-import com.shared.Request;
-import com.shared.SimpleGameModel;
+import com.shared.model.Request;
+import com.shared.model.SimpleGameModel;
 
 /**
  * The client-side stub for the RPC service.

@@ -4,15 +4,15 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import control.Controller;
-import control.Factory;
-import control.GameModel;
-import control.Player;
-import entities.buildings.Building;
-import entities.buildings.BuildingType;
-import entities.resources.Resources;
-import entities.units.Unit;
-import entities.units.UnitType;
+import com.shared.model.buildings.Building;
+import com.shared.model.buildings.BuildingType;
+import com.shared.model.control.Controller;
+import com.shared.model.control.Factory;
+import com.shared.model.control.GameModel;
+import com.shared.model.control.Player;
+import com.shared.model.resources.Resources;
+import com.shared.model.units.Unit;
+import com.shared.model.units.UnitType;
 
 public class TestResources {
 

@@ -2,9 +2,9 @@ package com.server;
 
 import java.util.List;
 
-import control.Player;
-import entities.gameboard.GameBoard;
-import entities.units.Unit;
+import com.shared.model.control.Player;
+import com.shared.model.gameboard.GameBoard;
+import com.shared.model.units.Unit;
 
 /**
  * FourXGameModel - A server-side model which contains all game and player

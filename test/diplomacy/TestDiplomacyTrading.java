@@ -4,13 +4,13 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import control.GameModel;
-import control.Player;
-import entities.diplomacy.trading.TradeFactory;
-import entities.diplomacy.trading.TradeManager;
-import entities.diplomacy.trading.interfaces.ITrade;
-import entities.diplomacy.trading.interfaces.ITradeManager;
-import entities.resources.Resources;
+import com.shared.model.control.GameModel;
+import com.shared.model.control.Player;
+import com.shared.model.diplomacy.trading.TradeFactory;
+import com.shared.model.diplomacy.trading.TradeManager;
+import com.shared.model.diplomacy.trading.interfaces.ITrade;
+import com.shared.model.diplomacy.trading.interfaces.ITradeManager;
+import com.shared.model.resources.Resources;
 
 public class TestDiplomacyTrading {
 	@Test

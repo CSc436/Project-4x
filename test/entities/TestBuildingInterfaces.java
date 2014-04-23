@@ -6,16 +6,16 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-import control.Player;
-import entities.buildings.Bank;
-import entities.buildings.Blacksmith;
-import entities.buildings.Farm;
-import entities.buildings.GoldMine;
-import entities.buildings.LumberMill;
-import entities.buildings.StoneMine;
-import entities.buildings.Town_Hall;
-import entities.buildings.University;
-import entities.resources.Resources;
+import com.shared.model.buildings.Bank;
+import com.shared.model.buildings.Blacksmith;
+import com.shared.model.buildings.Farm;
+import com.shared.model.buildings.GoldMine;
+import com.shared.model.buildings.LumberMill;
+import com.shared.model.buildings.StoneMine;
+import com.shared.model.buildings.Town_Hall;
+import com.shared.model.buildings.University;
+import com.shared.model.control.Player;
+import com.shared.model.resources.Resources;
 
 public class TestBuildingInterfaces {
 

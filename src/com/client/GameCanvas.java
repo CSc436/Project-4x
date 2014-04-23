@@ -7,8 +7,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.client.model.ClientModel;
-import com.client.utils.Vector3;
+import com.client.gameinterface.Console;
+import com.client.rendering.Camera;
+import com.client.rendering.Mesh;
+import com.client.rendering.OBJImporter;
+import com.client.rendering.RenderTile;
+import com.client.rendering.Selector;
+import com.client.rendering.Shader;
+import com.client.resources.ClientResources;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.NativeEvent;
@@ -39,7 +45,9 @@ import com.googlecode.gwtgl.binding.WebGLRenderingContext;
 import com.googlecode.gwtgl.binding.WebGLShader;
 import com.googlecode.gwtgl.binding.WebGLTexture;
 import com.googlecode.gwtgl.binding.WebGLUniformLocation;
-import com.shared.EntityModel;
+import com.shared.model.EntityModel;
+import com.shared.utils.Coordinate;
+import com.shared.utils.Vector3;
 
 public class GameCanvas {
 	private WebGLRenderingContext glContext;

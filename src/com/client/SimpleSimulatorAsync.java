@@ -3,9 +3,8 @@ package com.client;
 import java.util.Queue;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.shared.Request;
-import com.shared.SimpleGameModel;
+import com.shared.model.Request;
+import com.shared.model.SimpleGameModel;
 
 /**
  * The async counterpart of <code>GreetingService</code>.

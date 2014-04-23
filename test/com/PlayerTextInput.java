@@ -3,9 +3,9 @@ package com;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import control.Controller;
-import control.GameState;
-import control.PlayerCommands;
+import com.shared.model.control.Controller;
+import com.shared.model.control.GameState;
+import com.shared.model.control.PlayerCommands;
 
 //might break this into two threads. one for input, one for update
 public class PlayerTextInput implements Runnable {

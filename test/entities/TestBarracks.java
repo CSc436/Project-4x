@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-import entities.buildings.Barracks;
+import com.shared.model.buildings.Barracks;
 
 // import control.Player;
 

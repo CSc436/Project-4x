@@ -8,18 +8,18 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-import control.Controller;
-import control.GameModel;
-import control.Player;
-import control.commands.Command;
-import control.commands.ConstructBuildingCommand;
-import control.commands.ResearchTechnologyCommand;
-import entities.buildings.Building;
-import entities.buildings.BuildingType;
-import entities.buildings.ResearchBuilding;
-import entities.research.Technology;
-import entities.research.TechnologyEnum;
-import entities.resources.Resources;
+import com.shared.model.buildings.Building;
+import com.shared.model.buildings.BuildingType;
+import com.shared.model.buildings.ResearchBuilding;
+import com.shared.model.commands.Command;
+import com.shared.model.commands.ConstructBuildingCommand;
+import com.shared.model.commands.ResearchTechnologyCommand;
+import com.shared.model.control.Controller;
+import com.shared.model.control.GameModel;
+import com.shared.model.control.Player;
+import com.shared.model.research.Technology;
+import com.shared.model.research.TechnologyEnum;
+import com.shared.model.resources.Resources;
 
 public class TestResearchCommand {
 
