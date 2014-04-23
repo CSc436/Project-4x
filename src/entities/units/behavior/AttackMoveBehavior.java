@@ -13,28 +13,35 @@ import entities.util.Point;
  *
  */
 public class AttackMoveBehavior extends UnitBehavior{
+	NormalMovement movementBehavior;
 	
 	//User wishes for unit to attack/move to a location
-	public AttackMoveBehavior(Point targetLocation) {
+	public AttackMoveBehavior(Unit currUnit, Point targetLocation) {
 		attackBehavior = new NormalAttack();
-		movementBehavior = new NormalMovement(targetLocation);
+		movementBehavior = new NormalMovement(currUnit, targetLocation);
 	}
 
 	@Override
 	public boolean performBehavior(GameModel model, Unit currUnit, int timeScale) {
 		//TODO: needs Ben's line of sight stuff
-		if (attackBehavior.enemyInSight(model, currentUnit)) {
+		if (attackBehavior.isAttacking())
+			attackBehavior.attack(currUnit, timeScale);
+		else if (attackBehavior.enemyInSight(model, currentUnit)) {
 			if (attackBehavior.canAttack(model, currentUnit)) {
-				attackBehavior.attack(currentUnit);
+				attackBehavior.attack(currentUnit, timeScale);
+			}
+			else
+			{
+				
 			}
 		}
-		return false;
+		movementBehavior.move(timeScale);
+		return true;
 	}
 
 	@Override
-	public boolean setTargetLocation(GameModel model, Point target) {
-		// TODO Auto-generated method stub
-		
+	public boolean setTargetLocation(Point target) {
+		return movementBehavior.setTargetLocation(target);
 	}
 	
 	

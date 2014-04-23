@@ -13,46 +13,32 @@ public class NormalAttack extends AttackBehavior{
 
 	@Override
 	public void attack(Unit currentUnit, int timeStep) {
-		
-		
-		Point targetPosition = target.getPosition();
-		Point myPosition = currentUnit.getPosition();
-		double distanceToTarget = currentUnit.distance(target);
 		coolDownTimer += timeStep;
 		int numAttacks = coolDownTimer / coolDown;
 		coolDownTimer %= coolDown;
-
-		if( distanceToTarget <= range ) {
-			target.getHealthBehavior().takeDamage(numAttacks * strength);
-		} else {
-			double x = targetPosition.getX();
-			double y = targetPosition.getY();
-			moveBehavior.setMoveTarget(x, y);
-		}
-		
-		
-		
-		currentUnit.attack(target);
+		target.getStats().health -= (numAttacks * currentUnit.getStats().damage); 
 	}
 
 	@Override
 	public boolean canAttack(GameModel model, Unit currentUnit) {
-		if(currentUnit.getStats().range >= currentUnit.distance(target))
-			return true;// TODO Auto-generated method stub
+		PhysicsVector targetPosition = target.getPosition();
+		PhysicsVector myPosition = currentUnit.getUnitPosition();
+		double distanceToTarget = myPosition.sub(targetPosition).magnitude();
+		if( distanceToTarget <= currentUnit.getStats().range ) {
+			return true;
+		}
 		else
 			return false;
 	}
 
 	@Override
 	public void setAttackTarget(GameObject newTarget) {
-		// TODO Auto-generated method stub
-		
+		target = newTarget;
 	}
 
 	@Override
 	public void resetAttackTarget() {
-		// TODO Auto-generated method stub
-		
+		target = null;
 	}
 
 	@Override
@@ -64,6 +50,14 @@ public class NormalAttack extends AttackBehavior{
 			return false;
 		target = visible.get(0);
 		return true;
+	}
+
+	@Override
+	public boolean isAttacking() {
+		if (target != null)
+			return true;
+		else
+			return false;
 	}
 
 }

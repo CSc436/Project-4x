@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.UUID;
 
+import com.shared.PhysicsVector;
+
 import control.GameModel;
 import control.Player;
 import entities.stats.BaseStatsEnum;
@@ -18,7 +20,7 @@ public abstract class GameObject implements Locatable {
 	private UnitStats stats;
 	protected BaseStatsEnum baseStats;
 	private Player owner;
-	protected Point position;
+	protected PhysicsVector position;
 	protected PriorityQueue<Action> actionQueue;
 
 	public GameObject(UUID id, int playerId, BaseStatsEnum baseStats,
@@ -29,7 +31,7 @@ public abstract class GameObject implements Locatable {
 		stats = baseStats.getStats();
 		updateStats(baseStats, new_stats);
 		this.type = type;
-		position = new Point(xco, yco);
+		position = new PhysicsVector(xco, yco);
 		actionQueue = new PriorityQueue<Action>();
 
 	}
@@ -58,8 +60,7 @@ public abstract class GameObject implements Locatable {
 	public boolean setLocation(float x, float y) {
 
 		if (x >= 0 && y >= 0) {
-			position.x = x;
-			position.y = y;
+			position.set(x, y);
 			return true;
 		} else
 			return false;
@@ -131,16 +132,16 @@ public abstract class GameObject implements Locatable {
 		return stats;
 	}
 
-	public Point getPosition() {
+	public PhysicsVector getPosition() {
 		return position;
 	}
 
 	public float getX() {
-		return getPosition().x;
+		return (float) getPosition().getX();
 	}
 
 	public float getY() {
-		return getPosition().y;
+		return (float) getPosition().getY();
 	}
 
 	public UUID getId() {

@@ -61,7 +61,7 @@ public class Unit extends GameObject {
 			case DEATH:
 				// I DIED
 				System.out
-						.println("death at :" + position.x + " " + position.y);
+						.println("death at :" + position.getX() + " " + position.getY());
 				// getOwner().getUnits().removeUnit(this);
 				while (!actionQueue.isEmpty())
 					actionQueue.poll();
@@ -152,7 +152,7 @@ public class Unit extends GameObject {
 	 ==============================*/
 	public PhysicsVector getUnitPosition(){
 		if (unitPosition == null){
-			unitPosition = new PhysicsVector(position);
+			unitPosition = new PhysicsVector();
 		}
 		return this.unitPosition;
 	}

@@ -11,7 +11,7 @@ public abstract class AttackBehavior {
 
 	
 	//Use graham's stuff
-	public abstract void attack(Unit currentUnit);
+	public abstract void attack(Unit currentUnit, int timeStep);
 	
 	/**
 	 * depended on LOS, range, and 'desire' to attack
@@ -31,4 +31,6 @@ public abstract class AttackBehavior {
 	public abstract void resetAttackTarget();
 
 	public abstract boolean enemyInSight(GameModel model, Unit currentUnit);
+	
+	public abstract boolean isAttacking();
 }

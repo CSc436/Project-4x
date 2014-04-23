@@ -1,5 +1,7 @@
 package entities.units.behavior;
 
+import java.util.Stack;
+
 import com.shared.PhysicsVector;
 
 import control.GameModel;
@@ -8,7 +10,7 @@ import entities.util.Point;
 
 public class NormalMovement extends MoveBehavior{
 	
-	private PhysicsVector targetPosition;
+	private Stack<PhysicsVector> targetPosition;
 	private PhysicsVector targetVelocity;
 	private PhysicsVector position;
 	private PhysicsVector velocity;
@@ -16,7 +18,8 @@ public class NormalMovement extends MoveBehavior{
 	private int accel = 3;
 	
 	public NormalMovement(Unit m, Point targetLocation) {
-		targetPosition = new PhysicsVector(targetLocation);
+		targetPosition = new Stack<PhysicsVector>();
+		targetPosition.push(new PhysicsVector(targetLocation));
 		targetVelocity = new PhysicsVector(0,0);
 		position = m.getUnitPosition();
 		velocity = m.getUnitVelocity();
@@ -36,14 +39,18 @@ public class NormalMovement extends MoveBehavior{
 
 		/* This code was taken straight verbatum from MovementBehavior in com.shared
 		 * Original code by Sean Topping */
-		if(position.equals(targetPosition)) return;
+		if(position.equals(targetPosition))
+		{
+			targetPosition.pop();
+			return;
+		}
 
 		double timeSeconds = timeStep / 1000.0;
-		targetVelocity = targetPosition.sub(position).normalize(maxVelocity);
+		targetVelocity = targetPosition.peek().sub(position).normalize(maxVelocity);
 		PhysicsVector prevVelocity = velocity.copy();
 		velocity = velocity.setToTarget(targetVelocity, accel * timeSeconds);
 
-		double distance = position.sub(targetPosition).magnitude();
+		double distance = position.sub(targetPosition.peek()).magnitude();
 		double velMag = velocity.magnitude();
 		if( distance <= velMag * velMag / (2 * accel) ) {
 			targetVelocity = velocity.normalize(Math.sqrt(2 * distance * accel));
@@ -55,7 +62,7 @@ public class NormalMovement extends MoveBehavior{
 		double upper = prevVelocity.magnitude() * timeSeconds + accel * timeSeconds * timeSeconds;
 		double lower = prevVelocity.magnitude() * timeSeconds - accel * timeSeconds * timeSeconds;
 		if(distance <= upper && distance >= lower) {
-			position = targetPosition.copy();
+			position = targetPosition.peek().copy();
 			velocity = new PhysicsVector(0,0);
 			targetVelocity = new PhysicsVector(0,0);
 		} else {
@@ -76,7 +83,7 @@ public class NormalMovement extends MoveBehavior{
 	public boolean setTargetLocation(Point newTarget) {
 		if (newTarget.x < 0 || newTarget.y < 0)
 			return false;
-		targetPosition.set(newTarget.x, newTarget.y);
+		targetPosition.push(new PhysicsVector(newTarget));
 		return true;
 	}
 

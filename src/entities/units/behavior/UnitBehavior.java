@@ -12,6 +12,6 @@ public abstract class UnitBehavior {
 	
 	public abstract boolean performBehavior(GameModel model, Unit currUnit, int timeScale);
 	
-	public abstract void setTargetLocation(GameModel model, Point target);
+	public abstract boolean setTargetLocation(Point target);
 
 }

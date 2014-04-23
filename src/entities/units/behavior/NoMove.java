@@ -1,13 +1,27 @@
 package entities.units.behavior;
 
 import control.GameModel;
+import entities.util.Point;
 
 public class NoMove extends MoveBehavior{
 
+
 	@Override
-	public boolean move(GameModel model, int timeScale) {
+	public void move(int timeScale) {
 		// TODO Auto-generated method stub
-		return true;
+		
+	}
+
+	@Override
+	public boolean canMove(GameModel model) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean setTargetLocation(Point newTarget) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
