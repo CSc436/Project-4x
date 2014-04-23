@@ -32,6 +32,9 @@ public class TestCreateCommand {
 		// test create for player 1
 		Player p = model.getPlayer(1);
 		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));
+		p = model.getPlayer(2);
+		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));
+		p = model.getPlayer(1);
 		Map<UUID, Building> buildings = p.getGameObjects().getBuildings();
 		assertEquals(0, buildings.size());
 		//	public ConstructBuilding(Player p, int playerId, BuildingType bt, int xco,

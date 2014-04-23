@@ -20,11 +20,14 @@ public class Controller implements Runnable {
 
 	}
 
+	/**
+	 * run() -> actual game loop execution
+	 */
+
 	@Override
 	public void run() {
 		model.modelState();
 
-		// actual game execution
 		boolean gameRunning = true;
 		while (gameRunning) {
 
@@ -39,29 +42,8 @@ public class Controller implements Runnable {
 				comm.performCommand(model);
 			}
 			model.advanceTimeStep();
-			// produceGameObjects
-			// agentDecision();
-			// unitInteraction();
-			// When the timer on a unit in the production queue hits 0, add the
-			// unit to the player's unit list.
-
-			// TODO: change timestep to what we really want
-			// checkBuildingProductionQueue(10);
-
-			// gameRunning = playerCommands();
 
 		}
-	}
-
-	@SuppressWarnings("unused")
-	private void checkBuildingProductionQueue(int timestep) {
-
-	}
-
-	@SuppressWarnings("unused")
-	private boolean playerCommands() {
-
-		return true;
 	}
 
 	/*
@@ -73,21 +55,6 @@ public class Controller implements Runnable {
 	 */
 	public Queue<Tile> pathFinding() {
 		return null;
-	}
-	
-	@SuppressWarnings("unused")
-	private void unitInteraction() {
-
-	}
-
-	@SuppressWarnings("unused")
-	private void agentDecision() {
-
-	}
-
-	@SuppressWarnings("unused")
-	private void produceResources() {
-
 	}
 
 	public void addCommand(Command c) {

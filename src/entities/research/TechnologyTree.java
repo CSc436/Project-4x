@@ -11,7 +11,7 @@ public class TechnologyTree {
 	private Player p;
 
 	public HashMap<String, Technology> technologies;
-	private HashMap<String, Integer> currently_researching;
+	public HashMap<String, Integer> currently_researching;
 	private HashMap<String, Integer> researched;
 
 	public TechnologyTree(Player player) {

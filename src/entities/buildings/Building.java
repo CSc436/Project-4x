@@ -1,16 +1,11 @@
 package entities.buildings;
 
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.UUID;
-
-import control.Player;
 import control.Tools;
 import entities.GameObject;
 import entities.GameObjectType;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
-import entities.units.Unit;
 
 public abstract class Building extends GameObject {
 
@@ -20,11 +15,6 @@ public abstract class Building extends GameObject {
 														// knows what 'city' it
 														// belongs to
 	private BuildingType buildingType;
-
-	private Queue<Unit> buildingQ = new LinkedList<Unit>();
-
-	// private int turnsToExecute = 5; // Incase new implementation does not
-	// work.
 
 	/**
 	 * ResourceBuidling(): Base constructor for Resource Type buildings, calls
@@ -78,43 +68,6 @@ public abstract class Building extends GameObject {
 		return width;
 	}
 
-	/*
-	 * Holding the Queue for the units that the building is responsible for
-	 * producing. It can add units to its queue or remove finished units from
-	 * its queue
-	 * 
-	 * When a unit is ordered to be produced, the player is charged the
-	 * production costs. If the player decides to cancel the order, he is
-	 * refunded.
-	 * 
-	 * If the unit costs more resources than the player has, the unit is not queued, and false is returned
-	 */
-	public boolean queueUnit(Unit u) {
-
-		boolean b = this.getPlayer().chargePlayerForUnitProduction(
-				u.getProductionCost());
-
-		// if the player can afford to build the unit, queue it, otherwise
-		// return false;
-		if (b) {
-
-			return buildingQ.offer(u);
-
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * dequeueUnit(): takes a unit off of the production queue for this
-	 * building, and returns said unit
-	 * 
-	 * @return Unit that building finished creating
-	 */
-	public Unit dequeueUnit() {
-		return buildingQ.poll();
-	}
-
 	/**
 	 * getCastleID() Returns the castle ID that is associated with this building
 	 * 
@@ -124,55 +77,6 @@ public abstract class Building extends GameObject {
 		return castleId;
 	}
 
-	/**
-	 * productionQueueEmpty() returns true if the production queue for this
-	 * building is empty
-	 * 
-	 * @return true if queue is empty
-	 */
-	public boolean productionQueueEmpty() {
-
-		return buildingQ.isEmpty();
-	}
-
-	/*
-	 * public Unit advanceUnitProduction() { System.out.println("running"); if
-	 * (buildingQ.size() == 0) return null;
-	 * 
-	 * if (turnsToExecute > 0) { turnsToExecute--; return null; } else {
-	 * turnsToExecute = 5; return dequeueUnit(); }
-	 */// In case bellow one breaks....
-	/**
-	 * advanceUnitProduction(): increments how far along current unit production
-	 * is.
-	 * 
-	 * @param timestep
-	 *            - amount to increment player production
-	 * 
-	 * @return if not null add unit to player, if null, do nothing.
-	 */
-	public Unit advanceUnitProduction(int timestep) {
-		// add timestep to each unit
-		if (!productionQueueEmpty()) {
-			Unit u = buildingQ.peek();
-			u.decrementCreationTime(timestep);
-			if (u.getCreationTime() <= 0) {
-
-				return buildingQ.poll();
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public Unit getProducingUnit() {
-		return buildingQ.peek();
-	}
-
-	// will have to pla
 	public BuildingType getBuildingType() {
 
 		return buildingType;

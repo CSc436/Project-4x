@@ -91,12 +91,19 @@ public enum BaseStatsEnum {
 
 	// RESOURCE BUILDINGS
 	LUMBER_MILL(new UnitStats(0, 2, 100, 0, 1000, 0, 0, new Resources(100, 0,
-			0, 0, 0))), STONE_MINE(new UnitStats(0, 2, 100, 0, 1000, 0, 0,
-			new Resources(100, 0, 0, 0, 0))), GOLD_MINE(new UnitStats(0, 2,
-			100, 0, 1000, 0, 0, new Resources(100, 0, 0, 0, 0))), FARM(
+			0, 0, 0))),
+
+	STONE_MINE(new UnitStats(0, 2, 100, 0, 1000, 0, 0, new Resources(100, 0, 0,
+			0, 0))), GOLD_MINE(new UnitStats(0, 2, 100, 0, 1000, 0, 0,
+			new Resources(100, 0, 0, 0, 0))), FARM(new UnitStats(0, 2, 100, 0,
+			1000, 0, 0, new Resources(100, 0, 0, 0, 0))), UNIVERSITY(
 			new UnitStats(0, 2, 100, 0, 1000, 0, 0, new Resources(100, 0, 0, 0,
-					0))), UNIVERSITY(new UnitStats(0, 2, 100, 0, 1000, 0, 0,
-			new Resources(100, 0, 0, 0, 0)));
+					0))),
+
+	// RESEARCH BUILDINGS
+
+	BLACKSMITH(new UnitStats(0, 0, 1, 0, 100, 0, 0, new Resources(100, 0, 0, 0,
+			0)));
 
 	private UnitStats stats;
 	private int baseCreationTime;

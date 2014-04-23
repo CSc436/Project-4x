@@ -1,6 +1,5 @@
 package entities.buildings;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 import entities.resources.Resources;
@@ -8,34 +7,40 @@ import entities.stats.BaseStatsEnum;
 
 /**
  * GoldMine()
- * @author NRTop
- * The goldMine allows players to generate gold resources. 
+ * 
+ * @author NRTop The goldMine allows players to generate gold resources.
  */
-public class GoldMine extends ResourceBuilding{
+public class GoldMine extends Building implements ResourceBuilding {
 
-	/**
-	 * GoldMine():
-	 * @param id - unique id for this GoldMine
-	 * @param playerId - id of player who owns this goldmine
-	 * @param xco - xcoordinate of this mine
-	 * @param yco = y coordinate of this mine
-	 */
+	protected Resources baseResourceAmount;
+	protected Resources resourceAmount;
+
 	public GoldMine(UUID id, int playerId, float xco, float yco) {
-		super(id, playerId, BaseStatsEnum.GOLD_MINE, BaseStatsEnum.GOLD_MINE.getStats(), 
-				BuildingType.GOLD_MINE, xco,
-				yco, 1, 1, new Resources(20, 0, 0, 0, 0));
+		super(id, playerId, BaseStatsEnum.GOLD_MINE, BaseStatsEnum.GOLD_MINE
+				.getStats(), BuildingType.GOLD_MINE, xco, yco, 1, 1);
+		baseResourceAmount = new Resources(10000, 0, 0, 0, 0);
+		resourceAmount = new Resources(20, 0, 0, 0, 0);
+	}
+
+	public Resources generateResource() {
+
+		return resourceAmount;
 	}
 
 	@Override
-	protected void setActions() {
-		// TODO Auto-generated method stub
-		
+	public void advanceResourceProduction() {
+
+		if (baseResourceAmount.spend(20, 0, 0, 0, 0)) {
+
+			this.getPlayer().addResources(resourceAmount);
+		}
+
+		return;
 	}
 
-	@Override
-	public HashMap<String, String> getActions() {
-		// TODO Auto-generated method stub
-		return null;
+	public Resources getBaseResources() {
+
+		return baseResourceAmount;
 	}
 
 }

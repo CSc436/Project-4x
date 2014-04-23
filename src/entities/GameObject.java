@@ -150,24 +150,4 @@ public abstract class GameObject implements Locatable {
 		return playerId;
 	}
 
-	protected abstract void setActions();// might get rid
-
-	public abstract HashMap<String, String> getActions();// might get rid of
-
-	// /**
-	// *
-	// * @param a
-	// * - add an action to the PriorityQueue to be performed during
-	// * the turn.
-	// */
-	// public void addAction(Action a) {
-	// actionQueue.add(a);
-	// getOwner().getCommandQueue().push(a, this);
-	// }
-
-	// /**
-	// * Logic to handle actions that the Unit may do. TODO: add all necessary
-	// * actions
-	// */
-	// public void performActions()
 }

@@ -36,7 +36,6 @@ public class Resources {
 		Stone = startingStone;
 		Wood = startingWood;
 		Food = startingFood;
-		Stone = startingStone;
 		ResearchPts = startingRPts;
 	}
 
