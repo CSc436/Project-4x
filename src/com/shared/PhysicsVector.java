@@ -2,30 +2,33 @@ package com.shared;
 
 import java.io.Serializable;
 
+import entities.util.Point;
+
 public class PhysicsVector implements Serializable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1405808061376997684L;
-	private double x;
-	private double y;
+	private Point p;
 
 	public PhysicsVector(){
 		
 	}
 	
 	public PhysicsVector(double x, double y) {
-		this.x = x;
-		this.y = y;
+		p = new Point(x,y);
 	}
 	
+	public PhysicsVector(Point p){
+		this.p = p;
+	}
 	public PhysicsVector add(PhysicsVector other) {
-		return new PhysicsVector(x + other.x, y + other.y);
+		return new PhysicsVector(p.x + other.p.x, p.y + other.p.y);
 	}
 	
 	public PhysicsVector sub(PhysicsVector other) {
-		return new PhysicsVector(x - other.x, y - other.y);
+		return new PhysicsVector(p.x - other.p.x, p.y - other.p.y);
 	}
 	
 	/**
@@ -34,9 +37,9 @@ public class PhysicsVector implements Serializable{
 	 * @return
 	 */
 	public PhysicsVector normalize(double length) {
-		if (Math.hypot(x, y) != 0.0) {
-			double xTemp = x / Math.hypot(x, y);
-			double yTemp = y / Math.hypot(x, y);
+		if (Math.hypot(p.x, p.y) != 0.0) {
+			double xTemp = p.x / Math.hypot(p.x, p.y);
+			double yTemp = p.y / Math.hypot(p.x, p.y);
 			return new PhysicsVector(xTemp * length, yTemp * length);
 		} else {
 			return new PhysicsVector(0, 0);
@@ -49,36 +52,36 @@ public class PhysicsVector implements Serializable{
 	 * @param maxChange - Maximum change allowable to move towards target
 	 */
 	public PhysicsVector setToTarget( PhysicsVector target, double maxChange ) {
-		double deltaX = target.x - x;
-		double deltaY = target.y - y;
+		double deltaX = target.p.x - p.x;
+		double deltaY = target.p.y - p.y;
 		double deltaL = Math.hypot(deltaX, deltaY);
 		
 		if(deltaL <= maxChange) {
-			return new PhysicsVector(target.x, target.y);
+			return new PhysicsVector(target.p.x, target.p.y);
 		} else if(deltaL != 0.0) {
-			double xTemp = x + maxChange * (deltaX / deltaL);
-			double yTemp = y + maxChange * (deltaY / deltaL);
+			double xTemp = p.x + maxChange * (deltaX / deltaL);
+			double yTemp = p.y + maxChange * (deltaY / deltaL);
 			return new PhysicsVector(xTemp, yTemp);
 		}
-		return new PhysicsVector(x, y);
+		return new PhysicsVector(p.x, p.y);
 	}
 	
 	
 	public PhysicsVector setToTarget( PhysicsVector target, PhysicsVector changeVector ) {
 		
-		double tempX = x;
-		double tempY = y;
+		double tempX = p.x;
+		double tempY = p.y;
 		
-		if( changeVector.x > 0 && target.x >= x ) {
-			tempX = Math.min(target.x, x + changeVector.x);
-		} else if( changeVector.x < 0 && target.x <= x ) {
-			tempX = Math.max(target.x, x + changeVector.x);
+		if( changeVector.p.x > 0 && target.p.x >= p.x ) {
+			tempX = Math.min(target.p.x, p.x + changeVector.p.x);
+		} else if( changeVector.p.x < 0 && target.p.x <= p.x ) {
+			tempX = Math.max(target.p.x, p.x + changeVector.p.x);
 		}
 		
-		if( changeVector.y > 0 && target.y >= y ) {
-			tempY = Math.min(target.y, y + changeVector.y);
-		} else if( changeVector.y < 0 && target.y <= y ) {
-			tempY = Math.max(target.y, y + changeVector.y);
+		if( changeVector.p.y > 0 && target.p.y >= p.y ) {
+			tempY = Math.min(target.p.y, p.y + changeVector.p.y);
+		} else if( changeVector.p.y < 0 && target.p.y <= p.y ) {
+			tempY = Math.max(target.p.y, p.y + changeVector.p.y);
 		}
 		
 		return new PhysicsVector(tempX, tempY);
@@ -86,31 +89,34 @@ public class PhysicsVector implements Serializable{
 	}
 	
 	public PhysicsVector multiply( double factor ) {
-		return new PhysicsVector(x*factor, y*factor);
+		return new PhysicsVector(p.x*factor, p.y*factor);
 	}
 	
 	public void set( double x, double y ) {
-		this.x = x;
-		this.y = y;
+		this.p.x = x;
+		this.p.y = y;
 	}
 	
 	public double magnitude() {
-		return Math.hypot(x, y);
+		return Math.hypot(p.x, p.y);
 	}
 	
 	public double getX() {
-		return x;
+		return p.x;
 	}
 	
 	public double getY() {
-		return y;
+		return p.y;
 	}
 	
 	public PhysicsVector copy() {
-		return new PhysicsVector(x,y);
+		return new PhysicsVector(p);
 	}
 	
+	public Point getPoint(){
+		return p;
+	}
 	public boolean equals( PhysicsVector other ) {
-		return other.x == x && other.y == y;
+		return other.p.x == p.x && other.p.y == p.y;
 	}
 }

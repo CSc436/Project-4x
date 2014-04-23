@@ -166,12 +166,12 @@ public class TestBuildingInterfaces {
 	@Test
 	public void testMultipleInterfaces() {
 
-		Player p = new Player("Xu", 111);
+/*		Player p = new Player("Xu", 111);
 		Town_Hall th = new Town_Hall(new UUID(0, 0), 1, 1, 1, false);
 		th.setOwner(p);
 		
 		th.advanceResourceProduction();
-		th.advanceUnitProduction(1);
+		th.advanceUnitProduction(1);*/
 
 	}
 

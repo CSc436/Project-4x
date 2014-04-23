@@ -1,7 +1,9 @@
 package entities.buildings;
 
+import java.util.HashMap;
 import java.util.UUID;
 
+import control.GameModel;
 import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
 
@@ -55,6 +57,24 @@ public class LumberMill extends Building implements ResourceBuilding {
 	public Resources getBaseResources() {
 
 		return baseResourceAmount;
+	}
+
+	@Override
+	public void tick(int timeScale, GameModel model) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void setActions() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public HashMap<String, String> getActions() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

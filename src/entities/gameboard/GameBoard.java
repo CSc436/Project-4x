@@ -466,7 +466,7 @@ public class GameBoard {
 				}
 				temp = terrainList.get(rp)
 						.get(rpp % terrainList.get(rp).size());
-				map[Math.round(temp.x)][Math.round(temp.y)].setResource(res);
+				map[(int) Math.round(temp.x)][(int) Math.round(temp.y)].setResource(res);
 				terrainList.get(rp).remove(rpp % terrainList.get(rp).size());
 				numRes--;
 			} while (rnd.nextBoolean());
@@ -771,9 +771,9 @@ public class GameBoard {
 	 */
 	public void removeBuilding(Building b) {
 
-		Point pos = b.getPosition();
-		int x = Math.round(pos.x);
-		int y = Math.round(pos.y);
+		Point pos = b.getPosition().getPoint();
+		int x = (int) Math.round(pos.x);
+		int y = (int) Math.round(pos.y);
 
 		int height = b.getHeight();
 		int width = b.getWidth();

@@ -18,17 +18,14 @@ import entities.stats.BaseStatsEnum;
 import entities.units.Unit;
 import entities.units.UnitType;
 import entities.units.pawns.Archer;
-import entities.units.pawns.Battering_Ram;
 import entities.units.pawns.Cannon;
 import entities.units.pawns.Catapult;
 import entities.units.pawns.Dragoon;
 import entities.units.pawns.Infantry;
 import entities.units.pawns.Knight;
-import entities.units.pawns.Medic;
 import entities.units.pawns.Militia;
 import entities.units.pawns.Ranged_Calvary;
 import entities.units.pawns.Rifleman;
-import entities.units.pawns.Skirmisher;
 import entities.units.pawns.Transport;
 
 /**
@@ -84,9 +81,9 @@ public class Factory {
 		case ARCHER:
 			result = new Archer(newId, playerId, xco, yco);
 			break;
-		case SKIRMISHER:
+/*		case SKIRMISHER:
 			result = new Skirmisher(newId, playerId, xco, yco);
-			break;
+			break;*/
 		case KNIGHT:
 			result = new Knight(newId, playerId, xco, yco);
 			break;
@@ -99,9 +96,9 @@ public class Factory {
 		case CATAPULT:
 			result = new Catapult(newId, playerId, xco, yco);
 			break;
-		case BATTERING_RAM:
+/*		case BATTERING_RAM:
 			result = new Battering_Ram(newId, playerId, xco, yco);
-			break;
+			break;*/
 		case RIFLEMAN:
 			result = new Rifleman(newId, playerId, xco, yco);
 			break;
@@ -113,9 +110,9 @@ public class Factory {
 			result = new Cannon(newId, playerId, xco, yco);
 			break;
 
-		case MEDIC:
+/*		case MEDIC:
 			result = new Medic(newId, playerId, xco, yco);
-			break;
+			break;*/
 
 		case TRADE_CART:
 			result = new Infantry(newId, playerId, xco, yco);

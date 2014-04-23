@@ -1,8 +1,11 @@
 package entities.buildings;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.UUID;
+
+import control.GameModel;
 import entities.stats.BaseStatsEnum;
 import entities.units.Unit;
 
@@ -74,7 +77,7 @@ public class Barracks extends Building implements ProductionBuilding {
 		}
 		return null;
 	}
-
+	
 	public boolean queueUnit(Unit u) {
 		return buildingQ.add(u);
 
@@ -93,4 +96,21 @@ public class Barracks extends Building implements ProductionBuilding {
 		return buildingQ.peek();
 	}
 
+	@Override
+	public void tick(int timeScale, GameModel model) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void setActions() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public HashMap<String, String> getActions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
