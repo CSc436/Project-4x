@@ -8,4 +8,8 @@ public class Coordinate {
 		this.x = x;
 		this.y = y;
 	}
+	
+	public String toString(){
+		return "Coord(" + x + ", " + y + ")";	
+	}
 }

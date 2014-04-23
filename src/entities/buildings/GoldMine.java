@@ -3,11 +3,14 @@ package entities.buildings;
 import java.util.HashMap;
 import java.util.UUID;
 
-import control.BuildingType;
-
 import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
 
+/**
+ * GoldMine()
+ * @author NRTop
+ * The goldMine allows players to generate gold resources. 
+ */
 public class GoldMine extends ResourceBuilding{
 
 	/**

@@ -4,15 +4,17 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 import java.util.UUID;
+
 import org.junit.Test;
-import control.BuildingType;
+
 import control.Controller;
 import control.GameModel;
 import control.Player;
 import control.commands.Command;
 import control.commands.ConstructBuildingCommand;
 import entities.buildings.Building;
-
+import entities.buildings.BuildingType;
+import entities.resources.Resources;
 
 public class TestCreateBuildingCommand {
 
@@ -26,23 +28,22 @@ public class TestCreateBuildingCommand {
 
 		// test create for player 1
 		Player p = model.getPlayer(1);
+		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));
 		Map<UUID, Building> buildings = p.getGameObjects().getBuildings();
 		assertEquals(0, buildings.size());
 
 		Command comm = new ConstructBuildingCommand(p, p.getId(),
 				BuildingType.BARRACKS, 1, 1, model.getBoard());
 		controller.addCommand(comm);
-		
-		
+
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		assertEquals(1, buildings.size());
 
+		assertEquals(1, buildings.size());
 
 	}
 

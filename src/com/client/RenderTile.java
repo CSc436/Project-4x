@@ -7,10 +7,10 @@ import com.shared.Terrain;
 public class RenderTile {
 	private static int NW = 0b1, NE = 0b10, SW = 0b100, SE = 0b1000;
 	
-	public Coordinate position;
-	private int ne, nw, se, sw, iter;
-	private float size;
-	private float depth;
+	private Coordinate position; // x y coord of top left
+	private int ne, nw, se, sw, iter; // flags used for auto-tiling
+	private float size; // length of the tile
+	private float depth; // z coordinate
 	
 	public RenderTile(float x, float y, float size, float depth){
 		position = new Coordinate(x, y);
@@ -25,38 +25,40 @@ public class RenderTile {
 		iter = -1;
 	}
 	
-	public void setIter(int iter){
+	/* ========== Auto-tiling Helper Functions ========== */
+	
+	private void setIter(int iter){
 		if (this.iter != iter){
-			invert();
+			flipFlags();
 			this.iter = iter;
 		}
 	}
 	
-	public void getEastFrom(RenderTile other, int iter){
+	private void getEastFrom(RenderTile other, int iter){
 		setIter(iter);
 		ne = other.nw;
 		se = other.sw;
 	}
 	
-	public void getWestFrom(RenderTile other, int iter){
+	private void getWestFrom(RenderTile other, int iter){
 		setIter(iter);
 		nw = other.ne;
 		sw = other.se;
 	}
 	
-	public void getNorthFrom(RenderTile other, int iter){
+	private void getNorthFrom(RenderTile other, int iter){
 		setIter(iter);
 		nw = other.sw;
 		ne = other.se;
 	}
 	
-	public void getSouthFrom(RenderTile other, int iter){
+	private void getSouthFrom(RenderTile other, int iter){
 		setIter(iter);
 		sw = other.nw;
 		se = other.ne;
 	}
 	
-	public void setFlags(int nw, int ne, int sw, int se, int iter){
+	private void setFlags(int nw, int ne, int sw, int se, int iter){
 		this.nw = nw;
 		this.ne = ne;
 		this.sw = sw;
@@ -64,17 +66,29 @@ public class RenderTile {
 		this.iter = iter;
 	}
 	
-	public void invert(){
-		this.nw = 1 - nw;
-		this.ne = 1 - ne;
-		this.se = 1 - se;
-		this.sw = 1 - sw;
+	private void flipFlags(){
+		this.nw = 1;
+		this.ne = 1;
+		this.se = 1;
+		this.sw = 1;
 	}
 	
+	private int flagVals(){
+		return (nw * NW) | (sw * SW) | (ne * NE) | (se * SE);
+	}
+	
+	/**
+	 * Creates a 2d array of auto-tiled map of dimension 
+	 * @param seed			seed to use with DiamondSquare
+	 * @param dimension		length of one size
+	 * @return				the auto-tiled map
+	 */
 	public static RenderTile[][] makeMap(long seed, int dimension){
-		float[][] heightmap = DiamondSquare.DSGen(dimension,
+		// generate the height map
+		float[][] heightmap = DiamondSquare.DSGen(dimension, 
 				seed, 0.2f);
 		
+		// initialize the map
 		RenderTile[][] map = new RenderTile[dimension][dimension];
 		for (int x = 0; x < dimension; x++)
 			for (int y = 0; y < dimension; y++){
@@ -83,6 +97,7 @@ public class RenderTile {
 		
 		int n, s, e, w, val;
 		
+		// Auto tiling algorithm
 		for (Terrain t: Terrain.values()){
 			if (t == Terrain.FOREST || t == Terrain.WATER)
 				continue;
@@ -122,12 +137,15 @@ public class RenderTile {
 		}
 		return map;
 	}
+
 	
-	public int flagVals(){
-		return (nw * NW) | (sw * SW) | (ne * NE) | (se * SE);
-	}
-	
-	public void addToBuffer(int index, WebGLRenderingContext gl, Float32Array vertexBuffer, Float32Array texCoordBuffer){
+	/**
+	 * Adds the current tile's data to the given buffers
+	 * @param index				index of the buffers to write data to
+	 * @param vertexBuffer		vertex buffer to write to
+	 * @param texCoordBuffer	tex coord buffer to write to
+	 */
+	public void addToBuffer(int index, Float32Array vertexBuffer, Float32Array texCoordBuffer, Float32Array  selectColorBuffer){
 		
 		float startx = (iter < 0 ? 15 : flagVals()) / 16.0f, starty = (iter < 0 ? 0 : iter) / 16.0f;
 		float delta = 32.0f / 512.0f;
@@ -156,83 +174,21 @@ public class RenderTile {
 				position.x + size, position.y, depth
 		};
 		vertexBuffer.set(verts, index*verts.length);
-	}
-	
-	public static void addTileToBuffer(float x, float y, float size, int index, Terrain land, WebGLRenderingContext gl, Float32Array vertexBuffer, Float32Array texCoordBuffer){
-		Coordinate position = new Coordinate(x, y);
-
-		float depth = 0.0f;
-
-		float startx, starty;
-		float delta = 0.25f;
 		
-		switch(land){
-		case GRASS:		startx = 0.0f;
-						starty = 0.0f;
-						break;
-		case SAND: 		startx = 0.0f;
-						starty = delta;
-						break;
-		case WATER: 	startx = delta;
-						starty = 0.0f;
-						break;
-		case MOUNTAIN:	startx = 2 * delta;
-						starty = 0.0f;
-						break;
-		case SNOW:		startx = 2 * delta;
-						starty = delta;
-						break;
-		default:		startx = 2*delta;
-						starty = 2*delta;
-						break;
-		}
+		float R = position.x / ((float)GameCanvas.GRID_WIDTH);
+		float G = position.y / ((float)GameCanvas.GRID_WIDTH);
+		Console.log("R: " + R + ", G: " + G);
 		
-		float[] texCoords = new float[] { 
-				startx, starty, 
-				startx + delta, starty,
-				startx, starty + delta,
+		float[] selectColor = new float[] {
+				R, G,
+				R, G,
+				R, G,
 				
-				startx, starty + delta,
-				startx + delta, starty + delta,
-				startx + delta, starty
+				R, G,
+				R, G,
+				R, G
 		};
-		
-		texCoordBuffer.set(texCoords, index*texCoords.length);
-		
-		float[] verts = new float[] {
-				// first triangle
-				position.x, position.y, depth,
-				position.x + size, position.y, depth,
-				position.x, position.y + size, depth,
-				
-				// second triangle
-				position.x, position.y + size, depth,
-				position.x + size, position.y + size, depth,
-				position.x + size, position.y, depth
-		};
-		vertexBuffer.set(verts, index*verts.length);
-	}
-	
-	public static void main(String[] args){
-/*		int width = 32;
-		RenderTile[][] map = makeMap(121891L, width);
-		for (int x = 0; x < width; x++)
-			System.out.printf("---------");
-		System.out.printf("\n");
-		for (int y = 0; y < width; y++){
-			for (int x = 0; x < width; x++)
-				System.out.printf("[%d %3s %d]", map[x][y].nw, "", map[x][y].ne);
-			System.out.printf("\n");
-			for (int x = 0 ; x < width; x++){
-				System.out.printf("|   %s   |", map[x][y].iter < 0 ? "W" : map[x][y].iter == 0 ? "S" : map[x][y].iter == 1 ? "G" : map[x][y].iter == 2 ? "M" : "I");
-			}
-			System.out.printf("\n");
-			for (int x = 0; x < width; x++)
-				System.out.printf("[%d %3s %d]", map[x][y].sw,"", map[x][y].se);
-			System.out.printf("\n");
-			for (int x = 0; x < width; x++)
-				System.out.printf("---------");
-			System.out.printf("\n");
-		}*/
+
+		selectColorBuffer.set(selectColor, index*selectColor.length);
 	}
 }

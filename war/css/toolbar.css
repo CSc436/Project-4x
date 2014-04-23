@@ -1,3 +1,4 @@
+/* Entire toolbar div. Consists of the banner and toolbar */
 #toolbar-div {
 	position: fixed;
 	top: 0;
@@ -11,6 +12,7 @@
 	z-index: 999;
 }
 
+/* Where the logo goes. Currently this is just text, but TODO: should be an image */
 #banner {
 	display: inline-block;
 	height: 30px;
@@ -21,6 +23,7 @@
 	text-align: center;
 }
 
+/* Toolbar which holds the sidebar buttons */
 #toolbar {
 	position: absolute;
 	height: 50px;
@@ -60,6 +63,7 @@
 	float: right !important;
 }
 
+/* Has the game resource info */
 #game-resources {
 	padding: 5px;
 	text-align: left !important;

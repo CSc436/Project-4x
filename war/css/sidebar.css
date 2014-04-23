@@ -1,3 +1,4 @@
+/* Entire sidebar div */
 #sidebar {
 	position: fixed;
 	bottom: 0;
@@ -37,6 +38,7 @@
 }
 */
 
+/* Class which each panel (i.e. agent-menu, cities-menu-detail) has. The sidebar contains many sidebar-menus */
 .sidebar-menu {
 	display: none;
 	opacity: 1.0;
@@ -66,6 +68,7 @@
 	font-weight: bold;
 }
 
+/* TODO: this could probably be put in main.css if it gets used outside of the sidebar */
 .form-label {
 	width: 25%;
 	float: left;

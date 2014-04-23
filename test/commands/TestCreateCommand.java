@@ -7,16 +7,17 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-import control.BuildingType;
 import control.Controller;
 import control.GameModel;
 import control.Player;
-import control.UnitType;
 import control.commands.BuildingProductionCommand;
 import control.commands.Command;
 import control.commands.ConstructBuildingCommand;
 import entities.buildings.Building;
+import entities.buildings.BuildingType;
+import entities.resources.Resources;
 import entities.units.Unit;
+import entities.units.UnitType;
 
 public class TestCreateCommand {
 
@@ -30,6 +31,7 @@ public class TestCreateCommand {
 
 		// test create for player 1
 		Player p = model.getPlayer(1);
+		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));
 		Map<UUID, Building> buildings = p.getGameObjects().getBuildings();
 		assertEquals(0, buildings.size());
 		//	public ConstructBuilding(Player p, int playerId, BuildingType bt, int xco,
@@ -69,7 +71,7 @@ public class TestCreateCommand {
 
 		// test create for player 2
 		p = model.getPlayer(2);
-			
+		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));	
 		comm = new ConstructBuildingCommand(p,p.getId(),BuildingType.CASTLE,12,12,
 				model.getBoard());
 		controller.addCommand(comm);

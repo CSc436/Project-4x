@@ -3,9 +3,9 @@ package entities.units.pawns;
 import java.util.HashMap;
 import java.util.UUID;
 
-import control.UnitType;
 import entities.stats.BaseStatsEnum;
 import entities.units.Unit;
+import entities.units.UnitType;
 
 public class Battering_Ram extends Unit {
 

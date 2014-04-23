@@ -184,8 +184,6 @@ public class FloatMatrix {
 		return new FloatMatrix(data);
 	}
 	
-	
-	
 	public float [] columnWiseData(){
 		float [] result = new float[ROWS * COLS];
 		int i = 0;

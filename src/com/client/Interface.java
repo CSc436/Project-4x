@@ -8,6 +8,8 @@ import com.google.gwt.user.client.Event;
 
 public class Interface {
 
+	// ID of panel in sidebar currently showing
+	// Or "" if sidebar is hidden
 	private static String showing = "";
 
 	/**
@@ -29,6 +31,7 @@ public class Interface {
 	private static void initClickHandlers() {
 
 		// City Menu Button
+		// Callback to show cities-menu
 		$("#cities-button").click(new Function() {
 			public boolean f(Event e) {
 				changeSidebarContent("cities-menu");
@@ -40,6 +43,7 @@ public class Interface {
 		});
 
 		// Agent Menu Button
+		// Callback to show agent-menu
 		$("#agent-button").click(new Function() {
 			public boolean f(Event e) {
 				// Show agent menu
@@ -52,6 +56,7 @@ public class Interface {
 		});
 
 		// Diplomacy Menu Button
+		// Callback to show diplomacy-menu
 		$("#diplomacy-button").click(new Function() {
 			public boolean f(Event e) {
 				// Show diplomacy menu
@@ -65,6 +70,7 @@ public class Interface {
 		});
 
 		// Economies Menu Button
+		// Callback to show economies-menu
 		$("#economies-button").click(new Function() {
 			public boolean f(Event e) {
 				// Show economies menu
@@ -76,7 +82,9 @@ public class Interface {
 			}
 		});
 
-		$(".agent-view-button").click(new Function() {
+		// Agent Detail Button
+		// Callback to show agent-menu-detail
+		$(".agent-detail-button").click(new Function() {
 			public boolean f(Event e) {
 				// Show agent detail menu
 				changeSidebarContent("agent-menu-detail");
@@ -87,7 +95,9 @@ public class Interface {
 			}
 		});
 
-		$(".cities-view-button").click(new Function() {
+		// Cities Detail Button
+		// Callback to show cities-menu-detail
+		$(".cities-detail-button").click(new Function() {
 			public boolean f(Event e) {
 				// Show cities detail menu
 				changeSidebarContent("cities-menu-detail");
@@ -98,7 +108,9 @@ public class Interface {
 			}
 		});
 
-		$(".diplomacy-view-button").click(new Function() {
+		// Diplomacy Detail Button
+		// Callback to show diplomacy-menu-detail
+		$(".diplomacy-detail-button").click(new Function() {
 			public boolean f(Event e) {
 				// Show diplomacy detail menu
 				changeSidebarContent("diplomacy-menu-detail");
@@ -109,7 +121,9 @@ public class Interface {
 			}
 		});
 		
-		$(".economies-view-button").click(new Function() {
+		// Economies Detail Button
+		// Callback to show economies-menu-detail
+		$(".economies-detail-button").click(new Function() {
 			public boolean f(Event e) {
 				// Show diplomacy detail menu
 				changeSidebarContent("economies-menu-detail");
@@ -120,27 +134,21 @@ public class Interface {
 			}
 		});
 
+		// Detail Return Button
+		// Callback to 'return' from a detail or create panel
+		// Name of panel to return to is in button's 'data-return' attribute
+		// NOTE: $(this).data("return") didn't seem to work, even though it should,
+		//	but this works just as well
 		$(".detail-return").click(new Function() {
 			public boolean f(Event e) {
-				// Responsible for returning from ALL detail menus to list menus
-				// Gets name of menu to return to from it's data-return attribue
-				/*
-				if (showing.equals("agent-menu-detail") || showing.equals("agent-menu-create")) {
-					changeSidebarContent("agent-menu");
-				} else if (showing.equals("diplomacy-menu-detail") || showing.equals("diplomacy-menu-create")) {
-					changeSidebarContent("diplomacy-menu");
-				} else if (showing.equals("cities-menu-detail")) {
-					changeSidebarContent("cities-menu");
-				} else if (showing.equals("economies-menu-detail")) {
-					changeSidebarContent("economies-menu");
-				}
-				*/
 				String returnTo = $(this).attr("data-return");
 				changeSidebarContent(returnTo);
 				return true;
 			}
 		});
 
+		// Agent Create Button
+		// Callback to show agent-menu-create
 		$("#agent-create").click(new Function() {
 			public boolean f(Event e) {
 				// Show agent create menu
@@ -149,6 +157,8 @@ public class Interface {
 			}
 		});
 
+		// Diplomacy Create button
+		// Callback to show diplomacy-menu-create
 		$("#diplomacy-create").click(new Function() {
 			public boolean f(Event e) {
 				// Show diplomacy create menu
@@ -169,34 +179,40 @@ public class Interface {
 		});
 		*/
 
+		// Chat Trigger Button
+		// Callback to show/hide chat box
 		$("#chat-trigger").click(new Function() {
 			public boolean f(Event e) {
 				// Hide/show chat
 				$("#chat-box").slideToggle(500);
-				return true; // Default return true;
+				return true; // Default return true
 			}
 		});
 		
+		// Menu Button
+		// Callback to show/hide game menu
 		$("#menu-button").click(new Function() {
 			public boolean f(Event e) {
 				// Hide/show menu
 				$("#game-menu").fadeToggle(400);
-				return true;
+				return true; // Default return true
 			}
 		});
 		
+		// Close Menu Button
+		// Callback to hide game menu when it's open
 		$("#close-menu").click(new Function() {
 			public boolean f(Event e) {
 				$("#game-menu").fadeToggle(400);
-				return true;
+				return true; // Default return true
 			}
 		});
 		
 	}
 
 	/**
-	 * Will show/hide sidebar with animation hideIfShowing: whether or not close
-	 * the sidebar if it's showing
+	 * Will show/hide sidebar with animation
+	 * @param	hideIfShowing	true/false if we want to hide the sidebar and it's showing
 	 */
 	private static void toggleSidebar(boolean hideIfShowing) {
 		String left = $("#sidebar").css("left");
@@ -216,9 +232,9 @@ public class Interface {
 	}
 
 	/**
-	 * Manages which content is being shown/hidden in sidebar toShow: which
-	 * element with this ID to show, and hide the rest Also manages sidebar
-	 * toggling
+	 * Manages which content is being shown/hidden in sidebar
+	 * Also handles sidebar toggling and sets the showing string
+	 * @param	toShow 	which element with this ID to show, and hide the rest
 	 */
 	private static void changeSidebarContent(String toShow) {
 		// If 'toShow' is already showing, hide the sidebar

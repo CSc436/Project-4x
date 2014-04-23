@@ -5,11 +5,11 @@ import java.util.UUID;
 import control.AIControl;
 import control.Player;
 import entities.units.Agent;
+import entities.units.UnitType;
 import entities.gameboard.GameBoard;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 import entities.GameObjectType;
-import control.UnitType;
 
 //queueing of commands for controller, controller checks queue each
 //time segment, decides how many commands to execute. New commands

@@ -6,30 +6,28 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import control.BuildingType;
 import control.Factory;
 import control.Player;
 import entities.buildings.Building;
+import entities.buildings.BuildingType;
 import entities.gameboard.GameBoard;
 import entities.gameboard.Tile;
+import entities.resources.Resources;
 
 public class TestGameBoard {
 
 	GameBoard board = new GameBoard(200, 200);
 	Player p = new Player("meathook", 0);
-	Building b = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f, 2.0f,
-			board);
-
-	Tile t = board.getTileAt(0, 0);
 
 	@Test
 	public void testOccupied1() {
 
+		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));
 		assertEquals(200, board.getCols());
 		assertEquals(200, board.getRows());
 
-		board.placeBuildingAt(b, 1, 2);
-		System.out.println(b.getWidth() + " , " + b.getHeight());
+		Building b = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f,
+				2.0f, board);
 
 		for (int r = 0; r < 1; r++) {
 			for (int c = 0; c < 2; c++) {
@@ -67,7 +65,7 @@ public class TestGameBoard {
 
 	@Test
 	public void testOccupied2() {
-
+		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));
 		// These should fail, as there is a building at 1,2
 		Building b = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f,
 				2.0f, board);
