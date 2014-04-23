@@ -13,15 +13,4 @@ public class Infantry extends Unit {
 		super(id, playerId, BaseStatsEnum.INFANTRY, BaseStatsEnum.INFANTRY.getStats(), UnitType.INFANTRY, xco, yco);
 	}
 
-	@Override
-	protected void setActions() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public HashMap<String, String> getActions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

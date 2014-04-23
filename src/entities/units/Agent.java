@@ -48,19 +48,7 @@ public abstract class Agent extends Unit {
 		underlings = new HashMap<String, Unit>();
 		cq = new CommandQueue();
 	}
-	
-	
-	@Override
-	protected void setActions() {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public HashMap<String, String> getActions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	/*
 	 * To be implemented by all agents, update the agents status 

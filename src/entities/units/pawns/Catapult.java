@@ -14,16 +14,4 @@ public class Catapult extends Unit {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	protected void setActions() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public HashMap<String, String> getActions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

@@ -17,17 +17,6 @@ public class Trade_Cart extends Unit{
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	protected void setActions() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public HashMap<String, String> getActions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	public void setTradingCity(Town_Hall x) {
 		tradingCity = x;
