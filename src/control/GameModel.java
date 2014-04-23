@@ -9,6 +9,7 @@ import entities.GameObject;
 import entities.buildings.Building;
 import entities.buildings.ProductionBuilding;
 import entities.buildings.ResourceBuilding;
+import entities.diplomacy.trading.TradeManager;
 import entities.gameboard.GameBoard;
 import entities.gameboard.Tile;
 import entities.research.TechnologyTree;
@@ -17,6 +18,7 @@ import entities.units.Unit;
 public class GameModel {
 	private ArrayList<Player> players;
 	private GameBoard map;
+	private TradeManager tradeManager;
 
 	// simple test model start up.
 	// A different constructor should be used for different
@@ -29,6 +31,7 @@ public class GameModel {
 
 		players.get(0).getTechTree().research("INFANTRYDAMAGE");
 		
+		tradeManager = new TradeManager(this);
 	}
 
 	public ArrayList<Player> getPlayers() {
@@ -40,9 +43,9 @@ public class GameModel {
 	}
 
 	public void advanceTimeStep() {
-
+		// Lets just say 200 time units (ms) passes each step
+		tradeManager.update(200);
 		tickBuildings();
-
 	}
 
 	/*
@@ -178,5 +181,9 @@ public class GameModel {
 		
 		//Return the final list.
 		return visibles;
+	}
+
+	public TradeManager getTradeManager() {
+		return tradeManager;
 	}
 }

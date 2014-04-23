@@ -39,7 +39,7 @@ public class TradeManager implements ITradeManager {
 						game.getPlayer(trade.getPlayer2()));
 			}
 		}
-		for(ITrade remove: removables) {
+		for (ITrade remove : removables) {
 			activeTrades.remove(remove);
 		}
 	}
@@ -94,4 +94,8 @@ public class TradeManager implements ITradeManager {
 		proposedTrades.remove(proposal);
 	}
 
+	@Override
+	public void rejectActive(ITrade trade) {
+		activeTrades.remove(trade);
+	}
 }

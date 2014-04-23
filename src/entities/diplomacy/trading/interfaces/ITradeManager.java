@@ -64,4 +64,11 @@ public interface ITradeManager {
 	 *            - the Trade proposal we have received that we are rejecting.
 	 */
 	public void rejectProposal(ITrade proposal);
+
+	/**
+	 * 
+	 * @param trade
+	 *            - the currently active trade to disable and remove.
+	 */
+	public void rejectActive(ITrade trade);
 }
