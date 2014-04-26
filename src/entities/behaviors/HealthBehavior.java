@@ -1,4 +1,4 @@
-package entities;
+package entities.behaviors;
 
 public class HealthBehavior implements Attackable {
 
@@ -30,7 +30,7 @@ public class HealthBehavior implements Attackable {
 	}
 	
 	@Override
-	public void advanceTimeStep(int timeStep) {
+	public void simulateDamage(int timeStep) {
 		// TODO Auto-generated method stub
 		if(!isDead) {
 			hp += healthRegen * timeStep / 1000;
@@ -43,5 +43,11 @@ public class HealthBehavior implements Attackable {
 		}
 
 	}
+
+	@Override
+	public boolean isDead() {
+		return isDead;
+	}
+
 
 }

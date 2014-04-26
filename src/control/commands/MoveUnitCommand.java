@@ -1,6 +1,7 @@
 package control.commands;
 
 import control.GameModel;
+import entities.behaviors.Movable;
 
 public class MoveUnitCommand implements Command {
 	
@@ -28,7 +29,7 @@ public class MoveUnitCommand implements Command {
 
 	@Override
 	public boolean performCommand(GameModel model) {
-		model.getGameObject(entityID).getMoveBehavior().setTarget(x, y);
+		((Movable) model.getGameObject(entityID)).setMoveTarget(x, y);
 		return false;
 	}
 

@@ -56,18 +56,6 @@ public abstract class Agent extends Unit {
 	
 	public Agent() {}
 	
-	@Override
-	protected void setActions() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public HashMap<String, String> getActions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	/*
 	 * To be implemented by all agents, update the agents status 
 	 * once every turn/couple of turns based on the status of the

@@ -14,7 +14,7 @@ public class Resources implements Serializable {
 	 */
 	private static final long serialVersionUID = 5238901473592664603L;
 	// Tentative resource types suggested during planning
-	public int Gold;
+	private int Gold;
 	private int Wood;
 	private int Food;
 	private int Stone;
@@ -182,5 +182,25 @@ public class Resources implements Serializable {
 	public String toString() {
 		return "Gold: " + Gold + "\nWood: " + Wood + "\nFood: " + Food + "\nStone: " + Stone 
 				+ "\nResearch: " + ResearchPts;
+	}
+	
+	public int getGold() {
+		return Gold;
+	}
+
+	public int getWood() {
+		return Wood;
+	}
+
+	public int getFood() {
+		return Food;
+	}
+
+	public int getStone() {
+		return Stone;
+	}
+
+	public int getResearchPts() {
+		return ResearchPts;
 	}
 }

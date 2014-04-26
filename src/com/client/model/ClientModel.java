@@ -121,7 +121,7 @@ public class ClientModel {
 		*/
 		
 		// Dead-Reckoning System
-		double[] positionDouble = nextModel.getGameObject(unitID).getMoveBehavior().extrapolatePosition( currentTime - lastUpdateTime );
+		double[] positionDouble = nextModel.getGameObject(unitID).extrapolatePosition((int) ( currentTime - lastUpdateTime )).toArray();
 		position[0] = (float) positionDouble[0];
 		position[1] = (float) positionDouble[1];
 		

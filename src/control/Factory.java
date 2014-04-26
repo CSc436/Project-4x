@@ -1,16 +1,13 @@
 package control;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
-import entities.buildings.Barracks;
-import entities.buildings.Building;
-import entities.buildings.Castle;
+import entities.behaviors.Producer;
+import entities.behaviors.ProductionBehavior;
+import entities.buildings.*;
 import entities.gameboard.GameBoard;
-import entities.buildings.Farm;
-import entities.buildings.GoldMine;
-import entities.buildings.LumberMill;
-import entities.buildings.StoneMine;
-import entities.buildings.University;
+import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
 import entities.units.Unit;
 
@@ -101,7 +98,12 @@ public class Factory implements Serializable {
 				break;
 				
 			case BARRACKS:
-				result = new Barracks(newId, playerId, xco, yco);
+				ArrayList<UnitType> producibleUnitTypes = new ArrayList<UnitType>();
+				producibleUnitTypes.add(UnitType.INFANTRY);
+				producibleUnitTypes.add(UnitType.ARCHER);
+				Producer producer = new ProductionBehavior( producibleUnitTypes );
+				result = new ProductionBuilding(newId, playerId, BaseStatsEnum.BARRACKS, BaseStatsEnum.BARRACKS.getStats(),
+						BuildingType.BARRACKS, xco, yco, 2, 4, producer);
 				break;
 			case BANK:
 				result = new Barracks(newId, playerId, xco, yco);
@@ -110,19 +112,24 @@ public class Factory implements Serializable {
 				result = new Castle(newId, playerId, xco, yco, 100, 100); // last two args are populationCap and influenceArea 
 				break;
 			case LUMBER_MILL:
-				result = new LumberMill(newId, playerId, xco, yco);
+				result = new ResourceBuilding(newId, playerId, BaseStatsEnum.LUMBER_MILL, BaseStatsEnum.LUMBER_MILL.getStats(), 
+						BuildingType.LUMBER_MILL, xco, yco, 1, 1, new Resources(0, 20, 0, 0, 0));
 				break;
 			case STONE_MINE:
-				result = new StoneMine(newId, playerId, xco, yco);
+				result = new ResourceBuilding(newId, playerId, BaseStatsEnum.STONE_MINE, BaseStatsEnum.STONE_MINE.getStats(), 
+						BuildingType.STONE_MINE, xco, yco, 1, 1, new Resources(0, 0, 0, 20, 0));
 				break;
 			case GOLD_MINE:
-				result = new GoldMine(newId, playerId, xco, yco);
+				result = new ResourceBuilding(newId, playerId, BaseStatsEnum.GOLD_MINE, BaseStatsEnum.GOLD_MINE.getStats(), 
+						BuildingType.GOLD_MINE, xco, yco, 1, 1, new Resources(20, 0, 0, 0, 0));
 				break;
 			case FARM:
-				result = new Farm(newId, playerId, xco, yco);
+				result = new ResourceBuilding(newId, playerId, BaseStatsEnum.FARM, BaseStatsEnum.FARM.getStats(), 
+						BuildingType.FARM, xco, yco, 1, 1, new Resources(0, 0, 20, 0, 0));
 				break;
 			case UNIVERSITY:
-				result = new University(newId, playerId, xco, yco);
+				result = new ResourceBuilding(newId, playerId, BaseStatsEnum.UNIVERSITY, BaseStatsEnum.UNIVERSITY.getStats(), 
+						BuildingType.UNIVERSITY, xco, yco, 1, 1, new Resources(0, 0, 0, 0, 20));
 				break;
 			default:
 				result = null;

@@ -3,17 +3,18 @@ package entities.buildings;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.shared.PhysicsVector;
+
 import control.BuildingType;
 import control.Tools;
 import entities.GameObject;
 import entities.GameObjectType;
-import entities.Producer;
+import entities.behaviors.MoveBehavior;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 import entities.units.Unit;
-import entities.util.Point;
 
-public abstract class Building extends GameObject implements Producer {
+public abstract class Building extends GameObject {
 
 	/**
 	 * 
@@ -60,6 +61,7 @@ public abstract class Building extends GameObject implements Producer {
 		this.buildingType = buildingType;
 		this.height = height;
 		this.width = width;
+		this.moveBehavior = new MoveBehavior(new PhysicsVector(xco,yco), 0, 0);
 	}
 
 	/**
@@ -166,10 +168,5 @@ public abstract class Building extends GameObject implements Producer {
 
 		return buildingType;
 	}
-
-	public Point getPosition() {
-		float x = (float) moveBehavior.position.getX();
-		float y = (float) moveBehavior.position.getY();
-		return new Point(x,y);
-	}
+	
 }

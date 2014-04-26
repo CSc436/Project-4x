@@ -1,4 +1,4 @@
-package entities.units;
+package entities.behaviors;
 
 public interface Producible {
 	

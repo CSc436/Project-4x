@@ -1,8 +1,5 @@
 package entities.buildings;
 
-import java.util.HashMap;
-import java.util.UUID;
-
 import control.BuildingType;
 import entities.stats.BaseStatsEnum;
 
@@ -10,6 +7,10 @@ public class Castle extends Building {
 
 	// main hub
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3406038330060341620L;
 	private int populationCap;
 	private int influenceArea;
 
@@ -32,16 +33,4 @@ public class Castle extends Building {
 		return influenceArea;
 	}
 	
-	
-	@Override
-	protected void setActions() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public HashMap<String, String> getActions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

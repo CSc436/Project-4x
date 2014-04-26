@@ -1,8 +1,8 @@
 package control.commands;
 
 import control.GameModel;
-import entities.GameObject;
-import entities.units.Unit;
+import entities.behaviors.Attacker;
+import entities.behaviors.Combatable;
 
 public class AttackCommand implements Command {
 	
@@ -26,9 +26,9 @@ public class AttackCommand implements Command {
 
 	@Override
 	public boolean performCommand(GameModel model) {
-		Unit attacker = (Unit) model.getGameObject(attackerID);
-		GameObject target = model.getGameObject(targetID);
-		attacker.getAttackBehavior().setTarget(target);
+		Attacker attacker = (Attacker) model.getGameObject(attackerID);
+		Combatable target = (Combatable) model.getGameObject(targetID);
+		attacker.setTarget(target);
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -1,19 +1,19 @@
 package entities.units;
 
-import java.util.HashMap;
 import java.util.PriorityQueue;
-import java.util.UUID;
 
 import com.shared.PhysicsVector;
 
 import control.UnitType;
 import entities.Action;
+import entities.behaviors.AttackBehavior;
+import entities.behaviors.Attackable;
+import entities.behaviors.Attacker;
+import entities.behaviors.Combatable;
+import entities.behaviors.Producible;
 import entities.stats.BaseStatsEnum;
-import entities.AttackBehavior;
-import entities.Attacker;
 import entities.GameObject;
 import entities.GameObjectType;
-import entities.MoveBehavior;
 import entities.stats.UnitStats;
 
 /*
@@ -86,11 +86,6 @@ public class Unit extends GameObject implements Attacker, Producible {
 	{
 		this.creationTime -= timestep;
 	}
-	
-	public void advanceTimeStep( int timeStep ) {
-		super.advanceTimeStep(timeStep);
-		attackBehavior.advanceTimeStep(timeStep);
-	}
 
 	@Override
 	public PhysicsVector getPosition() {
@@ -108,7 +103,7 @@ public class Unit extends GameObject implements Attacker, Producible {
 	}
 
 	@Override
-	public void setTarget(GameObject target) {
+	public void setTarget(Combatable target) {
 		attackBehavior.setTarget(target);
 	}
 
@@ -126,4 +121,10 @@ public class Unit extends GameObject implements Attacker, Producible {
 	public int getProductionTime() {
 		return 0;
 	}
+
+	@Override
+	public void simulateAttack(int timeStep) {
+		attackBehavior.simulateAttack(timeStep);
+	}
+
 }

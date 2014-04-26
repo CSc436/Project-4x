@@ -1,4 +1,4 @@
-package entities;
+package entities.behaviors;
 
 import java.io.Serializable;
 

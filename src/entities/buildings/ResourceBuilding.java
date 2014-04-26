@@ -1,8 +1,8 @@
 package entities.buildings;
 
-import java.util.UUID;
-
 import control.BuildingType;
+import entities.behaviors.ResourceGenerator;
+import entities.behaviors.StandardResourceGenerator;
 import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
@@ -11,10 +11,15 @@ import entities.stats.UnitStats;
 // TODO for construction, need to add check to make sure resource building is 
 // being placed on correct tile type (food on food, gold on gold, etc.)
 
-public abstract class ResourceBuilding extends Building {
+public class ResourceBuilding extends Building implements ResourceGenerator {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -214411844510536374L;
 	protected final Resources baseResourceAmount;
 	protected Resources resourceAmount;
+	protected ResourceGenerator resourceGenerationBehavior;
 
 	// Global resource rate modifier that affects all resource buildings
 	private static Resources globalRateModifier = new Resources(1, 1, 1, 1, 1);
@@ -45,7 +50,7 @@ public abstract class ResourceBuilding extends Building {
 				yco, height, width);
 		baseResourceAmount = resourceAmount;
 		this.resourceAmount = resourceAmount;
-		
+		resourceGenerationBehavior = new StandardResourceGenerator(resourceAmount);
 	}
 	/* Setters and Getters */
 	public void setGlobalRateModifier(Resources newRate) {
@@ -57,8 +62,13 @@ public abstract class ResourceBuilding extends Building {
 		return globalRateModifier;
 	}
 
-	public final Resources generateResource()
+	public Resources generateResource()
 	{
-		return resourceAmount; 
+		return resourceAmount;
+	}
+
+	@Override
+	public Resources generateResources(int timeStep) {
+		return resourceGenerationBehavior.generateResources(timeStep);
 	}
 }

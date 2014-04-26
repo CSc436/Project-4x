@@ -6,10 +6,15 @@ import java.util.PriorityQueue;
 
 import com.shared.PhysicsVector;
 
+import entities.behaviors.Attackable;
+import entities.behaviors.Combatable;
+import entities.behaviors.HealthBehavior;
+import entities.behaviors.Movable;
+import entities.behaviors.MoveBehavior;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 
-public class GameObject implements Serializable, Movable, Attackable {
+public class GameObject implements Serializable, Combatable {
 	
 	/**
 	 * 
@@ -82,11 +87,6 @@ public class GameObject implements Serializable, Movable, Attackable {
 		return healthBehavior;
 	}
 
-	public void advanceTimeStep( int timeStep ) {
-		moveBehavior.advanceTimeStep(timeStep);
-		healthBehavior.advanceTimeStep(timeStep);
-	}
-
 	/**
 	 * 
 	 * @param n
@@ -132,6 +132,21 @@ public class GameObject implements Serializable, Movable, Attackable {
 	@Override
 	public void setMoveTarget(double x, double y) {
 		moveBehavior.setMoveTarget(x, y);
+	}
+
+	@Override
+	public void simulateMovement(int timeStep) {
+		moveBehavior.simulateMovement(timeStep);
+	}
+
+	@Override
+	public PhysicsVector extrapolatePosition(int timeStep) {
+		return moveBehavior.extrapolatePosition(timeStep);
+	}
+
+	@Override
+	public void simulateDamage(int timeStep) {
+		healthBehavior.simulateDamage(timeStep);
 	}
 
 }

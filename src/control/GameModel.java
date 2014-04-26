@@ -3,12 +3,19 @@ package control;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Queue;
 import java.util.Set;
 
+import com.shared.PhysicsVector;
+
 import entities.GameObject;
+import entities.behaviors.Attackable;
+import entities.behaviors.Attacker;
+import entities.behaviors.Movable;
+import entities.behaviors.Producer;
+import entities.behaviors.ResourceGenerator;
 import entities.buildings.Building;
 import entities.gameboard.GameBoard;
-import entities.gameboard.Tile;
 import entities.units.Unit;
 
 public class GameModel implements Serializable {
@@ -20,6 +27,12 @@ public class GameModel implements Serializable {
 	private GameBoard map;
 	// Hashmap of all gameObjects
 	private HashMap<Integer, GameObject> gameObjects;
+	private HashMap<Integer, Attacker> attackers;
+	private HashMap<Integer, Movable> movables;
+	private HashMap<Integer, Attackable> attackables;
+	private HashMap<Integer, Producer> producers;
+	private HashMap<Integer, ResourceGenerator> resourceGenerators;
+	
 	private int turnNumber = 0;
 
 	// simple test model start up.
@@ -49,67 +62,125 @@ public class GameModel implements Serializable {
 	 */
 	public void advanceTimeStep( int timeStep ) {
 		turnNumber++;
-		for( Player p : players ) {
-			HashMap<Integer, GameObject> playerObjects = p.getGameObjects().getGameObjects();
-			Set<Integer> keySet = playerObjects.keySet();
-			for( int i : keySet ) {
-				GameObject object = playerObjects.get(i);
-				object.advanceTimeStep( timeStep );
-			}
-		}
-		produceResources();
-		placeNewUnits();
+		advanceProduction(timeStep);
+		placeProducedUnits();
+		produceResources(timeStep);
+		moveObjects(timeStep);
+		attackObjects(timeStep);
+		updateHealth(timeStep);
 	}
 
-	private void produceResources() {
-		// TODO Auto-generated method stub
-
+	private void produceResources( int timeStep ) {
+		Set<Integer> keySet = resourceGenerators.keySet();
+		for( int i : keySet ) {
+			ResourceGenerator r = resourceGenerators.get(i);
+			Player p = players.get(((GameObject) r).getPlayerID());
+			p.getResources().receive(r.generateResources(timeStep));
+		}
 	}
 	
 	private void moveObjects( int timeStep ) {
-		for( Player p : players ) {
-			HashMap<Integer, GameObject> playerObjects = p.getGameObjects().getGameObjects();
-			Set<Integer> keySet = playerObjects.keySet();
-			for( int i : keySet ) {
-				GameObject object = playerObjects.get(i);
-				object.getMoveBehavior().advanceTimeStep(timeStep);
-			}
+		Set<Integer> keySet = movables.keySet();
+		for( int i : keySet ) {
+			Movable m = movables.get(i);
+			m.simulateMovement(timeStep);
 		}
 	}
 	
 	private void attackObjects( int timeStep ) {
-		for( Player p : players ) {
-			HashMap<Integer, GameObject> playerObjects = p.getGameObjects().getGameObjects();
-			Set<Integer> keySet = playerObjects.keySet();
-			for( int i : keySet ) {
-				GameObject object = playerObjects.get(i);
-				object.getMoveBehavior().advanceTimeStep(timeStep);
-				if( object )
-			}
+		
+		Set<Integer> keySet = attackers.keySet();
+		for( int i : keySet ) {
+			Attacker a = attackers.get(i);
+			a.simulateAttack(timeStep);
 		}
+		
 	}
 	
 	private void advanceProduction( int timeStep ) {
 		
+		Set<Integer> keySet = producers.keySet();
+		for( int i : keySet ) {
+			Producer p = producers.get(i);
+			p.simulateProduction(timeStep);
+		}
+		
 	}
 	
 	private void updateHealth( int timeStep ) {
-		
+		Set<Integer> keySet = attackables.keySet();
+		for( int i : keySet ) {
+			Attackable a = attackables.get(i);
+			a.simulateDamage(timeStep);
+			if(a.isDead()) {
+				removeFromAll((GameObject) a);
+			}
+		}
 	}
 	
-	private void placeProducedUnits( int timeStep ) {
+	private void removeFromAll(GameObject o) {
+		int id = o.getId();
+		gameObjects.remove(id);
+		attackers.remove(id);
+		movables.remove(id);
+		attackables.remove(id);
+		resourceGenerators.remove(id);
+		producers.remove(id);
 		
+		int playerID = o.getPlayerID();
+		players.get(playerID).getGameObjects().removeGameObject(id);
 	}
 
-	private void placeNewUnits() {
-		for (Player p : players) {
-			for (Building b : p.getGameObjects().getBuildings().values()) {
-				Unit potentialUnit = b.advanceUnitProduction(1); // Adjust time step in future 
-				if (potentialUnit != null) {
-					Tile t = map.getTileAt(0, 0);
-					t.addUnit(potentialUnit);
-					p.getGameObjects().addUnit(potentialUnit);
+	private void placeProducedUnits() {
+		
+		Set<Integer> keySet = producers.keySet();
+		for( int k : keySet ) {
+			Producer p = producers.get(k);
+			PhysicsVector position = ((GameObject) p).getPosition();
+			Queue<UnitType> unitQueue = p.getProducedUnits();
+			int x = (int) position.getX();
+			int y = (int) position.getY();
+			
+			// Attempt to place units in a spiraling pattern around the building
+			/*
+			int dx = 0, dy = 0;
+			while( !unitQueue.isEmpty() ) {
+				
+				
+				if(dy == 0) {
+					dy = -(dx + 1);
+					dx = 0;
+					if(dy > 0)
+						for(int i = 0; i < dx + dy; i++) {
+							
+						}
+					else
+						for(int i = 0; i < dx + dy; i++) {
+							
+						}
+				} else {
+					dx = dy;
+					dy = 0;
 				}
+				
+				if(dy == 0)
+				for(int i = 0; i < dx + dy; i++) {
+					
+				}
+				if()
+				x += dx;
+				y += dy;
+				
+			}*/
+			
+			int playerID = ((GameObject) p).getPlayerID();
+			for( UnitType ut : unitQueue ) {
+				Unit u = Factory.buildUnit(players.get(playerID), playerID, ut, x, y+1);
+				int unitID = u.getId();
+				gameObjects.put(unitID, u);
+				attackers.put(unitID, u);
+				movables.put(unitID, u);
+				attackables.put(unitID, u);
 			}
 		}
 	}

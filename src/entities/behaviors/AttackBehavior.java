@@ -1,4 +1,4 @@
-package entities;
+package entities.behaviors;
 
 import com.shared.PhysicsVector;
 
@@ -10,7 +10,7 @@ public class AttackBehavior implements Attacker {
 	private static final long serialVersionUID = 7599376887116225985L;
 	private int coolDown; // Number of milliseconds for attack cooldown
 	private int coolDownTimer = 0; // Number of milliseconds since previous attack
-	private GameObject target = null; // Current attack target
+	private Combatable target = null; // Current attack target
 	private float range; // Attack range
 	private int strength; // Attack strength
 	private boolean isAttacking; // Whether or not I am actively attacking my target
@@ -35,7 +35,7 @@ public class AttackBehavior implements Attacker {
 		this.moveBehavior = mb;
 	}
 	
-	public void setTarget( GameObject target ) {
+	public void setTarget( Combatable target ) {
 		this.target = target;
 	}
 	
@@ -48,9 +48,9 @@ public class AttackBehavior implements Attacker {
 	}
 
 	@Override
-	public void advanceTimeStep(int timeStep) {
+	public void simulateAttack(int timeStep) {
 		if(isAttacking) {
-			PhysicsVector targetPosition = target.getMoveBehavior().getPosition();
+			PhysicsVector targetPosition = target.getPosition();
 			PhysicsVector myPosition = moveBehavior.getPosition();
 			double distanceToTarget = targetPosition.sub(myPosition).magnitude();
 			
@@ -59,7 +59,7 @@ public class AttackBehavior implements Attacker {
 			coolDownTimer %= coolDown;
 			
 			if( distanceToTarget <= range ) {
-				target.getHealthBehavior().takeDamage(numAttacks * strength);
+				target.takeDamage(numAttacks * strength);
 			} else {
 				double x = targetPosition.getX();
 				double y = targetPosition.getY();
@@ -68,7 +68,6 @@ public class AttackBehavior implements Attacker {
 		} else {
 			coolDownTimer = coolDown;
 		}
-		
 	}
 	
 }

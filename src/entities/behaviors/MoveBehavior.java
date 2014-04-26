@@ -1,4 +1,4 @@
-package entities;
+package entities.behaviors;
 
 import java.io.Serializable;
 
@@ -34,7 +34,36 @@ public class MoveBehavior implements Serializable, Movable {
 		return position;
 	}
 	
-	public void advanceTimeStep(int timeStep) {
+	/**
+	 * Returns the extrapolated position, but doesn't update the model.
+	 * @param timeSinceUpdate - time (in milliseconds) to extrapolate from current state
+	 * @return An array containing the x and y position
+	 */
+	public PhysicsVector extrapolatePosition( int timeStep ) {
+		
+		double timeSeconds = timeStep / 1000.0;
+		PhysicsVector tempTargetVelocity = targetPosition.sub(position).normalize(maxVelocity);
+		PhysicsVector tempVelocity = velocity.setToTarget(tempTargetVelocity, accel * timeSeconds);
+		
+		double distance = position.sub(targetPosition).magnitude();
+		double velMag = tempVelocity.magnitude();
+		if( distance <= velMag * velMag / (2 * accel) ) {
+			tempTargetVelocity = tempVelocity.normalize(Math.sqrt(2 * distance * accel));
+			tempVelocity = tempVelocity.setToTarget(tempTargetVelocity, accel * timeSeconds);
+		}
+		
+		PhysicsVector tempPosition = position.add(tempVelocity.multiply(timeSeconds));
+		
+		return tempPosition;
+		
+	}
+	
+	public void setMoveTarget(double x, double y) {
+		targetPosition.set(x, y);
+	}
+
+	@Override
+	public void simulateMovement( int timeStep ) {
 		
 		if(position.equals(targetPosition)) return;
 		
@@ -62,37 +91,5 @@ public class MoveBehavior implements Serializable, Movable {
 			position = position.add(avgVelocity.multiply(timeSeconds));
 		}
 		
-	}
-	
-	/**
-	 * Returns the extrapolated position, but doesn't update the model.
-	 * @param timeSinceUpdate - time (in milliseconds) to extrapolate from current state
-	 * @return An array containing the x and y position
-	 */
-	public double[] extrapolatePosition( long timeSinceUpdate ) {
-		
-		double timeSeconds = timeSinceUpdate / 1000.0;
-		PhysicsVector tempTargetVelocity = targetPosition.sub(position).normalize(maxVelocity);
-		PhysicsVector tempVelocity = velocity.setToTarget(tempTargetVelocity, accel * timeSeconds);
-		
-		double distance = position.sub(targetPosition).magnitude();
-		double velMag = tempVelocity.magnitude();
-		if( distance <= velMag * velMag / (2 * accel) ) {
-			tempTargetVelocity = tempVelocity.normalize(Math.sqrt(2 * distance * accel));
-			tempVelocity = tempVelocity.setToTarget(tempTargetVelocity, accel * timeSeconds);
-		}
-		
-		PhysicsVector tempPosition = position.add(tempVelocity.multiply(timeSeconds));
-		
-		double[] positionArray = new double[2];
-		positionArray[0] = tempPosition.getX();
-		positionArray[1] = tempPosition.getY();
-		
-		return positionArray;
-		
-	}
-	
-	public void setMoveTarget(double x, double y) {
-		targetPosition.set(x, y);
 	}
 }

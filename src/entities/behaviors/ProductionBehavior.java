@@ -1,14 +1,11 @@
-package entities;
+package entities.behaviors;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import control.Factory;
 import control.UnitType;
-import entities.buildings.Building;
 import entities.stats.BaseStatsEnum;
-import entities.units.Unit;
 
 public class ProductionBehavior implements Producer {
 	
@@ -16,10 +13,9 @@ public class ProductionBehavior implements Producer {
 	 * 
 	 */
 	private static final long serialVersionUID = -445465287510037092L;
-	private Building producer;
 	private UnitType typeInProduction;
 	private Queue<UnitType> productionQueue = new LinkedList<UnitType>();
-	private Queue<Unit> finishedUnits = new LinkedList<Unit>();
+	private Queue<UnitType> finishedUnitTypes = new LinkedList<UnitType>();
 	private ArrayList<UnitType> producibleUnits;
 	private int productTime;
 	private int timeInProduction;
@@ -30,7 +26,7 @@ public class ProductionBehavior implements Producer {
 		activelyProducing = false;
 	}
 	
-	public ProductionBehavior( ArrayList<UnitType> producibleUnits) {
+	public ProductionBehavior( ArrayList<UnitType> producibleUnits ) {
 		this.producibleUnits = producibleUnits;
 		activelyProducing = false;
 	}
@@ -44,15 +40,13 @@ public class ProductionBehavior implements Producer {
 	}
 	
 	@Override
-	public void advanceTimeStep(int timeStep) {
+	public void simulateProduction(int timeStep) {
 		if(activelyProducing) {
 			timeInProduction += timeStep;
 			if(timeInProduction >= productTime * 1000) {
 				timeInProduction -= productTime * 1000;
 				// @TODO: create unit and place it on map
-				float x = (float) producer.getMoveBehavior().getPosition().getX();
-				float y = (float) producer.getMoveBehavior().getPosition().getY();
-				finishedUnits.add( Factory.buildUnit(null, 0, typeInProduction, x, y - 1.0F) );
+				finishedUnitTypes.add(typeInProduction);
 				if( !productionQueue.isEmpty() )
 					startProducing( productionQueue.remove() );
 				else {
@@ -103,9 +97,9 @@ public class ProductionBehavior implements Producer {
 	}
 
 	@Override
-	public Queue<Unit> getProducedUnits() {
-		Queue<Unit> units = finishedUnits;
-		finishedUnits = new LinkedList<Unit>();
+	public Queue<UnitType> getProducedUnits() {
+		Queue<UnitType> units = finishedUnitTypes;
+		finishedUnitTypes = new LinkedList<UnitType>();
 		return units;
 	}
 	
