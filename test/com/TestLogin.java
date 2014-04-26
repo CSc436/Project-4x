@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import com.shared.model.control.Login;
+import com.server.Login;
 
 public class TestLogin {
 

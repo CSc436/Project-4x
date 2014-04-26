@@ -1,4 +1,4 @@
-package com.shared.model.control;
+package com.server;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -7,20 +7,23 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.shared.model.control.Controller;
+import com.shared.model.control.GameModel;
+
 /**
- * Login : This class establishes a login system for the Game. It constructs the
- * GameModel and Controller based on the players that are logged in and added to
- * this game through this Class
+ * Login : This class establishes a login system for the Game. RPC calls will
+ * have to be used by the clients to validate with the server
  * 
  * 
  * @author bdeining
  * 
  */
 
-public class Login {
+public class Login implements Serializable {
 
 	private HashMap<String, String> accounts;
 	private ArrayList<String> players;
