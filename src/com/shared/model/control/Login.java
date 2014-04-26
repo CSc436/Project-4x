@@ -10,6 +10,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Login : This class establishes a login system for the Game. It constructs the
+ * GameModel and Controller based on the players that are logged in and added to
+ * this game through this Class
+ * 
+ * 
+ * @author bdeining
+ * 
+ */
+
 public class Login {
 
 	private HashMap<String, String> accounts;
@@ -25,6 +35,13 @@ public class Login {
 		loadObjects();
 
 	}
+
+	/**
+	 * loadObjects() : This method is called from the constructor and reads the
+	 * account data from users.txt
+	 * 
+	 * @return a list of the list of current Game Players
+	 */
 
 	private void loadObjects() {
 		FileReader fi;
@@ -56,6 +73,14 @@ public class Login {
 		}
 	}
 
+	/**
+	 * saveObjects(): This method is called whenever a change to the HashMap
+	 * occurs, which will output the account data to an external txt file
+	 * users.txt
+	 * 
+	 * @return none
+	 */
+
 	private void saveObjects() {
 		FileWriter fw;
 		BufferedWriter bw;
@@ -83,6 +108,13 @@ public class Login {
 
 	}
 
+	/**
+	 * addUserToHashMap() : Adds the specified user and password to the accounts
+	 * HashMap
+	 * 
+	 * @return a list of the list of current Game Players
+	 */
+
 	public boolean addUserToHashMap(String user, String pass) {
 		if (accounts.containsKey(user))
 			return false;
@@ -92,6 +124,12 @@ public class Login {
 			return true;
 		}
 	}
+
+	/**
+	 * removeUserFromHashMap(): deletes a user from the accounts hashmap
+	 * 
+	 * @returns true when the User was successfully removed from the hashmap
+	 */
 
 	public boolean removeUserFromHashMap(String user) {
 		if (!accounts.containsKey(user)) {
@@ -103,6 +141,13 @@ public class Login {
 		return false;
 	}
 
+	/**
+	 * addUserToGame(): This method will check if the user entered the correct
+	 * password, and will add the user to the game if it has a valid account
+	 * 
+	 * @return true if the player was added to the game successfully
+	 */
+
 	public boolean addUserToGame(String user, String pass) {
 		// validate user
 		if (accounts.containsKey(user) && pass.equals(accounts.get(user))
@@ -113,6 +158,12 @@ public class Login {
 			return false;
 	}
 
+	/**
+	 * removeUserFromGame()
+	 * 
+	 * @returns true when the user was successfully removed from the game list
+	 */
+
 	public boolean removeUserFromGame(String user) {
 
 		if (players.contains(user)) {
@@ -121,6 +172,14 @@ public class Login {
 		} else
 			return false;
 	}
+
+	/**
+	 * createGame() : This method should be called when all the players are
+	 * added to the game and the dimensions are set.
+	 * 
+	 * @return true if the game has at least 2 players and the board has at
+	 *         least 1 tile. (the game was created successfully).
+	 */
 
 	public boolean createGame() {
 
@@ -132,20 +191,54 @@ public class Login {
 			return false;
 	}
 
+	/**
+	 * setWidth() : Sets the width of the board for this Game Session, which is
+	 * then sent to the GameBoard when instantiated
+	 * 
+	 * 
+	 * @return none
+	 */
+
 	public void setWidth(int w) {
 		width = w;
 	}
+
+	/**
+	 * getGamePlayers()
+	 * 
+	 * @return true if the given user name is in the accounts map
+	 */
 
 	public boolean hasUserInHashMap(String user) {
 		return accounts.containsKey(user);
 	}
 
+	/**
+	 * getGamePlayers()
+	 * 
+	 * @return true if the player list is not empty
+	 */
+
 	public boolean hasPlayers() {
 		return !players.isEmpty();
 	}
 
+	/**
+	 * getGamePlayers()
+	 * 
+	 * @return a list of the list of current Game Players
+	 */
+
 	public ArrayList<String> getGamePlayers() {
 		return players;
+	}
+
+	public GameModel getGameModel() {
+		return model;
+	}
+
+	public Controller getController() {
+		return controller;
 	}
 
 }

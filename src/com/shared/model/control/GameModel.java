@@ -20,21 +20,19 @@ public class GameModel {
 	private GameBoard map;
 	private TradeManager tradeManager;
 
-	// simple test model start up.
-	// A different constructor should be used for different
-	public GameModel(ArrayList<String> playernames,int width) {
+	// The game model is now constructed with a list of Strings with the player
+	// names, and the square dimension of the
+	// the game board, which is provided by the Login class
+	public GameModel(ArrayList<String> playernames, int width) {
 		players = new ArrayList<Player>();
 
+		// Build the player list with the names given from the Login class
 		for (int c = 0; c < playernames.size(); c++) {
-			players.add(new Player(playernames.get(c), c));
+			players.add(new Player(playernames.get(c), c + 1));
 		}
 
-		// players.add(new Player("Player 2", 2));
-
+		// Build the board with the specified dimensions
 		map = new GameBoard(width, width);
-
-		// players.get(0).getTechTree().research("INFANTRYDAMAGE");
-
 		tradeManager = new TradeManager(this);
 	}
 

@@ -39,5 +39,9 @@ public class TestLogin {
 
 		assertFalse(log.addUserToHashMap("Meathook", "43"));
 
+		assertEquals(2, log.getGamePlayers().size());
+
+		log.createGame();
+
 	}
 }
