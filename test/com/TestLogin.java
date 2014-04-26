@@ -13,27 +13,31 @@ public class TestLogin {
 	@Test
 	public void testMap() {
 
-		// Non persistent
+		// persistent testing
+		// static users :
+		// Meathook,43
+		// Satan,4321
+		// God,1234
 
 		Login log = new Login();
 		assertFalse(log.hasPlayers());
-		assertFalse("God", log.addUserToGame("God", "1234"));
-		assertFalse(log.hasUserInHashMap("God"));
+		assertTrue("God", log.addUserToGame("God", "1234"));
 
-		assertTrue(log.addUserToHashMap("God", "1234"));
 		assertFalse(log.addUserToHashMap("God", "1234"));
 		assertTrue(log.hasUserInHashMap("God"));
 
 		assertFalse(log.addUserToGame("God", "21234"));
-		assertTrue(log.addUserToGame("God", "1234"));
+		assertFalse(log.addUserToGame("God", "1234"));
+
+		assertTrue(log.addUserToGame("Satan", "4321"));
 
 		assertFalse(log.addUserToGame("Satan", "4321"));
-		assertTrue(log.addUserToHashMap("Satan", "4321"));
-		assertTrue(log.addUserToGame("Satan", "4321"));
 
 		ArrayList<String> players = log.getGamePlayers();
 		assertEquals("God", players.get(0));
 		assertEquals("Satan", players.get(1));
+
+		assertFalse(log.addUserToHashMap("Meathook", "43"));
 
 	}
 }

@@ -1,8 +1,12 @@
 package com.shared.model.control;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,29 +17,69 @@ public class Login {
 	Controller controller;
 	int width;
 	GameModel model;
-	File users = new File("users.txt");
+	File users = new File(System.getProperty("user.dir") + "/src/users.txt");
 
 	public Login() {
 		accounts = new HashMap<String, String>();
 		players = new ArrayList<String>();
-		// model = new GameModel();
-		// controller = new Controller();
-		// model = controller.getGameModel();
 		loadObjects();
+
 	}
 
 	private void loadObjects() {
+		FileReader fi;
+		BufferedReader bi;
 
 		try {
-			FileInputStream fi = new FileInputStream(users);
+			fi = new FileReader(users);
+			bi = new BufferedReader(fi);
+
+			String temp;
+
+			while ((temp = bi.readLine()) != null) {
+
+				String[] split = temp.split(",");
+
+				String user = split[0];
+				String pw = split[1];
+				accounts.put(user, pw);
+
+			}
+
+			bi.close();
+			fi.close();
+
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	private void saveObjects() {
+		FileWriter fw;
+		BufferedWriter bw;
+
+		try {
+
+			fw = new FileWriter(users);
+			bw = new BufferedWriter(fw);
+
+			Object[] v = accounts.values().toArray();
+			Object[] k = accounts.keySet().toArray();
+
+			for (int x = 0; x < v.length; x++) {
+				bw.write(k[x] + "," + v[x] + "\n");
+			}
+
+			bw.close();
+			fw.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -44,6 +88,7 @@ public class Login {
 			return false;
 		else {
 			accounts.put(user, pass);
+			saveObjects();
 			return true;
 		}
 	}
@@ -53,13 +98,15 @@ public class Login {
 			return false;
 		} else {
 			accounts.remove(user);
+			saveObjects();
 		}
 		return false;
 	}
 
 	public boolean addUserToGame(String user, String pass) {
 		// validate user
-		if (accounts.containsKey(user) && pass == accounts.get(user)) {
+		if (accounts.containsKey(user) && pass.equals(accounts.get(user))
+				&& !players.contains(user)) {
 			players.add(user);
 			return true;
 		} else
