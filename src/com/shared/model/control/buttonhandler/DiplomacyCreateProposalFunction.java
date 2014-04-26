@@ -12,6 +12,14 @@ import com.shared.model.diplomacy.trading.IntervalResourceTrade;
 import com.shared.model.diplomacy.trading.interfaces.ITrade;
 import com.shared.model.resources.Resources;
 
+/**
+ * Defines behavior for creating a Trade Proposal, after the send button has
+ * been clicked.
+ * 
+ * @author Colin
+ * @date Apr 26, 2014
+ * 
+ */
 public class DiplomacyCreateProposalFunction extends AbstractGameModelFunction {
 
 	public DiplomacyCreateProposalFunction(GameCanvas canvas, GameModel model,
@@ -54,13 +62,24 @@ public class DiplomacyCreateProposalFunction extends AbstractGameModelFunction {
 		if (rcvId == -1 || send == null || receive == null) {
 			return false;
 		}
-		
+
 		ITrade trade = new IntervalResourceTrade(interval, duration,
 				sendingPlayer.getId(), rcvId, send, receive);
 		model.getTradeManager().createProposal(trade);
+		System.out.println("Creating Proposal");
 		return true;
 	}
 
+	/**
+	 * Parses a String resource amount, and a String resource Type into a
+	 * Resources Object.
+	 * 
+	 * @param amount
+	 *            - the amount of a resource in a trade.
+	 * @param type
+	 *            - the type of the resource being traded
+	 * @return - a Resources object if parsing succeeded, null otherwise.
+	 */
 	private Resources getResources(String amount, String type) {
 		int amt;
 		try {
