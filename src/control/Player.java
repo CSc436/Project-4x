@@ -2,11 +2,9 @@ package control;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import entities.Action;
 import entities.Civilization;
 import entities.PerfectCivilization;
 import entities.PlayerUnits;
@@ -16,9 +14,7 @@ import entities.research.Upgrades;
 import entities.resources.Resources;
 import entities.units.Agent;
 import entities.units.Unit;
-import entities.units.agents.General;
 import entities.units.agents.Goods;
-import entities.units.agents.Merchant;
 
 public class Player implements Serializable {
 
@@ -37,7 +33,6 @@ public class Player implements Serializable {
 	public Resources resources;
 	public Goods goods;
 	private Civilization civ;
-	private CommandQueue cq;
 	
 	private HashMap<Integer, Unit> selectedUnits;
 	private HashMap<Integer, Building> selectedBuildings;
@@ -70,7 +65,6 @@ public class Player implements Serializable {
 		// technology
 		upgrades = new Upgrades();
 		techTree = new TechnologyTree(this);
-		cq = new CommandQueue();
 		this.id = id;
 		
 		// init blabhlahb
@@ -102,17 +96,9 @@ public class Player implements Serializable {
 		return civ;
 	}
 
-	public CommandQueue getCommandQueue() {
-
-		return cq;
-	}
 
 	public Upgrades getUpgrades() {
 		return upgrades;
-	}
-
-	public void addActionTo(Unit u, Action a) {
-		cq.push(a, u);
 	}
 
 	public Building getBuilding(UUID buildingId) {

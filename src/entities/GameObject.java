@@ -8,9 +8,9 @@ import com.shared.PhysicsVector;
 
 import entities.behaviors.Attackable;
 import entities.behaviors.Combatable;
-import entities.behaviors.HealthBehavior;
+import entities.behaviors.StandardHealth;
 import entities.behaviors.Movable;
-import entities.behaviors.MoveBehavior;
+import entities.behaviors.StandardMover;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 
@@ -40,8 +40,8 @@ public class GameObject implements Serializable, Combatable {
 		this.type = GameObjectType.ALL;
 		actionQueue = new PriorityQueue<Action>();
 		PhysicsVector position = new PhysicsVector(0,0);
-		moveBehavior = new MoveBehavior( position, stats.movementSpeed, stats.movementSpeed / 2.0 );
-		healthBehavior = new HealthBehavior( stats.health, stats.health_regen, stats.armor );
+		moveBehavior = new StandardMover( position, stats.movementSpeed, stats.movementSpeed / 2.0 );
+		healthBehavior = new StandardHealth( stats.health, stats.health_regen, stats.armor );
 	}
 
 	public GameObject(int id, int playerId, BaseStatsEnum baseStats,
@@ -54,8 +54,8 @@ public class GameObject implements Serializable, Combatable {
 		this.type = type;
 		actionQueue = new PriorityQueue<Action>();
 		PhysicsVector position = new PhysicsVector(xco,yco);
-		moveBehavior = new MoveBehavior( position, stats.movementSpeed, stats.movementSpeed / 2.0 );
-		healthBehavior = new HealthBehavior( stats.health, stats.health_regen, stats.armor );
+		moveBehavior = new StandardMover( position, stats.movementSpeed, stats.movementSpeed / 2.0 );
+		healthBehavior = new StandardHealth( stats.health, stats.health_regen, stats.armor );
 	}
 
 	public int getId() {
@@ -147,6 +147,11 @@ public class GameObject implements Serializable, Combatable {
 	@Override
 	public void simulateDamage(int timeStep) {
 		healthBehavior.simulateDamage(timeStep);
+	}
+
+	@Override
+	public boolean isDead() {
+		return healthBehavior.isDead();
 	}
 
 }

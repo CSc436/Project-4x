@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.shared.PhysicsVector;
 
-public class MoveBehavior implements Serializable, Movable {
+public class StandardMover implements Serializable, Movable {
 	/**
 	 * 
 	 */
@@ -16,14 +16,14 @@ public class MoveBehavior implements Serializable, Movable {
 	public PhysicsVector targetVelocity = new PhysicsVector(0,0);
 	public double accel = 3.0; // Maximum velocity change allowable, in units per second per second
 	
-	public MoveBehavior() {
+	public StandardMover() {
 		this.position = new PhysicsVector(0,0);
 		this.targetPosition = new PhysicsVector(0,0);
 		this.maxVelocity = 5;
 		this.accel = 5;
 	}
 	
-	public MoveBehavior( PhysicsVector initPosition, double maxVelocity, double accel ) {
+	public StandardMover( PhysicsVector initPosition, double maxVelocity, double accel ) {
 		this.position = initPosition.copy();
 		this.targetPosition = initPosition.copy();
 		this.maxVelocity = maxVelocity;

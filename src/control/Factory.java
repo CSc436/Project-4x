@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import entities.behaviors.Producer;
-import entities.behaviors.ProductionBehavior;
+import entities.behaviors.StandardProduction;
 import entities.buildings.*;
 import entities.gameboard.GameBoard;
 import entities.resources.Resources;
@@ -101,7 +101,7 @@ public class Factory implements Serializable {
 				ArrayList<UnitType> producibleUnitTypes = new ArrayList<UnitType>();
 				producibleUnitTypes.add(UnitType.INFANTRY);
 				producibleUnitTypes.add(UnitType.ARCHER);
-				Producer producer = new ProductionBehavior( producibleUnitTypes );
+				Producer producer = new StandardProduction( producibleUnitTypes );
 				result = new ProductionBuilding(newId, playerId, BaseStatsEnum.BARRACKS, BaseStatsEnum.BARRACKS.getStats(),
 						BuildingType.BARRACKS, xco, yco, 2, 4, producer);
 				break;

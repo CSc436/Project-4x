@@ -7,7 +7,7 @@ import java.util.Queue;
 import control.UnitType;
 import entities.stats.BaseStatsEnum;
 
-public class ProductionBehavior implements Producer {
+public class StandardProduction implements Producer {
 	
 	/**
 	 * 
@@ -21,12 +21,12 @@ public class ProductionBehavior implements Producer {
 	private int timeInProduction;
 	private boolean activelyProducing;
 	
-	public ProductionBehavior() {
+	public StandardProduction() {
 		this.producibleUnits = new ArrayList<UnitType>();
 		activelyProducing = false;
 	}
 	
-	public ProductionBehavior( ArrayList<UnitType> producibleUnits ) {
+	public StandardProduction( ArrayList<UnitType> producibleUnits ) {
 		this.producibleUnits = producibleUnits;
 		activelyProducing = false;
 	}

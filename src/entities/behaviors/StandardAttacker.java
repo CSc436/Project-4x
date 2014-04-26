@@ -2,7 +2,7 @@ package entities.behaviors;
 
 import com.shared.PhysicsVector;
 
-public class AttackBehavior implements Attacker {
+public class StandardAttacker implements Attacker {
 
 	/**
 	 * 
@@ -20,14 +20,14 @@ public class AttackBehavior implements Attacker {
 	 */
 	private Movable moveBehavior;
 	
-	public AttackBehavior() {
+	public StandardAttacker() {
 		this.coolDown = 1000;
 		this.range = 1.0F;
 		this.strength = 1;
 		this.isAttacking = false;
 	}
 	
-	public AttackBehavior(int strength, float range, float coolDown, Movable mb) {
+	public StandardAttacker(int strength, float range, float coolDown, Movable mb) {
 		this.coolDown = 1000;
 		this.range = range;
 		this.strength = 1;

@@ -6,7 +6,7 @@ import com.shared.PhysicsVector;
 
 import control.UnitType;
 import entities.Action;
-import entities.behaviors.AttackBehavior;
+import entities.behaviors.StandardAttacker;
 import entities.behaviors.Attackable;
 import entities.behaviors.Attacker;
 import entities.behaviors.Combatable;
@@ -48,7 +48,7 @@ public class Unit extends GameObject implements Attacker, Producible {
 		super(id, playerId, baseStats, new_stats, GameObjectType.UNIT, xco, yco);
 		this.unitType = unitType;
 		this.creationTime = baseStats.getCreationTime();
-		attackBehavior = new AttackBehavior( stats.damage, stats.range, stats.actionSpeed, moveBehavior );
+		attackBehavior = new StandardAttacker( stats.damage, stats.range, stats.actionSpeed, moveBehavior );
 	}
 	
 	public Attacker getAttackBehavior() {

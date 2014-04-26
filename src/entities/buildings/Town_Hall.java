@@ -6,11 +6,9 @@ import java.util.UUID;
 import control.BuildingType;
 import entities.resources.Resources;
 import entities.stats.BaseStatsEnum;
-import entities.units.pawns.Trade_Cart;
 
 public class Town_Hall extends ResourceBuilding {
 
-	Trade_Cart trader;
 	boolean iscapital;
 
 	/*
@@ -27,17 +25,7 @@ public class Town_Hall extends ResourceBuilding {
 		this.iscapital = iscapital;
 
 	}
-
-	@Override
-	protected void setActions() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public HashMap<String, String> getActions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
+	public Town_Hall() {}
 
 }

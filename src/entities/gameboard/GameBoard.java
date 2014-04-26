@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.shared.PhysicsVector;
 import com.shared.Terrain;
 
 import entities.buildings.Building;
-import entities.units.Unit;
 import entities.util.Point;
 
 /* 
@@ -364,9 +364,9 @@ public class GameBoard implements Serializable {
 	 */
 	public void removeBuilding(Building b) {
 
-		Point pos = b.getPosition();
-		int x = Math.round(pos.x);
-		int y = Math.round(pos.y);
+		PhysicsVector pos = b.getPosition();
+		int x = (int) Math.round(pos.getX());
+		int y = (int) Math.round(pos.getY());
 
 		int height = b.getHeight();
 		int width = b.getWidth();

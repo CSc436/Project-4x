@@ -17,7 +17,7 @@ public class ResourceBuilding extends Building implements ResourceGenerator {
 	 * 
 	 */
 	private static final long serialVersionUID = -214411844510536374L;
-	protected final Resources baseResourceAmount;
+	protected Resources baseResourceAmount;
 	protected Resources resourceAmount;
 	protected ResourceGenerator resourceGenerationBehavior;
 
@@ -52,6 +52,11 @@ public class ResourceBuilding extends Building implements ResourceGenerator {
 		this.resourceAmount = resourceAmount;
 		resourceGenerationBehavior = new StandardResourceGenerator(resourceAmount);
 	}
+	
+	public ResourceBuilding() {
+		super();
+	}
+	
 	/* Setters and Getters */
 	public void setGlobalRateModifier(Resources newRate) {
 		globalRateModifier = newRate;

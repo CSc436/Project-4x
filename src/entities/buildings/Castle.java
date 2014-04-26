@@ -22,6 +22,8 @@ public class Castle extends Building {
 		this.populationCap = populationCap;
 		this.influenceArea = influenceArea;
 	}
+	
+	public Castle() {}
 
 	public int getPopulationCap()
 	{

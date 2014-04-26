@@ -22,6 +22,8 @@ public class Barracks extends Building {
 				BuildingType.BARRACKS, xco, yco,
 				2, 4);
 	}
+	
+	public Barracks() {}
 
 // ???????
 	public int createSoldiers(){

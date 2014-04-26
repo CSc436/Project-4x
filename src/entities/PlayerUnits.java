@@ -20,6 +20,8 @@ public class PlayerUnits implements Serializable {
 	private HashMap<Integer, Unit> units;
 	private HashMap<Integer, Agent> agents;
 	private int playerId;
+	
+	public PlayerUnits() {}
 
 	public PlayerUnits(int id) {
 		playerId = id;

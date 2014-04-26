@@ -1,6 +1,6 @@
 package com.shared;
 
-import entities.behaviors.MoveBehavior;
+import entities.behaviors.StandardMover;
 
 public class MovingUnitModel extends EntityModel {
 	/**
@@ -9,11 +9,11 @@ public class MovingUnitModel extends EntityModel {
 	private static final long serialVersionUID = -3036643547617800286L;
 	
 	public MovingUnitModel() {
-		movementBehavior = new MoveBehavior( new PhysicsVector(0,0), 1, 3 );
+		movementBehavior = new StandardMover( new PhysicsVector(0,0), 1, 3 );
 	}
 	
 	public MovingUnitModel( double initX, double initY, double maxVel, double maxAccel ) {
-		movementBehavior = new MoveBehavior( new PhysicsVector( initX, initY ), maxVel, maxAccel );
+		movementBehavior = new StandardMover( new PhysicsVector( initX, initY ), maxVel, maxAccel );
 	}
 	
 	public void simulateTimeStep(int timeStep) {

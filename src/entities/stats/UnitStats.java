@@ -51,6 +51,8 @@ public class UnitStats implements Serializable {
 		this.movementSpeed = movementSpeed;
 		this.actionSpeed = actionSpeed;
 	}
+	
+	public UnitStats() {}
 
 	public UnitStats clone() {
 		return new UnitStats(damage, range, armor, health_regen, max_health,

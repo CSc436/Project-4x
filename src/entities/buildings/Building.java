@@ -6,10 +6,9 @@ import java.util.Queue;
 import com.shared.PhysicsVector;
 
 import control.BuildingType;
-import control.Tools;
 import entities.GameObject;
 import entities.GameObjectType;
-import entities.behaviors.MoveBehavior;
+import entities.behaviors.StandardMover;
 import entities.stats.BaseStatsEnum;
 import entities.stats.UnitStats;
 import entities.units.Unit;
@@ -22,9 +21,8 @@ public abstract class Building extends GameObject {
 	private static final long serialVersionUID = -3938726121964982851L;
 	private int height; // height of the structure
 	private int width; // width of the structure
-	private long castleId = Tools.generateUniqueId();// this is how a building
-														// knows what 'city' it
-														// belongs to
+	private int cityID;
+
 	private BuildingType buildingType;
 	
 	private Queue<Unit> buildingQ = new LinkedList<Unit>();
@@ -61,9 +59,10 @@ public abstract class Building extends GameObject {
 		this.buildingType = buildingType;
 		this.height = height;
 		this.width = width;
-		this.moveBehavior = new MoveBehavior(new PhysicsVector(xco,yco), 0, 0);
+		this.moveBehavior = new StandardMover(new PhysicsVector(xco,yco), 0, 0);
 	}
 
+	public Building() {}
 	/**
 	 * getHeight() returns the height of the building
 	 * 
@@ -104,10 +103,10 @@ public abstract class Building extends GameObject {
 	/**
 	 * getCastleID() Returns the castle ID that is associated with this building
 	 * 
-	 * @return ong for castle id
+	 * @return int for castle id
 	 */
-	public long getCastleId() {
-		return castleId;
+	public int getCastleId() {
+		return cityID;
 	}
 
 	/**

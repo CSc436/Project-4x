@@ -35,6 +35,10 @@ public class Bank extends ResourceBuilding {
 		super(id, playerId, BaseStatsEnum.BANK, BaseStatsEnum.BANK.getStats(), BuildingType.BANK, xco, yco, 2, 2, resourceAmount);
 	}
 	
+	public Bank() {
+		super();
+	}
+	
 	@Override
 	public String toString() {
 		return "GameObject type: Bank; Player owner Id: " + this.getPlayerID() + "; Castle id: " + this.getCastleId() 
@@ -72,16 +76,5 @@ public class Bank extends ResourceBuilding {
 		this.gold+=gold;*/
 		return true;
 	}
-	
-	@Override
-	protected void setActions() {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public HashMap<String, String> getActions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

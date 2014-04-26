@@ -74,7 +74,7 @@ public class GameModel implements Serializable {
 		Set<Integer> keySet = resourceGenerators.keySet();
 		for( int i : keySet ) {
 			ResourceGenerator r = resourceGenerators.get(i);
-			Player p = players.get(((GameObject) r).getPlayerID());
+			Player p = getPlayer( ((GameObject) r).getPlayerID() );
 			p.getResources().receive(r.generateResources(timeStep));
 		}
 	}
@@ -128,7 +128,7 @@ public class GameModel implements Serializable {
 		producers.remove(id);
 		
 		int playerID = o.getPlayerID();
-		players.get(playerID).getGameObjects().removeGameObject(id);
+		getPlayer( playerID ).getGameObjects().removeGameObject(id);
 	}
 
 	private void placeProducedUnits() {
@@ -175,7 +175,7 @@ public class GameModel implements Serializable {
 			
 			int playerID = ((GameObject) p).getPlayerID();
 			for( UnitType ut : unitQueue ) {
-				Unit u = Factory.buildUnit(players.get(playerID), playerID, ut, x, y+1);
+				Unit u = Factory.buildUnit(getPlayer(playerID), playerID, ut, x, y+1);
 				int unitID = u.getId();
 				gameObjects.put(unitID, u);
 				attackers.put(unitID, u);

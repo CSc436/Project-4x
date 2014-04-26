@@ -1,6 +1,6 @@
 package entities.behaviors;
 
-public class HealthBehavior implements Attackable {
+public class StandardHealth implements Attackable {
 
 	/**
 	 * 
@@ -13,13 +13,13 @@ public class HealthBehavior implements Attackable {
 	private float healthRegen;
 	private boolean isDead = false;
 	
-	public HealthBehavior() {
+	public StandardHealth() {
 		this.maxHP = 10;
 		this.hp = maxHP;
 		this.armor = 0;
 	}
 	
-	public HealthBehavior( float maxHP, float healthRegen, int armor ) {
+	public StandardHealth( float maxHP, float healthRegen, int armor ) {
 		this.maxHP = maxHP;
 		this.hp = this.maxHP;
 		this.armor = armor;
