@@ -15,23 +15,20 @@ public abstract class GameCommand implements Serializable {
 	protected int turnToExecute; // Game turn to execute on, defaults to turnSent + 1
 	protected int playerID; // Player ID number
 	
-	// Default no-argument constructor for GWT
-	private GameCommand() {
-		this.turnSentOn = -1;
-		this.turnToExecute = -1;
-		this.playerID = -1;
-	}
-	
-	public GameCommand(int turnSentOn, int playerID) {
-		this.turnSentOn = turnSentOn;
-		this.turnToExecute = turnSentOn + 1;
-		this.playerID = playerID;
-	}
-	
 	public GameCommand(int turnSentOn, int turnToExecute, int playerID) {
 		this.turnSentOn = turnSentOn;
 		this.turnToExecute = turnToExecute;
 		this.playerID = playerID;
+	}
+	
+	public GameCommand(int turnSentOn, int playerID) {
+		this(turnSentOn, turnSentOn + 1, playerID);
+	}
+	
+	// Default no-argument constructor for GWT
+	@SuppressWarnings("unused")
+	private GameCommand() {
+		this(-1, -1, -1);
 	}
 	
 	/**
