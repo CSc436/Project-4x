@@ -15,7 +15,6 @@ import com.google.gwt.query.client.Function;
 
 public class PlayGame implements EntryPoint {
 
-
 	public void onModuleLoad() {
 
 		$("#login-button").click(new Function() {
