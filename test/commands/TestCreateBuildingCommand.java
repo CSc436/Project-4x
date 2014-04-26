@@ -24,7 +24,6 @@ public class TestCreateBuildingCommand {
 		ArrayList<String> plist = new ArrayList<>();
 		plist.add("Greg");
 		plist.add("Pedro");
-
 		GameModel model = new GameModel(plist, 500);
 		Controller controller = new Controller(model);
 
