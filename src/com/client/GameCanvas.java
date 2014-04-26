@@ -4,6 +4,7 @@ import static com.google.gwt.query.client.GQuery.$;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -46,6 +47,8 @@ import com.googlecode.gwtgl.binding.WebGLShader;
 import com.googlecode.gwtgl.binding.WebGLTexture;
 import com.googlecode.gwtgl.binding.WebGLUniformLocation;
 import com.shared.model.EntityModel;
+import com.shared.model.control.GameModel;
+import com.shared.model.control.buttonhandler.*;
 import com.shared.utils.Coordinate;
 import com.shared.utils.Vector3;
 
@@ -490,8 +493,14 @@ public class GameCanvas {
 				return true; // Default return true
 			}
 		});
+		
+		// TODO: get actual game model
+		GameModel tempGameModel = null;
+		// TODO: get sending player Id
+		int sendingPlayer = 1;
+		$("#diplomacy-create-confirm").click(new DiplomacyCreateProposalFunction(this, tempGameModel, sendingPlayer));
 	}
-	
+
 	/**
 	 * Registers handlers for showing/hiding sidebar
 	 */
