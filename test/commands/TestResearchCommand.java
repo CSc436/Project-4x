@@ -2,6 +2,7 @@ package commands;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -25,8 +26,11 @@ public class TestResearchCommand {
 
 	@Test
 	public void testCreate() {
-		Controller controller = new Controller();
-		GameModel model = controller.getGameModel();
+		ArrayList<String> plist = new ArrayList<>();
+		plist.add("Greg");
+		plist.add("Pedro");
+		GameModel model = new GameModel(plist, 500);
+		Controller controller = new Controller(model);
 		Thread t = new Thread(controller);
 		t.start();
 		assertEquals(2, model.getPlayers().size());
@@ -52,18 +56,15 @@ public class TestResearchCommand {
 			e.printStackTrace();
 		}
 
-		
-		
 		p = model.getPlayer(1);
 		temp = p.getTechTree().currently_researching;
 		assertEquals(0, temp.size());
-		
+
 		assertEquals(1, buildings.size());
 
 		buildings = p.getGameObjects().getBuildings();
 		ResearchBuilding b = (ResearchBuilding) buildings.values().toArray()[0];
 
-		
 		comm = new ResearchTechnologyCommand(p, b, TechnologyEnum.INFANTRYARMOR);
 		controller.addCommand(comm);
 
@@ -87,14 +88,14 @@ public class TestResearchCommand {
 		p = model.getPlayer(1);
 		temp = p.getTechTree().currently_researching;
 		assertEquals(1, temp.size());
-		assertEquals((Integer)10,temp.get("INFANTRYARMOR"));
+		assertEquals((Integer) 10, temp.get("INFANTRYARMOR"));
 		model.advanceTimeStep();
 
 		p = model.getPlayer(1);
 		temp = p.getTechTree().currently_researching;
 		assertEquals(1, temp.size());
-		assertEquals((Integer)9,temp.get("INFANTRYARMOR"));
-		
+		assertEquals((Integer) 9, temp.get("INFANTRYARMOR"));
+
 	}
 
 }

@@ -12,9 +12,9 @@ public class Controller implements Runnable {
 	private ConcurrentLinkedDeque<Command> commandQueue;
 	private int turnWaitTime;// in ms
 
-	public Controller() {
+	public Controller(GameModel model) {
 
-		model = new GameModel();
+		this.model = model;
 		commandQueue = new ConcurrentLinkedDeque<Command>();
 		turnWaitTime = 100;
 

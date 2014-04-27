@@ -2,6 +2,7 @@ package commands;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
 
@@ -20,8 +21,12 @@ public class TestCreateBuildingCommand {
 
 	@Test
 	public void testCreate() {
-		Controller controller = new Controller();
-		GameModel model = controller.getGameModel();
+		ArrayList<String> plist = new ArrayList<>();
+		plist.add("Greg");
+		plist.add("Pedro");
+		GameModel model = new GameModel(plist, 500);
+		Controller controller = new Controller(model);
+
 		Thread t = new Thread(controller);
 		t.start();
 		assertEquals(2, model.getPlayers().size());

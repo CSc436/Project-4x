@@ -45,8 +45,8 @@ public class PlayerTextInput implements Runnable {
 
 		// start controller in here
 		System.out.println("Let's start!");
-		Thread controller = new Thread(new Controller());
-		controller.start();
+		// Thread controller = new Thread(new Controller());
+		// controller.start();
 
 		while (result != -1) {
 			System.out.println("Which player is entering commands?");
