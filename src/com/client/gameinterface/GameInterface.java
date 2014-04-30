@@ -189,6 +189,18 @@ public class GameInterface {
 			}
 		});
 		
+		// Send Button
+		// Currently writes message to the console, clears contents of 
+		// chat- send box. 
+		$("#send-message").click(new Function(){
+			public boolean f(Event e)
+			{
+				Console.log($("#chat-send-box").text());
+				$("#chat-send-box").text("");
+				return true;
+			}
+		});
+		
 		// Menu Button
 		// Callback to show/hide game menu
 		$("#menu-button").click(new Function() {

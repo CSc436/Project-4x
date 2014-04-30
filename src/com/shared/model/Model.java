@@ -50,5 +50,4 @@ public class Model implements Runnable {
 	public MovingNumber getNumber() {
 		return number;
 	}
-	
 }

@@ -453,7 +453,7 @@ public class GameCanvas {
 		initClickHandlers();
 		camera.makeCameraMatrix();
 	}
-
+	
 	/**
 	 * Registers handlers for Interface buttons
 	 */
@@ -490,6 +490,8 @@ public class GameCanvas {
 				return true; // Default return true
 			}
 		});
+		
+		// 
 	}
 	
 	/**
@@ -885,5 +887,4 @@ public class GameCanvas {
 		
 		glContext.flush();
 	}
-	
 }
