@@ -46,6 +46,8 @@ import com.googlecode.gwtgl.binding.WebGLRenderingContext;
 import com.googlecode.gwtgl.binding.WebGLShader;
 import com.googlecode.gwtgl.binding.WebGLTexture;
 import com.googlecode.gwtgl.binding.WebGLUniformLocation;
+import com.shared.model.commands.Command;
+import com.shared.model.commands.MoveUnitCommand;
 import com.shared.model.entities.GameObject;
 import com.shared.utils.Coordinate;
 import com.shared.utils.Vector3;
@@ -368,7 +370,7 @@ public class GameCanvas {
 							double x = entities.get(targetID).posX;
 							double y = entities.get(targetID).posY;
 							for(Integer i : selectedEntities) {
-								theModel.setTarget(i, x, y);
+								theModel.sendCommand(new MoveUnitCommand(i,x,y));
 							}
 						}
 						else {

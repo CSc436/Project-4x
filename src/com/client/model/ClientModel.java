@@ -76,34 +76,9 @@ public class ClientModel {
 //		AutoBean<Request> bean = AutoBeanUtils.getAutoBean(delegate)
 
 	}
-
-	public void setTarget( int unitID, double x, double y ) {
-		/*
-		Request r = new SetTargetRequest( unitID, x, y );
-		AutoBean<Request> bean = AutoBeanUtils.getAutoBean(r);
-		String jsonRequest = AutoBeanCodex.encode(bean).getPayload();
-		socket.send(jsonRequest);
-		*/
-		//requestQueue.add(r);
-		
-		/*
-		simpleSimulator.sendRequest(r,
-				new AsyncCallback<Request[]>() {
-					public void onFailure(Throwable caught) {
-						System.out.println("Target request failed");
-					}
-
-					public void onSuccess(Request[] result) {
-						int entityID = ((SetTargetRequest) result[0]).entityID;
-						double x = ((SetTargetRequest) result[0]).x;
-						double y = ((SetTargetRequest) result[0]).y;
-						nextModel.get(entityID).getMovementBehavior().setTarget(x, y);
-						System.out.println("New target set: " + x + " " + y);
-					}
-				});
-		*/
-		 
-		
+	
+	public void sendCommand( Command c ) {
+		commandQueue.add(c);
 	}
 	
 	public float[] getPosition( int unitID, long currentTime ) {
