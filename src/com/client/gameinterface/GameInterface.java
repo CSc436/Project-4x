@@ -195,8 +195,8 @@ public class GameInterface {
 		$("#send-message").click(new Function(){
 			public boolean f(Event e)
 			{
-				Console.log($("#chat-send-box").text());
-				$("#chat-send-box").text("");
+				Console.log($("#message").val());
+				$("#message").val("");
 				return true;
 			}
 		});
