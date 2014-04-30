@@ -7,6 +7,7 @@ import com.client.gameinterface.GameInterface;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.query.client.Function;
 
 /**
@@ -15,12 +16,15 @@ import com.google.gwt.query.client.Function;
 
 public class PlayGame implements EntryPoint {
 
-
 	public void onModuleLoad() {
 
 		$("#login-button").click(new Function() {
 			public boolean f(Event e) {
 				Console.log($("#login-username").val());
+				Console.log($("#login-password").val());
+
+				Window.alert("Login?!");
+
 				$("#login-screen").remove();
 				// Init game in 1 second
 				// (This is purely to see the loading screen)

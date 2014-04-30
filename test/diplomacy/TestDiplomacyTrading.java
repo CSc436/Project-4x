@@ -2,8 +2,11 @@ package diplomacy;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+
 import org.junit.Test;
 
+import com.shared.model.control.Controller;
 import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
 import com.shared.model.diplomacy.trading.TradeFactory;
@@ -15,7 +18,13 @@ import com.shared.model.resources.Resources;
 public class TestDiplomacyTrading {
 	@Test
 	public void test() {
-		GameModel model = new GameModel();
+
+		ArrayList<String> plist = new ArrayList<>();
+		plist.add("Greg");
+		plist.add("Pedro");
+		GameModel model = new GameModel(plist, 500);
+		Controller controller = new Controller(model);
+
 		Player p1 = model.getPlayer(1);
 		Player p2 = model.getPlayer(2);
 
