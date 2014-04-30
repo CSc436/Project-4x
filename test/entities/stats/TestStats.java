@@ -1,3 +1,4 @@
+
 package entities.stats;
 
 import static org.junit.Assert.*;

@@ -77,3 +77,47 @@ hr {
 .pull-left {
 	float: left;
 }
+
+#loading-screen {
+	display: table;
+	position: absolute;
+	z-index: 1000;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background-color: rgba(0, 0, 0, .7);
+	color: white;
+}
+
+#loading-screen > div {
+	display: table-cell;
+	vertical-align: middle;
+	margin: 0;
+}
+
+#loading-screen h1 {
+	font-size: 80px;	
+}
+
+#loading-message {
+	font-size: 20px;
+}
+
+#login-screen {
+	display: table;
+	position: absolute;
+	z-index: 1001;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background-color: white;
+	color: black;
+}
+
+#login-screen > div {
+	display: table-cell;
+	vertical-align: middle;
+	margin: 0;
+}

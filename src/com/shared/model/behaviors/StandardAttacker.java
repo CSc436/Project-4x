@@ -1,6 +1,8 @@
 package com.shared.model.behaviors;
 
-import com.shared.PhysicsVector;
+import com.shared.utils.PhysicsVector;
+
+
 
 public class StandardAttacker implements Attacker {
 

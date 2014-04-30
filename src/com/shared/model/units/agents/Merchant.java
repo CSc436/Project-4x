@@ -43,7 +43,7 @@ public class Merchant extends Agent{
 		else
 		{
 			p.goodsNumber.put(goods, p.getGoodsNumber(goods)+number);
-			p.resources.Gold -= number * goods.price;
+			p.resources.setGold(p.resources.getGold() - number * goods.price);
 		}
 	}
 }

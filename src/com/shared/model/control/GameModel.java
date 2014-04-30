@@ -3,20 +3,22 @@ package com.shared.model.control;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import com.shared.PhysicsVector;
 import com.shared.model.behaviors.Attackable;
 import com.shared.model.behaviors.Attacker;
 import com.shared.model.behaviors.Movable;
 import com.shared.model.behaviors.Producer;
 import com.shared.model.behaviors.ResourceGenerator;
 import com.shared.model.buildings.Building;
+import com.shared.model.diplomacy.trading.TradeManager;
 import com.shared.model.entities.GameObject;
 import com.shared.model.gameboard.GameBoard;
 import com.shared.model.units.Unit;
 import com.shared.model.units.UnitType;
+import com.shared.utils.PhysicsVector;
 
 public class GameModel implements Serializable {
 	/**
@@ -34,6 +36,7 @@ public class GameModel implements Serializable {
 	private HashMap<Integer, ResourceGenerator> resourceGenerators;
 	
 	private int turnNumber = 0;
+	private TradeManager tradeManager;
 
 	// simple test model start up.
 	// A different constructor should be used for different
@@ -223,4 +226,82 @@ public class GameModel implements Serializable {
 	public int getTurnNumber() {
 		return turnNumber;
 	}
+
+	/**
+	 * Line-of-sight: used to obtain a listing of all objects visible to this
+	 * object. Standards for visibility are defined within this method to allow
+	 * for trivial changes, such as sight range, and may eventually be defined
+	 * elsewhere; for the time being that problem was too subtle and tricky.
+	 * 
+	 * @param viewingObject
+	 *            The object (unit, building) which sees other buildings/units
+	 *            (or doesn't).
+	 * @return A list containing references to the objects which are within
+	 *         visibility of viewingObject. This list will contain viewingObject
+	 *         unless it has been modified to use .equals (must be supported)
+	 *         AND IFF viewingObject != sameObject.
+	 */
+	public ArrayList<GameObject> getVisibleUnits(GameObject viewingObject) {
+		// Change this to change what can be visible.
+		int sightRange = 10;
+
+		// This method first determines all units which are within a large
+		// square
+		// containing the viewingObject at its center, then refines this list
+		// based
+		// on real distance.
+		ArrayList<GameObject> visibles = new ArrayList<GameObject>();
+		ArrayList<GameObject> inSquare = new ArrayList<GameObject>();
+
+		int baseX = GameBoard.getCoordEquivalent((float) viewingObject.getPosition().getX());
+		int baseY = GameBoard.getCoordEquivalent((float) viewingObject.getPosition().getY());
+
+		// Define the square with viewingObject at its center.
+		int minX = baseX - sightRange;
+		int maxX = baseX + sightRange;
+		int minY = baseY - sightRange;
+		int maxY = baseY + sightRange;
+
+		// Retrieve all GameObjects within the square.
+		for (Player p : players) {
+			Map<Integer, GameObject> goMap = p.getGameObjects().getGameObjects();
+			for (Integer u : goMap.keySet()) {
+				GameObject go = goMap.get(u);
+				int goX = GameBoard.getCoordEquivalent((float) go.getPosition().getX());
+				int goY = GameBoard.getCoordEquivalent((float) go.getPosition().getY());
+
+				boolean isInSquareX = (minX <= goX) && (goX <= maxX);
+				boolean isInSquareY = (minY <= goY) && (goY <= maxY);
+
+				if (isInSquareX && isInSquareY)
+					inSquare.add(go);
+			}
+		}
+
+		// Remove self from the list.
+		for (GameObject go : inSquare)
+			if (go == viewingObject)
+				inSquare.remove(go);
+
+		// Iterate over the game objects in the square and using pythagorean
+		// distance calculations, see if they're visible based on float coords.
+		for (GameObject go : inSquare) {
+			double dist = go.getPosition().sub(viewingObject.getPosition()).magnitude();
+
+			if (dist <= sightRange)
+				visibles.add(go);
+		}
+
+		// Return the final list.
+		return visibles;
+	}
+	
+	public TradeManager getTradeManager() {
+		return tradeManager;
+	}
+	
+	public HashMap<Integer,GameObject> getGameObjects() {
+		return gameObjects;
+	}
+	
 }

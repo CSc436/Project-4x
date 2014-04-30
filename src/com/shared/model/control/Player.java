@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.shared.model.buildings.Building;
+import com.shared.model.buildings.BuildingType;
 import com.shared.model.entities.Civilization;
 import com.shared.model.entities.PerfectCivilization;
 import com.shared.model.entities.PlayerUnits;
@@ -100,7 +101,7 @@ public class Player implements Serializable {
 	public Upgrades getUpgrades() {
 		return upgrades;
 	}
-
+	/*
 	public Building getBuilding(UUID buildingId) {
 		return objects.getBuildings().get(buildingId);
 	}
@@ -130,7 +131,7 @@ public class Player implements Serializable {
 		selectedUnits = new HashMap<Integer, Unit>();
 	}
 
-	
+	*/
 	// TODO implement the right way? Graham 
 	public int getGoodsNumber(Goods g)
 	{
@@ -154,5 +155,6 @@ public class Player implements Serializable {
 		} else {
 			return false;
 		}
+
 	}
 }

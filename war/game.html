@@ -28,6 +28,20 @@
 			Your web browser must have JavaScript enabled in order for this
 			application to display correctly.</div>
 	</noscript>
+	<div id="login-screen" class="text-center">
+		<div>
+			<h2>Login</h2>
+			Username : <input type="text" id="login-username"/>
+			<button type="button" id="login-button">Login</button><br>
+			Password : <input type="password" id="login-password"/>
+		</div>
+	</div>
+	<div id="loading-screen" class="text-center">
+		<div>
+			<h1>Loading...</h1>
+			<p id="loading-message"></p>
+		</div>
+	</div>
 	<div id="toolbar-div">
 		<span id="banner">Legacy of Kings</span>
 		<ul id="toolbar">
@@ -43,10 +57,13 @@
 			<!-- Goes from right to left -->
 			<li id="menu" class="toolbar-right"><a href="#" id="menu-button"
 				title="Menu">Menu</a></li>
-			<!-- These could be icons and then be on 1 line -->
-			<li id="game-resources" class="toolbar-right"><span>Gold:
-					100 Wood: 200 Food: 350 </span> <br /> <span>Stone: 79 Research:
-					1000</span></li>
+			<li id="game-resources" class="toolbar-right">
+				<span><img class="resource-icon" src="assets/Icons/GoldResourceIcon.png"> 100
+						<img class="resource-icon" src="assets/Icons/WoodResourceIcon.png"> 200
+						<img class="resource-icon" src="assets/Icons/FoodResourceIcon.png"> 350
+						<img class="resource-icon" src="assets/Icons/StoneResourceIcon.png"> 79
+						<img class="resource-icon" src="assets/Icons/ResearchResourceIcon.png"> 1000</span>
+			</li>
 		</ul>
 	</div>
 	<div id="sidebar">
@@ -507,8 +524,19 @@
 		src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
 	<script type="text/javascript">
+	
+		var loadingHints = [
+			"Blink and you'll miss it",
+			"This isn't your mother's MMORPG",
+			"Hidden Easter Egg: our own version of 'Hall of Tortured Souls'"
+		];
+		
 		$(document).ready(function() {
-
+			
+			// Set loading message
+			var randInt = Math.floor(Math.random() * (loadingHints.length));
+			$("#loading-message").text(loadingHints[randInt]);
+			
 			// Prevents '#' from appending to url when
 			// clicking menu icons
 			$("#toolbar > li > a").click(function(e) {

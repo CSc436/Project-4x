@@ -50,6 +50,7 @@ public abstract class Agent extends Unit {
 	}
 	
 	public Agent() {}
+
 	
 	/*
 	 * To be implemented by all agents, update the agents status 

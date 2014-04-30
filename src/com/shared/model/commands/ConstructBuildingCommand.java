@@ -1,9 +1,7 @@
 package com.shared.model.commands;
 
-import java.util.UUID;
-
 import com.shared.model.buildings.Building;
-import com.shared.model.control.BuildingType;
+import com.shared.model.buildings.BuildingType;
 import com.shared.model.control.Factory;
 import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
@@ -12,6 +10,10 @@ import com.shared.model.gameboard.GameBoard;
 
 public class ConstructBuildingCommand implements Command {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1798034723745667705L;
 	private int playerId;
 	private BuildingType buildingType;
 	private int xco;
@@ -44,6 +46,7 @@ public class ConstructBuildingCommand implements Command {
 
 		Building b = Factory.buildBuilding(p, playerId, buildingType, xco, yco,
 				gb);
+
 		if (b == null)
 			return false;
 		else

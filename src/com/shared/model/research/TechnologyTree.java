@@ -1,5 +1,6 @@
 package com.shared.model.research;
 
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,6 +25,7 @@ public class TechnologyTree implements Serializable {
 	
 	public TechnologyTree() {}
 	
+
 	public TechnologyTree(Player player) {
 		p = player;
 

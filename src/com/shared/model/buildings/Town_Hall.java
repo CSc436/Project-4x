@@ -1,14 +1,15 @@
+
 package com.shared.model.buildings;
 
-import java.util.HashMap;
-import java.util.UUID;
-
-import com.shared.model.control.BuildingType;
 import com.shared.model.resources.Resources;
 import com.shared.model.stats.BaseStatsEnum;
 
 public class Town_Hall extends ResourceBuilding {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1280392774032932674L;
 	boolean iscapital;
 
 	/*

@@ -1,8 +1,5 @@
 package com.shared.model.buildings;
 
-import java.util.HashMap;
-
-import com.shared.model.control.BuildingType;
 import com.shared.model.stats.BaseStatsEnum;
 
 public class Barracks extends Building {
@@ -55,5 +52,6 @@ public class Barracks extends Building {
 		case 5: capacity=25;
 		}
 	}
+
 
 }

@@ -12,6 +12,7 @@ public class Upgrades implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 5748974532072650087L;
+
 	public HashMap<String, BuffStats> mapping;
 	
 	public Upgrades() {

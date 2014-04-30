@@ -2,7 +2,6 @@ package com.shared.model.buildings;
 
 import com.shared.model.behaviors.ResourceGenerator;
 import com.shared.model.behaviors.StandardResourceGenerator;
-import com.shared.model.control.BuildingType;
 import com.shared.model.resources.Resources;
 import com.shared.model.stats.BaseStatsEnum;
 import com.shared.model.stats.UnitStats;
@@ -76,4 +75,5 @@ public class ResourceBuilding extends Building implements ResourceGenerator {
 	public Resources generateResources(int timeStep) {
 		return resourceGenerationBehavior.generateResources(timeStep);
 	}
+
 }

@@ -2,7 +2,7 @@ package com.shared.model.behaviors;
 
 import java.io.Serializable;
 
-import com.shared.PhysicsVector;
+import com.shared.utils.PhysicsVector;
 
 public interface Movable extends Serializable {
 	

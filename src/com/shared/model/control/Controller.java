@@ -33,6 +33,13 @@ public class Controller implements Runnable {
 			runningAvgQueue.add(timeStep);
 	}
 	
+	public Controller(GameModel m) {
+		model = m;
+		timeStep = 200;
+		for(int i = 0; i < numTimesSaved; i++)
+			runningAvgQueue.add(timeStep);
+	}
+	
 	public void run() {
 		isRunning = true;
 		lastTime = System.currentTimeMillis();
@@ -143,6 +150,7 @@ public class Controller implements Runnable {
 			movingAverage += (newTime - movingAverage) / numTimesSaved;
 		}
 		//System.out.println(movingAverage);
+
 	}
 
 }

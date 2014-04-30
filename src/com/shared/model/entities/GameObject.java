@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 
-import com.shared.PhysicsVector;
 import com.shared.model.behaviors.Attackable;
 import com.shared.model.behaviors.Combatable;
 import com.shared.model.behaviors.Movable;
@@ -12,6 +11,7 @@ import com.shared.model.behaviors.StandardHealth;
 import com.shared.model.behaviors.StandardMover;
 import com.shared.model.stats.BaseStatsEnum;
 import com.shared.model.stats.UnitStats;
+import com.shared.utils.PhysicsVector;
 
 public class GameObject implements Serializable, Combatable {
 	

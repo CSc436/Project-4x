@@ -13,9 +13,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 import com.google.web.bindery.autobean.shared.AutoBeanUtils;
-import com.shared.Request;
-import com.shared.SetTargetRequest;
-import com.shared.SimpleGameModel;
 import com.shared.model.commands.Command;
 import com.shared.model.control.GameModel;
 import com.sksamuel.gwt.websockets.Websocket;
@@ -81,12 +78,12 @@ public class ClientModel {
 	}
 
 	public void setTarget( int unitID, double x, double y ) {
-
+		/*
 		Request r = new SetTargetRequest( unitID, x, y );
 		AutoBean<Request> bean = AutoBeanUtils.getAutoBean(r);
 		String jsonRequest = AutoBeanCodex.encode(bean).getPayload();
 		socket.send(jsonRequest);
-		
+		*/
 		//requestQueue.add(r);
 		
 		/*

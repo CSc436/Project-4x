@@ -5,6 +5,7 @@ import com.shared.model.entities.GameObjectType;
 import com.shared.model.resources.Resources;
 
 public class InfantryDamage extends Technology {
+
 	/**
 	 * 
 	 */

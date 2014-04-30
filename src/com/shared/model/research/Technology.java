@@ -45,6 +45,7 @@ public abstract class Technology implements Serializable {
 	public BuffStats getStats(){ return buffstats[current_level - 1]; }
 	public Resources getCost() { return costs[current_level - 1]; }
 	
+
 	public void completeResearch() {
 		current_level++;
 	}

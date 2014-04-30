@@ -1,6 +1,5 @@
 package com.shared.model.buildings;
 
-import com.shared.model.control.BuildingType;
 import com.shared.model.stats.BaseStatsEnum;
 
 public class Castle extends Building {

@@ -7,29 +7,28 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.shared.model.buildings.Building;
-import com.shared.model.control.BuildingType;
+import com.shared.model.buildings.BuildingType;
 import com.shared.model.control.Factory;
 import com.shared.model.control.Player;
 import com.shared.model.gameboard.GameBoard;
 import com.shared.model.gameboard.Tile;
+import com.shared.model.resources.Resources;
+
 
 public class TestGameBoard {
 
 	GameBoard board = new GameBoard(200, 200);
 	Player p = new Player("meathook", 0);
-	Building b = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f, 2.0f,
-			board);
-
-	Tile t = board.getTileAt(0, 0);
 
 	@Test
 	public void testOccupied1() {
 
+		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));
 		assertEquals(200, board.getCols());
 		assertEquals(200, board.getRows());
 
-		board.placeBuildingAt(b, 1, 2);
-		System.out.println(b.getWidth() + " , " + b.getHeight());
+		Building b = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f,
+				2.0f, board);
 
 		for (int r = 0; r < 1; r++) {
 			for (int c = 0; c < 2; c++) {
@@ -42,10 +41,10 @@ public class TestGameBoard {
 		assertTrue(board.getTileAt(2, 2).isOccupiedByBuilding());
 		assertTrue(board.getTileAt(1, 3).isOccupiedByBuilding());
 		assertTrue(board.getTileAt(2, 3).isOccupiedByBuilding());
-		assertTrue(board.getTileAt(1, 4).isOccupiedByBuilding());
-		assertTrue(board.getTileAt(2, 4).isOccupiedByBuilding());
-		assertTrue(board.getTileAt(1, 5).isOccupiedByBuilding());
-		assertTrue(board.getTileAt(2, 5).isOccupiedByBuilding());
+		assertFalse(board.getTileAt(1, 4).isOccupiedByBuilding());
+		assertFalse(board.getTileAt(2, 4).isOccupiedByBuilding());
+		assertFalse(board.getTileAt(1, 5).isOccupiedByBuilding());
+		assertFalse(board.getTileAt(2, 5).isOccupiedByBuilding());
 
 		for (int r = 2; r < 200; r++) {
 			for (int c = 6; c < 200; c++) {
@@ -67,7 +66,7 @@ public class TestGameBoard {
 
 	@Test
 	public void testOccupied2() {
-
+		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));
 		// These should fail, as there is a building at 1,2
 		Building b = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f,
 				2.0f, board);

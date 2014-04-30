@@ -1,3 +1,4 @@
+
 package com;
 
 import static org.junit.Assert.*;
@@ -5,7 +6,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import com.shared.model.buildings.Building;
-import com.shared.model.control.BuildingType;
+import com.shared.model.buildings.BuildingType;
 import com.shared.model.control.Factory;
 import com.shared.model.control.Player;
 import com.shared.model.gameboard.GameBoard;

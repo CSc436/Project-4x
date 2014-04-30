@@ -2,10 +2,12 @@ package com.shared.model.research;
 
 import java.io.Serializable;
 
+
 public enum TechnologyEnum implements Serializable {
-	
-	INFANTRYDAMAGE1(InfantryDamage.class), DISABLEDTECHNOLOGY(
-			DisabledTechnology.class);
+	INFANTRYDAMAGE(InfantryDamage.class), DISABLEDTECHNOLOGY(
+			DisabledTechnology.class), RANGEDDAMAGE(RangedDamage.class), RANGEDLOS(
+			RangedLOS.class), INFANTRYARMOR(InfantryArmor.class);
+
 
 	private Class<? extends Technology> value;
 

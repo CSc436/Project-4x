@@ -1,16 +1,16 @@
 package com.shared.model.buildings;
 
+
 import java.util.LinkedList;
 import java.util.Queue;
 
-import com.shared.PhysicsVector;
 import com.shared.model.behaviors.StandardMover;
-import com.shared.model.control.BuildingType;
 import com.shared.model.entities.GameObject;
 import com.shared.model.entities.GameObjectType;
 import com.shared.model.stats.BaseStatsEnum;
 import com.shared.model.stats.UnitStats;
 import com.shared.model.units.Unit;
+import com.shared.utils.PhysicsVector;
 
 public abstract class Building extends GameObject {
 
@@ -167,4 +167,5 @@ public abstract class Building extends GameObject {
 		return buildingType;
 	}
 	
+
 }

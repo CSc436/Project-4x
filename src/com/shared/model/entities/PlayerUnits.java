@@ -1,5 +1,6 @@
 package com.shared.model.entities;
 
+
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -106,5 +107,6 @@ public class PlayerUnits implements Serializable {
 		returnStr += "\n";
 		return returnStr;
 	}
+
 
 }

@@ -1,3 +1,4 @@
+
 package entities;
 
 import static org.junit.Assert.*;
@@ -7,23 +8,26 @@ import java.util.UUID;
 import org.junit.Test;
 
 import com.shared.model.buildings.Building;
-import com.shared.model.control.BuildingType;
+import com.shared.model.buildings.BuildingType;
 import com.shared.model.control.Factory;
 import com.shared.model.control.Player;
 import com.shared.model.gameboard.GameBoard;
+import com.shared.model.resources.Resources;
 import com.shared.model.units.Unit;
 import com.shared.model.units.UnitType;
 
 public class TestPlayer {
 	GameBoard board = new GameBoard(200,200);
 	Player p = new Player("meathook", 0);
-	Building b = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f, 1.0f,board);
 	
 	Unit u = Factory.buildUnit(p, p.getId(), UnitType.ARCHER, 1.0f, 1.0f);
 
 	@Test
 	public void testGet() {
-
+		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));
+		
+		Building b = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f, 1.0f,board);
+		
 		p.getGameObjects().addBuilding(b);
 		p.getGameObjects().addUnit(u);
 		assertEquals("meathook", p.getAlias());

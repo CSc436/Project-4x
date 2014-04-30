@@ -6,12 +6,10 @@ import com.shared.model.resources.Resources;
 
 @TechDisabledByDefault
 public class DisabledTechnology extends Technology  {
-
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
 	public DisabledTechnology() {
 		super(3);
 		costs[0] = new Resources(50, 50, 50, 50, 50);

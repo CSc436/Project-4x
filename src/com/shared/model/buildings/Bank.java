@@ -1,13 +1,13 @@
 package com.shared.model.buildings;
 
-import java.util.HashMap;
-import java.util.UUID;
-
-import com.shared.model.control.BuildingType;
 import com.shared.model.resources.Resources;
 import com.shared.model.stats.BaseStatsEnum;
 
 public class Bank extends ResourceBuilding {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2728889770159789062L;
 	// Placeholder bank building dimensions
 	private static final int Height = 4;
 	private static final int Width = 4;
@@ -76,5 +76,6 @@ public class Bank extends ResourceBuilding {
 		this.gold+=gold;*/
 		return true;
 	}
+
 
 }
