@@ -1,7 +1,5 @@
 package com.shared.model.units.agents;
 
-import java.util.UUID;
-
 import com.shared.model.control.AIControl;
 import com.shared.model.control.Player;
 import com.shared.model.entities.GameObjectType;

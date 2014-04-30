@@ -9,6 +9,10 @@ import java.io.Serializable;
  *         currently has, also allows resource buildings to generate a resource.
  */
 public class Resources implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5099437055073288036L;
 	// Tentative resource types suggested during planning
 	private int Gold;
 	private int Wood;

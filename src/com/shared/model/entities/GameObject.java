@@ -2,7 +2,6 @@ package com.shared.model.entities;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.PriorityQueue;
 
 import com.shared.model.behaviors.Attackable;
 import com.shared.model.behaviors.Combatable;
@@ -28,7 +27,6 @@ public class GameObject implements Serializable, Combatable {
 	protected Movable moveBehavior;
 	protected Attackable healthBehavior;
 
-	protected PriorityQueue<Action> actionQueue;
 	
 	public GameObject() {
 		this.id = 0;
@@ -37,7 +35,6 @@ public class GameObject implements Serializable, Combatable {
 		stats = baseStats.getStats();
 		updateStats(baseStats, stats);
 		this.type = GameObjectType.ALL;
-		actionQueue = new PriorityQueue<Action>();
 		PhysicsVector position = new PhysicsVector(0,0);
 		moveBehavior = new StandardMover( position, stats.movementSpeed, stats.movementSpeed / 2.0 );
 		healthBehavior = new StandardHealth( stats.health, stats.health_regen, stats.armor );
@@ -51,7 +48,6 @@ public class GameObject implements Serializable, Combatable {
 		stats = baseStats.getStats();
 		updateStats(baseStats, new_stats);
 		this.type = type;
-		actionQueue = new PriorityQueue<Action>();
 		PhysicsVector position = new PhysicsVector(xco,yco);
 		moveBehavior = new StandardMover( position, stats.movementSpeed, stats.movementSpeed / 2.0 );
 		healthBehavior = new StandardHealth( stats.health, stats.health_regen, stats.armor );

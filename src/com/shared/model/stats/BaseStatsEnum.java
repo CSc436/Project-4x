@@ -1,6 +1,8 @@
 package com.shared.model.stats;
 
 
+import java.io.Serializable;
+
 import com.shared.model.resources.Resources;
 
 /**
@@ -12,7 +14,7 @@ import com.shared.model.resources.Resources;
  *          max health, movememnt speed, and action speed.
  * 
  */
-public enum BaseStatsEnum {
+public enum BaseStatsEnum implements Serializable {
 
 	/*
 	 * Each enumeration contains a UnitsStats object, which defines the stats
@@ -112,6 +114,8 @@ public enum BaseStatsEnum {
 	private BaseStatsEnum(UnitStats stats) {
 		this(stats, 100);
 	}
+	
+	BaseStatsEnum() {}
 
 	private BaseStatsEnum(UnitStats stats, int creationTime) {
 		this.stats = stats;

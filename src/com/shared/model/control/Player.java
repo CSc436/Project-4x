@@ -35,9 +35,6 @@ public class Player implements Serializable {
 	public Goods goods;
 	private Civilization civ;
 	
-	private HashMap<Integer, Unit> selectedUnits;
-	private HashMap<Integer, Building> selectedBuildings;
-	
 	public Player() {
 		this("", 0, new PerfectCivilization());
 	}
@@ -68,9 +65,6 @@ public class Player implements Serializable {
 		techTree = new TechnologyTree(this);
 		this.id = id;
 		
-		// init blabhlahb
-		selectedBuildings = new HashMap<Integer, Building>();
-		selectedUnits = new HashMap<Integer, Unit>();
 	}
 
 	public String getAlias() {
@@ -136,25 +130,5 @@ public class Player implements Serializable {
 	public int getGoodsNumber(Goods g)
 	{
 		return 1;
-	}
-	
-	
-	// !needs a test
-	public boolean hasSelectedEligibleBuilding() {
-
-		if (!selectedBuildings.isEmpty()) {
-			Object[] temp = selectedBuildings.values().toArray();
-		
-			for (int i = 0; i < temp.length; i++) {
-				Building b = (Building) temp[i];
-				System.out.println(b.getBuildingType());
-				if (b.getBuildingType() == BuildingType.BARRACKS)
-					return true;
-			}
-			return false;
-		} else {
-			return false;
-		}
-
 	}
 }

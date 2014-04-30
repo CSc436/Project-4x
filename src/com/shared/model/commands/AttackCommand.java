@@ -17,6 +17,8 @@ public class AttackCommand implements Command {
 		this.attackerID = attackerID;
 		this.targetID = targetID;
 	}
+	
+	public AttackCommand() {}
 
 	@Override
 	public boolean validateCommand(GameModel model) {

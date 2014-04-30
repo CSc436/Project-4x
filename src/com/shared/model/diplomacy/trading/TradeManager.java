@@ -16,6 +16,10 @@ import com.shared.model.diplomacy.trading.interfaces.ITradeManager;
  * 
  */
 public class TradeManager implements ITradeManager {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7693455599294524010L;
 	private List<ITrade> proposedTrades;
 	private List<ITrade> activeTrades;
 
@@ -27,6 +31,8 @@ public class TradeManager implements ITradeManager {
 		proposedTrades = new ArrayList<ITrade>();
 		activeTrades = new ArrayList<ITrade>();
 	}
+	
+	public TradeManager() {}
 
 	@Override
 	public void update(float delta) {

@@ -1,5 +1,7 @@
 package com.shared.model.diplomacy;
 
+import java.io.Serializable;
+
 /**
  * Public Inner Enum Standing
  * 
@@ -9,6 +11,6 @@ package com.shared.model.diplomacy;
  *              class is used to check whether a player's units should attack
  *              another player's units.
  */
-public enum DiplomacyStandingEnum {
+public enum DiplomacyStandingEnum implements Serializable {
 	Allied, Neutral, Enemy;
 }

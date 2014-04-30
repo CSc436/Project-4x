@@ -1,6 +1,10 @@
 package com.shared.model.diplomacy;
 
 public abstract class AbstractDiplomacy implements IDiplomacy {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7984818304600948547L;
 	/** Alliance Table */
 	protected final DiplomacyStandingEnum[][] table;
 
@@ -22,6 +26,10 @@ public abstract class AbstractDiplomacy implements IDiplomacy {
 			}
 		}
 		setSelfToAllied(num_players);
+	}
+	
+	protected AbstractDiplomacy() {
+		this(1, DiplomacyStandingEnum.Neutral);
 	}
 
 	/**

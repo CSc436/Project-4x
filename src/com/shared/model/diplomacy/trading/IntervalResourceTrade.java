@@ -12,6 +12,10 @@ import com.shared.model.resources.Resources;
  * 
  */
 public class IntervalResourceTrade extends AbstractIntervalTrade {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1986949014291109777L;
 	private int creatingPlayer;
 	private int receivingPlayer;
 	private Resources p1Trade;

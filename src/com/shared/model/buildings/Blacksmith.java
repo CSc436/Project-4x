@@ -25,6 +25,8 @@ public class Blacksmith extends Building implements ResearchBuilding {
 		this.addTechnology(TechnologyEnum.RANGEDDAMAGE);
 
 	}
+	
+	public Blacksmith() {}
 
 	@Override
 	public ArrayList<TechnologyEnum> getTechnologyList() {

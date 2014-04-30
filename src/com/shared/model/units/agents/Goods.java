@@ -1,8 +1,10 @@
 package com.shared.model.units.agents;
 
+import java.io.Serializable;
+
 import com.shared.model.control.Player;
 
-public enum Goods {
+public enum Goods implements Serializable {
 
 	silk,
 	bullets;

@@ -24,6 +24,8 @@ public class ResearchTechnologyCommand implements Command {
 		this.t = t;
 
 	}
+	
+	public ResearchTechnologyCommand() {}
 
 	@Override
 	public boolean validateCommand(GameModel model) {

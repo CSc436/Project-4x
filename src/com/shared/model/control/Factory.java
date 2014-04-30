@@ -17,10 +17,10 @@ public class Factory implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8480151288632582040L;
-	private static int nextID = 1;
+	public static final long serialVersionUID = -8480151288632582040L;
+	static int nextID = 1;
 	
-	private static int getUniqueID() {
+	public static int getUniqueID() {
 		return nextID++;
 	}
 

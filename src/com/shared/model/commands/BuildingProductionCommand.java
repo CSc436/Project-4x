@@ -17,6 +17,8 @@ public class BuildingProductionCommand implements Command{
 		this.unitType = unitType;
 	}
 	
+	public BuildingProductionCommand() {}
+	
 	@Override
 	public boolean validateCommand(GameModel model) {
 		// TODO Auto-generated method stub

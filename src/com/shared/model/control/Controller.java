@@ -1,5 +1,6 @@
 package com.shared.model.control;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Timer;
@@ -8,7 +9,7 @@ import java.util.TimerTask;
 import com.shared.model.commands.Command;
 import com.shared.model.gameboard.Tile;
 
-public class Controller implements Runnable {
+public class Controller implements Runnable, Serializable {
 
 	private GameModel model;
 	private Queue<Command> commandQueue = new LinkedList<Command>();

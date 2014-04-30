@@ -22,6 +22,8 @@ public class ProductionBuilding extends Building implements Producer {
 		super(id, playerId, baseStats, new_stats, buildingType, xco, yco, height, width);
 		productionBehavior = p;
 	}
+	
+	public ProductionBuilding() {}
 
 	@Override
 	public void simulateProduction(int timeStep) {

@@ -15,6 +15,11 @@ import com.shared.model.diplomacy.DiplomacyStandingEnum;
 public class FreeForAllDiplomacy extends LockedDiplomacy {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8313999875081253852L;
+
+	/**
 	 * Constructor that sets all players' alliances towards eachother to one
 	 * initial value.
 	 * 
@@ -26,6 +31,8 @@ public class FreeForAllDiplomacy extends LockedDiplomacy {
 	public FreeForAllDiplomacy(int num_players, DiplomacyStandingEnum initial) {
 		super(num_players, DiplomacyStandingEnum.Enemy);
 	}
+	
+	public FreeForAllDiplomacy() {}
 
 	/**
 	 * Constructor that sets all players in the game as Enemies to eachother.

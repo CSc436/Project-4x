@@ -21,6 +21,11 @@ public class TradeCommand implements Command {
 		this.trade = trade;
 		this.type = type;
 	}
+	
+	public TradeCommand() {
+		this.trade = null;
+		this.type = null;
+	}
 
 	@Override
 	public boolean validateCommand(GameModel model) {

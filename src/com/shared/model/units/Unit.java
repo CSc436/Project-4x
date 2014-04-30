@@ -1,13 +1,9 @@
 package com.shared.model.units;
 
-import java.util.PriorityQueue;
-
-import com.shared.model.behaviors.Attackable;
 import com.shared.model.behaviors.Attacker;
 import com.shared.model.behaviors.Combatable;
 import com.shared.model.behaviors.Producible;
 import com.shared.model.behaviors.StandardAttacker;
-import com.shared.model.entities.Action;
 import com.shared.model.entities.GameObject;
 import com.shared.model.entities.GameObjectType;
 import com.shared.model.stats.BaseStatsEnum;
@@ -51,15 +47,6 @@ public class Unit extends GameObject implements Attacker, Producible {
 	
 	public Attacker getAttackBehavior() {
 		return attackBehavior;
-	}
-
-	/**
-	 * getActionQueue()
-	 * returns the list of actions this unit is in process of doing. 
-	 * @return
-	 */
-	public PriorityQueue<Action> getActionQueue() {
-		return actionQueue;
 	}
 
 	/**

@@ -46,7 +46,6 @@ import com.googlecode.gwtgl.binding.WebGLRenderingContext;
 import com.googlecode.gwtgl.binding.WebGLShader;
 import com.googlecode.gwtgl.binding.WebGLTexture;
 import com.googlecode.gwtgl.binding.WebGLUniformLocation;
-import com.shared.model.EntityModel;
 import com.shared.model.entities.GameObject;
 import com.shared.utils.Coordinate;
 import com.shared.utils.Vector3;

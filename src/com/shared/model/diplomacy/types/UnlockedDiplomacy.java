@@ -15,6 +15,11 @@ import com.shared.model.diplomacy.DiplomacyStandingEnum;
  */
 public class UnlockedDiplomacy extends AbstractDiplomacy {
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5961732500559487007L;
+
+	/**
 	 * Constructor that sets all players' alliances towards eachother to one
 	 * initial value.
 	 * 
@@ -26,6 +31,8 @@ public class UnlockedDiplomacy extends AbstractDiplomacy {
 	public UnlockedDiplomacy(int num_players, DiplomacyStandingEnum initial) {
 		super(num_players, initial);
 	}
+	
+	public UnlockedDiplomacy() {}
 
 	/**
 	 * Constructor that takes an array of player's team numbers. All players
