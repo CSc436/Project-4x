@@ -35,6 +35,8 @@ public class TechnologyTree implements Serializable {
 		for (TechnologyEnum t : TechnologyEnum.values()) {
 			Technology tech = null;
 			// Don't mind this hack. Move along.
+			// GWT minds this hack, it's gone till we find a better solution
+			/*
 			try {
 				Class<? extends Technology> techClass = t.getValue();
 				if (!techClass.isAnnotationPresent(TechDisabledByDefault.class)) {
@@ -44,6 +46,7 @@ public class TechnologyTree implements Serializable {
 			} catch (InstantiationException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
+			*/
 		}
 		p.getCivilization().modifyTechnologies(technologies);
 	}

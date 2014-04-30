@@ -45,15 +45,15 @@ public abstract class Civilization implements Serializable {
 				// otherwise attempt to add this technology with the specified
 				// max_level to technologies.
 				TechnologyEnum te = TechnologyEnum.valueOf(key);
-				try {
+				
+				// NON-GWT COMPLIANT, NEEDS FIX
+				/*
 					System.out.println("Adding Technology: "
 							+ te.getValue().getName());
 					Technology toAdd = te.getValue().newInstance();
 					toAdd.setMax_level(research_max_level.get(key));
 					technologies.put(key, toAdd);
-				} catch (InstantiationException | IllegalAccessException e) {
-					e.printStackTrace();
-				}
+				*/
 			}
 		}
 	}
