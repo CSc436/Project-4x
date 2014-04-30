@@ -16,11 +16,10 @@ import com.google.web.bindery.autobean.shared.AutoBeanUtils;
 import com.shared.Request;
 import com.shared.SetTargetRequest;
 import com.shared.SimpleGameModel;
+import com.shared.model.commands.Command;
+import com.shared.model.control.GameModel;
 import com.sksamuel.gwt.websockets.Websocket;
 import com.sksamuel.gwt.websockets.WebsocketListener;
-
-import control.GameModel;
-import control.commands.Command;
 
 public class ClientModel {
 	

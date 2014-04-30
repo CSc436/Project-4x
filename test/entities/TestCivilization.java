@@ -1,6 +1,7 @@
 package entities;
 
-import entities.research.TechnologyEnum;
+import com.shared.model.entities.Civilization;
+import com.shared.model.research.TechnologyEnum;
 
 public class TestCivilization extends Civilization {
 

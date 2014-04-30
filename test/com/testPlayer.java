@@ -4,12 +4,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import control.BuildingType;
-import control.Factory;
-import control.Player;
-import entities.buildings.Barracks;
-import entities.buildings.Building;
-import entities.gameboard.GameBoard;
+import com.shared.model.buildings.Barracks;
+import com.shared.model.buildings.Building;
+import com.shared.model.control.BuildingType;
+import com.shared.model.control.Factory;
+import com.shared.model.control.Player;
+import com.shared.model.gameboard.GameBoard;
 
 public class testPlayer {
 

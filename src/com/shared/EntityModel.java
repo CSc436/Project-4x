@@ -2,7 +2,7 @@ package com.shared;
 
 import java.io.Serializable;
 
-import entities.behaviors.StandardMover;
+import com.shared.model.behaviors.StandardMover;
 
 public abstract class EntityModel implements Serializable {
 	

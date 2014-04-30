@@ -4,13 +4,14 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import control.Player;
-import entities.PerfectCivilization;
+import com.shared.model.control.Player;
+import com.shared.model.entities.GameObjectType;
+import com.shared.model.entities.PerfectCivilization;
+import com.shared.model.research.TechnologyEnum;
+import com.shared.model.research.TechnologyTree;
+import com.shared.model.resources.Resources;
+
 import entities.TestCivilization;
-import entities.GameObjectType;
-import entities.research.TechnologyEnum;
-import entities.research.TechnologyTree;
-import entities.resources.Resources;
 
 public class TestResearching {
 

@@ -1,7 +1,8 @@
 package com.server;
 
+import com.shared.model.entities.Locatable;
+
 import deprecated.Targets;
-import entities.Locatable;
 
 public class ModelEvent {
 	

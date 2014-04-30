@@ -1,7 +1,7 @@
 package com.server;
 
-import control.Player;
-import entities.units.Agent;
+import com.shared.model.control.Player;
+import com.shared.model.units.Agent;
 
 public class Dispatch implements ModelEventListener {
 	

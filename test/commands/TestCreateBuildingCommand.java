@@ -4,14 +4,16 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 import java.util.UUID;
+
 import org.junit.Test;
-import control.BuildingType;
-import control.Controller;
-import control.GameModel;
-import control.Player;
-import control.commands.Command;
-import control.commands.ConstructBuildingCommand;
-import entities.buildings.Building;
+
+import com.shared.model.buildings.Building;
+import com.shared.model.commands.Command;
+import com.shared.model.commands.ConstructBuildingCommand;
+import com.shared.model.control.BuildingType;
+import com.shared.model.control.Controller;
+import com.shared.model.control.GameModel;
+import com.shared.model.control.Player;
 
 
 public class TestCreateBuildingCommand {

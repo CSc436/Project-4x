@@ -4,10 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import entities.diplomacy.DiplomacyStandingEnum;
-import entities.diplomacy.IDiplomacy;
-import entities.diplomacy.types.FreeForAllDiplomacy;
-import entities.diplomacy.types.UnlockedDiplomacy;
+import com.shared.model.diplomacy.DiplomacyStandingEnum;
+import com.shared.model.diplomacy.IDiplomacy;
+import com.shared.model.diplomacy.types.FreeForAllDiplomacy;
+import com.shared.model.diplomacy.types.UnlockedDiplomacy;
 
 public class testRunner {
 

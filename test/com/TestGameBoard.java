@@ -6,12 +6,12 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import control.BuildingType;
-import control.Factory;
-import control.Player;
-import entities.buildings.Building;
-import entities.gameboard.GameBoard;
-import entities.gameboard.Tile;
+import com.shared.model.buildings.Building;
+import com.shared.model.control.BuildingType;
+import com.shared.model.control.Factory;
+import com.shared.model.control.Player;
+import com.shared.model.gameboard.GameBoard;
+import com.shared.model.gameboard.Tile;
 
 public class TestGameBoard {
 

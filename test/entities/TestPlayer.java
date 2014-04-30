@@ -6,13 +6,13 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-import control.BuildingType;
-import control.Factory;
-import control.Player;
-import control.UnitType;
-import entities.buildings.Building;
-import entities.gameboard.GameBoard;
-import entities.units.Unit;
+import com.shared.model.buildings.Building;
+import com.shared.model.control.BuildingType;
+import com.shared.model.control.Factory;
+import com.shared.model.control.Player;
+import com.shared.model.gameboard.GameBoard;
+import com.shared.model.units.Unit;
+import com.shared.model.units.UnitType;
 
 public class TestPlayer {
 	GameBoard board = new GameBoard(200,200);
