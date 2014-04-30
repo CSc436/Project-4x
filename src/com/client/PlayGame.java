@@ -30,7 +30,7 @@ public class PlayGame implements EntryPoint {
 						ClientModel theModel = new ClientModel();
 						theModel.run();
 						GameCanvas canvas = new GameCanvas(theModel);
-						GameInterface.init();
+						GameInterface.init(theModel);
 						// Remove loading screen
 						$("#loading-screen").remove();
 					}
