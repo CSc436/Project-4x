@@ -291,7 +291,7 @@ public class GameInterface {
 		// Log to messages. 
 		$("#messages").append(playerName + ": " + $("#message").val() + "<br />");
 		// Scroll to bottom of log.
-		$("#messages").scrollTop();
+		$("#messages").scrollTo(0, Integer.MAX_VALUE); // Hack to get it to scroll to the bottom...
 		
 		// Clear message line. 
 		$("#message").val("");
