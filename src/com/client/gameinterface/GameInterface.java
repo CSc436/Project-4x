@@ -2,9 +2,11 @@ package com.client.gameinterface;
 
 import static com.google.gwt.query.client.GQuery.$;
 
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Random;
 
 public class GameInterface {
 
@@ -12,6 +14,8 @@ public class GameInterface {
 	// Or "" if sidebar is hidden
 	private static String showing = "";
 
+	private static String playerName; 
+	
 	/**
 	 * Responsible for registering callbacks that are purely bound to the
 	 * interface
@@ -23,6 +27,24 @@ public class GameInterface {
 		$("#sidebar").css("left", "-"+ width);
 		initClickHandlers();
 		Console.log("hello");
+	}
+	
+	/**
+	 * Quick hack to set the players name in the chat based on login
+	 * will need to implement a better way in the future.
+	 */
+	public static void setPlayerName(String n)
+	{
+		// if no name given, generate a random one
+		if (n.equalsIgnoreCase(""))
+		{
+			int r = Random.nextInt(10000); 
+			String numbString = NumberFormat.getFormat("####").format(r);
+			playerName = "Guest" + numbString;
+		} else
+		{
+			playerName = n; 
+		}
 	}
 
 	/**
@@ -195,11 +217,42 @@ public class GameInterface {
 		$("#send-message").click(new Function(){
 			public boolean f(Event e)
 			{
-				Console.log($("#message").val());
-				$("#message").val("");
+				return sendMessage();
+			}
+		});
+		// Support pressing enter too
+		$("#message").keypress(new Function(){
+			public boolean f(Event e)
+			{
+				// If key pressed is enter, attempt to send message
+				if (e.getKeyCode() == 13)
+				{
+					return sendMessage();
+				}
 				return true;
 			}
 		});
+			
+		// When message is in focus, disable input to game 
+		$("#message").focus(new Function(){
+			public boolean f(Event e)
+			{
+				Console.log("Message in Focus");
+				// TODO 
+				return true;
+			}
+		});
+		
+		// When message loses focus, enable input to game
+		$("#message").blur(new Function(){
+			public boolean f(Event e)
+			{
+				Console.log("Message out of Focus");
+				// TODO
+				return true;
+			}
+		});
+		
 		
 		// Menu Button
 		// Callback to show/hide game menu
@@ -222,6 +275,29 @@ public class GameInterface {
 		
 	}
 
+	/**
+	 * Method used to send messages from #message
+	 * @return true if message sent, false if not
+	 */
+	private static boolean sendMessage()
+	{
+		// if Empty, don't send
+		if ($("#message").val().equals(""))
+		{
+			return false; 
+		}
+		// Log to Console 
+		Console.log(playerName + ": " + $("#message").val());
+		// Log to messages. 
+		$("#messages").append(playerName + ": " + $("#message").val() + "<br />");
+		// Scroll to bottom of log.
+		$("#messages").scrollTop();
+		
+		// Clear message line. 
+		$("#message").val("");
+		return true;
+	}
+	
 	/**
 	 * Will show/hide sidebar with animation
 	 * @param	hideIfShowing	true/false if we want to hide the sidebar and it's showing
