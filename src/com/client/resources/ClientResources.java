@@ -50,6 +50,9 @@ public interface ClientResources extends ClientBundle{
     @Source(value={"id.fs"})
     TextResource idFS();
     
+    @Source(value={"selected.vs"})
+    TextResource selectedVS();
+    
     @Source(value={"selected.fs"})
     TextResource selectedFS();
     

@@ -36,11 +36,12 @@ public class Mesh //implements Renderable {
 	public float scale;
 	public int id;
 	public int type;
+	public float healthPercentage;
 	
 	private FloatMatrix modelMatrix;
 	
 	private WebGLUniformLocation texUniform, resolutionUniform, timeUniform,
-	matrixUniform, camPosUniform, cameraPosUniform, idUniform;
+	matrixUniform, camPosUniform, cameraPosUniform, idUniform, healthPercentageUniform;
 	
 	public Mesh(float[] vs, float[] ts, float[] ns, int tris, WebGLRenderingContext glContext) {
 		
@@ -55,6 +56,7 @@ public class Mesh //implements Renderable {
 		scaleZ = 1.0f;
 		scale = 1.0f;
 		id = 0;
+		healthPercentage = 1.0f;
 		
 		image = ClientResources.INSTANCE.genericTexture();
 		
@@ -305,6 +307,10 @@ public class Mesh //implements Renderable {
 		int r = ((id / 65535) %256);
 		glContext.uniform4f(idUniform, r/255.0f, g/255.0f, b/255.0f, 1.0f);
 		
+		// Set the uniform variable for the health percentage
+		healthPercentageUniform = glContext.getUniformLocation(shader.shaderProgram, "healthPercentage");
+		glContext.uniform1f(healthPercentageUniform, healthPercentage);
+		
 		// Enable the vertexPosition attribute in the vertex shader
 		int vertexPositionAttribute = glContext.getAttribLocation(shader.shaderProgram, "vertexPosition");		
 		glContext.enableVertexAttribArray(vertexPositionAttribute);
@@ -323,6 +329,7 @@ public class Mesh //implements Renderable {
 		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, normalBuffer);
 		glContext.vertexAttribPointer(normalAttribute, 3, WebGLRenderingContext.FLOAT, false, 0, 0);
 
+		
 		// Enable the vertexColor attribute in the vertex shader
 		// Could be useful later on!
 //		int vertexColorAttribute = glContext.getAttribLocation(shader.shaderProgram, "vertexColor");

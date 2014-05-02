@@ -133,15 +133,30 @@ public class GameCanvas {
 		final Mesh ent2 = OBJImporter.objToMesh(ClientResources.INSTANCE.cubeOBJ().getText(), glContext);
 		ent2.posX = 20.0f;
 		ent2.id = 65432;
+		ent2.healthPercentage = 0.99f;
 		entities.put(ent2.id, ent2);
 		
 		final Mesh castle1 = OBJImporter.objToMesh(ClientResources.INSTANCE.castleOBJ().getText(), glContext);
-		castle1.setTexture(glContext, ClientResources.INSTANCE.castleTexture());
+		//castle1.setTexture(glContext, ClientResources.INSTANCE.castleTexture());
 		castle1.posX = 2.5f;
 		castle1.posY = 2.5f;
 		castle1.posZ = 0.0f;
 		castle1.id = 123321;
+		castle1.healthPercentage = 0.6f;
 		entities.put(castle1.id, castle1);
+		
+		/* STRAIN THE SERVER AAAAAAHHHHH 
+		int idcount = 300;
+		for (int i = 0; i < 20; i++) {
+			for (int j = 0; j < 20; j++) {
+				entities.put(idcount, OBJImporter.objToMesh(ClientResources.INSTANCE.castleOBJ().getText(), glContext));
+				entities.get(idcount).id = idcount;
+				entities.get(idcount).posX = (float)(1.5 * (i+1));
+				entities.get(idcount).posY = (float)(1.5 * (j+1));
+				Console.log("Castle #" + (idcount - 300) + " complete!");
+				idcount++;
+			}
+		}
 		
 		final Mesh cannon1 = OBJImporter.objToMesh(ClientResources.INSTANCE.cannonOBJ().getText(), glContext);
 		cannon1.setTexture(glContext, ClientResources.INSTANCE.cannonTexture());
@@ -149,7 +164,8 @@ public class GameCanvas {
 		cannon1.posY = 4.5f;
 		cannon1.posZ = 0.0f;
 		cannon1.id = 777777;
-		entities.put(cannon1.id, cannon1);
+		cannon1.healthPercentage = 0.15f;
+		entities.put(cannon1.id, cannon1);*/
 
 		final Mesh unit1 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
 		final Mesh unit2 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
@@ -198,15 +214,16 @@ public class GameCanvas {
 		
 		// These attribute locations are hard coded. I don't know if they change on
 		//different hardware though, so be wary of that.
-		int tileSelectAttrib = 0;
-		int vertexPositionAttribute = 1;
+		//int tileSelectAttrib = 0;
+		//int vertexPositionAttribute = 1;
 		
 		// These keeps returning -1 meaning it could not find the attributes. No clue why.
-		//int tileSelectAttrib = glContext.getAttribLocation(shader.shaderProgram, "tileSelectColor");
+		int tileSelectAttrib = glContext.getAttribLocation(shader.shaderProgram, "tileSelectColor");
 		//Console.log("tileSelectAttrib = " + tileSelectAttrib);
-		//int vertexPositionAttribute = glContext.getAttribLocation(shader.shaderProgram, "vertexPositoin");
+		int vertexPositionAttribute = glContext.getAttribLocation(shader.shaderProgram, "vertexPosition");
 		//Console.log("vertexPositionAttribute = " + vertexPositionAttribute);
 		
+		Console.log("tileSelectAttrib: " + tileSelectAttrib + "\nvertexPositionAttribute: " + vertexPositionAttribute);
 		Console.log("Rendering tile selection");
 		glContext.enableVertexAttribArray(tileSelectAttrib);
 		glContext.enableVertexAttribArray(vertexPositionAttribute);
@@ -278,13 +295,21 @@ public class GameCanvas {
 	}
 	
 	/**
-	 * Renders selected entities with the selection shader
+	 * Renders selected entities with an outline corresponding to their
+	 * remaing health
 	 * @param selectedShader
 	 */
-	public void renderSelectedEntities(Shader selectedShader) {
+	public void renderSelectedEntities(Shader selectedShader, Shader unselectedShader) {
 		int size = selectedEntities.size();
 		for(int i = 0; i < size; i++) {
+			// disable depth testing so the outline draws on top of everything
+			glContext.disable(WebGLRenderingContext.DEPTH_TEST);
+			// render the outline
 			entities.get(selectedEntities.get(i)).render(glContext, selectedShader, camera);
+			// enable depth testing so the actual model draws correctly
+			glContext.enable(WebGLRenderingContext.DEPTH_TEST);
+			// render the model over the outline
+			entities.get(selectedEntities.get(i)).render(glContext, unselectedShader, camera);
 		}
 	}
 	
@@ -573,7 +598,7 @@ public class GameCanvas {
 				.idFS().getText());
 		
 		final Shader selectedShader = new Shader(glContext,ClientResources.INSTANCE
-				.simpleMeshVS().getText(),ClientResources.INSTANCE
+				.selectedVS().getText(),ClientResources.INSTANCE
 				.selectedFS().getText());
 		
 		final Mesh barrel = OBJImporter.objToMesh(ClientResources.INSTANCE.barrelOBJ().getText(), glContext);
@@ -606,7 +631,7 @@ public class GameCanvas {
 				barrel.rotX = barrel.rotX + 0.01f;
 				
 				renderEntities(texturedPhongMeshShader);
-				renderSelectedEntities(selectedShader);
+				renderSelectedEntities(selectedShader, texturedPhongMeshShader);
 			}
 		};
 		t.scheduleRepeating(16); // roughly 30 FPS
