@@ -72,7 +72,7 @@ public class GameCanvas {
 	
 	private float agentX = 0.0f, agentY = 0.0f, agentZ = -0.1f;
 
-	public static final int GRID_WIDTH = 12;
+	public static final int GRID_WIDTH = 256;
 	private long time;
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
 	
@@ -84,6 +84,8 @@ public class GameCanvas {
 	private Selector objectSelector;
 	private HashMap<Integer,Mesh> entities;
 	public ArrayList<Integer> selectedEntities;
+	
+	private Mesh cannon1;
 
 	public GameCanvas(ClientModel theModel) {
 		// CODE FOR MINIMAP DEV/CLICK SELECTING
@@ -145,7 +147,7 @@ public class GameCanvas {
 		castle1.healthPercentage = 0.6f;
 		entities.put(castle1.id, castle1);
 		
-		/* STRAIN THE SERVER AAAAAAHHHHH 
+		/*// STRAIN THE SERVER AAAAAAHHHHH 
 		int idcount = 300;
 		for (int i = 0; i < 20; i++) {
 			for (int j = 0; j < 20; j++) {
@@ -156,16 +158,16 @@ public class GameCanvas {
 				Console.log("Castle #" + (idcount - 300) + " complete!");
 				idcount++;
 			}
-		}
+		}*/
 		
-		final Mesh cannon1 = OBJImporter.objToMesh(ClientResources.INSTANCE.cannonOBJ().getText(), glContext);
+		cannon1 = OBJImporter.objToMesh(ClientResources.INSTANCE.cannonOBJ().getText(), glContext);
 		cannon1.setTexture(glContext, ClientResources.INSTANCE.cannonTexture());
 		cannon1.posX = 4.5f;
 		cannon1.posY = 4.5f;
 		cannon1.posZ = 0.0f;
 		cannon1.id = 777777;
 		cannon1.healthPercentage = 0.15f;
-		entities.put(cannon1.id, cannon1);*/
+		entities.put(cannon1.id, cannon1);
 
 		final Mesh unit1 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
 		final Mesh unit2 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
@@ -433,8 +435,8 @@ public class GameCanvas {
 				Coordinate c = objectSelector.pickTile(event.getClientX(), event.getClientY());
 				// A quick check to make sure that we did not miss the map
 				if(c.x >= 0.0) {
-					c.x = (int)(c.x / (255/GRID_WIDTH));
-					c.y = (int)(c.y / (255/GRID_WIDTH));
+					c.x = (int)(c.x / (255.0/GRID_WIDTH));
+					c.y = (int)(c.y / (255.0/GRID_WIDTH));
 				}
 				RootPanel.get("tile-info").getElement().setInnerHTML(c.toString());
 				Console.log("TILE: " + c.toString());
@@ -629,6 +631,9 @@ public class GameCanvas {
 				barrel.posY = agentY;
 				barrel.posZ = (float) (agentZ + Math.sin(time/300));
 				barrel.rotX = barrel.rotX + 0.01f;
+				
+				cannon1.posX = 5.0f + (float) (Math.cos(time / 1000.0));
+				cannon1.posY = 5.0f + (float) (Math.sin(time / 1000.0));
 				
 				renderEntities(texturedPhongMeshShader);
 				renderSelectedEntities(selectedShader, texturedPhongMeshShader);
