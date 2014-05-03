@@ -212,7 +212,7 @@ public class ClientModel {
 	}
 	
 	public int timeSinceLastUpdate() {
-		return (int) (lastUpdateTime - System.currentTimeMillis());
+		return (int) (System.currentTimeMillis() - lastUpdateTime);
 	}
 	
 }

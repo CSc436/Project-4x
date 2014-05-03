@@ -43,6 +43,7 @@ public class StandardMover implements Serializable, Movable {
 	public PhysicsVector extrapolatePosition( int timeStep ) {
 		
 		double timeSeconds = timeStep / 1000.0;
+		/*
 		PhysicsVector tempTargetVelocity = targetPosition.sub(position).normalize(maxVelocity);
 		PhysicsVector tempVelocity = velocity.setToTarget(tempTargetVelocity, accel * timeSeconds);
 		
@@ -52,8 +53,9 @@ public class StandardMover implements Serializable, Movable {
 			tempTargetVelocity = tempVelocity.normalize(Math.sqrt(2 * distance * accel));
 			tempVelocity = tempVelocity.setToTarget(tempTargetVelocity, accel * timeSeconds);
 		}
+		*/
 		
-		PhysicsVector tempPosition = position.add(tempVelocity.multiply(timeSeconds));
+		PhysicsVector tempPosition = position.add(velocity.multiply(timeSeconds));
 		
 		return tempPosition;
 		

@@ -24,7 +24,7 @@ public class Controller implements Runnable, Serializable {
 	public boolean continueSimulation = true;
 	private long lastTime = System.currentTimeMillis();
 	private Queue<Integer> runningAvgQueue = new LinkedList<Integer>();
-	private int movingAverage = timeStep;
+	private int movingAverage;
 	private int numTimesSaved = 3; // Keep track of the last n cycle times to compute moving average
 	private boolean packetReady = false;
 	private boolean stop = false;
@@ -38,6 +38,7 @@ public class Controller implements Runnable, Serializable {
 		commandPacket = new CommandPacket();
 		packetToSend = commandPacket;
 		timeStep = 200;
+		movingAverage = timeStep;
 		for(int i = 0; i < numTimesSaved; i++)
 			runningAvgQueue.add(timeStep);
 	}
@@ -47,6 +48,7 @@ public class Controller implements Runnable, Serializable {
 		commandPacket = new CommandPacket();
 		packetToSend = commandPacket;
 		timeStep = 200;
+		movingAverage = timeStep;
 		for(int i = 0; i < numTimesSaved; i++)
 			runningAvgQueue.add(timeStep);
 	}

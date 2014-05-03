@@ -389,11 +389,11 @@ function game(){
     }
     var strongName;
     try {
-      unflattenKeylistIntoAnswers(['ie10'], '43E19F77250C2ADBB0F3193F8010BCA4');
-      unflattenKeylistIntoAnswers(['ie9'], '90845E1E6A706313C8D59C713A1EEC1A');
-      unflattenKeylistIntoAnswers(['safari'], '9E7D9AFF1F05C4AA01D11866AA2034BA');
-      unflattenKeylistIntoAnswers(['ie8'], 'B6881E0C01D8D8C9DC6FE741D39AB665');
-      unflattenKeylistIntoAnswers(['gecko1_8'], 'DC006FB69CFD70B208876DD27B9B2970');
+      unflattenKeylistIntoAnswers(['ie9'], '8A7D567C9B6070E499E379077E33DB6F');
+      unflattenKeylistIntoAnswers(['ie8'], 'A49375094D0D8D262D097B44D27BE746');
+      unflattenKeylistIntoAnswers(['ie10'], 'BF613C0BD70BCC56A996BD8FB5ACEC32');
+      unflattenKeylistIntoAnswers(['gecko1_8'], 'D1232821D1932F644BF9D68EC53814E9');
+      unflattenKeylistIntoAnswers(['safari'], 'E3E12494928CF130DB02B41B6AB25148');
       strongName = answers[computePropValue('user.agent')];
       var idx = strongName.indexOf(':');
       if (idx != -1) {
