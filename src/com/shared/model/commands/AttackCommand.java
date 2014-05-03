@@ -23,7 +23,7 @@ public class AttackCommand implements Command {
 	@Override
 	public boolean validateCommand(GameModel model) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class AttackCommand implements Command {
 		Combatable target = (Combatable) model.getGameObject(targetID);
 		attacker.setTarget(target);
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 }

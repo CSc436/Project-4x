@@ -22,14 +22,14 @@ public class BuildingProductionCommand implements Command{
 	@Override
 	public boolean validateCommand(GameModel model) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean performCommand(GameModel model) {
 		Producer p = (Producer) model.getGameObject(buildingId);
 		p.queueProduction(unitType);
-		return false;
+		return true;
 	}
 
 }

@@ -4,21 +4,19 @@ import java.io.Serializable;
 
 import com.shared.utils.Coordinate;
 
-public class PhysicsVector implements Serializable{
+public class PhysicsVector implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1405808061376997684L;
 	private Coordinate p;
-
-	public PhysicsVector(){
-		
-	}
 	
 	public PhysicsVector(double x, double y) {
 		p = new Coordinate(x,y);
 	}
+	
+	public PhysicsVector(){}
 	
 	public PhysicsVector(Coordinate p){
 		this.p = p;

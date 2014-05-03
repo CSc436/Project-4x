@@ -11,8 +11,13 @@ import com.shared.model.gameboard.Tile;
 
 public class Controller implements Runnable, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5520954150886924424L;
 	private GameModel model;
-	private Queue<Command> commandQueue = new LinkedList<Command>();
+	private CommandPacket commandPacket;
+	private CommandPacket packetToSend;
 	
 	public int timeStep; // Number of milliseconds per simulation step
 	public int turnNumber = 0;
@@ -21,14 +26,17 @@ public class Controller implements Runnable, Serializable {
 	private Queue<Integer> runningAvgQueue = new LinkedList<Integer>();
 	private int movingAverage = timeStep;
 	private int numTimesSaved = 3; // Keep track of the last n cycle times to compute moving average
+	private boolean packetReady = false;
 	private boolean stop = false;
-	private boolean sendGame = false;
 	public boolean isRunning;
+	private boolean debug = true;
 	
 	/**************************************************************/
 	
 	public Controller() {
 		model = new GameModel();
+		commandPacket = new CommandPacket();
+		packetToSend = commandPacket;
 		timeStep = 200;
 		for(int i = 0; i < numTimesSaved; i++)
 			runningAvgQueue.add(timeStep);
@@ -36,6 +44,8 @@ public class Controller implements Runnable, Serializable {
 	
 	public Controller(GameModel m) {
 		model = m;
+		commandPacket = new CommandPacket();
+		packetToSend = commandPacket;
 		timeStep = 200;
 		for(int i = 0; i < numTimesSaved; i++)
 			runningAvgQueue.add(timeStep);
@@ -58,43 +68,43 @@ public class Controller implements Runnable, Serializable {
 
 	}
 	
-	public void simulateFrame() {
+	public synchronized void simulateFrame() {
 		
 		long currTime = System.currentTimeMillis();
-		//if( !continueSimulation ) return;
 		if( currTime < lastTime + timeStep || !continueSimulation ) return;
 		
 		continueSimulation = false;
 		updateRunningAverage( (int) (currTime - lastTime) );
 		lastTime = currTime;
 		
-		Queue<Command> frameCommandQueue = commandQueue;
-		commandQueue = new LinkedList<Command>();
+		packetToSend = commandPacket;
+		commandPacket = new CommandPacket();
+		packetToSend.executeOn(model);
 		
-		while(!frameCommandQueue.isEmpty()) {
-			Command c = frameCommandQueue.remove();
-			c.performCommand(this.model);
-		}
+		if(debug) System.out.println(packetToSend.getCommandQueue().size() + " commands processed this turn");
 		
 		model.advanceTimeStep( movingAverage );
-		//System.out.println("Server >>> "  + unit.position.getX() + " " + unit.position.getY());
+		packetToSend.setTime( movingAverage );
+		packetToSend.setTurnNumber(turnNumber);
 		turnNumber++;
-		sendGame = true; // Game updated, ready to update clients
+		packetReady = true; // Game updated, ready to update clients
 		
 	}
 	
-	public void continueSimulation() {
-		//System.out.println(">>> Continuing simulation, turn " + turnNumber + " complete.");
-		continueSimulation = true;
-		sendGame = false;
+	public synchronized void continueSimulation() {
+		if(!continueSimulation) {
+			if(debug) System.out.println(">>> Continuing simulation, turn " + turnNumber + " complete.");
+			continueSimulation = true;
+			packetReady = false;
+		}
 	}
 	
 	public void queueCommand( Command c ) {
-		commandQueue.add(c);
+		commandPacket.addCommand(c);
 	}
 	
-	public boolean sendingGame() {
-		return sendGame;
+	public boolean isPacketReady() {
+		return packetReady;
 	}
 	
 	public void stop() {
@@ -102,15 +112,6 @@ public class Controller implements Runnable, Serializable {
 	}
 	
 	/**************************************************************/
-
-	private void checkBuildingProductionQueue(int timestep) {
-
-	}
-
-	private boolean playerCommands() {
-
-		return true;
-	}
 
 	/*
 	 * TODO implement - or move somewhere better. pathFinding() Description:
@@ -123,35 +124,37 @@ public class Controller implements Runnable, Serializable {
 		return null;
 	}
 
-	private void unitInteraction() {
-
-	}
-
-	private void agentDecision() {
-
-	}
-
-	private void produceResources() {
-
-	}
-
 	public void addCommand(Command c) {
-		commandQueue.add(c);
+		commandPacket.addCommand(c);
 	}
 
 	public GameModel getGameModel() {
 		return model;
 	}
 	
+	public CommandPacket getCommandPacket() {
+		return commandPacket;
+	}
+	
 	private void updateRunningAverage(int newTime) {
+		if(debug) System.out.println("Cycle time: " + newTime + " ms");
 		runningAvgQueue.add(newTime);
-		if( runningAvgQueue.size() > numTimesSaved ) {
+		if( runningAvgQueue.size() > numTimesSaved )
 			movingAverage += (newTime - runningAvgQueue.remove()) / numTimesSaved;
-		} else {
+		else
 			movingAverage += (newTime - movingAverage) / numTimesSaved;
-		}
-		//System.out.println(movingAverage);
+	}
 
+	public synchronized void sendCommands(Queue<Command> commandQueue) {
+		commandPacket.addCommands(commandQueue);
+	}
+	
+	public CommandPacket getPacketToSend() {
+		return packetToSend;
+	}
+
+	public void setPacketToSend(CommandPacket packetToSend) {
+		this.packetToSend = packetToSend;
 	}
 
 }

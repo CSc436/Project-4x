@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+import com.client.gameinterface.Console;
 import com.shared.model.behaviors.Attackable;
 import com.shared.model.behaviors.Attacker;
 import com.shared.model.behaviors.Movable;
@@ -18,6 +19,7 @@ import com.shared.model.entities.GameObject;
 import com.shared.model.gameboard.GameBoard;
 import com.shared.model.units.Unit;
 import com.shared.model.units.UnitType;
+import com.shared.utils.Coordinate;
 import com.shared.utils.PhysicsVector;
 
 public class GameModel implements Serializable {
@@ -25,7 +27,7 @@ public class GameModel implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -3911016502183103473L;
-	private ArrayList<Player> players;
+	private HashMap<Integer, Player> players;
 	private GameBoard map;
 	// Hashmap of all gameObjects
 	private HashMap<Integer, GameObject> gameObjects;
@@ -36,22 +38,29 @@ public class GameModel implements Serializable {
 	private HashMap<Integer, ResourceGenerator> resourceGenerators;
 	
 	private int turnNumber = 0;
+	private int nextPlayerID = 1;
 	private TradeManager tradeManager;
 
 	// simple test model start up.
 	// A different constructor should be used for different
 	public GameModel() {
-		players = new ArrayList<Player>();
-		players.add(new Player("Player 1", 1));
-		players.add(new Player("Player 2", 2));
+		players = new HashMap<Integer, Player>();
 		
 		gameObjects = new HashMap<Integer, GameObject>();
-
+		attackers = new HashMap<Integer, Attacker>();
+		movables = new HashMap<Integer, Movable>();
+		attackables = new HashMap<Integer, Attackable>();
+		producers = new HashMap<Integer, Producer>();
+		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
+		
 		map = new GameBoard(500, 500);
-
 	}
-
-	public ArrayList<Player> getPlayers() {
+	
+	public void addPlayer( String playerName ) {
+		players.put(nextPlayerID, new Player(playerName, nextPlayerID++));
+	}
+	
+	public HashMap<Integer, Player> getPlayers() {
 		return players;
 	}
 
@@ -66,7 +75,7 @@ public class GameModel implements Serializable {
 	public void advanceTimeStep( int timeStep ) {
 		turnNumber++;
 		advanceProduction(timeStep);
-		placeProducedUnits();
+		placeNewObjects();
 		produceResources(timeStep);
 		moveObjects(timeStep);
 		attackObjects(timeStep);
@@ -134,7 +143,10 @@ public class GameModel implements Serializable {
 		getPlayer( playerID ).getGameObjects().removeGameObject(id);
 	}
 
-	private void placeProducedUnits() {
+	private void placeNewObjects() {
+		
+		
+		
 		
 		Set<Integer> keySet = producers.keySet();
 		for( int k : keySet ) {
@@ -189,15 +201,16 @@ public class GameModel implements Serializable {
 	}
 
 	public void modelState() {
+		
 		System.out.println("Game State:");
 		System.out.print("Players: ");
-		for (Player player : players) {
+		for (Player player : players.values()) {
 			player.getAlias();
 			System.out.print(player.getAlias() + ",");
 		}
 		System.out.println();
 		System.out.println();
-		for (Player player : players) {
+		for (Player player : players.values()) {
 			System.out.println(player.getAlias() + "'s Resources:");
 			System.out.println(player.getResources().toString());
 			System.out.println(player.getAlias() + "'s Units: ");
@@ -263,7 +276,7 @@ public class GameModel implements Serializable {
 		int maxY = baseY + sightRange;
 
 		// Retrieve all GameObjects within the square.
-		for (Player p : players) {
+		for (Player p : players.values()) {
 			Map<Integer, GameObject> goMap = p.getGameObjects().getGameObjects();
 			for (Integer u : goMap.keySet()) {
 				GameObject go = goMap.get(u);
@@ -302,6 +315,18 @@ public class GameModel implements Serializable {
 	
 	public HashMap<Integer,GameObject> getGameObjects() {
 		return gameObjects;
+	}
+	
+	public void createUnit( UnitType ut, int pn, Coordinate c ) {
+		Unit u = Factory.buildUnit(players.get(pn), pn, ut, c.fx(), c.fy());
+		int unitID = u.getId();
+		gameObjects.put(unitID, u);
+		attackers.put(unitID, u);
+		movables.put(unitID, u);
+		attackables.put(unitID, u);
+		if(u != null) {
+			System.out.println(ut.name() + " created with ID " + u.getId());
+		}
 	}
 	
 }

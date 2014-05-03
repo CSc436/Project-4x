@@ -29,7 +29,7 @@ public class TradeCommand implements Command {
 
 	@Override
 	public boolean validateCommand(GameModel model) {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class TradeCommand implements Command {
 		case REJECTACTIVE:
 			manager.rejectActive(trade);
 		}
-		return false;
+		return true;
 	}
 
 }

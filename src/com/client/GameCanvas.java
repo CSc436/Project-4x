@@ -46,9 +46,15 @@ import com.googlecode.gwtgl.binding.WebGLRenderingContext;
 import com.googlecode.gwtgl.binding.WebGLShader;
 import com.googlecode.gwtgl.binding.WebGLTexture;
 import com.googlecode.gwtgl.binding.WebGLUniformLocation;
+import com.shared.model.buildings.Building;
+import com.shared.model.buildings.BuildingType;
+import com.shared.model.commands.AttackCommand;
 import com.shared.model.commands.Command;
 import com.shared.model.commands.MoveUnitCommand;
+import com.shared.model.commands.PlaceUnitCommand;
 import com.shared.model.entities.GameObject;
+import com.shared.model.units.Unit;
+import com.shared.model.units.UnitType;
 import com.shared.utils.Coordinate;
 import com.shared.utils.Vector3;
 
@@ -85,7 +91,11 @@ public class GameCanvas {
 	private final Canvas webGLCanvas = Canvas.createIfSupported();
 	
 	private Selector objectSelector;
-	private HashMap<Integer,Mesh> entities;
+	private HashMap<UnitType,Mesh> unitMeshes;
+	private HashMap<BuildingType,Mesh> buildingMeshes;
+	
+	private Coordinate mouseTile = new Coordinate(0,0);
+	
 	public ArrayList<Integer> selectedEntities;
 
 	public GameCanvas(ClientModel theModel) {
@@ -131,50 +141,23 @@ public class GameCanvas {
 	 * Populates with a few starter entities
 	 */
 	private void initEntities() {
-		entities = new HashMap<Integer,Mesh>();
 		
-		final Mesh ent2 = OBJImporter.objToMesh(ClientResources.INSTANCE.cubeOBJ().getText(), glContext);
-		ent2.posX = 20.0f;
-		ent2.id = 65432;
-		entities.put(ent2.id, ent2);
+		unitMeshes = new HashMap<UnitType,Mesh>();
+		buildingMeshes = new HashMap<BuildingType,Mesh>();
 		
 		final Mesh castle1 = OBJImporter.objToMesh(ClientResources.INSTANCE.castleOBJ().getText(), glContext);
 		castle1.setTexture(glContext, ClientResources.INSTANCE.castleTexture());
-		castle1.posX = 2.5f;
-		castle1.posY = 2.5f;
-		castle1.posZ = 0.0f;
-		castle1.id = 123321;
-		entities.put(castle1.id, castle1);
 		
 		final Mesh cannon1 = OBJImporter.objToMesh(ClientResources.INSTANCE.cannonOBJ().getText(), glContext);
 		cannon1.setTexture(glContext, ClientResources.INSTANCE.cannonTexture());
-		cannon1.posX = 4.5f;
-		cannon1.posY = 4.5f;
-		cannon1.posZ = 0.0f;
-		cannon1.id = 777777;
-		entities.put(cannon1.id, cannon1);
-
-		final Mesh unit1 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
-		final Mesh unit2 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
-		final Mesh unit3 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
-		final Mesh unit4 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
-		final Mesh unit5 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
-		unit1.id = 1;
-		unit1.posZ = -0.1f;
-		unit2.id = 2;
-		unit2.posZ = -0.1f;
-		unit3.id = 3;
-		unit3.posZ = -0.1f;
-		unit4.id = 4;
-		unit4.posZ = -0.1f;
-		unit5.id = 5;
-		unit5.posZ = -0.1f;
-
-		entities.put(1, unit1);
-		entities.put(2, unit2);
-		entities.put(3, unit3);
-		entities.put(4, unit4);
-		entities.put(5, unit5);
+		
+		for(UnitType t : UnitType.values()) {
+			unitMeshes.put(t, cannon1);
+		}
+		for(BuildingType t : BuildingType.values()) {
+			buildingMeshes.put(t, castle1);
+		}
+		
 	}
 	
 	/**
@@ -182,11 +165,25 @@ public class GameCanvas {
 	 * @param shader
 	 */
 	public void renderEntities(Shader shader) {
-		Set<Integer> keys = entities.keySet();
-		Integer[] keysArr = new Integer[entities.size()];
-		keysArr = keys.toArray(keysArr);
-		for(int i = 0; i< keysArr.length; i++) {
-			entities.get(keysArr[i]).render(glContext, shader, camera);
+		HashMap<Integer, GameObject> gameObjects = theModel.getGameModel().getGameObjects();
+		//Console.log(gameObjects.size() + " objects to render");
+		
+		int timeSinceUpdate = theModel.timeSinceLastUpdate();
+		
+		for(GameObject o : gameObjects.values()) {
+			Mesh m;
+			if(o instanceof Unit) {
+				m = unitMeshes.get(((Unit) o).getUnitType());
+			} else if(o instanceof Building) {
+				m = buildingMeshes.get(((Building) o).getBuildingType());
+			} else {
+				m = unitMeshes.get(((Unit) o).getUnitType());
+			}
+			double[] pos = o.extrapolatePosition(timeSinceUpdate).toArray();
+			m.posX = (float) pos[0];
+			m.posY = (float) pos[1];
+			m.id = o.getId();
+			m.render(glContext, shader, camera);
 		}
 	}
 	
@@ -201,13 +198,13 @@ public class GameCanvas {
 		
 		// These attribute locations are hard coded. I don't know if they change on
 		//different hardware though, so be wary of that.
-		int tileSelectAttrib = 0;
-		int vertexPositionAttribute = 1;
+		//int tileSelectAttrib = 0;
+		//int vertexPositionAttribute = 1;
 		
 		// These keeps returning -1 meaning it could not find the attributes. No clue why.
-		//int tileSelectAttrib = glContext.getAttribLocation(shader.shaderProgram, "tileSelectColor");
+		int tileSelectAttrib = glContext.getAttribLocation(shader.shaderProgram, "tileSelectColor");
 		//Console.log("tileSelectAttrib = " + tileSelectAttrib);
-		//int vertexPositionAttribute = glContext.getAttribLocation(shader.shaderProgram, "vertexPositoin");
+		int vertexPositionAttribute = glContext.getAttribLocation(shader.shaderProgram, "vertexPosition");
 		//Console.log("vertexPositionAttribute = " + vertexPositionAttribute);
 		
 		Console.log("Rendering tile selection");
@@ -285,9 +282,26 @@ public class GameCanvas {
 	 * @param selectedShader
 	 */
 	public void renderSelectedEntities(Shader selectedShader) {
-		int size = selectedEntities.size();
-		for(int i = 0; i < size; i++) {
-			entities.get(selectedEntities.get(i)).render(glContext, selectedShader, camera);
+		HashMap<Integer, GameObject> gameObjects = theModel.getGameModel().getGameObjects();
+		//Console.log(gameObjects.size() + " objects to render");
+		
+		int timeSinceUpdate = theModel.timeSinceLastUpdate();
+		
+		for(Integer i : selectedEntities) {
+			GameObject o = gameObjects.get(i);
+			Mesh m;
+			if(o instanceof Unit) {
+				m = unitMeshes.get(((Unit) o).getUnitType());
+			} else if(o instanceof Building) {
+				m = buildingMeshes.get(((Building) o).getBuildingType());
+			} else {
+				m = unitMeshes.get(((Unit) o).getUnitType());
+			}
+			double[] pos = o.extrapolatePosition(timeSinceUpdate).toArray();
+			m.posX = (float) pos[0];
+			m.posY = (float) pos[1];
+			m.id = i;
+			m.render(glContext, selectedShader, camera);
 		}
 	}
 	
@@ -324,6 +338,9 @@ public class GameCanvas {
 				case KeyCodes.KEY_Q: rotateLeft = true; break;
 				case KeyCodes.KEY_E: rotateRight = true; break;
 				case KeyCodes.KEY_X: center = true; break;
+				case KeyCodes.KEY_I: 
+					theModel.sendCommand(new PlaceUnitCommand( UnitType.CANNON, 1, mouseTile));
+					break;
 				default: if (debug) Console.log("Unrecognized: " + event.getNativeKeyCode()); break;
 				}
 			}
@@ -364,30 +381,31 @@ public class GameCanvas {
 				case NativeEvent.BUTTON_LEFT:
 					if(event.isShiftKeyDown()) {
 						int targetID = objectSelector.pickEntity(event.getClientX(), event.getClientY());
-						System.out.println("Selected entity with ID " + targetID + ".");
-						if (entities.containsKey(targetID)) {
-							System.out.println("This entity exists! Adding to selected entities...");
-							double x = entities.get(targetID).posX;
-							double y = entities.get(targetID).posY;
-							for(Integer i : selectedEntities) {
-								theModel.sendCommand(new MoveUnitCommand(i,x,y));
+						
+						if(targetID == 0) {
+							Coordinate c = objectSelector.pickTile(event.getClientX(), event.getClientY());
+							// A quick check to make sure that we did not miss the map
+							if(c.x >= 0.0) {
+								c.x = (int)(c.x / (255.0/GRID_WIDTH));
+								c.y = (int)(c.y / (255.0/GRID_WIDTH));
 							}
-						}
-						else {
-							System.out.println("This entity DOES NOT exist!");
+							for(Integer i : selectedEntities) {
+								theModel.sendCommand(new MoveUnitCommand(i,c.x,c.y));
+							}
+						} else {
+							for(Integer i : selectedEntities) {
+								theModel.sendCommand(new AttackCommand(i,targetID));
+							}
 						}
 					} else {
 						if(!event.isControlKeyDown()) selectedEntities.clear();
 						int selectedID = objectSelector.pickEntity(event.getClientX(), event.getClientY());
-						if(selectedID < 50 || true) {
-							System.out.println("Selected entity with ID " + selectedID + ".");
-							if (entities.containsKey(selectedID)) {
-								System.out.println("This entity exists! Adding to selected entities...");
-								selectedEntities.add(selectedID);
-							}
-							else {
-								System.out.println("This entity DOES NOT exist!");
-							}
+						Console.log("Selected entity with ID " + selectedID + ".");
+						if (theModel.getGameModel().getGameObjects().containsKey(selectedID)) {
+							Console.log("This entity exists! Adding to selected entities...");
+							selectedEntities.add(selectedID);
+						} else {
+							Console.log("This entity DOES NOT exist!");
 						}
 					}
 					break;
@@ -408,14 +426,14 @@ public class GameCanvas {
 				} else {
 					GameCanvas.this.move = false;
 				}
-				Coordinate c = objectSelector.pickTile(event.getClientX(), event.getClientY());
+				mouseTile = objectSelector.pickTile(event.getClientX(), event.getClientY());
 				// A quick check to make sure that we did not miss the map
-				if(c.x >= 0.0) {
-					c.x = (int)(c.x / (255/GRID_WIDTH));
-					c.y = (int)(c.y / (255/GRID_WIDTH));
+				if(mouseTile.x >= 0.0) {
+					mouseTile.x = (int)(mouseTile.x / (255.0/GRID_WIDTH));
+					mouseTile.y = (int)(mouseTile.y / (255.0/GRID_WIDTH));
 				}
-				RootPanel.get("tile-info").getElement().setInnerHTML(c.toString());
-				Console.log("TILE: " + c.toString());
+				RootPanel.get("tile-info").getElement().setInnerHTML(mouseTile.toString());
+				//Console.log("TILE: " + mouseTile.toString());
 			}
 			
 		}, MouseMoveEvent.getType());
@@ -586,7 +604,7 @@ public class GameCanvas {
 			@Override
 			public void run() {
 				time = System.currentTimeMillis();
-				
+				/*
 				float[] pos;
 				agentX = 0;
 				agentY = 0;
@@ -594,12 +612,12 @@ public class GameCanvas {
 				Map<Integer, GameObject> modelEntities = theModel.getGameModel().getGameObjects();
 				Set<Integer> keySet = modelEntities.keySet();
 				for(Integer i : keySet) {
-					Mesh currMesh = entities.get(i);
+					Mesh currMesh = unitMeshes.get(i);
 					pos = theModel.getPosition(i, System.currentTimeMillis());
 					currMesh.posX = pos[0];
 					currMesh.posY = pos[1];
 				}
-				
+				*/
 				updateCamera();
 				drawScene();
 				
@@ -612,7 +630,7 @@ public class GameCanvas {
 				renderSelectedEntities(selectedShader);
 			}
 		};
-		t.scheduleRepeating(16); // roughly 30 FPS
+		t.scheduleRepeating(33); // roughly 30 FPS
 	}
 	
 	/**

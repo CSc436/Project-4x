@@ -5,6 +5,7 @@ import java.util.Queue;
 
 import com.client.SimpleSimulator;
 import com.client.SimpleSimulatorAsync;
+import com.client.gameinterface.Console;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -14,9 +15,10 @@ import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 import com.google.web.bindery.autobean.shared.AutoBeanUtils;
 import com.shared.model.commands.Command;
+import com.shared.model.control.CommandPacket;
 import com.shared.model.control.GameModel;
-import com.sksamuel.gwt.websockets.Websocket;
-import com.sksamuel.gwt.websockets.WebsocketListener;
+//import com.sksamuel.gwt.websockets.Websocket;
+//import com.sksamuel.gwt.websockets.WebsocketListener;
 
 public class ClientModel {
 	
@@ -25,13 +27,12 @@ public class ClientModel {
 	float[] position = { 0.0F, 0.0F };
 	private long lastUpdateTime;
 	private final SimpleSimulatorAsync simpleSimulator;
-	private GameModel lastModel;
-	private GameModel nextModel;
+	private GameModel model = new GameModel();
 	private int averageTurnInterval = 200;
 	private boolean readyForNext = true;
 	private int cycleTime = 100;
 	
-	private Websocket socket;
+	//private Websocket socket;
 	
 	private Queue<Command> commandQueue = new LinkedList<Command>();
 	
@@ -81,50 +82,45 @@ public class ClientModel {
 		commandQueue.add(c);
 	}
 	
-	public float[] getPosition( int unitID, long currentTime ) {
-		
-		if (lastModel == null || nextModel == null)
-			return position;
-		// Interpolation System
-		/*
-		position[0] = (float) (lastUnit.location.x + (currentTime - lastUpdateTime) * (nextUnit.location.x - lastUnit.location.x) / averageTurnInterval) ; 
-		position[1] = (float) (lastUnit.location.y + (currentTime - lastUpdateTime) * (nextUnit.location.y - lastUnit.location.y) / averageTurnInterval) ;
-		*/
-		
-		// Dead-Reckoning System
-		double[] positionDouble = nextModel.getGameObject(unitID).extrapolatePosition((int) ( currentTime - lastUpdateTime )).toArray();
-		position[0] = (float) positionDouble[0];
-		position[1] = (float) positionDouble[1];
-		
-		//System.out.println("Client >>> " + position[0] + " " + position[1]);
-		
-		return position;
-		
-	}
-	
 	public void run() {
 		
-		simpleSimulator.joinSimulation(new AsyncCallback<Integer>() {
+		simpleSimulator.joinGame(new AsyncCallback<Integer>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				System.out.println("Failed to join simulation");
+				Console.log("Failed to join simulation");
 			}
 
 			@Override
 			public void onSuccess(Integer playerNum) {
-				// TODO Auto-generated method stub
-				System.out.println("Joined game");
+				Console.log("Joined game");
 				playerNumber = playerNum;
-				startup();
+				retrieveGame();
 			}
 
 		});
 		
 	}
 	
-	public void startup(){
+	private void retrieveGame() {
+		simpleSimulator.getGame(playerNumber, -1, new AsyncCallback<GameModel>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Console.log("Could not retrieve game.");
+			}
+
+			@Override
+			public void onSuccess(GameModel result) {
+				Console.log("Game retrieved!");
+				model = result;
+				beginPlaying();
+			}
+			
+		});
+	}
+	
+	public void beginPlaying(){
 		readyForNext = true;
 		
 		Timer pollTimer = new Timer() {
@@ -136,35 +132,54 @@ public class ClientModel {
 				final long startTime = System.currentTimeMillis();
 				
 				if(!readyForNext) {
-					System.out.println("Not ready for next simulation state");
+					//Console.log("Not ready for next set of commands");
 					return;
 				}
 				
 				readyForNext = false;
-				System.out.println("Requesting simulation state...");
+				Console.log("Requesting simulation state...");
+				Console.log("Attempting to send " + commandQueue.size() + " commands to server");
 				
-				Queue<Command> tempQueue = commandQueue;
-				commandQueue = new LinkedList<Command>();
-				
-				simpleSimulator.sendCommands(tempQueue, new AsyncCallback<GameModel>() {
+				simpleSimulator.sendCommands(playerNumber, commandQueue, new AsyncCallback<CommandPacket>() {
 					@Override
 					public void onFailure(Throwable caught) {
-						System.out.println("    Unable to receive simulation state");
+						Console.log("    Unable to receive simulation state");
+						Console.log(caught.getMessage());
 						readyForNext = true;
 					}
 
 					@Override
-					public void onSuccess(GameModel result) {
-
-						lastModel = nextModel;
-						nextModel = result;
+					public void onSuccess(CommandPacket result) {
 						
-						long currTime = System.currentTimeMillis();
-						cycleTime = (int) (currTime - lastUpdateTime);
-						lastUpdateTime = currTime;
-						turnNumber = result.getTurnNumber();
-						System.out.println("    Simulation state received! Cycle time: " + cycleTime + " ms");
-						confirmReceipt();
+						commandQueue = new LinkedList<Command>();
+						
+						if(result == null) {
+							simpleSimulator.getGame(playerNumber, -1, new AsyncCallback<GameModel>() {
+
+								@Override
+								public void onFailure(Throwable caught) {
+									Console.log("Could not retrieve game.");
+								}
+
+								@Override
+								public void onSuccess(GameModel result) {
+									Console.log("Game retrieved!");
+									model = result;
+								}
+								
+							});
+						} else {
+							Console.log(result.getCommandQueue().size() + " commands received, simulate for " + result.getTime() + " ms");
+							result.executeOn(model);
+							model.advanceTimeStep(result.getTime());
+							
+							long currTime = System.currentTimeMillis();
+							cycleTime = (int) (currTime - lastUpdateTime);
+							lastUpdateTime = currTime;
+							turnNumber = result.getTurnNumber();
+							Console.log("    Simulation state received! Cycle time: " + cycleTime + " ms");
+							confirmReceipt();
+						}
 					}
 				});
 			}
@@ -180,12 +195,12 @@ public class ClientModel {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				System.out.println("    Receipt failed, retrying...");
+				Console.log("    Receipt failed, retrying...");
 			}
 
 			@Override
 			public void onSuccess(String result) {
-				System.out.println("    Receipt success!");
+				Console.log("    Receipt success!");
 				readyForNext = true;
 			}
 
@@ -193,7 +208,11 @@ public class ClientModel {
 	}
 	
 	public GameModel getGameModel() {
-		return nextModel;
+		return model;
+	}
+	
+	public int timeSinceLastUpdate() {
+		return (int) (lastUpdateTime - System.currentTimeMillis());
 	}
 	
 }

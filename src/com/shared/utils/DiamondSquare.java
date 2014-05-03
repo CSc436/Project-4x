@@ -7,10 +7,15 @@
 
 package com.shared.utils;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class DiamondSquare {
+public class DiamondSquare implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3803679460439727596L;
 	private static Random rand = new Random();
 	
 	public static float[][] DSGen(int SIZE, long seed, float roughness){

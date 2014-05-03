@@ -24,13 +24,13 @@ public class MoveUnitCommand implements Command {
 	@Override
 	public boolean validateCommand(GameModel model) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean performCommand(GameModel model) {
 		((Movable) model.getGameObject(entityID)).setMoveTarget(x, y);
-		return false;
+		return true;
 	}
 
 }

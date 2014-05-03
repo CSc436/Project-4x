@@ -21,4 +21,6 @@ public class Point implements Serializable {
 		x = r;
 		y = c;
 	}
+	
+	public Point() {}
 }

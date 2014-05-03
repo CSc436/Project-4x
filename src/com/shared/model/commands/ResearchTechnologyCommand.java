@@ -30,7 +30,7 @@ public class ResearchTechnologyCommand implements Command {
 	@Override
 	public boolean validateCommand(GameModel model) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class ResearchTechnologyCommand implements Command {
 			}
 		}
 
-		return false;
+		return true;
 	}
 
 }
