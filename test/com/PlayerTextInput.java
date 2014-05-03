@@ -3,7 +3,7 @@ package com;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import com.shared.model.control.Controller;
+import com.server.Controller;
 import com.shared.model.control.GameState;
 import com.shared.model.control.PlayerCommands;
 

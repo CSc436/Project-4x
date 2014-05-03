@@ -56,7 +56,6 @@ public class StandardMover implements Serializable, Movable {
 		*/
 		
 		PhysicsVector tempPosition = position.add(velocity.multiply(timeSeconds));
-		
 		return tempPosition;
 		
 	}

@@ -74,14 +74,6 @@ public class GameObject implements Serializable, Combatable {
 		}
 	}
 	
-	public Movable getMoveBehavior() {
-		return moveBehavior;
-	}
-	
-	public Attackable getHealthBehavior() {
-		return healthBehavior;
-	}
-
 	/**
 	 * 
 	 * @param n

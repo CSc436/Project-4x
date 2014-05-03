@@ -10,7 +10,6 @@ import com.client.SimpleSimulator;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.shared.model.commands.Command;
 import com.shared.model.control.CommandPacket;
-import com.shared.model.control.Controller;
 import com.shared.model.control.GameModel;
 
 /**

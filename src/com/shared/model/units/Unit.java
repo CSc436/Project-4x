@@ -8,7 +8,6 @@ import com.shared.model.entities.GameObject;
 import com.shared.model.entities.GameObjectType;
 import com.shared.model.stats.BaseStatsEnum;
 import com.shared.model.stats.UnitStats;
-import com.shared.utils.PhysicsVector;
 
 /*
  * 
@@ -73,21 +72,6 @@ public class Unit extends GameObject implements Attacker, Producible {
 	}
 
 	@Override
-	public PhysicsVector getPosition() {
-		return super.getPosition();
-	}
-
-	@Override
-	public void setMoveTarget(double x, double y) {
-		super.setMoveTarget(x, y);
-	}
-
-	@Override
-	public void takeDamage(int damage) {
-		super.takeDamage(damage);
-	}
-
-	@Override
 	public void setTarget(Combatable target) {
 		attackBehavior.setTarget(target);
 	}
@@ -110,7 +94,6 @@ public class Unit extends GameObject implements Attacker, Producible {
 	@Override
 	public void simulateAttack(int timeStep) {
 		attackBehavior.simulateAttack(timeStep);
-
 	}
 
 }

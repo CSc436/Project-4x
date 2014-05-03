@@ -85,7 +85,8 @@ public class GameCanvas {
 	private long time;
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
 	
-	private final boolean debug = true;
+	private final boolean debug = false;
+	private final boolean commandDebug = true;
 	
 	private final ClientModel theModel;
 	private final Canvas webGLCanvas = Canvas.createIfSupported();
@@ -166,7 +167,7 @@ public class GameCanvas {
 	 */
 	public void renderEntities(Shader shader) {
 		HashMap<Integer, GameObject> gameObjects = theModel.getGameModel().getGameObjects();
-		//Console.log(gameObjects.size() + " objects to render");
+		if(debug) Console.log(gameObjects.size() + " objects to render");
 		
 		int timeSinceUpdate = theModel.timeSinceLastUpdate();
 		
@@ -179,7 +180,9 @@ public class GameCanvas {
 			} else {
 				m = unitMeshes.get(((Unit) o).getUnitType());
 			}
+			//Console.log("Extrapolating position " + timeSinceUpdate + " ms forward");
 			double[] pos = o.extrapolatePosition(timeSinceUpdate).toArray();
+			//Console.log("Unit " + o.getId() + " at " + pos[0] + " " + pos[1]);
 			m.posX = (float) pos[0];
 			m.posY = (float) pos[1];
 			m.id = o.getId();
@@ -207,7 +210,7 @@ public class GameCanvas {
 		int vertexPositionAttribute = glContext.getAttribLocation(shader.shaderProgram, "vertexPosition");
 		//Console.log("vertexPositionAttribute = " + vertexPositionAttribute);
 		
-		Console.log("Rendering tile selection");
+		if(debug) Console.log("Rendering tile selection");
 		glContext.enableVertexAttribArray(tileSelectAttrib);
 		glContext.enableVertexAttribArray(vertexPositionAttribute);
 		
@@ -283,7 +286,7 @@ public class GameCanvas {
 	 */
 	public void renderSelectedEntities(Shader selectedShader) {
 		HashMap<Integer, GameObject> gameObjects = theModel.getGameModel().getGameObjects();
-		//Console.log(gameObjects.size() + " objects to render");
+		if(debug) Console.log(gameObjects.size() + " objects to render");
 		
 		int timeSinceUpdate = theModel.timeSinceLastUpdate();
 		
@@ -381,13 +384,14 @@ public class GameCanvas {
 				case NativeEvent.BUTTON_LEFT:
 					if(event.isShiftKeyDown()) {
 						int targetID = objectSelector.pickEntity(event.getClientX(), event.getClientY());
-						
+						if(commandDebug) Console.log("Target ID: " + targetID);
 						if(targetID == 0) {
 							Coordinate c = objectSelector.pickTile(event.getClientX(), event.getClientY());
 							// A quick check to make sure that we did not miss the map
 							if(c.x >= 0.0) {
 								c.x = (int)(c.x / (255.0/GRID_WIDTH));
 								c.y = (int)(c.y / (255.0/GRID_WIDTH));
+								if(commandDebug) Console.log( "Sending units to: " + c.x + " " + c.y );
 							}
 							for(Integer i : selectedEntities) {
 								theModel.sendCommand(new MoveUnitCommand(i,c.x,c.y));
@@ -400,12 +404,12 @@ public class GameCanvas {
 					} else {
 						if(!event.isControlKeyDown()) selectedEntities.clear();
 						int selectedID = objectSelector.pickEntity(event.getClientX(), event.getClientY());
-						Console.log("Selected entity with ID " + selectedID + ".");
+						if(commandDebug) Console.log("Selected entity with ID " + selectedID + ".");
 						if (theModel.getGameModel().getGameObjects().containsKey(selectedID)) {
-							Console.log("This entity exists! Adding to selected entities...");
+							if(commandDebug) Console.log("This entity exists! Adding to selected entities...");
 							selectedEntities.add(selectedID);
 						} else {
-							Console.log("This entity DOES NOT exist!");
+							if(commandDebug) Console.log("This entity DOES NOT exist!");
 						}
 					}
 					break;
@@ -598,26 +602,19 @@ public class GameCanvas {
 				.selectedFS().getText());
 		
 		final Mesh barrel = OBJImporter.objToMesh(ClientResources.INSTANCE.barrelOBJ().getText(), glContext);
-
+		
+		final long startTime = System.currentTimeMillis();
+		
 		// repaint timer
 		Timer t = new Timer() {
 			@Override
 			public void run() {
 				time = System.currentTimeMillis();
-				/*
-				float[] pos;
-				agentX = 0;
-				agentY = 0;
-				
-				Map<Integer, GameObject> modelEntities = theModel.getGameModel().getGameObjects();
-				Set<Integer> keySet = modelEntities.keySet();
-				for(Integer i : keySet) {
-					Mesh currMesh = unitMeshes.get(i);
-					pos = theModel.getPosition(i, System.currentTimeMillis());
-					currMesh.posX = pos[0];
-					currMesh.posY = pos[1];
-				}
-				*/
+				int deltaT = (int) (time - startTime);
+
+				agentX = (float) Math.sin(deltaT / 1000.0);
+				agentY = (float) Math.cos(deltaT / 1000.0);
+
 				updateCamera();
 				drawScene();
 				

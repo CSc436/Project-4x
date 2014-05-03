@@ -1,4 +1,4 @@
-package com.shared.model.control;
+package com.server;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -7,6 +7,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.shared.model.commands.Command;
+import com.shared.model.control.CommandPacket;
+import com.shared.model.control.GameModel;
 import com.shared.model.gameboard.Tile;
 
 public class Controller implements Runnable, Serializable {

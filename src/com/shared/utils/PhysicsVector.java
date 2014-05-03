@@ -19,7 +19,7 @@ public class PhysicsVector implements Serializable {
 	public PhysicsVector(){}
 	
 	public PhysicsVector(Coordinate p){
-		this.p = p;
+		this.p = new Coordinate(p.x,p.y);
 	}
 	public PhysicsVector add(PhysicsVector other) {
 		return new PhysicsVector(p.x + other.p.x, p.y + other.p.y);
@@ -112,7 +112,7 @@ public class PhysicsVector implements Serializable {
 	}
 	
 	public Coordinate getCoordinate(){
-		return p;
+		return new Coordinate(p.x,p.y);
 	}
 	public boolean equals( PhysicsVector other ) {
 		return other.p.x == p.x && other.p.y == p.y;

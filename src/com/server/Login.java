@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.shared.model.control.Controller;
 import com.shared.model.control.GameModel;
 
 /**

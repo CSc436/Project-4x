@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import com.server.Controller;
 import com.shared.model.buildings.Building;
 import com.shared.model.buildings.BuildingType;
-import com.shared.model.control.Controller;
 import com.shared.model.control.Factory;
 import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;

@@ -31,6 +31,7 @@ public class ClientModel {
 	private int averageTurnInterval = 200;
 	private boolean readyForNext = true;
 	private int cycleTime = 100;
+	private boolean debug = false;
 	
 	//private Websocket socket;
 	
@@ -88,12 +89,12 @@ public class ClientModel {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Console.log("Failed to join simulation");
+				if(debug) Console.log("Failed to join simulation");
 			}
 
 			@Override
 			public void onSuccess(Integer playerNum) {
-				Console.log("Joined game");
+				if(debug) Console.log("Joined game");
 				playerNumber = playerNum;
 				retrieveGame();
 			}
@@ -107,12 +108,12 @@ public class ClientModel {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Console.log("Could not retrieve game.");
+				if(debug) Console.log("Could not retrieve game.");
 			}
 
 			@Override
 			public void onSuccess(GameModel result) {
-				Console.log("Game retrieved!");
+				if(debug) Console.log("Game retrieved!");
 				model = result;
 				beginPlaying();
 			}
@@ -137,14 +138,14 @@ public class ClientModel {
 				}
 				
 				readyForNext = false;
-				Console.log("Requesting simulation state...");
-				Console.log("Attempting to send " + commandQueue.size() + " commands to server");
+				if(debug) Console.log("Requesting simulation state...");
+				if(debug) Console.log("Attempting to send " + commandQueue.size() + " commands to server");
 				
 				simpleSimulator.sendCommands(playerNumber, commandQueue, new AsyncCallback<CommandPacket>() {
 					@Override
 					public void onFailure(Throwable caught) {
-						Console.log("    Unable to receive simulation state");
-						Console.log(caught.getMessage());
+						if(debug) Console.log("    Unable to receive simulation state");
+						if(debug) Console.log(caught.getMessage());
 						readyForNext = true;
 					}
 
@@ -158,18 +159,18 @@ public class ClientModel {
 
 								@Override
 								public void onFailure(Throwable caught) {
-									Console.log("Could not retrieve game.");
+									if(debug) Console.log("Could not retrieve game.");
 								}
 
 								@Override
 								public void onSuccess(GameModel result) {
-									Console.log("Game retrieved!");
+									if(debug) Console.log("Game retrieved!");
 									model = result;
 								}
 								
 							});
 						} else {
-							Console.log(result.getCommandQueue().size() + " commands received, simulate for " + result.getTime() + " ms");
+							if(debug) Console.log(result.getCommandQueue().size() + " commands received, simulate for " + result.getTime() + " ms");
 							result.executeOn(model);
 							model.advanceTimeStep(result.getTime());
 							
@@ -177,7 +178,7 @@ public class ClientModel {
 							cycleTime = (int) (currTime - lastUpdateTime);
 							lastUpdateTime = currTime;
 							turnNumber = result.getTurnNumber();
-							Console.log("    Simulation state received! Cycle time: " + cycleTime + " ms");
+							if(debug) Console.log("    Simulation state received! Cycle time: " + cycleTime + " ms");
 							confirmReceipt();
 						}
 					}
@@ -195,12 +196,12 @@ public class ClientModel {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Console.log("    Receipt failed, retrying...");
+				if(debug) Console.log("    Receipt failed, retrying...");
 			}
 
 			@Override
 			public void onSuccess(String result) {
-				Console.log("    Receipt success!");
+				if(debug) Console.log("    Receipt success!");
 				readyForNext = true;
 			}
 
