@@ -4,6 +4,7 @@ import static com.google.gwt.query.client.GQuery.$;
 
 import com.client.gameinterface.Console;
 import com.client.gameinterface.GameInterface;
+import com.client.model.ClientModel;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;

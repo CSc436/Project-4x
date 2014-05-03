@@ -8,11 +8,11 @@ import java.util.UUID;
 
 import org.junit.Test;
 
+import com.server.Controller;
 import com.shared.model.buildings.Building;
 import com.shared.model.buildings.BuildingType;
 import com.shared.model.commands.Command;
 import com.shared.model.commands.ConstructBuildingCommand;
-import com.shared.model.control.Controller;
 import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
 import com.shared.model.resources.Resources;
@@ -34,7 +34,7 @@ public class TestCreateBuildingCommand {
 		// test create for player 1
 		Player p = model.getPlayer(1);
 		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));
-		Map<UUID, Building> buildings = p.getGameObjects().getBuildings();
+		Map<Integer, Building> buildings = p.getGameObjects().getBuildings();
 		assertEquals(0, buildings.size());
 
 		Command comm = new ConstructBuildingCommand(p, p.getId(),

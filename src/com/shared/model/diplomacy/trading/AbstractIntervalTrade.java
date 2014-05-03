@@ -12,6 +12,10 @@ import com.shared.model.diplomacy.trading.interfaces.ITrade;
  * 
  */
 public abstract class AbstractIntervalTrade implements ITrade {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8631614298939652590L;
 	private float currentTime;
 	private final float interval;
 	private float timeRemaining;

@@ -1,8 +1,14 @@
 package com.shared.model.stats;
 
+
 import com.shared.model.resources.Resources;
 
 public class BuffStats extends UnitStats {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 246167545506980048L;
 
 	public BuffStats() {
 		super(0, 0, 0, 0, 0, 0, 0, new Resources(0, 0, 0, 0, 0));
@@ -25,7 +31,6 @@ public class BuffStats extends UnitStats {
 		health_regen -= stats.health_regen;
 		max_health -= stats.max_health;
 		movementSpeed -= stats.movementSpeed;
-
 		actionSpeed -= stats.actionSpeed;
 	}
 

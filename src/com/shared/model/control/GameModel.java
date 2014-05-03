@@ -1,110 +1,219 @@
 package com.shared.model.control;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+import java.util.Queue;
 import java.util.Set;
 
+import com.client.gameinterface.Console;
+import com.shared.model.behaviors.Attackable;
+import com.shared.model.behaviors.Attacker;
+import com.shared.model.behaviors.Movable;
+import com.shared.model.behaviors.Producer;
+import com.shared.model.behaviors.ResourceGenerator;
 import com.shared.model.buildings.Building;
-import com.shared.model.buildings.ProductionBuilding;
-import com.shared.model.buildings.ResourceBuilding;
 import com.shared.model.diplomacy.trading.TradeManager;
 import com.shared.model.entities.GameObject;
 import com.shared.model.gameboard.GameBoard;
-import com.shared.model.gameboard.Tile;
-import com.shared.model.research.TechnologyTree;
 import com.shared.model.units.Unit;
+import com.shared.model.units.UnitType;
+import com.shared.utils.Coordinate;
+import com.shared.utils.PhysicsVector;
 
-public class GameModel {
-	private ArrayList<Player> players;
+public class GameModel implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3911016502183103473L;
+	private HashMap<Integer, Player> players;
 	private GameBoard map;
+	// Hashmap of all gameObjects
+	private HashMap<Integer, GameObject> gameObjects;
+	private HashMap<Integer, Attacker> attackers;
+	private HashMap<Integer, Movable> movables;
+	private HashMap<Integer, Attackable> attackables;
+	private HashMap<Integer, Producer> producers;
+	private HashMap<Integer, ResourceGenerator> resourceGenerators;
+	
+	private int turnNumber = 0;
+	private int nextPlayerID = 1;
 	private TradeManager tradeManager;
 
-	// The game model is now constructed with a list of Strings with the player
-	// names, and the square dimension of the
-	// the game board, which is provided by the Login class
-	public GameModel(ArrayList<String> playernames, int width) {
-		players = new ArrayList<Player>();
-
-		// Build the player list with the names given from the Login class
-		for (int c = 0; c < playernames.size(); c++) {
-			players.add(new Player(playernames.get(c), c + 1));
-		}
-
-		// Build the board with the specified dimensions
-		map = new GameBoard(width, width);
-		tradeManager = new TradeManager(this);
+	// simple test model start up.
+	// A different constructor should be used for different
+	public GameModel() {
+		players = new HashMap<Integer, Player>();
+		
+		gameObjects = new HashMap<Integer, GameObject>();
+		attackers = new HashMap<Integer, Attacker>();
+		movables = new HashMap<Integer, Movable>();
+		attackables = new HashMap<Integer, Attackable>();
+		producers = new HashMap<Integer, Producer>();
+		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
+		
+		map = new GameBoard(500, 500);
 	}
-
-	public ArrayList<Player> getPlayers() {
+	
+	public void addPlayer( String playerName ) {
+		players.put(nextPlayerID, new Player(playerName, nextPlayerID++));
+	}
+	
+	public HashMap<Integer, Player> getPlayers() {
 		return players;
 	}
 
 	public Player getPlayer(int playerId) {
 		return players.get(playerId - 1);
 	}
-
-	public void advanceTimeStep() {
-		// Lets just say 200 time units (ms) passes each step
-		tradeManager.update(200);
-		tickBuildings();
+	
+	/**
+	 * Move the simulate forward by a certain number of milliseconds
+	 * @param timeStep - number of milliseconds to advance the simulation
+	 */
+	public void advanceTimeStep( int timeStep ) {
+		turnNumber++;
+		advanceProduction(timeStep);
+		placeNewObjects();
+		produceResources(timeStep);
+		moveObjects(timeStep);
+		attackObjects(timeStep);
+		updateHealth(timeStep);
 	}
 
-	/*
-	 * tickBuildings will iterate through a player's building list and execute
-	 * timestep advances according to what building interfaces it uses.
-	 */
+	private void produceResources( int timeStep ) {
+		Set<Integer> keySet = resourceGenerators.keySet();
+		for( int i : keySet ) {
+			ResourceGenerator r = resourceGenerators.get(i);
+			Player p = getPlayer( ((GameObject) r).getPlayerID() );
+			p.getResources().receive(r.generateResources(timeStep));
+		}
+	}
+	
+	private void moveObjects( int timeStep ) {
+		Set<Integer> keySet = movables.keySet();
+		for( int i : keySet ) {
+			Movable m = movables.get(i);
+			m.simulateMovement(timeStep);
+		}
+	}
+	
+	private void attackObjects( int timeStep ) {
+		
+		Set<Integer> keySet = attackers.keySet();
+		for( int i : keySet ) {
+			Attacker a = attackers.get(i);
+			a.simulateAttack(timeStep);
+		}
+		
+	}
+	
+	private void advanceProduction( int timeStep ) {
+		
+		Set<Integer> keySet = producers.keySet();
+		for( int i : keySet ) {
+			Producer p = producers.get(i);
+			p.simulateProduction(timeStep);
+		}
+		
+	}
+	
+	private void updateHealth( int timeStep ) {
+		Set<Integer> keySet = attackables.keySet();
+		for( int i : keySet ) {
+			Attackable a = attackables.get(i);
+			a.simulateDamage(timeStep);
+			if(a.isDead()) {
+				removeFromAll((GameObject) a);
+			}
+		}
+	}
+	
+	private void removeFromAll(GameObject o) {
+		int id = o.getId();
+		gameObjects.remove(id);
+		attackers.remove(id);
+		movables.remove(id);
+		attackables.remove(id);
+		resourceGenerators.remove(id);
+		producers.remove(id);
+		
+		int playerID = o.getPlayerID();
+		getPlayer( playerID ).getGameObjects().removeGameObject(id);
+	}
 
-	private void tickBuildings() {
-		for (Player p : players) {
-
-			// advance the timestep for all technologies being researched by
-			// player
-			p.getTechTree().researchStep(1); // Adjust time step in future
-
-			for (Building b : p.getGameObjects().getBuildings().values()) {
-
-				if (b instanceof ProductionBuilding) {
-
-					Unit potentialUnit = ((ProductionBuilding) b)
-							.advanceUnitProduction(1); // Adjust time step in
-														// future
-					if (potentialUnit != null) {
-						Tile t = map.getTileAt(0, 0);
-						t.addUnit(potentialUnit);
-						p.getGameObjects().addUnit(potentialUnit);
-					}
-
-					if (b instanceof ResourceBuilding) {
-						((ResourceBuilding) b).generateResource();
-					}
+	private void placeNewObjects() {
+		
+		
+		
+		
+		Set<Integer> keySet = producers.keySet();
+		for( int k : keySet ) {
+			Producer p = producers.get(k);
+			PhysicsVector position = ((GameObject) p).getPosition();
+			Queue<UnitType> unitQueue = p.getProducedUnits();
+			int x = (int) position.getX();
+			int y = (int) position.getY();
+			
+			// Attempt to place units in a spiraling pattern around the building
+			/*
+			int dx = 0, dy = 0;
+			while( !unitQueue.isEmpty() ) {
+				
+				
+				if(dy == 0) {
+					dy = -(dx + 1);
+					dx = 0;
+					if(dy > 0)
+						for(int i = 0; i < dx + dy; i++) {
+							
+						}
+					else
+						for(int i = 0; i < dx + dy; i++) {
+							
+						}
+				} else {
+					dx = dy;
+					dy = 0;
 				}
+				
+				if(dy == 0)
+				for(int i = 0; i < dx + dy; i++) {
+					
+				}
+				if()
+				x += dx;
+				y += dy;
+				
+			}*/
+			
+			int playerID = ((GameObject) p).getPlayerID();
+			for( UnitType ut : unitQueue ) {
+				Unit u = Factory.buildUnit(getPlayer(playerID), playerID, ut, x, y+1);
+				int unitID = u.getId();
+				gameObjects.put(unitID, u);
+				attackers.put(unitID, u);
+				movables.put(unitID, u);
+				attackables.put(unitID, u);
 			}
 		}
 	}
 
 	public void modelState() {
+		
 		System.out.println("Game State:");
 		System.out.print("Players: ");
-		for (Player player : players) {
+		for (Player player : players.values()) {
 			player.getAlias();
 			System.out.print(player.getAlias() + ",");
 		}
 		System.out.println();
 		System.out.println();
-		for (Player player : players) {
+		for (Player player : players.values()) {
 			System.out.println(player.getAlias() + "'s Resources:");
 			System.out.println(player.getResources().toString());
 			System.out.println(player.getAlias() + "'s Units: ");
-
-			TechnologyTree t = player.getTechTree();
-			Set<String> as = t.currently_researching.keySet();
-
-			for (String s : as) {
-
-				System.out.println("Curr research : " + s);
-			}
-
 			for (Unit u : player.getGameObjects().getUnits().values()) {
 				System.out.println(u.toString());
 			}
@@ -120,6 +229,15 @@ public class GameModel {
 	public GameBoard getBoard() {
 
 		return map;
+	}
+
+	public GameObject getGameObject(int entityID) {
+		// TODO Auto-generated method stub
+		return gameObjects.get(entityID);
+	}
+	
+	public int getTurnNumber() {
+		return turnNumber;
 	}
 
 	/**
@@ -148,8 +266,8 @@ public class GameModel {
 		ArrayList<GameObject> visibles = new ArrayList<GameObject>();
 		ArrayList<GameObject> inSquare = new ArrayList<GameObject>();
 
-		int baseX = GameBoard.getCoordEquivalent(viewingObject.getX());
-		int baseY = GameBoard.getCoordEquivalent(viewingObject.getY());
+		int baseX = GameBoard.getCoordEquivalent((float) viewingObject.getPosition().getX());
+		int baseY = GameBoard.getCoordEquivalent((float) viewingObject.getPosition().getY());
 
 		// Define the square with viewingObject at its center.
 		int minX = baseX - sightRange;
@@ -158,12 +276,12 @@ public class GameModel {
 		int maxY = baseY + sightRange;
 
 		// Retrieve all GameObjects within the square.
-		for (Player p : players) {
-			Map<UUID, GameObject> goMap = p.getGameObjects().getGameObjects();
-			for (UUID u : goMap.keySet()) {
+		for (Player p : players.values()) {
+			Map<Integer, GameObject> goMap = p.getGameObjects().getGameObjects();
+			for (Integer u : goMap.keySet()) {
 				GameObject go = goMap.get(u);
-				int goX = GameBoard.getCoordEquivalent(go.getX());
-				int goY = GameBoard.getCoordEquivalent(go.getY());
+				int goX = GameBoard.getCoordEquivalent((float) go.getPosition().getX());
+				int goY = GameBoard.getCoordEquivalent((float) go.getPosition().getY());
 
 				boolean isInSquareX = (minX <= goX) && (goX <= maxX);
 				boolean isInSquareY = (minY <= goY) && (goY <= maxY);
@@ -181,9 +299,7 @@ public class GameModel {
 		// Iterate over the game objects in the square and using pythagorean
 		// distance calculations, see if they're visible based on float coords.
 		for (GameObject go : inSquare) {
-			float dx = go.getX() - viewingObject.getX();
-			float dy = go.getY() - viewingObject.getY();
-			double dist = Math.sqrt((dx * dx) + (dy * dy));
+			double dist = go.getPosition().sub(viewingObject.getPosition()).magnitude();
 
 			if (dist <= sightRange)
 				visibles.add(go);
@@ -192,8 +308,25 @@ public class GameModel {
 		// Return the final list.
 		return visibles;
 	}
-
+	
 	public TradeManager getTradeManager() {
 		return tradeManager;
 	}
+	
+	public HashMap<Integer,GameObject> getGameObjects() {
+		return gameObjects;
+	}
+	
+	public void createUnit( UnitType ut, int pn, Coordinate c ) {
+		Unit u = Factory.buildUnit(players.get(pn), pn, ut, c.fx(), c.fy());
+		int unitID = u.getId();
+		gameObjects.put(unitID, u);
+		attackers.put(unitID, u);
+		movables.put(unitID, u);
+		attackables.put(unitID, u);
+		if(u != null) {
+			System.out.println(ut.name() + " created with ID " + u.getId());
+		}
+	}
+	
 }

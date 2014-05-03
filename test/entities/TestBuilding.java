@@ -1,3 +1,4 @@
+
 package entities;
 
 import static org.junit.Assert.*;
@@ -26,8 +27,8 @@ public class TestBuilding {
 		assertEquals(2, b.getHeight());
 		assertEquals(0, b.getPlayerID());
 		assertEquals(2, b.getWidth());
-		assertEquals(1.0, 0, b.getY());
-		assertEquals(1.0, 0, b.getX());
+		assertEquals(1.0, 0, b.getPosition().getY());
+		assertEquals(1.0, 0, b.getPosition().getX());
 
 
 	}

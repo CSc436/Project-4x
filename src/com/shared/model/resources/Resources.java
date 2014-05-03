@@ -1,12 +1,18 @@
 package com.shared.model.resources;
 
+import java.io.Serializable;
+
 /**
  * Resources
  * 
  * @author NRTop This class keeps track of how many resource the player
  *         currently has, also allows resource buildings to generate a resource.
  */
-public class Resources {
+public class Resources implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5099437055073288036L;
 	// Tentative resource types suggested during planning
 	private int Gold;
 	private int Wood;
@@ -37,6 +43,15 @@ public class Resources {
 		Wood = startingWood;
 		Food = startingFood;
 		ResearchPts = startingRPts;
+	}
+	
+	public Resources() {
+		Gold = 0;
+		Stone = 0;
+		Wood = 0;
+		Food = 0;
+		Stone = 0;
+		ResearchPts = 0;
 	}
 
 	/**
@@ -246,5 +261,6 @@ public class Resources {
 		Gold = i;
 
 	}
+
 
 }

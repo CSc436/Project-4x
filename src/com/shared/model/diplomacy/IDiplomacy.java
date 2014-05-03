@@ -1,5 +1,7 @@
 package com.shared.model.diplomacy;
 
+import java.io.Serializable;
+
 /**
  * DiplomacyTree
  * 
@@ -10,7 +12,7 @@ package com.shared.model.diplomacy;
  * @author Colin
  * 
  */
-public interface IDiplomacy {
+public interface IDiplomacy extends Serializable {
 
 	/**
 	 * method getStanding - gets the alliance of player 1 towards player 2;

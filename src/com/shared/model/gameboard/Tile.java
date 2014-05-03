@@ -1,6 +1,6 @@
 package com.shared.model.gameboard;
 
-
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.shared.model.Terrain;
@@ -19,8 +19,12 @@ import com.shared.model.units.Unit;
  *          GameBoard object, in order to create the field of play for a 4X
  *          Game.
  */
-public class Tile {
+public class Tile implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2707530827818938579L;
 	private boolean passable; // Boolean representing whether or not units can
 								// pass over/through a terrain tile.
 	private Resource resource; // Resource that populates this tile.
@@ -72,6 +76,8 @@ public class Tile {
 		terrain = calculateTerrainType(height);
 		unitsOnTile = new ArrayList<Unit>();
 	}
+	
+	public Tile() {}
 
 
 	/**
@@ -384,6 +390,7 @@ public class Tile {
 	 * @param u - unit to remove from this tile
 	 * @return true if unit was successfully removed, false if not. 
 	 */
+
 	public boolean removeUnit(Unit u) {
 		return unitsOnTile.remove(u);
 	}

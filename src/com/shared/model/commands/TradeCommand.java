@@ -5,6 +5,11 @@ import com.shared.model.diplomacy.trading.TradeManager;
 import com.shared.model.diplomacy.trading.interfaces.ITrade;
 
 public class TradeCommand implements Command {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1716348576240409430L;
+
 	public static enum Type {
 		ACCEPTPROPOSAL, CREATEPROPOSAL, REJECTPROPOSAL, REJECTACTIVE;
 	}
@@ -16,10 +21,15 @@ public class TradeCommand implements Command {
 		this.trade = trade;
 		this.type = type;
 	}
+	
+	public TradeCommand() {
+		this.trade = null;
+		this.type = null;
+	}
 
 	@Override
 	public boolean validateCommand(GameModel model) {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -38,7 +48,7 @@ public class TradeCommand implements Command {
 		case REJECTACTIVE:
 			manager.rejectActive(trade);
 		}
-		return false;
+		return true;
 	}
 
 }

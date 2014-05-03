@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.shared.model.control.Controller;
 import com.shared.model.control.GameModel;
 
 /**
@@ -25,6 +24,10 @@ import com.shared.model.control.GameModel;
 
 public class Login implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7009566566451237218L;
 	private HashMap<String, String> accounts;
 	private ArrayList<String> players;
 	Controller controller;

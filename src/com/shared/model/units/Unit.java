@@ -1,20 +1,13 @@
 package com.shared.model.units;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.PriorityQueue;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.UUID;
-
-import com.shared.model.control.GameModel;
-import com.shared.model.entities.Action;
+import com.shared.model.behaviors.Attacker;
+import com.shared.model.behaviors.Combatable;
+import com.shared.model.behaviors.Producible;
+import com.shared.model.behaviors.StandardAttacker;
 import com.shared.model.entities.GameObject;
 import com.shared.model.entities.GameObjectType;
-import com.shared.model.resources.Resources;
 import com.shared.model.stats.BaseStatsEnum;
 import com.shared.model.stats.UnitStats;
-import com.shared.utils.PhysicsVector;
 
 /*
  * 
@@ -26,99 +19,40 @@ import com.shared.utils.PhysicsVector;
 // TODO add A* path finding, use diagonals to make nice looking paths
 // returns a queue/list of tiles that it needs to go to, at each turn pop one off and move player there. 
 
-public class Unit extends GameObject {
+public class Unit extends GameObject implements Attacker, Producible {
 
-	public PhysicsVector unitPosition;
-	public PhysicsVector velocity = new PhysicsVector(0,0);
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5568927886403172710L;
 	private UnitType unitType;
-	private int creationTime; // this is used...
-	//private UnitBehavior currentBehavior;
-	public  GameObject target;
+	private int creationTime;
+	private Attacker attackBehavior;
 	
-	public Unit(UUID id, int playerId, BaseStatsEnum baseStats,
+	public Unit() {
+		super();
+		this.unitType = UnitType.ARCHER;
+		this.creationTime = baseStats.getCreationTime();
+	}
+
+	public Unit(int id, int playerId, BaseStatsEnum baseStats,
 			UnitStats new_stats, UnitType unitType,
 			float xco, float yco) {
 		super(id, playerId, baseStats, new_stats, GameObjectType.UNIT, xco, yco);
 		this.unitType = unitType;
 		this.creationTime = baseStats.getCreationTime();
-
-	}
-
-	// not sure if needed
-	public void performActions() {
-		while (!actionQueue.isEmpty()) {
-			Action a = actionQueue.poll();
-			switch (a) {
-			case PLAYER_ATTACK_MOVE:
-				System.out.println("player attack move");
-				break;
-			case PLAYER_ATTACK:
-				System.out.println("player attack");
-				break;
-			case DEATH:
-				// I DIED
-				System.out
-						.println("death at :" + position.getX() + " " + position.getY());
-				// getOwner().getUnits().removeUnit(this);
-				while (!actionQueue.isEmpty())
-					actionQueue.poll();
-				break;
-			default:
-				break;
-			}
-			// TODO: do stuff
-		}
+		attackBehavior = new StandardAttacker( stats.damage, stats.range, stats.actionSpeed, moveBehavior );
 	}
 	
-	public double distance(GameObject u){
-		return Math.sqrt(Math.pow(u.getX()+this.getX(),2)-Math.pow(u.getY()-this.getY(),2));
-	}
-	
-	public void setTarget(GameObject u){
-		this.target=u;
-	}
-	
-	public void clearTarget(GameObject u){
-		this.target=null;
-	}
-	
-	public void attack(){
-		if(this.target.getHealth()>0){
-			this.target.getStats().health-=this.getStats().damage;
-			System.out.println(this.target.getHealth());
-		}
-		else
-			System.out.println("The enemy is dead");
-	}
-	
-	//attack & heal (medic will heal in an attack way, with damage below 0)
-
-	public void canAttack(){
-		if(this.target==null)
-			System.out.println("You must select a target");
-		else if(this.getStats().range<this.distance(this.target))
-			System.out.println("Out of range");
-		else if(this.getUnitType()!=unitType.MEDIC && this==this.target)
-			System.out.println("You cannot attack yourself...");
-		else if(this.getUnitType()!=unitType.MEDIC && this.getPlayerID()==this.target.getPlayerID())
-			System.out.println("You cannot attack your teammate!");
-		else if(this.getUnitType()==unitType.MEDIC && this.getPlayerID()!=this.target.getPlayerID())
-			System.out.println("You cannot heal your enemies!");
-		else{
-			new Timer().schedule(new TimerTask(){
-				@Override
-				public void run() {
-					attack();
-				}
-			}, 1000);
-		}
-	}
-	
-	public PriorityQueue<Action> getActionQueue() {
-		return actionQueue;
+	public Attacker getAttackBehavior() {
+		return attackBehavior;
 	}
 
+	/**
+	 * getCreationTime():
+	 * returns the creation time for this unit.
+	 * @return
+	 */
 	public int getCreationTime() {
 		return this.baseStats.getCreationTime();
 	}
@@ -127,58 +61,39 @@ public class Unit extends GameObject {
 		return unitType;
 	}
 	
-	@Override
-	protected void setActions() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public HashMap<String, String> getActions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void tick(int timeScale, GameModel model) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	/*=============================
-	 * Getters for physicsVectors req for Movent of Units
-	 ==============================*/
-	public PhysicsVector getUnitPosition(){
-		if (unitPosition == null){
-			unitPosition = new PhysicsVector();
-		}
-		return this.unitPosition;
-	}
-
-	public PhysicsVector getUnitVelocity(){
-		return this.velocity;
-	}
-
-
-	public void setUnitPosition(double x, double y){
-		this.unitPosition.set(x, y);
-	}
-
-	public void setUnitVelocity(PhysicsVector p){
-		this.velocity.set(p.getX(), p.getY());
-	}
 	/**
-	 * decrementCreationTime() decrements remaining time for unit production
-	 * 
+	 * decrementCreationTime()
+	 * decrements remaining time for unit production
 	 * @param int timestep - how much to decrement by
 	 */
-	public void decrementCreationTime(int timestep) {
+	public void decrementCreationTime(int timestep)
+	{
 		this.creationTime -= timestep;
 	}
 
-	public Resources getProductionCost() {
+	@Override
+	public void setTarget(Combatable target) {
+		attackBehavior.setTarget(target);
+	}
 
-		return this.baseStats.getProductionCost();
+	@Override
+	public void startAttack() {
+		attackBehavior.startAttack();
+	}
+
+	@Override
+	public void stopAttack() {
+		attackBehavior.stopAttack();
+	}
+
+	@Override
+	public int getProductionTime() {
+		return 0;
+	}
+
+	@Override
+	public void simulateAttack(int timeStep) {
+		attackBehavior.simulateAttack(timeStep);
 	}
 
 }

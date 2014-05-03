@@ -2,9 +2,7 @@ package com.shared.model.units;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
-import com.shared.model.control.CommandQueue;
 import com.shared.model.control.Player;
 import com.shared.model.entities.GameObjectType;
 import com.shared.model.gameboard.GameBoard;
@@ -22,8 +20,11 @@ import com.shared.model.stats.UnitStats;
  * 
  */
 public abstract class Agent extends Unit {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2396774940374466000L;
 	private Map<String, Unit> underlings; // TODO possibly replace Unit or String with their unique ID's (UUID?)
-	private CommandQueue cq; // list of current commnands to issue.
 	
 	/*
 	 * Agent():
@@ -42,12 +43,13 @@ public abstract class Agent extends Unit {
 	 * @param float yco - initial y coordinate of the unit 
 	 * 
 	 */
-	public Agent(UUID id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, GameObjectType type, UnitType unitType, float xco,
+	public Agent(int id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, GameObjectType type, UnitType unitType, float xco,
 			float yco) {
 		super(id, playerId,  baseStats, new_stats, unitType, xco, yco);
 		underlings = new HashMap<String, Unit>();
-		cq = new CommandQueue();
 	}
+	
+	public Agent() {}
 
 	
 	/*

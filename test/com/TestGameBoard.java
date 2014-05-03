@@ -14,6 +14,7 @@ import com.shared.model.gameboard.GameBoard;
 import com.shared.model.gameboard.Tile;
 import com.shared.model.resources.Resources;
 
+
 public class TestGameBoard {
 
 	GameBoard board = new GameBoard(200, 200);

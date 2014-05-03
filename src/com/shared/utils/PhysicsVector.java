@@ -4,24 +4,22 @@ import java.io.Serializable;
 
 import com.shared.utils.Coordinate;
 
-public class PhysicsVector implements Serializable{
+public class PhysicsVector implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1405808061376997684L;
 	private Coordinate p;
-
-	public PhysicsVector(){
-		
-	}
 	
 	public PhysicsVector(double x, double y) {
 		p = new Coordinate(x,y);
 	}
 	
+	public PhysicsVector(){}
+	
 	public PhysicsVector(Coordinate p){
-		this.p = p;
+		this.p = new Coordinate(p.x,p.y);
 	}
 	public PhysicsVector add(PhysicsVector other) {
 		return new PhysicsVector(p.x + other.p.x, p.y + other.p.y);
@@ -114,9 +112,13 @@ public class PhysicsVector implements Serializable{
 	}
 	
 	public Coordinate getCoordinate(){
-		return p;
+		return new Coordinate(p.x,p.y);
 	}
 	public boolean equals( PhysicsVector other ) {
 		return other.p.x == p.x && other.p.y == p.y;
+	}
+
+	public double[] toArray() {
+		return new double[] { p.x, p.y };
 	}
 }

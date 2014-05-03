@@ -1,6 +1,12 @@
 package com.shared.utils;
 
-public class FloatMatrix {
+import java.io.Serializable;
+
+public class FloatMatrix implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6678885514837810649L;
 	private float [][] data;
 	private final int ROWS, COLS;
 	

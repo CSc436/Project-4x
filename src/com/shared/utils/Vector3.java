@@ -1,7 +1,13 @@
 package com.shared.utils;
 
+import java.io.Serializable;
 
-public class Vector3 {
+
+public class Vector3 implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -663648887447528420L;
 	public float x;
 	public float y;
 	public float z;
@@ -11,6 +17,8 @@ public class Vector3 {
 		this.y = y;
 		this.z = z;
 	}
+	
+	public Vector3() {}
 	
 	public void normalize() {
 		float length = (float) Math.sqrt(x*x + y*y + z*z);

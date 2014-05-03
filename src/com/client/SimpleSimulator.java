@@ -4,8 +4,9 @@ import java.util.Queue;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.shared.model.Request;
-import com.shared.model.SimpleGameModel;
+import com.shared.model.commands.Command;
+import com.shared.model.control.CommandPacket;
+import com.shared.model.control.GameModel;
 
 /**
  * The client-side stub for the RPC service.
@@ -13,17 +14,15 @@ import com.shared.model.SimpleGameModel;
 @RemoteServiceRelativePath("simple_sim")
 public interface SimpleSimulator extends RemoteService {
 	
-	Request[] sendRequest(Request input) throws IllegalArgumentException;
-	
-	SimpleGameModel sendRequests( Queue<Request> requestQueue );
+	CommandPacket sendCommands( int playerNumber, Queue<Command> commandQueue );
 	
 	String startSimulation();
 	
-	SimpleGameModel getSimulationState( int playerNumber, int lastTurnReceived );
+	GameModel getGame( int playerNumber, int lastTurnReceived );
 	
 	String confirmReceipt( int playerNumber, int turnNumber ); 
 	
-	Integer joinSimulation();
+	Integer joinGame();
 	
 	Integer exitGame( int playerNumber );
 	

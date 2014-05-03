@@ -1,12 +1,12 @@
 package com.shared.model.gameboard;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
 import com.shared.model.Terrain;
 import com.shared.model.buildings.Building;
 import com.shared.model.buildings.BuildingType;
-
 import com.shared.utils.Coordinate;
 
 /**
@@ -18,8 +18,12 @@ import com.shared.utils.Coordinate;
  * constructor requires the row and column size and the number of players.
  * 
  */
-public class GameBoard {
+public class GameBoard implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6766345213080989539L;
 	private Tile[][] map;
 	private int rows;
 	private int cols;
@@ -131,6 +135,10 @@ public class GameBoard {
 		System.out.println("Total execution time: " + (endTime - startTime)
 				+ "\n");
 
+	}
+	
+	public GameBoard() {
+		
 	}
 
 	/**
@@ -787,6 +795,7 @@ public class GameBoard {
 	}
 
 	/**
+>>>>>>> refs/heads/dev
 	 * Gabe Kishi - DiamondSquare Procedurally generates terrain using a height
 	 * map produced by the Diamond Squares algorithm
 	 * http://en.wikipedia.org/wiki/Diamond-square_algorithm

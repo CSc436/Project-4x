@@ -8,12 +8,12 @@ import java.util.UUID;
 
 import org.junit.Test;
 
+import com.server.Controller;
 import com.shared.model.buildings.Building;
 import com.shared.model.buildings.BuildingType;
 import com.shared.model.commands.BuildingProductionCommand;
 import com.shared.model.commands.Command;
 import com.shared.model.commands.ConstructBuildingCommand;
-import com.shared.model.control.Controller;
 import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
 import com.shared.model.resources.Resources;

@@ -1,5 +1,7 @@
 package com.shared.model.entities;
 
+
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -7,7 +9,12 @@ import java.util.Set;
 import com.shared.model.research.Technology;
 import com.shared.model.research.TechnologyEnum;
 
-public abstract class Civilization {
+public abstract class Civilization implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4980684434586151255L;
 
 	HashMap<String, Integer> research_max_level;
 
@@ -38,15 +45,15 @@ public abstract class Civilization {
 				// otherwise attempt to add this technology with the specified
 				// max_level to technologies.
 				TechnologyEnum te = TechnologyEnum.valueOf(key);
-				try {
+				
+				// NON-GWT COMPLIANT, NEEDS FIX
+				/*
 					System.out.println("Adding Technology: "
 							+ te.getValue().getName());
 					Technology toAdd = te.getValue().newInstance();
 					toAdd.setMax_level(research_max_level.get(key));
 					technologies.put(key, toAdd);
-				} catch (InstantiationException | IllegalAccessException e) {
-					e.printStackTrace();
-				}
+				*/
 			}
 		}
 	}

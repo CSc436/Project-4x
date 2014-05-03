@@ -1,5 +1,6 @@
 package com.shared.model.diplomacy.trading.interfaces;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  * @date Apr 3, 2014
  * 
  */
-public interface ITradeManager {
+public interface ITradeManager extends Serializable {
 	/**
 	 * This method allows for defining how to update Trades that the
 	 * ITradeManager manages.
