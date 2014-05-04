@@ -2,11 +2,14 @@ package com.client.gameinterface;
 
 import static com.google.gwt.query.client.GQuery.$;
 
+import com.client.GameCanvas;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Random;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.RootPanel;
 
 public class GameInterface {
 
@@ -15,18 +18,25 @@ public class GameInterface {
 	private static String showing = "";
 
 	private static String playerName; 
+	private static GameCanvas canvas; // canvas of game, so camera can be turned off 
+	private static int msgCount = 0; // keeps count of number of messages.
 	
 	/**
 	 * Responsible for registering callbacks that are purely bound to the
 	 * interface
 	 */
-	public static void init() {
+	public static void init(GameCanvas c) {
 		// Change sidebar left value to calculated value
 		int width = $("#sidebar").outerWidth(true);
 		//int closeWidth = $("#sidebar-hide").outerWidth(true);
 		$("#sidebar").css("left", "-"+ width);
 		initClickHandlers();
 		Console.log("hello");
+		
+		// Upon init - if go with giant chat log 
+		
+		// set canvas to c
+		canvas = c; 
 	}
 	
 	/**
@@ -238,7 +248,7 @@ public class GameInterface {
 			public boolean f(Event e)
 			{
 				Console.log("Message in Focus");
-				// TODO 
+				canvas.turnOnChatFlag();
 				return true;
 			}
 		});
@@ -248,11 +258,26 @@ public class GameInterface {
 			public boolean f(Event e)
 			{
 				Console.log("Message out of Focus");
-				// TODO
+				canvas.turnOffChatFlag();
 				return true;
 			}
 		});
 		
+		// When scroll in messages if scroll to top, turn off new message text
+		$("#messages").scroll(new Function()
+		{
+			public boolean f(Event e)
+			{
+				if ($("#messages").scrollTop() == 0)
+				{
+					Console.log("At the top of messages!");
+					$("#chat-trigger").text("Chat");
+					return true; 
+				}
+				Console.log("Scrolling in messages...");
+				return false;
+			}
+		});
 		
 		// Menu Button
 		// Callback to show/hide game menu
@@ -288,14 +313,42 @@ public class GameInterface {
 		}
 		// Log to Console 
 		Console.log(playerName + ": " + $("#message").val());
-		// Log to messages. 
-		$("#messages").append(playerName + ": " + $("#message").val() + "<br />");
-		// Scroll to bottom of log.
-		$("#messages").scrollTo(0, Integer.MAX_VALUE); // Hack to get it to scroll to the bottom...
+
+		// Send message - currently just local
+		updateMessages(playerName + ": " + $("#message").val());
 		
 		// Clear message line. 
 		$("#message").val("");
 		return true;
+	}
+	
+	/**
+	 * Appends a new message from server/local to the messages window 
+	 * @param mssg - message to append, should ONLY contain message with users name with Users name. i.e. "Bob: gg" 
+	 *
+	 */
+	public static void updateMessages(String mssg)
+	{
+		// Log to messages. 
+		// based on message count, pick a color
+		if (msgCount % 2 == 0)
+		{
+			$("#messages").prepend("<br />"+ mssg);
+		} else
+		{
+			$("#messages").prepend("<br />");
+			$("#messages").prepend("<font color=\"red\">"+ mssg + "</font>");
+		}
+		
+		msgCount++; // increment message count, only matters locally. 
+		
+		
+		if ($("#messages").scrollTop() != 0)
+		{
+			$("#chat-trigger").text("Chat - New Message!"); // Don't want for message you send yourself, get rid of when at scrollTop() = 0. 
+		}
+		// scroll to the top of the messages 
+		// $("#messages").scrollTop(0); // turned off for now to do new mesage test. 
 	}
 	
 	/**
