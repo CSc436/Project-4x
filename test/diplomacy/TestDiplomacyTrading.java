@@ -22,7 +22,8 @@ public class TestDiplomacyTrading {
 		ArrayList<String> plist = new ArrayList<>();
 		plist.add("Greg");
 		plist.add("Pedro");
-		GameModel model = new GameModel(plist, 500);
+
+		GameModel model = new GameModel();
 		Controller controller = new Controller(model);
 
 		Player p1 = model.getPlayer(1);
