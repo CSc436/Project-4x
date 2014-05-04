@@ -3,23 +3,25 @@ package com.client.gameinterface;
 import static com.google.gwt.query.client.GQuery.$;
 
 import java.util.HashMap;
-import java.util.UUID;
 
-import com.client.ClientModel;
+import com.client.model.ClientModel;
 import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.user.client.Event;
 import com.shared.model.buildings.Building;
+import com.shared.model.buildings.ResourceBuilding;
+import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
 import com.shared.model.resources.Resources;
 import com.shared.model.units.Agent;
+import com.shared.model.units.Unit;
 
 public class GameInterface {
 
 	// ID of panel in sidebar currently showing
 	// Or "" if sidebar is hidden
 	private static String showing = "";
-	private static ClientModel clientModel;
+	private static GameModel gameModel;
 	private static Player me;
 
 	/**
@@ -27,13 +29,14 @@ public class GameInterface {
 	 * interface
 	 */
 	public static void init(ClientModel cm) {
-		int playerID = 1;
-		clientModel = cm;
-		//me = clientModel.getPlayer(playerID);
+		int playerID = cm.getPlayerID();
+		gameModel = cm.getGameModel();
+		// TODO: need to set me
+		me = gameModel.getPlayer(playerID);
 		// Change sidebar left value to calculated value
 		int width = $("#sidebar").outerWidth(true);
-		//int closeWidth = $("#sidebar-hide").outerWidth(true);
-		$("#sidebar").css("left", "-"+ width);
+		// int closeWidth = $("#sidebar-hide").outerWidth(true);
+		$("#sidebar").css("left", "-" + width);
 		initClickHandlers();
 		Console.log("hello");
 	}
@@ -43,23 +46,23 @@ public class GameInterface {
 	 */
 	private static void initClickHandlers() {
 
-		// City Menu Button
-		// Callback to show cities-menu
-		$("#cities-button").click(new Function() {
+		// Building Menu Button
+		// Callback to show buildings-menu
+		$("#buildings-button").click(new Function() {
 			public boolean f(Event e) {
-				changeSidebarContent("cities-menu");
+				changeSidebarContent("buildings-menu");
 				// Clear out table
 				$("#buildings-table tbody").empty();
-				// Get all cities from client model
-				// Populate cities-menu
-				HashMap<UUID, Building> buildings = (HashMap<UUID, Building>) me.getGameObjects().getBuildings();
-				for (UUID u : buildings.keySet()) {
+				// Get all buildings from client model
+				// Populate buildings-menu
+				HashMap<Integer, Building> buildings = (HashMap<Integer, Building>) me.getGameObjects().getBuildings();
+				for (int u : buildings.keySet()) {
 					Building b = buildings.get(u);
 					$("#buildings-table tbody").append("" +
 						"<tr>" +
 							"<td>" +
 								"<div>" + b.getBuildingType().toString() + "</div>" +
-								"<button type='button' data-id='" + u + "' class='btn btn-green cities-detail-button'>View</button>" +
+								"<button type='button' data-id='" + u + "' class='btn btn-green buildings-detail-button'>View</button>" +
 							"</td>" +
 							"<td>" +
 								"<button type='button' class='btn btn-green'>Goto</button>" +
@@ -73,22 +76,22 @@ public class GameInterface {
 		});
 
 		// Agent Menu Button
-		// Callback to show agent-menu
-		$("#agent-button").click(new Function() {
+		// Callback to show units-menu
+		$("#units-button").click(new Function() {
 			public boolean f(Event e) {
-				// Show agent menu
-				changeSidebarContent("agent-menu");
-				// Clear out agents table
-				$("#agents-table tbody").empty();
-				// Get all agents from shallow model
-				HashMap<UUID, Agent> agents = (HashMap<UUID, Agent>) me.getGameObjects().getAgents();
-				for (UUID u : agents.keySet()) {
-					Agent a = agents.get(u);
-					$("#agents-table tbody").append("" +
+				// Show unit menu
+				changeSidebarContent("units-menu");
+				// Clear out units table
+				$("#units-table tbody").empty();
+				// Get all units from shallow model
+				HashMap<Integer, Unit> units = (HashMap<Integer, Unit>) me.getGameObjects().getUnits();
+				for (int u : units.keySet()) {
+					Unit a = units.get(u);
+					$("#units-table tbody").append("" +
 						"<tr>" +
 							"<td>" +
 								"<div>" + a.getUnitType().toString() + "</div>" +
-								"<button type='button' data-id='" + u + "' class='btn btn-green agent-detail-button'>View</button>" +
+								"<button type='button' data-id='" + u + "' class='btn btn-green units-detail-button'>View</button>" +
 							"</td>" +
 							"<td>" +
 								"<button type='button' class='btn btn-green'>Goto</button>" +
@@ -96,7 +99,7 @@ public class GameInterface {
 						"</tr>"
 					);
 				}
-				// Populate agent-menu
+				// Populate units-menu
 				return true; // Default return true
 			}
 		});
@@ -123,6 +126,7 @@ public class GameInterface {
 				changeSidebarContent("economies-menu");
 				// Get all resource info from player
 				Resources r = me.getResources();
+				// Populate economies-menu
 				$("#economies-resource-info").html("" +
 					"<div>Gold: " + r.getGold() + "</div>" +
 					"<div>Wood: " + r.getWood() + "</div>" +
@@ -130,42 +134,83 @@ public class GameInterface {
 					"<div>Food :" + r.getFood() + "</div>" +
 					"<div>Research: " + r.getResearchPts() + "</div>"
 				);
-				// TODO: is there resource information for a building?
-				// Populate economies-menu
+				// Clear out buildings table
+				$("#economies-building-info tbody").empty();
+				// Get all buildings and populate with only resource info
+				HashMap<Integer, Building> buildings = me.getGameObjects().getBuildings();
+				for(int i : buildings.keySet()) {
+					Building b = buildings.get(i);
+					// We only want to display a building if it generates resources
+					if (b instanceof ResourceBuilding) {
+						$("#economies-building-info tbody").append("" + 
+							"<tr>" +
+								"<td>" +
+									"<div>" + b.getBuildingType().toString() + "</div>" +
+									"<button type='button' class='btn btn-green'>Goto</button>" +
+								"</td>" +
+								"<td>" +
+									"<div>Gold: " + ((ResourceBuilding) b).generateResource().getGold() + "</div>" +
+									"<div>Wood: " + ((ResourceBuilding) b).generateResource().getWood() + "</div>" +
+									"<div>Stone: " + ((ResourceBuilding) b).generateResource().getStone() + "</div>" +
+									"<div>Food: " + ((ResourceBuilding) b).generateResource().getFood() + "</div>" +
+									"<div>Research: " + ((ResourceBuilding) b).generateResource().getResearchPts() + "</div>" +
+								"</td>" +
+							"</tr>");
+					}
+				}
+				
 				return true; // Default return true
 			}
 		});
 
-		// Agent Detail Button
-		// Callback to show agent-menu-detail
-		$(".agent-detail-button").click(new Function() {
+		// Unit Detail Button
+		// Callback to show units-menu-detail
+		$(".units-detail-button").click(new Function() {
 			public boolean f(Event e) {
-				// Show agent detail menu
-				changeSidebarContent("agent-menu-detail");
-				// Get agent ID from btn
-				UUID id = UUID.fromString($(this).attr("data-id"));
-				// TODO: how to get agent by ID?
-				// Populate agent-menu-detail with info
+				// Show unit detail menu
+				changeSidebarContent("units-menu-detail");
+				// Get unit ID from btn
+				int id = Integer.parseInt($(this).attr("data-id"));
+				Unit u = me.getGameObjects().getUnits().get(id);
+				// Clear out unit-info
+				$("#unit-info").empty();
+				// Populate units-menu-detail with info
+				$("#unit-info").append("" +
+						"<div>Type: " + u.getUnitType().toString() + "</div>" +
+						"<div>Health: " + u.getHealth() + "</div>" +
+						"<div>Position: " + u.getPosition().getX()  + ", " + u.getPosition().getY() + "</div>"
+				);
 				return true; // Default return true
 			}
 		});
 
-		// Cities Detail Button
-		// Callback to show cities-menu-detail
-		$(".cities-detail-button").click(new Function() {
+		// Buildings Detail Button
+		// Callback to show buildings-menu-detail
+		$(".buildings-detail-button").click(new Function() {
 			public boolean f(Event e) {
-				// Show cities detail menu
-				changeSidebarContent("cities-menu-detail");
-				// Get city ID from btn
-				UUID id = UUID.fromString($(this).attr("data-id"));
-				Building b = me.getBuilding(id);
-				// Populate cities-menu-detail with info
-				$("#cities-menu-detail #building-name").html("" +
+				// Show buildings detail menu
+				changeSidebarContent("buildings-menu-detail");
+				// Get building ID from btn
+				int id = Integer.parseInt($(this).attr("data-id"));
+				Building b = me.getGameObjects().getBuildings().get(id);
+				// Populate buildings-menu-detail with info
+				$("#buildings-menu-detail #building-name").html("" +
 						"<h2>" + b.getBuildingType().toString() + "</h2>"
 				);
-				$("#cities-menu-detail #building-data").html("" +
-						"<div>Health: " + b.getHealth() + "</div>"
+				$("#buildings-menu-detail #building-data").html("" +
+						"<div>Health: " + b.getHealth() + "</div>" +
+						"<div>Position: " + (int) b.getPosition().getX() + ", " + (int) b.getPosition().getY() + "</div>"
 				);
+				if (b instanceof ResourceBuilding) {
+					$("#buildings-menu-detail #building-data").append("" +
+						"<div>Resource Generation:</div>" +
+						"<div>Food: " + ((ResourceBuilding) b).generateResource().getFood() + "</div>" +
+						"<div>Gold: " + ((ResourceBuilding) b).generateResource().getGold() + "</div>" +
+						"<div>Stone: " + ((ResourceBuilding) b).generateResource().getStone() + "</div>" +
+						"<div>Wood: " + ((ResourceBuilding) b).generateResource().getWood() + "</div>" +
+						"<div>Research: " + ((ResourceBuilding) b).generateResource().getResearchPts() + "</div>"
+					);
+				}
 				return true; // Default return true
 			}
 		});
@@ -176,19 +221,6 @@ public class GameInterface {
 			public boolean f(Event e) {
 				// Show diplomacy detail menu
 				changeSidebarContent("diplomacy-menu-detail");
-				// TODO: actual functionality
-				// Get agreement ID from btn
-				// Populate diplomacy-menu-detail
-				return true;
-			}
-		});
-		
-		// Economies Detail Button
-		// Callback to show economies-menu-detail
-		$(".economies-detail-button").click(new Function() {
-			public boolean f(Event e) {
-				// Show diplomacy detail menu
-				changeSidebarContent("economies-menu-detail");
 				// TODO: actual functionality
 				// Get agreement ID from btn
 				// Populate diplomacy-menu-detail
@@ -210,21 +242,21 @@ public class GameInterface {
 		});
 
 		// Agent Create Button
-		// Callback to show agent-menu-create
-		$("#agent-create").click(new Function() {
+		// Callback to show units-menu-create
+		$("#units-create").click(new Function() {
 			public boolean f(Event e) {
-				// Show agent create menu
-				changeSidebarContent("agent-menu-create");
+				// Show unit create menu
+				changeSidebarContent("units-menu-create");
 				return true;
 			}
 		});
 		
 		// Callback when 'Create' button is clicked on Agent Create Menu
-		// Sends data to game model to create this agent
-		$("#agent-create-confirm").click(new Function() {
+		// Sends data to game model to create this unit
+		$("#units-create-confirm").click(new Function() {
 			public boolean f(Event e) {
 				// Collect all data from form
-				String agentType = $("#agent-type").val();
+				String unitType = $("#unit-type").val();
 				// Create command
 				// Send command to Controller
 				// Clear out form
@@ -275,12 +307,14 @@ public class GameInterface {
 
 	/**
 	 * Will show/hide sidebar with animation
-	 * @param	hideIfShowing	true/false if we want to hide the sidebar and it's showing
+	 * 
+	 * @param hideIfShowing
+	 *            true/false if we want to hide the sidebar and it's showing
 	 */
 	private static void toggleSidebar(boolean hideIfShowing) {
 		String left = $("#sidebar").css("left");
 		int width = $("#sidebar").outerWidth(true);
-		//int closeWidth = $("#sidebar-hide").outerWidth(true);
+		// int closeWidth = $("#sidebar-hide").outerWidth(true);
 		if (left.equals("0px")) {
 			// Hide only if param is true
 			if (hideIfShowing) {
@@ -295,9 +329,11 @@ public class GameInterface {
 	}
 
 	/**
-	 * Manages which content is being shown/hidden in sidebar
-	 * Also handles sidebar toggling and sets the showing string
-	 * @param	toShow 	which element with this ID to show, and hide the rest
+	 * Manages which content is being shown/hidden in sidebar Also handles
+	 * sidebar toggling and sets the showing string
+	 * 
+	 * @param toShow
+	 *            which element with this ID to show, and hide the rest
 	 */
 	private static void changeSidebarContent(String toShow) {
 		// If 'toShow' is already showing, hide the sidebar

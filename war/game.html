@@ -31,9 +31,9 @@
 	<div id="login-screen" class="text-center">
 		<div>
 			<h2>Login</h2>
-			Username : <input type="text" id="login-username"/>
-			<button type="button" id="login-button">Login</button><br>
-			Password : <input type="password" id="login-password"/>
+			Username : <input type="text" id="login-username" />
+			<button type="button" id="login-button">Login</button>
+			<br> Password : <input type="password" id="login-password" />
 		</div>
 	</div>
 	<div id="loading-screen" class="text-center">
@@ -45,10 +45,10 @@
 	<div id="toolbar-div">
 		<span id="banner">Legacy of Kings</span>
 		<ul id="toolbar">
-			<li><a href="#" id="agent-button" title="Agents"><img
-					src="assets/Icons/AgentsIcon.png" /></a></li>
-			<li><a href="#" id="cities-button" title="Cities"><img
-					src="assets/Icons/CitiesIcon.png" /></a></li>
+			<li><a href="#" id="units-button" title="Units"><img
+					src="assets/Icons/UnitsIcon.png" /></a></li>
+			<li><a href="#" id="buildings-button" title="Buildings"><img
+					src="assets/Icons/BuildingsIcon.png" /></a></li>
 			<li><a href="#" id="diplomacy-button" title="Diplomacy"><img
 					src="assets/Icons/DiplomacyIcon.png" /></a></li>
 			<li><a href="#" id="economies-button" title="Economies"><img
@@ -69,22 +69,22 @@
 		</ul>
 	</div>
 	<div id="sidebar">
-		<!-- AGENT MENU -->
-		<div id="agent-menu" class="sidebar-menu">
+		<!-- UNIT MENU -->
+		<div id="units-menu" class="sidebar-menu">
 			<div class="text-center">
-				<h2>Agents</h2>
+				<h2>Units</h2>
 			</div>
 			<div>
-				<button type="button" id="agent-create"
-					class="btn btn-green full-size">Create Agent</button>
+				<button type="button" id="units-create"
+					class="btn btn-green full-size">Create Unit</button>
 			</div>
 			<hr>
-			<table class="sidebar-table" id="agents-table">
+			<table class="sidebar-table" id="units-table">
 				<tbody>
 					<tr>
 						<td>
 							<div>General</div>
-							<button type="button" class="btn btn-green agent-detail-button">View</button>
+							<button type="button" class="btn btn-green units-detail-button">View</button>
 						</td>
 						<td>
 							<button type="button" class="btn btn-green">Goto</button>
@@ -93,7 +93,7 @@
 					<tr>
 						<td>
 							<div>Banker</div>
-							<button type="button" class="btn btn-green agent-detail-button">View</button>
+							<button type="button" class="btn btn-green units-detail-button">View</button>
 						</td>
 						<td>
 							<button type="button" class="btn btn-green">Goto</button>
@@ -102,7 +102,7 @@
 					<tr>
 						<td>
 							<div>Prospector</div>
-							<button type="button" class="btn btn-green agent-detail-button">View</button>
+							<button type="button" class="btn btn-green units-detail-button">View</button>
 						</td>
 						<td>
 							<button type="button" class="btn btn-green">Goto</button>
@@ -111,16 +111,15 @@
 				</tbody>
 			</table>
 		</div>
-		<!-- AGENT MENU DETAIL -->
-		<div id="agent-menu-detail" class="sidebar-menu">
+		<!-- UNIT MENU DETAIL -->
+		<div id="units-menu-detail" class="sidebar-menu">
 			<!-- 
 			<div class="text-center">
 				<h2>Kelsey</h2>
 			</div>
 			-->
 			<div class="text-center">
-				<div>General</div>
-				<div>Current Action</div>
+				<div id="unit-info">Unit info here</div>
 				<div>
 					<button type="button" class="btn btn-green">Goto</button>
 				</div>
@@ -128,48 +127,48 @@
 			<div class="text-center">
 				<button type="button" class="btn btn-red">Dismiss</button>
 				<button type="button" class="btn btn-red detail-return"
-					data-return="agent-menu">Back</button>
+					data-return="units-menu">Back</button>
 			</div>
 		</div>
-		<!-- AGENT MENU CREATE -->
-		<div id="agent-menu-create" class="sidebar-menu">
+		<!-- UNIT MENU CREATE -->
+		<div id="units-menu-create" class="sidebar-menu">
 			<div class="text-center">
-				<h2>Create an Agent</h2>
+				<h2>Create a Unit</h2>
 			</div>
 			<hr>
 			<!-- 
 			<div>
-				<label class="form-label" for="agent-name">Name:</label><input
-					type="text" id="agent-name" />
+				<label class="form-label" for="unit-name">Name:</label><input
+					type="text" id="unit-name" />
 			</div>
 			-->
 			<div>
-				<label class="form-label" for="agent-type">Type:</label> <select
-					id="agent-type">
+				<label class="form-label" for="unit-type">Type:</label> <select
+					id="unit-type">
 					<option value="General">General</option>
 					<option value="Merchant">Merchant</option>
 					<option value="Prospector">Prospector</option>
 				</select>
 			</div>
 			<div>
-				<label class="form-label" for="agent-action">Set Action:</label> <select
-					id="agent-action">
+				<label class="form-label" for="unit-action">Set Action:</label> <select
+					id="unit-action">
 					<option value="?">?</option>
 					<option value="?">?</option>
 					<option value="?">?</option>
 				</select>
 			</div>
 			<div class="text-center">
-				<button type="button" class="btn btn-red" id="agent-create-confirm">Create
-					Agent</button>
+				<button type="button" class="btn btn-red" id="units-create-confirm">Create
+					Unit</button>
 				<button type="button" class="btn btn-red detail-return"
-					data-return="agent-menu">Back</button>
+					data-return="units-menu">Back</button>
 			</div>
 		</div>
-		<!-- CITIES MENU -->
-		<div id="cities-menu" class="sidebar-menu">
+		<!-- BUILDINGS MENU -->
+		<div id="buildings-menu" class="sidebar-menu">
 			<div class="text-center">
-				<h2>Cities</h2>
+				<h2>Buildings</h2>
 			</div>
 			<hr>
 			<table class="sidebar-table" id="buildings-table">
@@ -177,7 +176,8 @@
 					<tr>
 						<td>
 							<div>Metropolis</div>
-							<button type="button" class="btn btn-green cities-detail-button">View</button>
+							<button type="button"
+								class="btn btn-green buildings-detail-button">View</button>
 						</td>
 						<td>
 							<button type="button" class="btn btn-green">Goto</button>
@@ -186,7 +186,8 @@
 					<tr>
 						<td>
 							<div>Mike</div>
-							<button type="button" class="btn btn-green cities-detail-button">View</button>
+							<button type="button"
+								class="btn btn-green buildings-detail-button">View</button>
 						</td>
 						<td>
 							<button type="button" class="btn btn-green">Goto</button>
@@ -195,7 +196,8 @@
 					<tr>
 						<td>
 							<div>Porkins</div>
-							<button type="button" class="btn btn-green cities-detail-button">View</button>
+							<button type="button"
+								class="btn btn-green buildings-detail-button">View</button>
 						</td>
 						<td>
 							<button type="button" class="btn btn-green">Goto</button>
@@ -204,44 +206,42 @@
 				</tbody>
 			</table>
 		</div>
-		<!-- CITIES MENU DETAIL -->
-		<div id="cities-menu-detail" class="sidebar-menu">
+		<!-- BUILDINGS MENU DETAIL -->
+		<div id="buildings-menu-detail" class="sidebar-menu">
 			<div class="text-center" id="building-name">
 				<h2>Metropolis</h2>
 			</div>
 			<div class="text-center" id="building-data">
-				<div>Days Since Creation</div>
-				<div>Population</div>
-				<div>Resource info</div>
-				<div><h4>CREATE UNITE</h4>
-					<label class="form-label" for="unit-type"> Unit Type: </label> <select
-						id="unit-type">
-						<option value="Militia">Militia</option>
-						<option value="Infantry">Infantry</option>
-						<option value="Skirmisher">Skirmisher</option>
-						<option value="Archer">Archer</option>
-						<option value="Knight">Knight</option>
-						<option value="Ranged_Calvary">Ranged Calvary</option>
-						<option value="Transport">Transport</option>
-						<option value="Catapult">Catapult</option>
-						<option value="Battering_Ram">Battering Ram</option>
-						<option value="Rifleman">Rifleman</option>
-						<option value="Dragoon">Dragoon</option>
-						<option value="Cannon">Cannon</option>
-						<option value="Medic">Medic</option>
-						<option value="Trade_Cart">Trade Cart</option>
-					</select>
-					<button type="button" class="btn btn-red">Create Unite</button>
-				</div>
-
-				<div>
-					<button type="button" class="btn btn-green">Goto</button>
-				</div>
+				<div>Health</div>
 			</div>
 			<div class="text-center">
+				<button type="button" class="btn btn-green">Goto</button>
 				<button type="button" class="btn btn-red">Destroy</button>
+			</div>
+			<div class="text-center">
 				<button type="button" class="btn btn-red detail-return"
-					data-return="cities-menu">Back</button>
+					data-return="buildings-menu">Back</button>
+			</div>
+			<div>
+				<h4>Create Unit</h4>
+				<label class="form-label" for="unit-type"> Unit Type: </label> <select
+					id="unit-type">
+					<option value="Militia">Militia</option>
+					<option value="Infantry">Infantry</option>
+					<option value="Skirmisher">Skirmisher</option>
+					<option value="Archer">Archer</option>
+					<option value="Knight">Knight</option>
+					<option value="Ranged_Calvary">Ranged Calvary</option>
+					<option value="Transport">Transport</option>
+					<option value="Catapult">Catapult</option>
+					<option value="Battering_Ram">Battering Ram</option>
+					<option value="Rifleman">Rifleman</option>
+					<option value="Dragoon">Dragoon</option>
+					<option value="Cannon">Cannon</option>
+					<option value="Medic">Medic</option>
+					<option value="Trade_Cart">Trade Cart</option>
+				</select>
+				<button type="button" class="btn btn-red">Create Unit</button>
 			</div>
 		</div>
 		<!-- DIPLOMACY MENU -->
@@ -365,7 +365,7 @@
 					data-return="diplomacy-menu">Back</button>
 			</div>
 		</div>
-		<!-- DIPLOMACY MENY CREATE -->
+		<!-- DIPLOMACY MENU CREATE -->
 		<div id="diplomacy-menu-create" class="sidebar-menu">
 			<div class="text-center">
 				<h2>Propose Agreement</h2>
@@ -423,8 +423,8 @@
 				<div>Food: 74</div>
 				<div>Research: 30</div>
 			</div>
-			<h3>City Resources</h3>
-			<table class="sidebar-table">
+			<h3>Resource Generating Buildings</h3>
+			<table class="sidebar-table" id="economies-building-info">
 				<tbody>
 					<tr>
 						<td>
@@ -446,39 +446,9 @@
 							<button type="button" class="btn btn-green">Goto</button>
 						</td>
 					</tr>
-					<tr>
-						<td>
-							<div>Porkins</div>
-							<button type="button"
-								class="btn btn-green economies-detail-button">View</button>
-						</td>
-						<td>
-							<button type="button" class="btn btn-green">Goto</button>
-						</td>
-					</tr>
 				</tbody>
 			</table>
 		</div>
-		<!-- ECONOMIES MENU DETAIL (same as cities-menu-detail) -->
-		<div id="economies-menu-detail" class="sidebar-menu">
-			<div class="text-center">
-				<h2>Metropolis</h2>
-			</div>
-			<div class="text-center">
-				<div>Days Since Creation</div>
-				<div>Population</div>
-				<div>Resource info</div>
-				<div>
-					<button type="button" class="btn btn-green">Goto</button>
-				</div>
-			</div>
-			<div class="text-center">
-				<button type="button" class="btn btn-red">Destroy</button>
-				<button type="button" class="btn btn-red detail-return"
-					data-return="economies-menu">Back</button>
-			</div>
-		</div>
-		<!-- <div id="sidebar-hide">&lt;&lt;</div> -->
 	</div>
 
 	<!-- This div displays the WebGL -->

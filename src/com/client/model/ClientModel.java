@@ -79,6 +79,10 @@ public class ClientModel {
 
 	}
 	
+	public int getPlayerID() {
+		return playerNumber;
+	}
+	
 	public void sendCommand( Command c ) {
 		commandQueue.add(c);
 	}

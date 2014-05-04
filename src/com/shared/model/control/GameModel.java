@@ -56,6 +56,19 @@ public class GameModel implements Serializable {
 		map = new GameBoard(500, 500);
 	}
 	
+	public GameModel(ArrayList<Player> players, int width) {
+		//this.players = players;
+		
+		gameObjects = new HashMap<Integer, GameObject>();
+		attackers = new HashMap<Integer, Attacker>();
+		movables = new HashMap<Integer, Movable>();
+		attackables = new HashMap<Integer, Attackable>();
+		producers = new HashMap<Integer, Producer>();
+		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
+		
+		map = new GameBoard(width, width);
+	}
+	
 	public void addPlayer( String playerName ) {
 		players.put(nextPlayerID, new Player(playerName, nextPlayerID++));
 	}
