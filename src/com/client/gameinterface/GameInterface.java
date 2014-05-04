@@ -20,6 +20,7 @@ public class GameInterface {
 	private static String playerName; 
 	private static GameCanvas canvas; // canvas of game, so camera can be turned off 
 	private static int msgCount = 0; // keeps count of number of messages.
+	private static boolean chatBoxHidden = true; // if chat box is hidden, changed when toggled. 
 	
 	/**
 	 * Responsible for registering callbacks that are purely bound to the
@@ -217,6 +218,7 @@ public class GameInterface {
 			public boolean f(Event e) {
 				// Hide/show chat
 				$("#chat-box").slideToggle(500);
+				chatBoxHidden = !chatBoxHidden; // toggle chatBoxHidden
 				return true; // Default return true
 			}
 		});
@@ -297,7 +299,6 @@ public class GameInterface {
 				return true; // Default return true
 			}
 		});
-		
 	}
 
 	/**
@@ -316,6 +317,17 @@ public class GameInterface {
 
 		// Send message - currently just local
 		updateMessages(playerName + ": " + $("#message").val());
+		
+		// Scroll back up to the top of messages, wait a couple of ms
+		Timer timer = new Timer()
+		{
+			@Override
+			public void run() {
+				$("#messages").scrollTop(0);
+			}
+			
+		};
+		timer.schedule(500); // wait a little bit to scroll up, wait for messages to be updated
 		
 		// Clear message line. 
 		$("#message").val("");
@@ -342,13 +354,11 @@ public class GameInterface {
 		
 		msgCount++; // increment message count, only matters locally. 
 		
-		
-		if ($("#messages").scrollTop() != 0)
+		// if not already at the top, don't indicate new message. Indicate it if chatBoxHidden is true though.
+		if ($("#messages").scrollTop() != 0 || chatBoxHidden)
 		{
 			$("#chat-trigger").text("Chat - New Message!"); // Don't want for message you send yourself, get rid of when at scrollTop() = 0. 
 		}
-		// scroll to the top of the messages 
-		// $("#messages").scrollTop(0); // turned off for now to do new mesage test. 
 	}
 	
 	/**
