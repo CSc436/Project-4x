@@ -5,6 +5,8 @@ import static com.google.gwt.query.client.GQuery.$;
 import java.util.HashMap;
 
 import com.client.model.ClientModel;
+import com.client.GameCanvas;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.user.client.Event;
@@ -13,8 +15,9 @@ import com.shared.model.buildings.ResourceBuilding;
 import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
 import com.shared.model.resources.Resources;
-import com.shared.model.units.Agent;
 import com.shared.model.units.Unit;
+import com.google.gwt.user.client.Random;
+import com.google.gwt.user.client.Timer;
 
 public class GameInterface {
 
@@ -24,11 +27,16 @@ public class GameInterface {
 	private static GameModel gameModel;
 	private static Player me;
 
+	private static String playerName; 
+	private static GameCanvas canvas; // canvas of game, so camera can be turned off 
+	private static int msgCount = 0; // keeps count of number of messages.
+	private static boolean chatBoxHidden = true; // if chat box is hidden, changed when toggled. 
+	
 	/**
 	 * Responsible for registering callbacks that are purely bound to the
 	 * interface
 	 */
-	public static void init(ClientModel cm) {
+	public static void init(ClientModel cm, GameCanvas c) {
 		int playerID = cm.getPlayerID();
 		gameModel = cm.getGameModel();
 		// TODO: need to set me
@@ -39,6 +47,29 @@ public class GameInterface {
 		$("#sidebar").css("left", "-" + width);
 		initClickHandlers();
 		Console.log("hello");
+		
+		// Upon init - if go with giant chat log, update chat to reflect log
+		
+		// set canvas to c
+		canvas = c; 
+	}
+	
+	/**
+	 * Quick hack to set the players name in the chat based on login
+	 * will need to implement a better way in the future.
+	 */
+	public static void setPlayerName(String n)
+	{
+		// if no name given, generate a random one
+		if (n.equalsIgnoreCase(""))
+		{
+			int r = Random.nextInt(10000); 
+			String numbString = NumberFormat.getFormat("####").format(r);
+			playerName = "Guest" + numbString;
+		} else
+		{
+			playerName = n; 
+		}
 	}
 
 	/**
@@ -280,7 +311,66 @@ public class GameInterface {
 			public boolean f(Event e) {
 				// Hide/show chat
 				$("#chat-box").slideToggle(500);
+				chatBoxHidden = !chatBoxHidden; // toggle chatBoxHidden
 				return true; // Default return true
+			}
+		});
+		
+		// Send Button
+		// Currently writes message to the console, clears contents of 
+		// chat- send box. 
+		$("#send-message").click(new Function(){
+			public boolean f(Event e)
+			{
+				return sendMessage();
+			}
+		});
+		// Support pressing enter too
+		$("#message").keypress(new Function(){
+			public boolean f(Event e)
+			{
+				// If key pressed is enter, attempt to send message
+				if (e.getKeyCode() == 13)
+				{
+					return sendMessage();
+				}
+				return true;
+			}
+		});
+			
+		// When message is in focus, disable input to game 
+		$("#message").focus(new Function(){
+			public boolean f(Event e)
+			{
+				Console.log("Message in Focus");
+				canvas.turnOnChatFlag();
+				return true;
+			}
+		});
+		
+		// When message loses focus, enable input to game
+		$("#message").blur(new Function(){
+			public boolean f(Event e)
+			{
+				Console.log("Message out of Focus");
+				canvas.turnOffChatFlag();
+				return true;
+			}
+		});
+		
+		// When scroll in messages if scroll to top, turn off new message text
+		$("#messages").scroll(new Function()
+		{
+			public boolean f(Event e)
+			{
+				if ($("#messages").scrollTop() == 0)
+				{
+					Console.log("At the top of messages!");
+					$("#chat-trigger").text("Chat");
+					return true; 
+				}
+				Console.log("Scrolling in messages...");
+				return false;
 			}
 		});
 		
@@ -302,9 +392,68 @@ public class GameInterface {
 				return true; // Default return true
 			}
 		});
-		
-	} // End initClickHandlers
+	}// End initClickHandlers
 
+	/**
+	 * Method used to send messages from #message
+	 * @return true if message sent, false if not
+	 */
+	private static boolean sendMessage()
+	{
+		// if Empty, don't send
+		if ($("#message").val().equals(""))
+		{
+			return false; 
+		}
+		// Log to Console 
+		Console.log(playerName + ": " + $("#message").val());
+
+		// Send message - currently just local
+		updateMessages(playerName + ": " + $("#message").val());
+		
+		// Scroll back up to the top of messages, wait a couple of ms
+		Timer timer = new Timer()
+		{
+			@Override
+			public void run() {
+				$("#messages").scrollTop(0);
+			}
+			
+		};
+		timer.schedule(500); // wait a little bit to scroll up, wait for messages to be updated
+		
+		// Clear message line. 
+		$("#message").val("");
+		return true;
+	}
+	
+	/**
+	 * Appends a new message from server/local to the messages window 
+	 * @param mssg - message to append, should ONLY contain message with users name with Users name. i.e. "Bob: gg" 
+	 *
+	 */
+	public static void updateMessages(String mssg)
+	{
+		// Log to messages. 
+		// based on message count, pick a color
+		if (msgCount % 2 == 0)
+		{
+			$("#messages").prepend("<br />"+ mssg);
+		} else
+		{
+			$("#messages").prepend("<br />");
+			$("#messages").prepend("<font color=\"red\">"+ mssg + "</font>");
+		}
+		
+		msgCount++; // increment message count, only matters locally. 
+		
+		// if not already at the top, don't indicate new message. Indicate it if chatBoxHidden is true though.
+		if ($("#messages").scrollTop() != 0 || chatBoxHidden)
+		{
+			$("#chat-trigger").text("Chat - New Message!"); // Don't want for message you send yourself, get rid of when at scrollTop() = 0. 
+		}
+	} 
+	
 	/**
 	 * Will show/hide sidebar with animation
 	 * 

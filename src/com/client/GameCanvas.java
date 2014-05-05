@@ -4,8 +4,6 @@ import static com.google.gwt.query.client.GQuery.$;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 import com.client.gameinterface.Console;
 import com.client.model.ClientModel;
@@ -49,7 +47,6 @@ import com.googlecode.gwtgl.binding.WebGLUniformLocation;
 import com.shared.model.buildings.Building;
 import com.shared.model.buildings.BuildingType;
 import com.shared.model.commands.AttackCommand;
-import com.shared.model.commands.Command;
 import com.shared.model.commands.MoveUnitCommand;
 import com.shared.model.commands.PlaceUnitCommand;
 import com.shared.model.entities.GameObject;
@@ -99,6 +96,9 @@ public class GameCanvas {
 	
 	public ArrayList<Integer> selectedEntities;
 
+	private boolean chatFlag = false; // if chat is selected, do not allow camera movment/input
+	
+	
 	public GameCanvas(ClientModel theModel) {
 		// CODE FOR MINIMAP DEV/CLICK SELECTING
 		selectedEntities = new ArrayList<Integer>();
@@ -135,6 +135,22 @@ public class GameCanvas {
 		camera.makeCameraMatrix();
 		start();
 		Console.log("done with Game Canvas");
+	}
+	
+	/**
+	 * sets chatFlag to true, turning off input to game canvas
+	 */
+	public void turnOnChatFlag()
+	{
+		chatFlag = true;
+	}
+	
+	/**
+	 * sets chatFlag to false, turning input to game canvas back on 
+	 */
+	public void turnOffChatFlag()
+	{
+		chatFlag = false;
 	}
 	
 	/**
@@ -319,32 +335,41 @@ public class GameCanvas {
 			public void onKeyDown(KeyDownEvent event) {
 				objectSelector.invalidMap = true;
 				if (debug) Console.log("Pressed: " + event.getNativeKeyCode());
-				switch (event.getNativeKeyCode()) {
-				case KeyCodes.KEY_UP:
-				case KeyCodes.KEY_W:
-					up = true;
-					break;
-				case KeyCodes.KEY_DOWN:
-				case KeyCodes.KEY_S:
-					down = true;
-					break;
-				case KeyCodes.KEY_LEFT:
-				case KeyCodes.KEY_A:
-					left = true;
-					break;
-				case KeyCodes.KEY_RIGHT:
-				case KeyCodes.KEY_D:
-					right = true;
-					break;
-				case KeyCodes.KEY_P: out = true; break;
-				case KeyCodes.KEY_O: in = true; break;
-				case KeyCodes.KEY_Q: rotateLeft = true; break;
-				case KeyCodes.KEY_E: rotateRight = true; break;
-				case KeyCodes.KEY_X: center = true; break;
-				case KeyCodes.KEY_I: 
-					theModel.sendCommand(new PlaceUnitCommand( UnitType.CANNON, 1, mouseTile));
-					break;
-				default: if (debug) Console.log("Unrecognized: " + event.getNativeKeyCode()); break;
+				if (!chatFlag)
+				{
+					switch (event.getNativeKeyCode()) {
+					case KeyCodes.KEY_UP:
+					case KeyCodes.KEY_W:
+						up = true;
+						break;
+					case KeyCodes.KEY_DOWN:
+					case KeyCodes.KEY_S:
+						down = true;
+						break;
+					case KeyCodes.KEY_LEFT:
+					case KeyCodes.KEY_A:
+						left = true;
+						break;
+					case KeyCodes.KEY_RIGHT:
+					case KeyCodes.KEY_D:
+						right = true;
+						break;
+					case KeyCodes.KEY_P: out = true; break;
+					case KeyCodes.KEY_O: in = true; break;
+					case KeyCodes.KEY_Q: rotateLeft = true; break;
+					case KeyCodes.KEY_E: rotateRight = true; break;
+					case KeyCodes.KEY_X: center = true; break;
+					case KeyCodes.KEY_I: 
+						theModel.sendCommand(new PlaceUnitCommand( UnitType.CANNON, 1, mouseTile));
+						break;
+					default: if (debug) Console.log("Unrecognized: " + event.getNativeKeyCode()); break;
+					}
+				} else // chatFlag is set, make sure all camera flags are false
+				{
+					up    = false;
+					down  = false; 
+					right = false;
+					left  = false; 
 				}
 			}
 		}, KeyDownEvent.getType());
