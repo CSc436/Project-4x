@@ -35,8 +35,8 @@ public class TestPlayer {
 		assertEquals(b.getId(), p.getBuilding(b.getId()).getId());
 		assertEquals(u.getId(), p.getUnit(u.getId()).getId());
 		/* Rando UUID Should return null */
-		assertEquals(null, p.getBuilding(new UUID(22, 0)));
-		assertEquals(null, p.getUnit(new UUID(22, 0)));
+		assertEquals(null, p.getBuilding(200));
+		assertEquals(null, p.getUnit(200));
 
 	}
 

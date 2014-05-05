@@ -23,7 +23,9 @@ public class TestResources {
 		ArrayList<String> plist = new ArrayList<>();
 		plist.add("Greg");
 		plist.add("Pedro");
-		GameModel model = new GameModel(plist, 500);
+		GameModel model = new GameModel(500);
+		model.addPlayer("Greg");
+		model.addPlayer("Pedro");
 		Controller controller = new Controller(model);
 		Thread t = new Thread(controller);
 		t.start();

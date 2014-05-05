@@ -95,12 +95,12 @@ public class Player implements Serializable {
 	public Upgrades getUpgrades() {
 		return upgrades;
 	}
-	/*
-	public Building getBuilding(UUID buildingId) {
+	
+	public Building getBuilding(int buildingId) {
 		return objects.getBuildings().get(buildingId);
 	}
 
-	public Unit getUnit(UUID id2) {
+	public Unit getUnit(int id2) {
 		return objects.getUnits().get(id2);
 	}
 
@@ -108,6 +108,7 @@ public class Player implements Serializable {
 		objects.addBuilding(b);
 	}
 
+	/*
 	public void selectUnit(Unit u) {
 		selectedUnits.put(u.getId(), u);
 	}

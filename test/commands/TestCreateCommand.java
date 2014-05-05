@@ -24,10 +24,12 @@ public class TestCreateCommand {
 
 	@Test
 	public void testCreate() {
-		ArrayList<String> plist = new ArrayList<>();
-		plist.add("Greg");
-		plist.add("Pedro");
-		GameModel model = new GameModel(plist, 500);
+		//ArrayList<Player> plist = new ArrayList<Player>();
+		//plist.add(new Player("Greg", 0));
+		//plist.add(new Player("Pedro", 1));
+		GameModel model = new GameModel(500);
+		model.addPlayer("Greg");
+		model.addPlayer("Pedro");
 		Controller controller = new Controller(model);
 		
 		Thread t = new Thread(controller);
@@ -36,11 +38,12 @@ public class TestCreateCommand {
 
 		// test create for player 1
 		Player p = model.getPlayer(1);
+		
 		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));
 		p = model.getPlayer(2);
 		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));
 		p = model.getPlayer(1);
-		Map<UUID, Building> buildings = p.getGameObjects().getBuildings();
+		Map<Integer, Building> buildings = p.getGameObjects().getBuildings();
 		assertEquals(0, buildings.size());
 		//	public ConstructBuilding(Player p, int playerId, BuildingType bt, int xco,
 		// int yco, GameBoard gb)
@@ -56,14 +59,15 @@ public class TestCreateCommand {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		Building castle = buildings.values().iterator().next();
+
+		// Currently fails.
 		assertEquals(1, buildings.size());
+		Building castle = buildings.values().iterator().next();
+
 		
-		comm = new BuildingProductionCommand(p.getId(), castle.getId(),
-				UnitType.INFANTRY);
+		comm = new BuildingProductionCommand(p.getId(), UnitType.INFANTRY);
 		controller.addCommand(comm);
-		Map<UUID, Unit> units = p.getGameObjects().getUnits();
+		Map<Integer, Unit> units = p.getGameObjects().getUnits();
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
@@ -73,8 +77,8 @@ public class TestCreateCommand {
 		assertEquals(1, units.size());
 		Unit u = units.values().iterator().next();
 		assertEquals(p.getId(), u.getPlayerID());
-		assertEquals(castle.getX(), u.getX(), .001);
-		assertEquals(castle.getY(), u.getY(), .001);
+		assertEquals(castle.getPosition().getX(), u.getPosition().getX(), .001);
+		assertEquals(castle.getPosition().getY(), u.getPosition().getY(), .001);
 		assertEquals(UnitType.INFANTRY, u.getUnitType());
 
 		// test create for player 2
@@ -96,8 +100,7 @@ public class TestCreateCommand {
 		buildings = p.getGameObjects().getBuildings();
 		castle = buildings.values().iterator().next();
 
-		comm = new BuildingProductionCommand(p.getId(), castle.getId(),
-				UnitType.INFANTRY);
+		comm = new BuildingProductionCommand(p.getId(), UnitType.INFANTRY);
 		controller.addCommand(comm);
 		units = p.getGameObjects().getUnits();
 		try {
@@ -109,8 +112,8 @@ public class TestCreateCommand {
 		assertEquals(1, units.size());
 		u = units.values().iterator().next();
 		assertEquals(p.getId(), u.getPlayerID());
-		assertEquals(castle.getX(), u.getX(), .001);
-		assertEquals(castle.getY(), u.getY(), .001);
+		assertEquals(castle.getPosition().getX(), u.getPosition().getX(), .001);
+		assertEquals(castle.getPosition().getY(), u.getPosition().getY(), .001);
 		assertEquals(UnitType.INFANTRY, u.getUnitType());
 	}
 
