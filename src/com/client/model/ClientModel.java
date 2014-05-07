@@ -1,5 +1,7 @@
 package com.client.model;
 
+import static com.google.gwt.query.client.GQuery.$;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -119,6 +121,8 @@ public class ClientModel {
 			@Override
 			public void onSuccess(GameModel result) {
 				if(debug) Console.log("Game retrieved!");
+				// Remove loading screen
+				$("#loading-screen").remove();
 				model = result;
 				beginPlaying();
 			}

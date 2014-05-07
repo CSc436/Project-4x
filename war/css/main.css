@@ -104,6 +104,10 @@ hr {
 	font-size: 20px;
 }
 
+#loading-actions {
+	font-size: 12px;
+}
+
 #login-screen {
 	display: table;
 	position: absolute;

@@ -30,9 +30,7 @@ import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.query.client.Function;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Image;
@@ -552,65 +550,8 @@ public class GameCanvas {
 			}
 		});
 
-		initClickHandlers();
 		camera.makeCameraMatrix();
 	}
-
-	/**
-	 * Registers handlers for Interface buttons
-	 */
-	private void initClickHandlers() {
-		// City Menu Button
-		$("#city-button").click(new Function() {
-			public boolean f(Event e) {
-				// Show city menu
-				toggleSidebar(false);
-				$("#agent-menu").hide();
-				$("#city-menu").show();
-				// Change content to city menu
-				return true; // Default return true
-			}
-		});
-
-		// Agent Menu Button
-		$("#agent-button").click(new Function() {
-			public boolean f(Event e) {
-				// Show agent menu
-				toggleSidebar(false);
-				$("#city-menu").hide();
-				$("#agent-menu").show();
-				// Change content to agent menu
-				return true; // Default return true
-			}
-		});
-
-		// Sidebar close/open
-		$("#sidebar-hide").click(new Function() {
-			public boolean f(Event e) {
-				// Hide sidebar
-				toggleSidebar(true);
-				return true; // Default return true
-			}
-		});
-	}
-	
-	/**
-	 * Registers handlers for showing/hiding sidebar
-	 */
-	private void toggleSidebar(boolean hideIfShowing) {
-		String left = $("#sidebar").css("left");
-		if (left.equals("0px")) {
-			//Hide only if param is true
-			if (hideIfShowing) {
-				int width = $("#sidebar").outerWidth(true);
-				int closeWidth = $("#sidebar-hide").outerWidth(true);
-				$("#sidebar").animate("left:-" + (width + closeWidth));
-			}
-		} else {
-			//Show sidebar
-			$("#sidebar").animate("left:0");
-		}
-	}	
 	
 	/**
 	 * Updates the position of the camera
