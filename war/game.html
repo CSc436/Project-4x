@@ -74,10 +74,12 @@
 			<div class="text-center">
 				<h2>Units</h2>
 			</div>
+			<!--
 			<div>
 				<button type="button" id="units-create"
 					class="btn btn-green full-size">Create Unit</button>
 			</div>
+			-->
 			<hr>
 			<table class="sidebar-table" id="units-table">
 				<tbody>
@@ -131,23 +133,25 @@
 			</div>
 		</div>
 		<!-- UNIT MENU CREATE -->
+		<!--  
 		<div id="units-menu-create" class="sidebar-menu">
 			<div class="text-center">
 				<h2>Create a Unit</h2>
 			</div>
 			<hr>
-			<!-- 
 			<div>
 				<label class="form-label" for="unit-name">Name:</label><input
 					type="text" id="unit-name" />
 			</div>
-			-->
 			<div>
 				<label class="form-label" for="unit-type">Type:</label> <select
 					id="unit-type">
-					<option value="General">General</option>
-					<option value="Merchant">Merchant</option>
-					<option value="Prospector">Prospector</option>
+					<option value="Militia">Militia</option>
+					<option value="Infantry">Infantry</option>
+					<option value="Skirmisher">Skirmisher</option>
+					<option value="Archer">Archer</option>
+					<option value="Knight">Knight</option>
+					<option value="Skirmisher">Skirmisher</option>
 				</select>
 			</div>
 			<div>
@@ -165,6 +169,7 @@
 					data-return="units-menu">Back</button>
 			</div>
 		</div>
+		-->
 		<!-- BUILDINGS MENU -->
 		<div id="buildings-menu" class="sidebar-menu">
 			<div class="text-center">
@@ -208,6 +213,7 @@
 		</div>
 		<!-- BUILDINGS MENU DETAIL -->
 		<div id="buildings-menu-detail" class="sidebar-menu">
+			<input type="hidden" id="building-id" value="" />
 			<div class="text-center" id="building-name">
 				<h2>Metropolis</h2>
 			</div>
@@ -224,8 +230,8 @@
 			</div>
 			<div>
 				<h4>Create Unit</h4>
-				<label class="form-label" for="unit-type"> Unit Type: </label> <select
-					id="unit-type">
+				<label class="form-label" for="unit-type"> Unit Type: </label>
+				<select id="unit-type">
 					<option value="Militia">Militia</option>
 					<option value="Infantry">Infantry</option>
 					<option value="Skirmisher">Skirmisher</option>
@@ -241,7 +247,7 @@
 					<option value="Medic">Medic</option>
 					<option value="Trade_Cart">Trade Cart</option>
 				</select>
-				<button type="button" class="btn btn-red">Create Unit</button>
+				<button type="button" class="btn btn-red" id="buildings-detail-create-unit">Create Unit</button>
 			</div>
 		</div>
 		<!-- DIPLOMACY MENU -->

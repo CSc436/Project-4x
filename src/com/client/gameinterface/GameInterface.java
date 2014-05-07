@@ -12,10 +12,12 @@ import com.google.gwt.query.client.GQuery;
 import com.google.gwt.user.client.Event;
 import com.shared.model.buildings.Building;
 import com.shared.model.buildings.ResourceBuilding;
+import com.shared.model.commands.BuildingProductionCommand;
 import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
 import com.shared.model.resources.Resources;
 import com.shared.model.units.Unit;
+import com.shared.model.units.UnitType;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Timer;
 
@@ -25,6 +27,7 @@ public class GameInterface {
 	// Or "" if sidebar is hidden
 	private static String showing = "";
 	private static GameModel gameModel;
+	private static ClientModel clientModel;
 	private static Player me;
 
 	private static String playerName; 
@@ -38,7 +41,8 @@ public class GameInterface {
 	 */
 	public static void init(ClientModel cm, GameCanvas c) {
 		int playerID = cm.getPlayerID();
-		gameModel = cm.getGameModel();
+		clientModel = cm;
+		gameModel = clientModel.getGameModel();
 		// TODO: need to set me
 		me = gameModel.getPlayer(playerID);
 		// Change sidebar left value to calculated value
@@ -242,6 +246,8 @@ public class GameInterface {
 						"<div>Research: " + ((ResourceBuilding) b).generateResource().getResearchPts() + "</div>"
 					);
 				}
+				// Set building-id value
+				$("#buildings-menu-detail #building-id").val("" + id);
 				return true; // Default return true
 			}
 		});
@@ -274,6 +280,7 @@ public class GameInterface {
 
 		// Agent Create Button
 		// Callback to show units-menu-create
+		/*
 		$("#units-create").click(new Function() {
 			public boolean f(Event e) {
 				// Show unit create menu
@@ -281,7 +288,9 @@ public class GameInterface {
 				return true;
 			}
 		});
+		*/
 		
+		/*
 		// Callback when 'Create' button is clicked on Agent Create Menu
 		// Sends data to game model to create this unit
 		$("#units-create-confirm").click(new Function() {
@@ -291,6 +300,19 @@ public class GameInterface {
 				// Create command
 				// Send command to Controller
 				// Clear out form
+				return true;
+			}
+		});
+		*/
+		
+		// Callback to create a unit from a buildings-menu-detail
+		// Sends data through client model to create this unit
+		$("#buildings-detail-create-unit").click(new Function() {
+			public boolean f(Event e) {
+				String unitType = $("#buildings-menu-detail #unit-type").val();
+				int buildingID = Integer.parseInt($("#buildings-menu-detail #building-id").val());
+				// Send command through clientModel
+				clientModel.sendCommand(new BuildingProductionCommand(buildingID, UnitType.valueOf(unitType.toUpperCase())));
 				return true;
 			}
 		});
