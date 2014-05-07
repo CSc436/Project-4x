@@ -1,12 +1,9 @@
 package com.shared.model.control;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import com.shared.model.buildings.Building;
-import com.shared.model.buildings.BuildingType;
 import com.shared.model.entities.Civilization;
 import com.shared.model.entities.PerfectCivilization;
 import com.shared.model.entities.PlayerUnits;
@@ -23,7 +20,7 @@ public class Player implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -3426296427536759563L;
-	private final String name;
+	private String name;
 	private int id;
 	public Map<Agent,Integer> prestige;
 	public Map<Goods,Integer> goodsNumber;

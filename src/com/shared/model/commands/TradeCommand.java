@@ -14,8 +14,8 @@ public class TradeCommand implements Command {
 		ACCEPTPROPOSAL, CREATEPROPOSAL, REJECTPROPOSAL, REJECTACTIVE;
 	}
 	
-	private final ITrade trade;
-	private final Type type;
+	private ITrade trade;
+	private Type type;
 	
 	public TradeCommand(final ITrade trade, final Type type) {
 		this.trade = trade;
