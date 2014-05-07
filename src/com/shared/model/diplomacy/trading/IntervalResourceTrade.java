@@ -75,4 +75,20 @@ public class IntervalResourceTrade extends AbstractIntervalTrade {
 	public int getPlayer2() {
 		return receivingPlayer;
 	}
+	
+	public int getCreatingPlayer() {
+		return creatingPlayer;
+	}
+
+	public int getReceivingPlayer() {
+		return receivingPlayer;
+	}
+
+	public Resources getP1Trade() {
+		return p1Trade;
+	}
+
+	public Resources getP2Trade() {
+		return p2Trade;
+	}
 }
