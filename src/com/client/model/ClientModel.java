@@ -156,6 +156,8 @@ public class ClientModel {
 					@Override
 					public void onSuccess(CommandPacket result) {
 						
+						// for chat commands, update the gameInterface. ClientModel likely needs reference to gameInterface?
+						// Will try
 						commandQueue = new LinkedList<Command>();
 						
 						if(result == null) {

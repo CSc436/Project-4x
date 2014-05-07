@@ -41,16 +41,21 @@ public class GameModel implements Serializable {
 	private int nextPlayerID = 1;
 	private TradeManager tradeManager;
 
+	// ADdd chat log. 
+	// add functionality to see if chat log has updated
+	// once all players have checked a message, remove from new messages?
+	
+	
 	// simple test model start up.
 	// A different constructor should be used for different
 	public GameModel() {
 		players = new HashMap<Integer, Player>();
 		
 		gameObjects = new HashMap<Integer, GameObject>();
-		attackers = new HashMap<Integer, Attacker>();
-		movables = new HashMap<Integer, Movable>();
+		attackers   = new HashMap<Integer, Attacker>();
+		movables    = new HashMap<Integer, Movable>();
 		attackables = new HashMap<Integer, Attackable>();
-		producers = new HashMap<Integer, Producer>();
+		producers   = new HashMap<Integer, Producer>();
 		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
 		
 		map = new GameBoard(500, 500);
