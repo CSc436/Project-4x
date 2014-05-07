@@ -230,7 +230,7 @@
 			</div>
 			<div>
 				<h4>Create Unit</h4>
-				<label class="form-label" for="unit-type"> Unit Type: </label>
+				<label class="form-label" for="unit-type">Unit Type </label>
 				<select id="unit-type">
 					<option value="Militia">Militia</option>
 					<option value="Infantry">Infantry</option>
@@ -263,7 +263,7 @@
 			<div>
 				<h3 class="text-center">Sent Agreements</h3>
 				<hr>
-				<table class="sidebar-table">
+				<table class="sidebar-table" id="sent-agreements-table">
 					<tbody>
 						<tr>
 							<td>
@@ -289,7 +289,7 @@
 			<div>
 				<h3 class="text-center">Received Agreements</h3>
 				<hr>
-				<table class="sidebar-table">
+				<table class="sidebar-table" id="received-agreements-table">
 					<tbody>
 						<tr>
 							<td>
@@ -319,7 +319,7 @@
 			<div>
 				<h3 class="text-center">Accepted Agreements</h3>
 				<hr>
-				<table class="sidebar-table">
+				<table class="sidebar-table" id="accepted-agreements-table">
 					<tbody>
 						<tr>
 							<td>
@@ -354,11 +354,13 @@
 		</div>
 		<!-- DIPLOMACY MENU DETAIL -->
 		<div id="diplomacy-menu-detail" class="sidebar-menu">
+			<!--
 			<div class="text-center">
 				<h2>Agreement: Gooby pls</h2>
 			</div>
 			<hr>
-			<div class="text-center">
+			-->
+			<div class="text-center" id="diplomacy-detail-info">
 				<div>Agreement With</div>
 				<div>They Receive</div>
 				<div>You Receive</div>
@@ -377,13 +379,19 @@
 				<h2>Propose Agreement</h2>
 			</div>
 			<hr>
+			<!--
 			<div>
 				<label class="form-label" for="diplomacy-name">Name:</label><input
 					type="text" id="diplomacy-name" />
 			</div>
+			-->
 			<div>
+				<label class="form-label" for="diplomacy-send-user">Send To </label>
+				<input type="text" id="diplomacy-send-user" />
+			</div>
+			<div class="clearfix">
 				<label class="form-label" for="diplomacy-send-quantity">They
-					Receive:</label> <input type="text" id="diplomacy-send-quantity" /> <select
+					Receive </label><input type="text" id="diplomacy-send-quantity" /> <select
 					id="diplomacy-send-type">
 					<option value="Gold">Gold</option>
 					<option value="Wood">Wood</option>
@@ -391,9 +399,9 @@
 					<option value="Stone">Stone</option>
 				</select>
 			</div>
-			<div>
+			<div class="clearfix">
 				<label class="form-label" for="diplomacy-receive-quantity">You
-					Receive:</label> <input type="text" id="diplomacy-receive-quantity" /> <select
+					Receive </label> <input type="text" id="diplomacy-receive-quantity" /> <select
 					id="diplomacy-receive-type">
 					<option value="Gold">Gold</option>
 					<option value="Wood">Wood</option>
@@ -401,13 +409,15 @@
 					<option value="Stone">Stone</option>
 				</select>
 			</div>
+			<!--
 			<div>
 				<label class="form-label" for="diplomacy-time-unit">Trade
-					Every:</label> <input type="text" id="diplomacy-time-unit" /> Time Units
+					Every:</label> <input type="text" id="diplomacy-time-unit" /> Minutes
 			</div>
-			<div>
-				<label class="form-label" for="diplomacy-expire">Expires In:</label>
-				<input type="text" id="diplomacy-expire" /> Time Units
+			-->
+			<div class="clearfix">
+				<label class="form-label" for="diplomacy-expire">Expires In </label>
+				<input type="text" id="diplomacy-expire" /> Minutes
 			</div>
 			<div class="text-center">
 				<button type="button" class="btn btn-red"
@@ -518,15 +528,24 @@
 	
 		var loadingHints = [
 			"Blink and you'll miss it",
-			"This isn't your mother's MMORPG",
-			"Hidden Easter Egg: our own version of 'Hall of Tortured Souls'"
+			"This isn't your mother's MMORPG. Mostly because it's not an MMORPG.",
+			"Hidden Easter Egg: our own version of 'Hall of Tortured Souls'",
+			"In the next Soviet iteration, the chart burns down YOU!",
+			"If I had a dollar for every compile error, I'd have, like, a million dollars",
+			"<b>Were You Aware?</b> The phrase 'Did You Know' has very expensive copywright permissions",
+			"Every pizza is a personal pizza if you try hard and believe in yourself",
+			"Tell me I'm witty",
+			"You're grammar is bad and you should feel bad",
+			"Strange women lying in ponds distributing swords is no basis for a system of government<br>- Abraham Lincoln",
+			"It's not a pillage if you yell 'Surprise!'",
+			"'Oh look they changed the cursor. How novel.'"
 		];
 		
 		$(document).ready(function() {
 			
 			// Set loading message
 			var randInt = Math.floor(Math.random() * (loadingHints.length));
-			$("#loading-message").text(loadingHints[randInt]);
+			$("#loading-message").html(loadingHints[randInt]);
 			
 			// Prevents '#' from appending to url when
 			// clicking menu icons

@@ -3,6 +3,7 @@ package com.client.gameinterface;
 import static com.google.gwt.query.client.GQuery.$;
 
 import java.util.HashMap;
+import java.util.List;
 
 import com.client.model.ClientModel;
 import com.client.GameCanvas;
@@ -15,6 +16,7 @@ import com.shared.model.buildings.ResourceBuilding;
 import com.shared.model.commands.BuildingProductionCommand;
 import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
+import com.shared.model.diplomacy.trading.interfaces.ITrade;
 import com.shared.model.resources.Resources;
 import com.shared.model.units.Unit;
 import com.shared.model.units.UnitType;
@@ -40,10 +42,11 @@ public class GameInterface {
 	 * interface
 	 */
 	public static void init(ClientModel cm, GameCanvas c) {
-		int playerID = cm.getPlayerID();
 		clientModel = cm;
+		int playerID = clientModel.getPlayerID();
 		gameModel = clientModel.getGameModel();
-		// TODO: need to set me
+		// TODO: need to set me, this currently doesn't work
+		// 		because playerID is never set in the ClientModel
 		me = gameModel.getPlayer(playerID);
 		// Change sidebar left value to calculated value
 		int width = $("#sidebar").outerWidth(true);
@@ -145,10 +148,56 @@ public class GameInterface {
 			public boolean f(Event e) {
 				// Show diplomacy menu
 				changeSidebarContent("diplomacy-menu");
-				// TODO: actual functionality
-				// Get all agreements from shallow model (or would this be a
-				// call to server?)
-				// Populate diplomacy-menu
+				// Get all sent agreements
+				List<ITrade> sentAgreements = gameModel.getTradeManager().getSentTrades(me.getId());
+				// Get all received agreements
+				List<ITrade> receivedAgreements = gameModel.getTradeManager().getReceivedTrades(me.getId());
+				// Get all proposed agreements
+				List<ITrade> acceptedAgreements = gameModel.getTradeManager().getAcceptedTrades(me.getId());
+				// Clear out tables
+				$("#sent-agreements-table tbody").empty();
+				$("#received-agreements-table tbody").empty();
+				$("#accepted-agreements-table tbody").empty();
+				// TODO: detail buttons set ID
+				// Re-populate sent
+				for (int i = 0; i < sentAgreements.size(); i++) {
+					$("#sent-agreements-table tbody").append("" +
+						"<tr>" +
+							"<td>" +
+								"<div>To: " + sentAgreements.get(i).getPlayer2() + "</div>" +
+							"</td>" +
+							"<td>" +
+								"<button type='button' class='btn btn-green diplomacy-detail-button'>View</button>" +
+							"</td>" +
+						"</tr>"
+					);
+				}
+				// Re-populate received
+				for (int i = 0; i < receivedAgreements.size(); i++) {
+					$("#received-agreements-table tbody").append("" +
+						"<tr>" +
+							"<td>" +
+								"<div>From: " + receivedAgreements.get(i).getPlayer1() + "</div>" +
+							"</td>" +
+							"<td>" +
+								"<button type='button' class='btn btn-green diplomacy-detail-button'>View</button>" +
+							"</td>" +
+						"</tr>"
+					);
+				}
+				// Re-populate proposed
+				for (int i = 0; i < acceptedAgreements.size(); i++) {
+					$("#sent-agreements-table tbody").append("" +
+						"<tr>" +
+							"<td>" +
+								"<div>From: " + acceptedAgreements.get(i).getPlayer1() + "</div>" +
+							"</td>" +
+							"<td>" +
+								"<button type='button' class='btn btn-green diplomacy-detail-button'>View</button>" +
+							"</td>" +
+						"</tr>"
+					);
+				}
 				return true; // Default return true
 			}
 		});
@@ -323,6 +372,20 @@ public class GameInterface {
 			public boolean f(Event e) {
 				// Show diplomacy create menu
 				changeSidebarContent("diplomacy-menu-create");
+				return true;
+			}
+		});
+		
+		// Callback to send a trade agreement
+		$("#diplomacy-create-confirm").click(new Function() {
+			public boolean f(Event e) {
+				String toUser = $("#diplomacy-send-user").val();
+				String resourceSend = $("#diplomacy-send-type").val();
+				int resourceSendQuantity = Integer.parseInt($("#diplomacy-send-quantity").val());
+				String resourceReceive = $("#diplomacy-receive-type").val();
+				int resourceReceiveQuantity = Integer.parseInt($("#diplomacy-receive-quantity").val());
+				int tradeExpire = Integer.parseInt($("#diplomacy-expire").val());
+				// TODO: error check (not important right now)
 				return true;
 			}
 		});

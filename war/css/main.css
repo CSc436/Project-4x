@@ -97,7 +97,7 @@ hr {
 }
 
 #loading-screen h1 {
-	font-size: 80px;	
+	font-size: 80px;
 }
 
 #loading-message {
@@ -116,8 +116,17 @@ hr {
 	color: black;
 }
 
-#login-screen > div {
+#login-screen>div {
 	display: table-cell;
 	vertical-align: middle;
 	margin: 0;
+}
+
+.clearfix:after {
+	visibility: hidden;
+	content: " ";
+	display: block;
+	font-size: 0;
+	height: 0;
+	clear: both;
 }
