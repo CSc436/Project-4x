@@ -19,3 +19,12 @@
 #menu-content {
 	height: 85%;
 }
+
+#building-toolbar {
+	display: none;
+	background-image: url('../assets/Panels/panel_sidebar.png');
+	background-size: 100% 100%;
+	position: absolute;
+	z-index: 1001;
+	padding: 5px;
+}

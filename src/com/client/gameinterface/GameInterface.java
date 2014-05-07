@@ -32,11 +32,13 @@ public class GameInterface {
 	private static ClientModel clientModel;
 	private static Player me;
 
-	private static String playerName; 
-	private static GameCanvas canvas; // canvas of game, so camera can be turned off 
+	private static String playerName;
+	private static GameCanvas canvas; // canvas of game, so camera can be turned
+										// off
 	private static int msgCount = 0; // keeps count of number of messages.
-	private static boolean chatBoxHidden = true; // if chat box is hidden, changed when toggled. 
-	
+	private static boolean chatBoxHidden = true; // if chat box is hidden,
+													// changed when toggled.
+
 	/**
 	 * Responsible for registering callbacks that are purely bound to the
 	 * interface
@@ -46,36 +48,33 @@ public class GameInterface {
 		int playerID = clientModel.getPlayerID();
 		gameModel = clientModel.getGameModel();
 		// TODO: need to set me, this currently doesn't work
-		// 		because playerID is never set in the ClientModel
+		// because playerID is never set in the ClientModel
 		me = gameModel.getPlayer(playerID);
+
 		// Change sidebar left value to calculated value
 		int width = $("#sidebar").outerWidth(true);
-		// int closeWidth = $("#sidebar-hide").outerWidth(true);
 		$("#sidebar").css("left", "-" + width);
+
 		initClickHandlers();
-		Console.log("hello");
-		
+
 		// Upon init - if go with giant chat log, update chat to reflect log
-		
+
 		// set canvas to c
-		canvas = c; 
+		canvas = c;
 	}
-	
+
 	/**
-	 * Quick hack to set the players name in the chat based on login
-	 * will need to implement a better way in the future.
+	 * Quick hack to set the players name in the chat based on login will need
+	 * to implement a better way in the future.
 	 */
-	public static void setPlayerName(String n)
-	{
+	public static void setPlayerName(String n) {
 		// if no name given, generate a random one
-		if (n.equalsIgnoreCase(""))
-		{
-			int r = Random.nextInt(10000); 
+		if (n.equalsIgnoreCase("")) {
+			int r = Random.nextInt(10000);
 			String numbString = NumberFormat.getFormat("####").format(r);
 			playerName = "Guest" + numbString;
-		} else
-		{
-			playerName = n; 
+		} else {
+			playerName = n;
 		}
 	}
 
@@ -93,22 +92,26 @@ public class GameInterface {
 				$("#buildings-table tbody").empty();
 				// Get all buildings from client model
 				// Populate buildings-menu
-				HashMap<Integer, Building> buildings = (HashMap<Integer, Building>) me.getGameObjects().getBuildings();
+				HashMap<Integer, Building> buildings = (HashMap<Integer, Building>) me
+						.getGameObjects().getBuildings();
 				for (int u : buildings.keySet()) {
 					Building b = buildings.get(u);
-					$("#buildings-table tbody").append("" +
-						"<tr>" +
-							"<td>" +
-								"<div>" + b.getBuildingType().toString() + "</div>" +
-								"<button type='button' data-id='" + u + "' class='btn btn-green buildings-detail-button'>View</button>" +
-							"</td>" +
-							"<td>" +
-								"<button type='button' class='btn btn-green'>Goto</button>" +
-							"</td>" +
-						"</tr>"
-					);
+					$("#buildings-table tbody")
+							.append(""
+									+ "<tr>"
+									+ "<td>"
+									+ "<div>"
+									+ b.getBuildingType().toString()
+									+ "</div>"
+									+ "<button type='button' data-id='"
+									+ u
+									+ "' class='btn btn-green buildings-detail-button'>View</button>"
+									+ "</td>"
+									+ "<td>"
+									+ "<button type='button' class='btn btn-green'>Goto</button>"
+									+ "</td>" + "</tr>");
 				}
-				
+
 				return true; // Default return true
 			}
 		});
@@ -122,20 +125,24 @@ public class GameInterface {
 				// Clear out units table
 				$("#units-table tbody").empty();
 				// Get all units from shallow model
-				HashMap<Integer, Unit> units = (HashMap<Integer, Unit>) me.getGameObjects().getUnits();
+				HashMap<Integer, Unit> units = (HashMap<Integer, Unit>) me
+						.getGameObjects().getUnits();
 				for (int u : units.keySet()) {
 					Unit a = units.get(u);
-					$("#units-table tbody").append("" +
-						"<tr>" +
-							"<td>" +
-								"<div>" + a.getUnitType().toString() + "</div>" +
-								"<button type='button' data-id='" + u + "' class='btn btn-green units-detail-button'>View</button>" +
-							"</td>" +
-							"<td>" +
-								"<button type='button' class='btn btn-green'>Goto</button>" +
-							"</td>" +
-						"</tr>"
-					);
+					$("#units-table tbody")
+							.append(""
+									+ "<tr>"
+									+ "<td>"
+									+ "<div>"
+									+ a.getUnitType().toString()
+									+ "</div>"
+									+ "<button type='button' data-id='"
+									+ u
+									+ "' class='btn btn-green units-detail-button'>View</button>"
+									+ "</td>"
+									+ "<td>"
+									+ "<button type='button' class='btn btn-green'>Goto</button>"
+									+ "</td>" + "</tr>");
 				}
 				// Populate units-menu
 				return true; // Default return true
@@ -149,11 +156,14 @@ public class GameInterface {
 				// Show diplomacy menu
 				changeSidebarContent("diplomacy-menu");
 				// Get all sent agreements
-				List<ITrade> sentAgreements = gameModel.getTradeManager().getSentTrades(me.getId());
+				List<ITrade> sentAgreements = gameModel.getTradeManager()
+						.getSentTrades(me.getId());
 				// Get all received agreements
-				List<ITrade> receivedAgreements = gameModel.getTradeManager().getReceivedTrades(me.getId());
+				List<ITrade> receivedAgreements = gameModel.getTradeManager()
+						.getReceivedTrades(me.getId());
 				// Get all proposed agreements
-				List<ITrade> acceptedAgreements = gameModel.getTradeManager().getAcceptedTrades(me.getId());
+				List<ITrade> acceptedAgreements = gameModel.getTradeManager()
+						.getAcceptedTrades(me.getId());
 				// Clear out tables
 				$("#sent-agreements-table tbody").empty();
 				$("#received-agreements-table tbody").empty();
@@ -161,42 +171,45 @@ public class GameInterface {
 				// TODO: detail buttons set ID
 				// Re-populate sent
 				for (int i = 0; i < sentAgreements.size(); i++) {
-					$("#sent-agreements-table tbody").append("" +
-						"<tr>" +
-							"<td>" +
-								"<div>To: " + sentAgreements.get(i).getPlayer2() + "</div>" +
-							"</td>" +
-							"<td>" +
-								"<button type='button' class='btn btn-green diplomacy-detail-button'>View</button>" +
-							"</td>" +
-						"</tr>"
-					);
+					$("#sent-agreements-table tbody")
+							.append(""
+									+ "<tr>"
+									+ "<td>"
+									+ "<div>To: "
+									+ sentAgreements.get(i).getPlayer2()
+									+ "</div>"
+									+ "</td>"
+									+ "<td>"
+									+ "<button type='button' class='btn btn-green diplomacy-detail-button'>View</button>"
+									+ "</td>" + "</tr>");
 				}
 				// Re-populate received
 				for (int i = 0; i < receivedAgreements.size(); i++) {
-					$("#received-agreements-table tbody").append("" +
-						"<tr>" +
-							"<td>" +
-								"<div>From: " + receivedAgreements.get(i).getPlayer1() + "</div>" +
-							"</td>" +
-							"<td>" +
-								"<button type='button' class='btn btn-green diplomacy-detail-button'>View</button>" +
-							"</td>" +
-						"</tr>"
-					);
+					$("#received-agreements-table tbody")
+							.append(""
+									+ "<tr>"
+									+ "<td>"
+									+ "<div>From: "
+									+ receivedAgreements.get(i).getPlayer1()
+									+ "</div>"
+									+ "</td>"
+									+ "<td>"
+									+ "<button type='button' class='btn btn-green diplomacy-detail-button'>View</button>"
+									+ "</td>" + "</tr>");
 				}
 				// Re-populate proposed
 				for (int i = 0; i < acceptedAgreements.size(); i++) {
-					$("#sent-agreements-table tbody").append("" +
-						"<tr>" +
-							"<td>" +
-								"<div>From: " + acceptedAgreements.get(i).getPlayer1() + "</div>" +
-							"</td>" +
-							"<td>" +
-								"<button type='button' class='btn btn-green diplomacy-detail-button'>View</button>" +
-							"</td>" +
-						"</tr>"
-					);
+					$("#sent-agreements-table tbody")
+							.append(""
+									+ "<tr>"
+									+ "<td>"
+									+ "<div>From: "
+									+ acceptedAgreements.get(i).getPlayer1()
+									+ "</div>"
+									+ "</td>"
+									+ "<td>"
+									+ "<button type='button' class='btn btn-green diplomacy-detail-button'>View</button>"
+									+ "</td>" + "</tr>");
 				}
 				return true; // Default return true
 			}
@@ -211,38 +224,54 @@ public class GameInterface {
 				// Get all resource info from player
 				Resources r = me.getResources();
 				// Populate economies-menu
-				$("#economies-resource-info").html("" +
-					"<div>Gold: " + r.getGold() + "</div>" +
-					"<div>Wood: " + r.getWood() + "</div>" +
-					"<div>Stone: " + r.getStone() + "</div>" +
-					"<div>Food :" + r.getFood() + "</div>" +
-					"<div>Research: " + r.getResearchPts() + "</div>"
-				);
+				$("#economies-resource-info").html(
+						"" + "<div>Gold: " + r.getGold() + "</div>"
+								+ "<div>Wood: " + r.getWood() + "</div>"
+								+ "<div>Stone: " + r.getStone() + "</div>"
+								+ "<div>Food :" + r.getFood() + "</div>"
+								+ "<div>Research: " + r.getResearchPts()
+								+ "</div>");
 				// Clear out buildings table
 				$("#economies-building-info tbody").empty();
 				// Get all buildings and populate with only resource info
-				HashMap<Integer, Building> buildings = me.getGameObjects().getBuildings();
-				for(int i : buildings.keySet()) {
+				HashMap<Integer, Building> buildings = me.getGameObjects()
+						.getBuildings();
+				for (int i : buildings.keySet()) {
 					Building b = buildings.get(i);
-					// We only want to display a building if it generates resources
+					// We only want to display a building if it generates
+					// resources
 					if (b instanceof ResourceBuilding) {
-						$("#economies-building-info tbody").append("" + 
-							"<tr>" +
-								"<td>" +
-									"<div>" + b.getBuildingType().toString() + "</div>" +
-									"<button type='button' class='btn btn-green'>Goto</button>" +
-								"</td>" +
-								"<td>" +
-									"<div>Gold: " + ((ResourceBuilding) b).generateResource().getGold() + "</div>" +
-									"<div>Wood: " + ((ResourceBuilding) b).generateResource().getWood() + "</div>" +
-									"<div>Stone: " + ((ResourceBuilding) b).generateResource().getStone() + "</div>" +
-									"<div>Food: " + ((ResourceBuilding) b).generateResource().getFood() + "</div>" +
-									"<div>Research: " + ((ResourceBuilding) b).generateResource().getResearchPts() + "</div>" +
-								"</td>" +
-							"</tr>");
+						$("#economies-building-info tbody")
+								.append("" + "<tr>" + "<td>" + "<div>"
+										+ b.getBuildingType().toString()
+										+ "</div>"
+										+ "<button type='button' class='btn btn-green'>Goto</button>"
+										+ "</td>"
+										+ "<td>"
+										+ "<div>Gold: "
+										+ ((ResourceBuilding) b)
+												.generateResource().getGold()
+										+ "</div>"
+										+ "<div>Wood: "
+										+ ((ResourceBuilding) b)
+												.generateResource().getWood()
+										+ "</div>"
+										+ "<div>Stone: "
+										+ ((ResourceBuilding) b)
+												.generateResource().getStone()
+										+ "</div>"
+										+ "<div>Food: "
+										+ ((ResourceBuilding) b)
+												.generateResource().getFood()
+										+ "</div>"
+										+ "<div>Research: "
+										+ ((ResourceBuilding) b)
+												.generateResource()
+												.getResearchPts() + "</div>"
+										+ "</td>" + "</tr>");
 					}
 				}
-				
+
 				return true; // Default return true
 			}
 		});
@@ -259,11 +288,12 @@ public class GameInterface {
 				// Clear out unit-info
 				$("#unit-info").empty();
 				// Populate units-menu-detail with info
-				$("#unit-info").append("" +
-						"<div>Type: " + u.getUnitType().toString() + "</div>" +
-						"<div>Health: " + u.getHealth() + "</div>" +
-						"<div>Position: " + u.getPosition().getX()  + ", " + u.getPosition().getY() + "</div>"
-				);
+				$("#unit-info").append(
+						"" + "<div>Type: " + u.getUnitType().toString()
+								+ "</div>" + "<div>Health: " + u.getHealth()
+								+ "</div>" + "<div>Position: "
+								+ u.getPosition().getX() + ", "
+								+ u.getPosition().getY() + "</div>");
 				return true; // Default return true
 			}
 		});
@@ -278,22 +308,36 @@ public class GameInterface {
 				int id = Integer.parseInt($(this).attr("data-id"));
 				Building b = me.getGameObjects().getBuildings().get(id);
 				// Populate buildings-menu-detail with info
-				$("#buildings-menu-detail #building-name").html("" +
-						"<h2>" + b.getBuildingType().toString() + "</h2>"
-				);
-				$("#buildings-menu-detail #building-data").html("" +
-						"<div>Health: " + b.getHealth() + "</div>" +
-						"<div>Position: " + (int) b.getPosition().getX() + ", " + (int) b.getPosition().getY() + "</div>"
-				);
+				$("#buildings-menu-detail #building-name").html(
+						"" + "<h2>" + b.getBuildingType().toString() + "</h2>");
+				$("#buildings-menu-detail #building-data").html(
+						"" + "<div>Health: " + b.getHealth() + "</div>"
+								+ "<div>Position: "
+								+ (int) b.getPosition().getX() + ", "
+								+ (int) b.getPosition().getY() + "</div>");
 				if (b instanceof ResourceBuilding) {
-					$("#buildings-menu-detail #building-data").append("" +
-						"<div>Resource Generation:</div>" +
-						"<div>Food: " + ((ResourceBuilding) b).generateResource().getFood() + "</div>" +
-						"<div>Gold: " + ((ResourceBuilding) b).generateResource().getGold() + "</div>" +
-						"<div>Stone: " + ((ResourceBuilding) b).generateResource().getStone() + "</div>" +
-						"<div>Wood: " + ((ResourceBuilding) b).generateResource().getWood() + "</div>" +
-						"<div>Research: " + ((ResourceBuilding) b).generateResource().getResearchPts() + "</div>"
-					);
+					$("#buildings-menu-detail #building-data").append(
+							""
+									+ "<div>Resource Generation:</div>"
+									+ "<div>Food: "
+									+ ((ResourceBuilding) b).generateResource()
+											.getFood()
+									+ "</div>"
+									+ "<div>Gold: "
+									+ ((ResourceBuilding) b).generateResource()
+											.getGold()
+									+ "</div>"
+									+ "<div>Stone: "
+									+ ((ResourceBuilding) b).generateResource()
+											.getStone()
+									+ "</div>"
+									+ "<div>Wood: "
+									+ ((ResourceBuilding) b).generateResource()
+											.getWood()
+									+ "</div>"
+									+ "<div>Research: "
+									+ ((ResourceBuilding) b).generateResource()
+											.getResearchPts() + "</div>");
 				}
 				// Set building-id value
 				$("#buildings-menu-detail #building-id").val("" + id);
@@ -317,8 +361,9 @@ public class GameInterface {
 		// Detail Return Button
 		// Callback to 'return' from a detail or create panel
 		// Name of panel to return to is in button's 'data-return' attribute
-		// NOTE: $(this).data("return") didn't seem to work, even though it should,
-		//	but this works just as well
+		// NOTE: $(this).data("return") didn't seem to work, even though it
+		// should,
+		// but this works just as well
 		$(".detail-return").click(new Function() {
 			public boolean f(Event e) {
 				String returnTo = $(this).attr("data-return");
@@ -330,38 +375,30 @@ public class GameInterface {
 		// Agent Create Button
 		// Callback to show units-menu-create
 		/*
-		$("#units-create").click(new Function() {
-			public boolean f(Event e) {
-				// Show unit create menu
-				changeSidebarContent("units-menu-create");
-				return true;
-			}
-		});
-		*/
-		
+		 * $("#units-create").click(new Function() { public boolean f(Event e) {
+		 * // Show unit create menu changeSidebarContent("units-menu-create");
+		 * return true; } });
+		 */
+
 		/*
-		// Callback when 'Create' button is clicked on Agent Create Menu
-		// Sends data to game model to create this unit
-		$("#units-create-confirm").click(new Function() {
-			public boolean f(Event e) {
-				// Collect all data from form
-				String unitType = $("#unit-type").val();
-				// Create command
-				// Send command to Controller
-				// Clear out form
-				return true;
-			}
-		});
-		*/
-		
+		 * // Callback when 'Create' button is clicked on Agent Create Menu //
+		 * Sends data to game model to create this unit
+		 * $("#units-create-confirm").click(new Function() { public boolean
+		 * f(Event e) { // Collect all data from form String unitType =
+		 * $("#unit-type").val(); // Create command // Send command to
+		 * Controller // Clear out form return true; } });
+		 */
+
 		// Callback to create a unit from a buildings-menu-detail
 		// Sends data through client model to create this unit
 		$("#buildings-detail-create-unit").click(new Function() {
 			public boolean f(Event e) {
 				String unitType = $("#buildings-menu-detail #unit-type").val();
-				int buildingID = Integer.parseInt($("#buildings-menu-detail #building-id").val());
+				int buildingID = Integer.parseInt($(
+						"#buildings-menu-detail #building-id").val());
 				// Send command through clientModel
-				clientModel.sendCommand(new BuildingProductionCommand(buildingID, UnitType.valueOf(unitType.toUpperCase())));
+				clientModel.sendCommand(new BuildingProductionCommand(
+						buildingID, UnitType.valueOf(unitType.toUpperCase())));
 				return true;
 			}
 		});
@@ -375,16 +412,19 @@ public class GameInterface {
 				return true;
 			}
 		});
-		
+
 		// Callback to send a trade agreement
 		$("#diplomacy-create-confirm").click(new Function() {
 			public boolean f(Event e) {
 				String toUser = $("#diplomacy-send-user").val();
 				String resourceSend = $("#diplomacy-send-type").val();
-				int resourceSendQuantity = Integer.parseInt($("#diplomacy-send-quantity").val());
+				int resourceSendQuantity = Integer.parseInt($(
+						"#diplomacy-send-quantity").val());
 				String resourceReceive = $("#diplomacy-receive-type").val();
-				int resourceReceiveQuantity = Integer.parseInt($("#diplomacy-receive-quantity").val());
-				int tradeExpire = Integer.parseInt($("#diplomacy-expire").val());
+				int resourceReceiveQuantity = Integer.parseInt($(
+						"#diplomacy-receive-quantity").val());
+				int tradeExpire = Integer
+						.parseInt($("#diplomacy-expire").val());
 				// TODO: error check (not important right now)
 				return true;
 			}
@@ -400,65 +440,57 @@ public class GameInterface {
 				return true; // Default return true
 			}
 		});
-		
+
 		// Send Button
-		// Currently writes message to the console, clears contents of 
-		// chat- send box. 
-		$("#send-message").click(new Function(){
-			public boolean f(Event e)
-			{
+		// Currently writes message to the console, clears contents of
+		// chat- send box.
+		$("#send-message").click(new Function() {
+			public boolean f(Event e) {
 				return sendMessage();
 			}
 		});
 		// Support pressing enter too
-		$("#message").keypress(new Function(){
-			public boolean f(Event e)
-			{
+		$("#message").keypress(new Function() {
+			public boolean f(Event e) {
 				// If key pressed is enter, attempt to send message
-				if (e.getKeyCode() == 13)
-				{
+				if (e.getKeyCode() == 13) {
 					return sendMessage();
 				}
 				return true;
 			}
 		});
-			
-		// When message is in focus, disable input to game 
-		$("#message").focus(new Function(){
-			public boolean f(Event e)
-			{
+
+		// When message is in focus, disable input to game
+		$("#message").focus(new Function() {
+			public boolean f(Event e) {
 				Console.log("Message in Focus");
 				canvas.turnOnChatFlag();
 				return true;
 			}
 		});
-		
+
 		// When message loses focus, enable input to game
-		$("#message").blur(new Function(){
-			public boolean f(Event e)
-			{
+		$("#message").blur(new Function() {
+			public boolean f(Event e) {
 				Console.log("Message out of Focus");
 				canvas.turnOffChatFlag();
 				return true;
 			}
 		});
-		
+
 		// When scroll in messages if scroll to top, turn off new message text
-		$("#messages").scroll(new Function()
-		{
-			public boolean f(Event e)
-			{
-				if ($("#messages").scrollTop() == 0)
-				{
+		$("#messages").scroll(new Function() {
+			public boolean f(Event e) {
+				if ($("#messages").scrollTop() == 0) {
 					Console.log("At the top of messages!");
 					$("#chat-trigger").text("Chat");
-					return true; 
+					return true;
 				}
 				Console.log("Scrolling in messages...");
 				return false;
 			}
 		});
-		
+
 		// Menu Button
 		// Callback to show/hide game menu
 		$("#menu-button").click(new Function() {
@@ -468,7 +500,7 @@ public class GameInterface {
 				return true; // Default return true
 			}
 		});
-		
+
 		// Close Menu Button
 		// Callback to hide game menu when it's open
 		$("#close-menu").click(new Function() {
@@ -477,68 +509,72 @@ public class GameInterface {
 				return true; // Default return true
 			}
 		});
+		
 	}// End initClickHandlers
 
 	/**
 	 * Method used to send messages from #message
+	 * 
 	 * @return true if message sent, false if not
 	 */
-	private static boolean sendMessage()
-	{
+	private static boolean sendMessage() {
 		// if Empty, don't send
-		if ($("#message").val().equals(""))
-		{
-			return false; 
+		if ($("#message").val().equals("")) {
+			return false;
 		}
-		// Log to Console 
+		// Log to Console
 		Console.log(playerName + ": " + $("#message").val());
 
 		// Send message - currently just local
 		updateMessages(playerName + ": " + $("#message").val());
-		
+
 		// Scroll back up to the top of messages, wait a couple of ms
-		Timer timer = new Timer()
-		{
+		Timer timer = new Timer() {
 			@Override
 			public void run() {
 				$("#messages").scrollTop(0);
 			}
-			
+
 		};
-		timer.schedule(500); // wait a little bit to scroll up, wait for messages to be updated
-		
-		// Clear message line. 
+		timer.schedule(500); // wait a little bit to scroll up, wait for
+								// messages to be updated
+
+		// Clear message line.
 		$("#message").val("");
 		return true;
 	}
-	
+
 	/**
-	 * Appends a new message from server/local to the messages window 
-	 * @param mssg - message to append, should ONLY contain message with users name with Users name. i.e. "Bob: gg" 
-	 *
+	 * Appends a new message from server/local to the messages window
+	 * 
+	 * @param mssg
+	 *            - message to append, should ONLY contain message with users
+	 *            name with Users name. i.e. "Bob: gg"
+	 * 
 	 */
-	public static void updateMessages(String mssg)
-	{
-		// Log to messages. 
+	public static void updateMessages(String mssg) {
+		// Log to messages.
 		// based on message count, pick a color
-		if (msgCount % 2 == 0)
-		{
-			$("#messages").prepend("<br />"+ mssg);
-		} else
-		{
+		if (msgCount % 2 == 0) {
+			$("#messages").prepend("<br />" + mssg);
+		} else {
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"red\">"+ mssg + "</font>");
+			$("#messages").prepend("<font color=\"red\">" + mssg + "</font>");
 		}
-		
-		msgCount++; // increment message count, only matters locally. 
-		
-		// if not already at the top, don't indicate new message. Indicate it if chatBoxHidden is true though.
-		if ($("#messages").scrollTop() != 0 || chatBoxHidden)
-		{
-			$("#chat-trigger").text("Chat - New Message!"); // Don't want for message you send yourself, get rid of when at scrollTop() = 0. 
+
+		msgCount++; // increment message count, only matters locally.
+
+		// if not already at the top, don't indicate new message. Indicate it if
+		// chatBoxHidden is true though.
+		if ($("#messages").scrollTop() != 0 || chatBoxHidden) {
+			$("#chat-trigger").text("Chat - New Message!"); // Don't want for
+															// message you send
+															// yourself, get rid
+															// of when at
+															// scrollTop() = 0.
 		}
-	} 
-	
+	}
+
 	/**
 	 * Will show/hide sidebar with animation
 	 * 

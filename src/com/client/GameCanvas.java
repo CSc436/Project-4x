@@ -98,6 +98,21 @@ public class GameCanvas {
 
 	private boolean chatFlag = false; // if chat is selected, do not allow camera movment/input
 	
+	// Game mode
+	private enum Mode {
+		BUILDING, NONE
+	}
+
+	private static Mode currMode = Mode.NONE; // Set initial mode to NONE
+
+	// Location of mouse X and Y
+	private static int mouseX;
+	private static int mouseY;
+
+	// Collection of BuildingType enum
+	private static BuildingType[] buildingTypes = BuildingType.values();
+	private static int buildingCounter = -1;
+	
 	
 	public GameCanvas(ClientModel theModel) {
 		// CODE FOR MINIMAP DEV/CLICK SELECTING
@@ -363,6 +378,32 @@ public class GameCanvas {
 						Console.log("pressed I");
 						theModel.sendCommand(new PlaceUnitCommand( UnitType.CANNON, 1, mouseTile));
 						break;
+					case KeyCodes.KEY_B:
+						if (event.getNativeEvent().getShiftKey()) {
+							Console.log("pressed shift-b");
+							// Cycle through building types
+							buildingCounter++;
+							String currBuilding = buildingTypes[(buildingTypes.length + buildingCounter) % buildingTypes.length].toString();
+							// Display in the menu
+							$("#building-toolbar").html(currBuilding);
+						} else {
+							Console.log("pressed b");
+							// Toggle building mode
+							currMode = currMode == Mode.NONE ? Mode.BUILDING
+									: Mode.NONE;
+							// Show/hide building toolbar
+							$("#building-toolbar").toggle();
+							if (currMode == Mode.BUILDING) {
+								// Set div to mouse position
+								$("#building-toolbar").css("left", mouseX + "px");
+								$("#building-toolbar").css("top", mouseY + "px");
+								// Set current building type
+								String currBuilding = buildingTypes[(buildingTypes.length + buildingCounter) % buildingTypes.length].toString();
+								// Display in the menu
+								$("#building-toolbar").html(currBuilding);
+							}
+						}
+						break;
 					default: if (debug) Console.log("Unrecognized: " + event.getNativeKeyCode()); break;
 					}
 				} else // chatFlag is set, make sure all camera flags are false
@@ -449,6 +490,16 @@ public class GameCanvas {
 
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
+				mouseX = event.getX();
+				mouseY = event.getY();
+				if (currMode == Mode.BUILDING) {
+					// Set building css
+					// $("#building-toolbar").css("left: '" + mouseX +
+					// "px'; top: '" + mouseY + "px';");
+					$("#building-toolbar").css("left", mouseX + "px");
+					$("#building-toolbar").css("top", mouseY + "px");
+				}
+				
 				//Console.log("X: " + event.getClientX() + ", Y: " + event.getClientY());
 				if (GameCanvas.this.onEdgeOfMap(event)) {
 					GameCanvas.this.mouseVector = Vector3.getVectorBetween(GameCanvas.this.getCenterOfMap(), new Vector3(event.getClientX(), event.getClientY(), 0));
