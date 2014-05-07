@@ -360,6 +360,7 @@ public class GameCanvas {
 					case KeyCodes.KEY_E: rotateRight = true; break;
 					case KeyCodes.KEY_X: center = true; break;
 					case KeyCodes.KEY_I: 
+						Console.log("pressed I");
 						theModel.sendCommand(new PlaceUnitCommand( UnitType.CANNON, 1, mouseTile));
 						break;
 					default: if (debug) Console.log("Unrecognized: " + event.getNativeKeyCode()); break;

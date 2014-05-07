@@ -31,11 +31,12 @@ public class ClientModel {
 	private int averageTurnInterval = 200;
 	private boolean readyForNext = true;
 	private int cycleTime = 100;
-	private boolean debug = false;
 	
 	//private Websocket socket;
 	
 	private Queue<Command> commandQueue = new LinkedList<Command>();
+	private Queue<Command> commandQueueCopy = new LinkedList<Command>();
+	private boolean debug = false;
 	
 	public ClientModel() {
 		
@@ -125,10 +126,12 @@ public class ClientModel {
 		});
 	}
 	
+	private Timer pollTimer;
+	
 	public void beginPlaying(){
 		readyForNext = true;
 		
-		Timer pollTimer = new Timer() {
+		pollTimer = new Timer() {
 
 			@Override
 			public void run() {
@@ -138,6 +141,7 @@ public class ClientModel {
 				
 				if(!readyForNext) {
 					//Console.log("Not ready for next set of commands");
+					resetTimer();
 					return;
 				}
 				
@@ -145,18 +149,31 @@ public class ClientModel {
 				if(debug) Console.log("Requesting simulation state...");
 				if(debug) Console.log("Attempting to send " + commandQueue.size() + " commands to server");
 				
+				// Create a copy so we know exactly which commands are being sent
+				// This way we don't lose any command that get added when the async method
+				//		returns and clears everything out
+				for (Command c : commandQueue) {
+					commandQueueCopy.add(c);
+				}
+				
 				simpleSimulator.sendCommands(playerNumber, commandQueue, new AsyncCallback<CommandPacket>() {
 					@Override
 					public void onFailure(Throwable caught) {
 						if(debug) Console.log("    Unable to receive simulation state");
 						if(debug) Console.log(caught.getMessage());
 						readyForNext = true;
+						resetTimer();
 					}
 
 					@Override
 					public void onSuccess(CommandPacket result) {
 						
-						commandQueue = new LinkedList<Command>();
+						for (Command c: commandQueueCopy) {
+							// Remove every item in the copy from commandQueue
+							commandQueue.remove(c);
+						}
+						// Reset commandQueueCopy
+						commandQueueCopy = new LinkedList<Command>();
 						
 						if(result == null) {
 							simpleSimulator.getGame(playerNumber, -1, new AsyncCallback<GameModel>() {
@@ -185,14 +202,25 @@ public class ClientModel {
 							if(debug) Console.log("    Simulation state received! Cycle time: " + cycleTime + " ms");
 							confirmReceipt();
 						}
+						resetTimer();
 					}
 				});
 			}
 
 		};
 
-		pollTimer.scheduleRepeating(20);
+		//pollTimer.scheduleRepeating(20);
+		pollTimer.schedule(20);
 		
+	}
+	
+	/**
+	 * Resets the Timer in the beginPlaying method
+	 * This method is called when the SimpleSimulator Async method 'returns' (callsback?)
+	 * Also if 'readyForNext' is false
+	 */
+	private void resetTimer() {
+		pollTimer.schedule(20);
 	}
 	
 	public void confirmReceipt() {
