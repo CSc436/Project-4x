@@ -34,6 +34,7 @@ public class GameInterface {
 	private static GameCanvas canvas; // canvas of game, so camera can be turned off 
 	private static int msgCount = 0; // keeps count of number of messages.
 	private static boolean chatBoxHidden = true; // if chat box is hidden, changed when toggled. 
+
 	
 	/**
 	 * Responsible for registering callbacks that are purely bound to the
@@ -48,7 +49,7 @@ public class GameInterface {
 		Console.log("hello");
 		
 		clientModel = cm; 
-
+		gameModel   = null;
 		// Needed to delay getting gameModel, because it wasn't set to the one actually on the server.
 	    Timer tim = new Timer()
 	    {
@@ -67,17 +68,15 @@ public class GameInterface {
 		// Schedule update from chat log at fixed rate. 
 		// Timer
 		// TimerTask.
-		/*Timer timer = new Timer(){
+		Timer timer = new Timer(){
 
 			@Override
 			public void run() {
-				gameModel = clientModel.getGameModel(); 
-				initializeChat();
-				
+				updateChat();	
 			}
 			
 		};
-		timer.scheduleRepeating(500);*/
+		timer.scheduleRepeating(250); // Check for new messages every second.
 		
 		// set canvas to c
 		canvas = c; 
@@ -438,9 +437,9 @@ public class GameInterface {
 		Console.log(playerName + ": " + $("#message").val());
 
 		// Send message - currently just local
-		updateMessages(playerName + ": " + $("#message").val());
+		//updateMessages(playerName + ": " + $("#message").val());
 		clientModel.sendCommand(new SendMessageCommand(playerName + ": " + $("#message").val()));
-		Console.log("Chat Command sent to server ");
+		//Console.log("Chat Command sent to server ");
 		
 		// Scroll back up to the top of messages, wait a couple of ms
 		Timer timer = new Timer()
@@ -486,15 +485,39 @@ public class GameInterface {
 	} 
 	
 	/**
+	 * After chat has been initialized, need to update it to see new messages, prepend
+	 * any new messages to messages.
+	 */
+	public static void updateChat()
+	{
+		// TODO add call, if length is even, and greater than size, reset chat log in gameModel.
+		// But for now who cares, ALL TEH MEMORY IS MINE.
+		if (gameModel == null)
+			return;
+		
+		int chatLogLength = gameModel.getChatLog().size();
+		if (chatLogLength > msgCount)
+		{
+			// update chat with new messages - msgCount is updated by updateMessages call.
+			for (int i = msgCount; i < chatLogLength; i++)
+			{
+				//Console.log("msgCount: "+ msgCount + "\tchatLogLength: "+ chatLogLength + "i: " + i);
+				updateMessages(gameModel.getChatLog().get(i));
+			}
+		} else
+		{
+			//Console.log("No new Messages to prepend");
+		}
+	}
+	
+	/**
 	 * initializes the chat based on contents of chat log.
 	 */
 	public static void initializeChat()
 	{
 		if (gameModel.getChatLog().size() == 0)
 			Console.log("No chats in the chat log!");
-		//if (gameModel.get)
-		
-		
+
 		for (String msg : gameModel.getChatLog())
 		{
 			updateMessages(msg);
