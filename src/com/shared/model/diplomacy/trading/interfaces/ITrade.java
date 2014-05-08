@@ -53,4 +53,10 @@ public interface ITrade extends Serializable {
 	 * @return - the id of the second player.
 	 */
 	public int getPlayer2();
+	
+	/**
+	 * 
+	 * @return - the auto-generated Id of the trade.
+	 */
+	public int getId();
 }

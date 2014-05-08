@@ -1,7 +1,10 @@
 package com.shared.model.diplomacy.trading;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.shared.model.control.GameModel;
 import com.shared.model.diplomacy.trading.interfaces.ITrade;
@@ -16,20 +19,17 @@ import com.shared.model.diplomacy.trading.interfaces.ITradeManager;
  * 
  */
 public class TradeManager implements ITradeManager {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7693455599294524010L;
-	private List<ITrade> proposedTrades;
-	private List<ITrade> activeTrades;
+	private Map<Integer, ITrade> proposedTrades;
+	private Map<Integer, ITrade> activeTrades;
 
 	/** The GameModel object with which we get the player instances with */
 	private GameModel game;
 
 	public TradeManager(GameModel game) {
 		this.game = game;
-		proposedTrades = new ArrayList<ITrade>();
-		activeTrades = new ArrayList<ITrade>();
+		proposedTrades = new HashMap<Integer, ITrade>();
+		activeTrades = new HashMap<Integer, ITrade>();
 	}
 	
 	public TradeManager() {}
@@ -37,7 +37,8 @@ public class TradeManager implements ITradeManager {
 	@Override
 	public void update(float delta) {
 		ArrayList<ITrade> removables = new ArrayList<ITrade>();
-		for (ITrade trade : activeTrades) {
+		for (Entry<Integer, ITrade> entry : activeTrades.entrySet()) {
+			ITrade trade = entry.getValue();
 			if (!trade.isActive()) {
 				removables.add(trade);
 			} else if (trade.update(delta)) {
@@ -53,7 +54,8 @@ public class TradeManager implements ITradeManager {
 	@Override
 	public List<ITrade> getAcceptedTrades(int playerId) {
 		List<ITrade> results = new ArrayList<ITrade>();
-		for (ITrade trade : activeTrades) {
+		for (Entry<Integer, ITrade> entry : activeTrades.entrySet()) {
+			ITrade trade = entry.getValue();
 			if (trade.getPlayer1() == playerId
 					|| trade.getPlayer2() == playerId) {
 				results.add(trade);
@@ -65,7 +67,8 @@ public class TradeManager implements ITradeManager {
 	@Override
 	public List<ITrade> getSentTrades(int playerId) {
 		List<ITrade> results = new ArrayList<ITrade>();
-		for (ITrade trade : proposedTrades) {
+		for (Entry<Integer, ITrade> entry : proposedTrades.entrySet()) {
+			ITrade trade = entry.getValue();
 			if (trade.getPlayer1() == playerId) {
 				results.add(trade);
 			}
@@ -76,7 +79,8 @@ public class TradeManager implements ITradeManager {
 	@Override
 	public List<ITrade> getReceivedTrades(int playerId) {
 		List<ITrade> results = new ArrayList<ITrade>();
-		for (ITrade trade : proposedTrades) {
+		for (Entry<Integer, ITrade> entry : proposedTrades.entrySet()) {
+			ITrade trade = entry.getValue();
 			if (trade.getPlayer2() == playerId) {
 				results.add(trade);
 			}
@@ -86,22 +90,22 @@ public class TradeManager implements ITradeManager {
 
 	@Override
 	public void createProposal(ITrade proposal) {
-		proposedTrades.add(proposal);
+		proposedTrades.put(proposal.getId(), proposal);
 	}
 
 	@Override
-	public void acceptProposal(ITrade proposal) {
-		proposedTrades.remove(proposal);
-		activeTrades.add(proposal);
+	public void acceptProposal(int proposalId) {
+		ITrade trade = proposedTrades.remove(proposalId);
+		activeTrades.put(trade.getId(), trade);
 	}
 
 	@Override
-	public void rejectProposal(ITrade proposal) {
-		proposedTrades.remove(proposal);
+	public void rejectProposal(int proposalId) {
+		proposedTrades.remove(proposalId);
 	}
 
 	@Override
-	public void rejectActive(ITrade trade) {
-		activeTrades.remove(trade);
+	public void rejectActive(int tradeId) {
+		activeTrades.remove(tradeId);
 	}
 }
