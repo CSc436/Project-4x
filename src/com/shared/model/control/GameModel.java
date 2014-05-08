@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import com.client.gameinterface.Console;
 import com.shared.model.behaviors.Attackable;
 import com.shared.model.behaviors.Attacker;
 import com.shared.model.behaviors.Movable;
@@ -41,6 +40,8 @@ public class GameModel implements Serializable {
 	private int nextPlayerID = 1;
 	private TradeManager tradeManager;
 
+	private ArrayList<String> chatLog; 
+	
 	// ADdd chat log. 
 	// add functionality to see if chat log has updated
 	// once all players have checked a message, remove from new messages?
@@ -59,6 +60,8 @@ public class GameModel implements Serializable {
 		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
 		
 		map = new GameBoard(500, 500);
+		
+		chatLog = new ArrayList<String>();
 	}
 	
 	/**
@@ -78,6 +81,26 @@ public class GameModel implements Serializable {
 		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
 		
 		map = new GameBoard(width, width);
+		
+		chatLog = new ArrayList<String>();
+	}
+	
+	/**
+	 * updates chat log with a new message
+	 * @param message
+	 */
+	public void updateChatLog(String message)
+	{
+		chatLog.add(message);
+	}
+	
+	/**
+	 * returns current chat log.
+	 * @return
+	 */
+	public ArrayList<String> getChatLog()
+	{
+		return chatLog; 
 	}
 	
 	//@deprecated 

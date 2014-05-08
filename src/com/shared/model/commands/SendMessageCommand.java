@@ -11,6 +11,10 @@ import com.shared.model.control.GameModel;
 public class SendMessageCommand implements Command
 {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -396455197222500915L;
 	private String message; 
 	
 	public SendMessageCommand() {}
@@ -30,7 +34,7 @@ public class SendMessageCommand implements Command
 		return true;
 	}
 
-	/**
+	/**hhhhhh
 	 * 
 	 * @param GameModel model - the model of the game this chat message command exists in.
 	 */
@@ -38,7 +42,7 @@ public class SendMessageCommand implements Command
 		// TODO Auto-generated method stub
 		// model.getInterface.updateMessages?
 		// or add some sort of flag so that interface knows to look at the gameModel.
-		
+		model.updateChatLog(message);
 		return true;
 	}
 

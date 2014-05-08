@@ -3,6 +3,7 @@ package com.client.gameinterface;
 import static com.google.gwt.query.client.GQuery.$;
 
 import java.util.HashMap;
+import java.util.TimerTask;
 
 import com.client.model.ClientModel;
 import com.client.GameCanvas;
@@ -12,6 +13,7 @@ import com.google.gwt.query.client.GQuery;
 import com.google.gwt.user.client.Event;
 import com.shared.model.buildings.Building;
 import com.shared.model.buildings.ResourceBuilding;
+import com.shared.model.commands.SendMessageCommand;
 import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
 import com.shared.model.resources.Resources;
@@ -24,6 +26,7 @@ public class GameInterface {
 	// ID of panel in sidebar currently showing
 	// Or "" if sidebar is hidden
 	private static String showing = "";
+	private static ClientModel clientModel; 
 	private static GameModel gameModel;
 	private static Player me;
 
@@ -37,10 +40,6 @@ public class GameInterface {
 	 * interface
 	 */
 	public static void init(ClientModel cm, GameCanvas c) {
-		int playerID = cm.getPlayerID();
-		gameModel = cm.getGameModel();
-		// TODO: need to set me
-		me = gameModel.getPlayer(playerID);
 		// Change sidebar left value to calculated value
 		int width = $("#sidebar").outerWidth(true);
 		// int closeWidth = $("#sidebar-hide").outerWidth(true);
@@ -48,7 +47,37 @@ public class GameInterface {
 		initClickHandlers();
 		Console.log("hello");
 		
-		// Upon init - if go with giant chat log, update chat to reflect log
+		clientModel = cm; 
+
+		// Needed to delay getting gameModel, because it wasn't set to the one actually on the server.
+	    Timer tim = new Timer()
+	    {
+	    	public void run()
+	    	{
+	    		gameModel = clientModel.getGameModel(); // needs to be delayed?
+	    		int playerID = clientModel.getPlayerID();
+	    		me = gameModel.getPlayer(playerID);
+	    		// Upon init - if go with giant chat log, update chat to reflect log
+	    		initializeChat();
+	    	}
+	    };
+	    tim.schedule(10000); // Delay ensures that gameModel is set to the one on the server, not the placeholder in the Client model
+	    
+		
+		// Schedule update from chat log at fixed rate. 
+		// Timer
+		// TimerTask.
+		/*Timer timer = new Timer(){
+
+			@Override
+			public void run() {
+				gameModel = clientModel.getGameModel(); 
+				initializeChat();
+				
+			}
+			
+		};
+		timer.scheduleRepeating(500);*/
 		
 		// set canvas to c
 		canvas = c; 
@@ -410,6 +439,8 @@ public class GameInterface {
 
 		// Send message - currently just local
 		updateMessages(playerName + ": " + $("#message").val());
+		clientModel.sendCommand(new SendMessageCommand(playerName + ": " + $("#message").val()));
+		Console.log("Chat Command sent to server ");
 		
 		// Scroll back up to the top of messages, wait a couple of ms
 		Timer timer = new Timer()
@@ -453,6 +484,22 @@ public class GameInterface {
 			$("#chat-trigger").text("Chat - New Message!"); // Don't want for message you send yourself, get rid of when at scrollTop() = 0. 
 		}
 	} 
+	
+	/**
+	 * initializes the chat based on contents of chat log.
+	 */
+	public static void initializeChat()
+	{
+		if (gameModel.getChatLog().size() == 0)
+			Console.log("No chats in the chat log!");
+		//if (gameModel.get)
+		
+		
+		for (String msg : gameModel.getChatLog())
+		{
+			updateMessages(msg);
+		}
+	}
 	
 	/**
 	 * Will show/hide sidebar with animation
