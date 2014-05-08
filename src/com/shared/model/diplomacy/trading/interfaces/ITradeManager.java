@@ -17,7 +17,7 @@ public interface ITradeManager extends Serializable {
 	 * ITradeManager manages.
 	 * 
 	 * @param delta
-	 *            - the time step in the gameloop
+	 *            - the time step in the gameloop in seconds
 	 */
 	public void update(float delta);
 
@@ -57,19 +57,19 @@ public interface ITradeManager extends Serializable {
 	 * @param proposal
 	 *            - the Trade proposal we have received that we are accepting.
 	 */
-	public void acceptProposal(ITrade proposal);
+	public void acceptProposal(int proposalId);
 
 	/**
 	 * 
 	 * @param proposal
 	 *            - the Trade proposal we have received that we are rejecting.
 	 */
-	public void rejectProposal(ITrade proposal);
+	public void rejectProposal(int proposalId);
 
 	/**
 	 * 
 	 * @param trade
 	 *            - the currently active trade to disable and remove.
 	 */
-	public void rejectActive(ITrade trade);
+	public void rejectActive(int tradeId);
 }

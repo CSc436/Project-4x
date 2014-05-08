@@ -17,22 +17,19 @@ public abstract class AbstractIntervalTrade implements ITrade {
 	 */
 	private static final long serialVersionUID = 8631614298939652590L;
 	private float currentTime;
-	private final float interval;
+	private static final float interval = 30;
 	private float timeRemaining;
 
 	/**
 	 * Constructor that initializes this Trade with a trade interval and total
 	 * duration.
 	 * 
-	 * @param interval
-	 *            - the interval in seconds that each trade is executed in.
 	 * @param totalDuration
-	 *            - the total amount of time this IntervalTrade is active.
+	 *            - the total amount of time this IntervalTrade is active in minutes.
 	 */
-	protected AbstractIntervalTrade(float interval, float totalDuration) {
+	protected AbstractIntervalTrade(int totalDuration) {
 		currentTime = 0;
-		this.interval = interval;
-		this.timeRemaining = totalDuration;
+		this.timeRemaining = totalDuration * 60;
 	}
 
 	/**
@@ -62,4 +59,6 @@ public abstract class AbstractIntervalTrade implements ITrade {
 	public abstract int getPlayer1();
 
 	public abstract int getPlayer2();
+	
+	public abstract int getId();
 }

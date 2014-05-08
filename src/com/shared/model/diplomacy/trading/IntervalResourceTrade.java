@@ -12,20 +12,18 @@ import com.shared.model.resources.Resources;
  * 
  */
 public class IntervalResourceTrade extends AbstractIntervalTrade {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1986949014291109777L;
+
 	private int creatingPlayer;
 	private int receivingPlayer;
 	private Resources p1Trade;
 	private Resources p2Trade;
+	
+	private int id;
 
 	/**
 	 * Initializes the interval trade.
 	 * 
-	 * @param interval
-	 *            - how often in seconds to perform a trade.
 	 * @param totalDuration
 	 *            - the total time until the trade deactivates.
 	 * @param creatingPlayer
@@ -36,11 +34,11 @@ public class IntervalResourceTrade extends AbstractIntervalTrade {
 	 *            - The Resources that player1 gives to player2 on each act().
 	 * @param p2Trade
 	 *            - The Resources that player2 gives to player1 on each act().
+	 * @param id - the id of this trade 
 	 */
-	public IntervalResourceTrade(float interval, float totalDuration,
-			int creatingPlayer, int receivingPlayer, Resources p1Trade,
-			Resources p2Trade) {
-		super(interval, totalDuration);
+	public IntervalResourceTrade(int totalDuration, int creatingPlayer,
+			int receivingPlayer, Resources p1Trade, Resources p2Trade, int id) {
+		super(totalDuration);
 		this.creatingPlayer = creatingPlayer;
 		this.receivingPlayer = receivingPlayer;
 		this.p1Trade = p1Trade;
@@ -75,7 +73,7 @@ public class IntervalResourceTrade extends AbstractIntervalTrade {
 	public int getPlayer2() {
 		return receivingPlayer;
 	}
-	
+
 	public int getCreatingPlayer() {
 		return creatingPlayer;
 	}
@@ -90,5 +88,10 @@ public class IntervalResourceTrade extends AbstractIntervalTrade {
 
 	public Resources getP2Trade() {
 		return p2Trade;
+	}
+	
+	@Override
+	public int getId() {
+		return id;
 	}
 }
