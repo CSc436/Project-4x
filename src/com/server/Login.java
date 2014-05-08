@@ -190,7 +190,7 @@ public class Login implements Serializable {
 	public boolean createGame() {
 
 		if (players.size() > 1 && width > 0) {
-			model = new GameModel(players, width);
+			model = new GameModel();
 			controller = new Controller(model);
 			return true;
 		} else

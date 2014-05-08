@@ -152,4 +152,13 @@ public class TechnologyTree implements Serializable {
 		}
 		return false;
 	}
+	
+	/**
+	 * returns current tree since it was changed to private. 
+	 * @return currently_researching tree
+	 */
+	public HashMap<String, Integer> getCurrentlyResearching()
+	{
+		return currently_researching;
+	}
 }

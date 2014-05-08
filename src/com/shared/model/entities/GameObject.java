@@ -18,8 +18,8 @@ public class GameObject implements Serializable, Combatable {
 	 * 
 	 */
 	private static final long serialVersionUID = -449525545957280452L;
-	private final int id;
-	private final int playerId;
+	private int id;
+	private int playerId;
 	protected HashMap<String, String> allActions;
 	protected GameObjectType type;
 	protected UnitStats stats;

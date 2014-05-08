@@ -56,6 +56,39 @@ public class GameModel implements Serializable {
 		map = new GameBoard(500, 500);
 	}
 	
+	/**
+	 * if we don't actually initialize a list of players anymore, might as
+	 * well have a new constructor....
+	 * 
+	 * @param width width of gameboard
+	 */
+	public GameModel(int width) {
+		players = new HashMap<Integer,Player>();
+		
+		gameObjects = new HashMap<Integer, GameObject>();
+		attackers = new HashMap<Integer, Attacker>();
+		movables = new HashMap<Integer, Movable>();
+		attackables = new HashMap<Integer, Attackable>();
+		producers = new HashMap<Integer, Producer>();
+		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
+		
+		map = new GameBoard(width, width);
+	}
+	
+	//@deprecated 
+	/*public GameModel(ArrayList<Player> players, int width) {
+		//this.players = players;
+		
+		gameObjects = new HashMap<Integer, GameObject>();
+		attackers = new HashMap<Integer, Attacker>();
+		movables = new HashMap<Integer, Movable>();
+		attackables = new HashMap<Integer, Attackable>();
+		producers = new HashMap<Integer, Producer>();
+		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
+		
+		map = new GameBoard(width, width);
+	}*/
+	
 	public void addPlayer( String playerName ) {
 		players.put(nextPlayerID, new Player(playerName, nextPlayerID++));
 	}
@@ -65,7 +98,7 @@ public class GameModel implements Serializable {
 	}
 
 	public Player getPlayer(int playerId) {
-		return players.get(playerId - 1);
+		return players.get(playerId);
 	}
 	
 	/**

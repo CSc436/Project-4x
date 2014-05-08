@@ -24,6 +24,10 @@ public class PlayGame implements EntryPoint {
 				Console.log($("#login-username").val());
 				Console.log($("#login-password").val());
 
+				// Added quick hack to get loggin name to be chat name - Nick
+				// Possibly move to run method? 
+				GameInterface.setPlayerName($("#login-username").val());
+				
 				Window.alert("Login?!");
 
 				$("#login-screen").remove();
@@ -35,7 +39,7 @@ public class PlayGame implements EntryPoint {
 						ClientModel theModel = new ClientModel();
 						theModel.run();
 						GameCanvas canvas = new GameCanvas(theModel);
-						GameInterface.init();
+						GameInterface.init(theModel, canvas);
 						// Remove loading screen
 						$("#loading-screen").remove();
 					}
