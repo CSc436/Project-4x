@@ -1,7 +1,9 @@
 package com.shared.model.commands;
 
-import com.shared.model.behaviors.Movable;
+import com.shared.model.behaviors.Attacker;
 import com.shared.model.control.GameModel;
+import com.shared.model.entities.GameObject;
+import com.shared.model.units.Unit;
 
 public class MoveUnitCommand implements Command {
 	
@@ -29,7 +31,11 @@ public class MoveUnitCommand implements Command {
 
 	@Override
 	public boolean performCommand(GameModel model) {
-		((Movable) model.getGameObject(entityID)).setMoveTarget(x, y);
+		GameObject o = model.getGameObject(entityID);
+		if( o != null ) {
+			o.setMoveTarget(x, y);
+			if( o instanceof Attacker ) ((Attacker) o).stopAttack();
+		}
 		return true;
 	}
 

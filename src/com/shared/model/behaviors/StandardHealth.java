@@ -16,25 +16,31 @@ public class StandardHealth implements Attackable {
 	public StandardHealth() {
 		this.maxHP = 10;
 		this.hp = maxHP;
+		this.healthRegen = 0;
 		this.armor = 0;
 	}
 	
 	public StandardHealth( float maxHP, float healthRegen, int armor ) {
 		this.maxHP = maxHP;
 		this.hp = this.maxHP;
+		this.healthRegen = healthRegen;
 		this.armor = armor;
 	}
 	
 	public void takeDamage( int damage ) {
-		damageToTake += damage - armor;
+		damage -= armor;
+		damage = damage > 0 ? damage : 0 ;
+		damageToTake += damage;
 	}
 	
 	@Override
 	public void simulateDamage(int timeStep) {
 		// TODO Auto-generated method stub
 		if(!isDead) {
-			hp += healthRegen * timeStep / 1000;
+			System.out.println("I have " + hp + " health left!");
+			hp += healthRegen * timeStep / 1000.0f;
 			hp -= damageToTake;
+			hp = hp > maxHP ? maxHP : hp ;
 			if( hp <= 0 ) {
 				hp = 0;
 				isDead = true;

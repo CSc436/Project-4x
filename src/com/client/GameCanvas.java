@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.client.gameinterface.Console;
-import com.client.model.ClientModel;
+import com.client.model.ClientController;
 import com.client.rendering.Camera;
 import com.client.rendering.Mesh;
 import com.client.rendering.OBJImporter;
@@ -47,6 +47,7 @@ import com.googlecode.gwtgl.binding.WebGLUniformLocation;
 import com.shared.model.buildings.Building;
 import com.shared.model.buildings.BuildingType;
 import com.shared.model.commands.AttackCommand;
+import com.shared.model.commands.ConstructBuildingCommand;
 import com.shared.model.commands.MoveUnitCommand;
 import com.shared.model.commands.PlaceUnitCommand;
 import com.shared.model.entities.GameObject;
@@ -85,7 +86,7 @@ public class GameCanvas {
 	private final boolean debug = false;
 	private final boolean commandDebug = true;
 	
-	private final ClientModel theModel;
+	private final ClientController theModel;
 	private final Canvas webGLCanvas = Canvas.createIfSupported();
 	
 	private Selector objectSelector;
@@ -99,7 +100,7 @@ public class GameCanvas {
 	private boolean chatFlag = false; // if chat is selected, do not allow camera movment/input
 	
 	
-	public GameCanvas(ClientModel theModel) {
+	public GameCanvas(ClientController theModel) {
 		// CODE FOR MINIMAP DEV/CLICK SELECTING
 		selectedEntities = new ArrayList<Integer>();
 		this.mouseVector = new Vector3(0,0,0);
@@ -199,8 +200,8 @@ public class GameCanvas {
 			//Console.log("Extrapolating position " + timeSinceUpdate + " ms forward");
 			double[] pos = o.extrapolatePosition(timeSinceUpdate).toArray();
 			//Console.log("Unit " + o.getId() + " at " + pos[0] + " " + pos[1]);
-			m.posX = (float) pos[0];
-			m.posY = (float) pos[1];
+			m.posX = (float) pos[0] + 0.5f;
+			m.posY = (float) pos[1] + 0.5f;
 			m.id = o.getId();
 			m.render(glContext, shader, camera);
 		}
@@ -317,8 +318,8 @@ public class GameCanvas {
 				m = unitMeshes.get(((Unit) o).getUnitType());
 			}
 			double[] pos = o.extrapolatePosition(timeSinceUpdate).toArray();
-			m.posX = (float) pos[0];
-			m.posY = (float) pos[1];
+			m.posX = (float) pos[0] + 0.5f;
+			m.posY = (float) pos[1] + 0.5f;
 			m.id = i;
 			m.render(glContext, selectedShader, camera);
 		}
@@ -360,8 +361,10 @@ public class GameCanvas {
 					case KeyCodes.KEY_E: rotateRight = true; break;
 					case KeyCodes.KEY_X: center = true; break;
 					case KeyCodes.KEY_I: 
-						Console.log("pressed I");
 						theModel.sendCommand(new PlaceUnitCommand( UnitType.CANNON, 1, mouseTile));
+						break;
+					case KeyCodes.KEY_B:
+						theModel.sendCommand(new ConstructBuildingCommand( BuildingType.BARRACKS, 1, mouseTile));
 						break;
 					default: if (debug) Console.log("Unrecognized: " + event.getNativeKeyCode()); break;
 					}

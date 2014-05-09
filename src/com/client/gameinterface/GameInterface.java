@@ -4,7 +4,7 @@ import static com.google.gwt.query.client.GQuery.$;
 
 import java.util.HashMap;
 
-import com.client.model.ClientModel;
+import com.client.model.ClientController;
 import com.client.GameCanvas;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.query.client.Function;
@@ -36,7 +36,7 @@ public class GameInterface {
 	 * Responsible for registering callbacks that are purely bound to the
 	 * interface
 	 */
-	public static void init(ClientModel cm, GameCanvas c) {
+	public static void init(ClientController cm, GameCanvas c) {
 		int playerID = cm.getPlayerID();
 		gameModel = cm.getGameModel();
 		// TODO: need to set me

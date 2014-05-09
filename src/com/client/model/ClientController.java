@@ -15,7 +15,7 @@ import com.shared.model.commands.Command;
 import com.shared.model.control.CommandPacket;
 import com.shared.model.control.GameModel;
 
-public class ClientModel {
+public class ClientController {
 	
 	private int turnNumber = -1;
 	private int playerNumber = -1;
@@ -30,7 +30,7 @@ public class ClientModel {
 	private Queue<Command> commandQueueCopy = new LinkedList<Command>();
 	private boolean debug = false;
 	
-	public ClientModel() {
+	public ClientController() {
 		
 		simpleSimulator = GWT.create(SimpleSimulator.class);
 		

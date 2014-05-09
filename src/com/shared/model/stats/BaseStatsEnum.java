@@ -19,8 +19,7 @@ public enum BaseStatsEnum implements Serializable {
 	/*
 	 * Each enumeration contains a UnitsStats object, which defines the stats
 	 * for the each type of unit
-	 * UnitsStats(damage,range,armor,health_regen,health
-	 * ,movementSpeed,actionSpeed,ProductionCost)
+	 * UnitsStats( damage, range, armor, health_regen, health ,movementSpeed, actionSpeed, ProductionCost)
 	 */
 
 	// UNITS
@@ -79,29 +78,33 @@ public enum BaseStatsEnum implements Serializable {
 
 	// BUILDINGS
 
-	CASTLE(new UnitStats(0, 2, 200, 0, 2000, 0, 0, new Resources(100, 0, 0, 0,
+	CASTLE(new UnitStats(0, 2, 0, 0, 2000, 0, 0, new Resources(100, 0, 0, 0,
 			0))),
 
-	BARRACKS(new UnitStats(0, 2, 100, 0, 1000, 0, 0, new Resources(100, 0, 0,
+	BARRACKS(new UnitStats(0, 2, 0, 0, 1000, 0, 0, new Resources(100, 0, 0,
 			0, 0))),
 
-	BANK(
-			new UnitStats(0, 2, 100, 0, 1000, 0, 0, new Resources(100, 0, 0, 0,
+	BANK( new UnitStats(0, 2, 0, 0, 1000, 0, 0, new Resources(100, 0, 0, 0,
 					0))),
 
-	TOWN_HALL(new UnitStats(0, 2, 100, 0, 1000, 0, 0, new Resources(100, 0, 0,
+	TOWN_HALL(new UnitStats(0, 2, 0, 0, 1000, 0, 0, new Resources(100, 0, 0,
 			0, 0))),
 
 	// RESOURCE BUILDINGS
-	LUMBER_MILL(new UnitStats(0, 2, 100, 0, 1000, 0, 0, new Resources(100, 0,
-			0, 0, 0))),
+	LUMBER_MILL(new UnitStats(0, 2, 0, 0, 1000, 0, 0, new Resources(100, 0, 0,
+			0, 0))),
 
-	STONE_MINE(new UnitStats(0, 2, 100, 0, 1000, 0, 0, new Resources(100, 0, 0,
-			0, 0))), GOLD_MINE(new UnitStats(0, 2, 100, 0, 1000, 0, 0,
-			new Resources(100, 0, 0, 0, 0))), FARM(new UnitStats(0, 2, 100, 0,
-			1000, 0, 0, new Resources(100, 0, 0, 0, 0))), UNIVERSITY(
-			new UnitStats(0, 2, 100, 0, 1000, 0, 0, new Resources(100, 0, 0, 0,
-					0))),
+	STONE_MINE(new UnitStats(0, 2, 0, 0, 1000, 0, 0, new Resources(100, 0, 0,
+			0, 0))), 
+	
+	GOLD_MINE( new UnitStats(0, 2, 0, 0, 1000, 0, 0, new Resources(100, 0, 0,
+			0, 0))),
+			
+	FARM( new UnitStats(0, 2, 0, 0, 1000, 0, 0, new Resources(100, 0, 0, 0,
+			0))), 
+			
+	UNIVERSITY( new UnitStats(0, 2, 0, 0, 1000, 0, 0, new Resources(100, 0, 0,
+			0, 0))),
 
 	// RESEARCH BUILDINGS
 

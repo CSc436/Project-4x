@@ -1,6 +1,7 @@
 package com.server;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Timer;
@@ -114,12 +115,15 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements SimpleS
 		long currTime = System.currentTimeMillis();
 		
 		if(currTime > lastReadyTime + timeout) {
+			LinkedList<Integer> dropList = new LinkedList<Integer>();
 			for( Integer key : keySet ) {
 				if(!playerTable.get(key)) {
 					if(debug) System.out.println("!!! Dropping player " + key);
-					playerTable.remove(key);
+					dropList.add(key);
 				}
 			}
+			for( Integer i : dropList )
+				playerTable.remove(i);
 		} else {
 			for( Integer key : keySet ) {
 				if(!playerTable.get(key)) {

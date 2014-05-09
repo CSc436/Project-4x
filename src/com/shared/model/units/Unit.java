@@ -96,4 +96,9 @@ public class Unit extends GameObject implements Attacker, Producible {
 		attackBehavior.simulateAttack(timeStep);
 	}
 
+	@Override
+	public boolean isAnimatingAttack() {
+		return attackBehavior.isAnimatingAttack();
+	}
+
 }
