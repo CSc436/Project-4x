@@ -25,7 +25,7 @@ public class ClientController {
 	private long lastUpdateTime;
 	private final SimpleSimulatorAsync simpleSimulator;
 	private GameModel model = new GameModel();
-	private boolean readyForNext = true;
+	private volatile boolean readyForNext = false;
 	private int cycleTime = 100;
 	
 	private Queue<Command> commandQueue = new LinkedList<Command>();
@@ -66,7 +66,7 @@ public class ClientController {
 
 			@Override
 			public void onSuccess(Integer playerNum) {
-				if(debug) Console.log("Joined game");
+				Console.log("Joined game");
 				playerNumber = playerNum;
 				retrieveGame();
 			}
@@ -80,7 +80,7 @@ public class ClientController {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				if(debug) Console.log("Could not retrieve game.");
+				Console.log("Could not retrieve game.");
 			}
 
 			@Override
@@ -89,7 +89,21 @@ public class ClientController {
 				model = result;
 				GameInterface.setGameModel(result);
 				$("#loading-screen").remove();
-				beginPlaying();
+				turnNumber = result.getTurnNumber();
+				simpleSimulator.confirmReceipt(playerNumber, turnNumber, new AsyncCallback<String>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Console.log("    Receipt failed, retrying...");
+					}
+
+					@Override
+					public void onSuccess(String result) {
+						if(debug) Console.log("    Receipt success!");
+						readyForNext = true;
+						beginPlaying();
+					}
+				});
 			}
 			
 		});
@@ -98,7 +112,6 @@ public class ClientController {
 	private Timer pollTimer;
 	
 	public void beginPlaying(){
-		readyForNext = true;
 		
 		pollTimer = new Timer() {
 
@@ -199,7 +212,7 @@ public class ClientController {
 
 			@Override
 			public void onSuccess(String result) {
-				if(debug) Console.log("    Receipt success!");
+				Console.log("    Receipt success!");
 				readyForNext = true;
 			}
 

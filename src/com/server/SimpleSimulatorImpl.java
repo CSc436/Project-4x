@@ -1,11 +1,12 @@
 package com.server;
 
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.client.SimpleSimulator;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -24,11 +25,17 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements SimpleS
 	int currentTurn;
 	boolean debug = false;
 	
-	HashMap<Integer, Boolean> playerTable = new HashMap<Integer, Boolean>();
+	Map<Integer, PlayerState> playerTable = new ConcurrentHashMap<Integer, PlayerState>();
 	private long lastReadyTime = System.currentTimeMillis();
 	private int timeout = 100000; // Number of milliseconds to wait before dropping connections
 	int nextPlayerSlot = 0;
 	
+	public static enum PlayerState {
+		AwaitConfirmation,
+		ModelUpToDate,
+		NoCommandsSent,
+		HasSentCommands
+	}
 	
 	@Override
 	public void init() {
@@ -39,22 +46,27 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements SimpleS
 		TimerTask task = new TimerTask() {
 			@Override
 			public void run() {
-				trySendGame();
+				updateServerState();
 			}
 		};
 		
 		timer.scheduleAtFixedRate(task, 0, 10);
 	}
 	
-	
 	public CommandPacket sendCommands( int playerNumber, Queue<Command> commandQueue ) {
 		// Are you still part of the game, or have you timed out?
 		if( !playerTable.containsKey(playerNumber) ) {
 			return null;
 		}
-		controller.sendCommands( commandQueue );
 		
-		while(!controller.isPacketReady()) {
+		System.out.println("    Player " + playerNumber + " waiting for server to start receiving commands");
+		synchronizeOn(PlayerState.NoCommandsSent, PlayerState.HasSentCommands);
+		
+		System.out.println("    Player " + playerNumber + " sending its commands!");
+		controller.sendCommands( commandQueue );
+		playerTable.put(playerNumber, PlayerState.HasSentCommands);
+		
+		while(!controller.isPacketReady() ) {
 			//System.out.println("    Client already up to date");
 			try {
 				Thread.sleep(10);
@@ -76,8 +88,14 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements SimpleS
 	 */
 	@Override
 	public String confirmReceipt( int playerNumber, int turnNumber ) {
+		
+		System.out.println("    Player " + playerNumber + " waiting for all players to confirm receipt");
+		synchronizeOn(PlayerState.AwaitConfirmation, PlayerState.ModelUpToDate);
+		
+		System.out.println("    Player " + playerNumber + " done waiting for confirmReceipt!");
+		
 		if(turnNumber <= controller.turnNumber) {
-			playerTable.put(playerNumber, true);
+			playerTable.put(playerNumber, PlayerState.ModelUpToDate);
 			if(debug) System.out.println(">>> Player " + playerNumber + " confirms receipt of turn " + turnNumber);
 		}
 		return null;
@@ -89,13 +107,29 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements SimpleS
 	 */
 	@Override
 	public GameModel getGame( int playerNumber, int lastTurnReceived ) {
-		playerTable.put(playerNumber, true);
+		
+		System.out.println("    GETGAME: Player " + playerNumber + " waiting for server to start receiving commands");
+		synchronizeOn(PlayerState.NoCommandsSent, PlayerState.HasSentCommands);
+		
+		System.out.println("    GETGAME: Player " + playerNumber + " putting itself in the table!");
+		
+		synchronized(playerTable) {
+			playerTable.put(playerNumber, PlayerState.HasSentCommands);
+		}
+		
+		while(!controller.isPacketReady() ) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("    GETGAME: Player " + playerNumber + " about to receive game!");
 		return controller.getGameModel();
 	}
 	
 	public Integer joinGame() {
 		if(!controller.isRunning) controller.run();
-		playerTable.put(nextPlayerSlot, true);
 		return nextPlayerSlot++;
 	}
 	
@@ -110,10 +144,9 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements SimpleS
 	 * Tries to send the next set of commands out to players if they are all ready.
 	 * @return - whether or not every player is ready to continue with the game
 	 */
-	public synchronized boolean trySendGame() {
-		Set<Integer> keySet = playerTable.keySet();
+	public synchronized void updateServerState() {
 		long currTime = System.currentTimeMillis();
-		
+		/*
 		if(currTime > lastReadyTime + timeout) {
 			LinkedList<Integer> dropList = new LinkedList<Integer>();
 			for( Integer key : keySet ) {
@@ -124,22 +157,58 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements SimpleS
 			}
 			for( Integer i : dropList )
 				playerTable.remove(i);
-		} else {
+		} else {*/
+			synchronized(playerTable) {
+				if(allPlayersAtState(PlayerState.ModelUpToDate)) {
+					System.out.println("Ready to receive commands from all players on turn " + controller.getGameModel().getTurnNumber());
+					lastReadyTime = currTime;
+					setAllPlayerStates(PlayerState.NoCommandsSent);
+				}
+				else if(allPlayersAtState(PlayerState.HasSentCommands)) {
+					System.out.println("Ready to send command packet to all players on turn " + controller.getGameModel().getTurnNumber());
+					controller.continueSimulation();
+					setAllPlayerStates(PlayerState.AwaitConfirmation);
+				} else {
+					//System.out.println("WTF: " + controller.getGameModel().getTurnNumber());
+				}
+			}
+		//}
+		
+	}
+	
+	public boolean allPlayersAtState(PlayerState...states) {
+		synchronized(playerTable) {
+			Set<Integer> keySet = playerTable.keySet();
 			for( Integer key : keySet ) {
-				if(!playerTable.get(key)) {
+				boolean playerstate = false;
+				for(PlayerState state: states) {
+					playerstate |= playerTable.get(key) == state;
+				}
+				if(!playerstate) {
 					if(debug) System.out.println(">>> Still waiting for player " + key);
 					return false;
 				}
 			}
+			return true;
 		}
-		
-		keySet = playerTable.keySet();
-		for( Integer key : keySet ) {
-			playerTable.put(key, false);
-		}
-		controller.continueSimulation();
-		lastReadyTime = currTime;
-		return true;
 	}
-
+	
+	public void setAllPlayerStates(PlayerState state) {
+		synchronized(playerTable) {
+			Set<Integer> keySet = playerTable.keySet();
+			for( Integer key : keySet ) {
+				playerTable.put(key, state);
+			}
+		}
+	}
+	
+	public void synchronizeOn(PlayerState...states) {
+		while(!allPlayersAtState(states)) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }
