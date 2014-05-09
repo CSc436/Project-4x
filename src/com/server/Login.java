@@ -210,7 +210,7 @@ public class Login implements Serializable {
 	}
 
 	/**
-	 * getGamePlayers()
+	 * hasUserInHashMap()
 	 * 
 	 * @return true if the given user name is in the accounts map
 	 */
@@ -220,7 +220,7 @@ public class Login implements Serializable {
 	}
 
 	/**
-	 * getGamePlayers()
+	 * hasPlayers()
 	 * 
 	 * @return true if the player list is not empty
 	 */
