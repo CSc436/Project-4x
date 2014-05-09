@@ -1,6 +1,7 @@
 package com.client.rendering;
 
 import com.client.GameCanvas;
+import com.client.gameinterface.Console;
 import com.shared.utils.FloatMatrix;
 import com.shared.utils.Vector3;
 
@@ -41,9 +42,14 @@ public class Camera {
 	public float up(float delta) {
 		// TODO Auto-generated method stub
 		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 10/camZ);
-		temp.normalize();
-		camX += temp.x * delta;
-		camY += temp.y * delta;
+		if (!temp.normalize())
+			return 0;
+		Vector3 temp2D = new Vector3(temp.x, temp.y, 0);
+		if (!temp2D.normalize())
+			return 0;
+		camX += temp2D.x * delta;
+		camY += temp2D.y * delta;
+		Console.log("x: " + temp.x + ", y: " + temp.y + ", delt: " + delta);
 		return Vector3.dist(temp.x, temp.y);
 	}
 
@@ -52,9 +58,13 @@ public class Camera {
 		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw) , getSign(yaw), 10/camZ);
 		temp.left();
 		temp.left();
-		temp.normalize();
-		camX += temp.x * delta;
-		camY += temp.y * delta;
+		if (!temp.normalize())
+			return 0;
+		Vector3 temp2D = new Vector3(temp.x, temp.y, 0);
+		if (!temp2D.normalize())
+			return 0;
+		camX += temp2D.x * delta;
+		camY += temp2D.y * delta;
 		return Vector3.dist(temp.x, temp.y);
 	}
 
@@ -62,9 +72,13 @@ public class Camera {
 		// TODO Auto-generated method stub
 		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 10/camZ);
 		temp.right(); // the map starts off backwards...
-		temp.normalize();
-		camX += temp.x * delta;
-		camY += temp.y * delta;
+		if (!temp.normalize())
+			return;
+		Vector3 temp2D = new Vector3(temp.x, temp.y, 0);
+		if (!temp2D.normalize())
+			return;
+		camX += temp2D.x * delta;
+		camY += temp2D.y * delta;
 		
 	}
 
@@ -72,9 +86,13 @@ public class Camera {
 		// TODO Auto-generated method stub
 		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 10/camZ);
 		temp.left();
-		temp.normalize();
-		camX += temp.x * delta;
-		camY += temp.y * delta;
+		if (!temp.normalize())
+			return;
+		Vector3 temp2D = new Vector3(temp.x, temp.y, 0);
+		if (!temp2D.normalize())
+			return;
+		camX += temp2D.x * delta;
+		camY += temp2D.y * delta;
 	}
 
 	private float getSign(float yaw) {
@@ -98,12 +116,18 @@ public class Camera {
 
 	public void rotateLeft() {
 		// TODO Auto-generated method stub
+		up(camZ);
 		yaw -= DELTA_ROTATE;
+		down(camZ);
 	}
 
 	public void rotateRight() {
 		// TODO Auto-generated method stub
+		//if (up(camZ) == 0)
+		//	return;
+		up(camZ);
 		yaw += DELTA_ROTATE;
+		down(camZ);
 	}
 
 	public void defaultPosition() {

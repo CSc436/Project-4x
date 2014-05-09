@@ -12,13 +12,14 @@ public class Vector3 {
 		this.z = z;
 	}
 	
-	public void normalize() {
+	public boolean normalize() {
 		float length = (float) Math.sqrt(x*x + y*y + z*z);
 		if (length == 0)
-			return;
+			return false;
 		x /= length;
 		y /= length;
 		z /= length;
+		return true;
 	}
 	
 	public void multScalar(float scalar) {

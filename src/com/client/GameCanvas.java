@@ -298,6 +298,7 @@ public class GameCanvas {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				objectSelector.invalidMap = true;
+				
 				if (debug) Console.log("Pressed: " + event.getNativeKeyCode());
 				switch (event.getNativeKeyCode()) {
 				case KeyCodes.KEY_UP:
