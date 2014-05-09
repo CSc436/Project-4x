@@ -451,17 +451,11 @@ public class GameCanvas {
 						int targetID = objectSelector.pickEntity(event.getClientX(), event.getClientY());
 						if(commandDebug) Console.log("Target ID: " + targetID);
 						if(targetID == 0) {
-							Coordinate c = objectSelector.pickTile(event.getClientX(), event.getClientY());
-							// A quick check to make sure that we did not miss the map
-							if(c.x >= 0.0) {
-								c.x = (int)(c.x / (255.0/GRID_WIDTH));
-								c.y = (int)(c.y / (255.0/GRID_WIDTH));
-								if(commandDebug) Console.log( "Sending units to: " + c.x + " " + c.y );
-							}
 							for(Integer i : selectedEntities) {
-								theModel.sendCommand(new MoveUnitCommand(i,c.x,c.y));
+								theModel.sendCommand(new MoveUnitCommand(i, mouseTile.x, mouseTile.y));
 							}
 						} else {
+							if(commandDebug) Console.log("Selected units attacking unit " + targetID);
 							for(Integer i : selectedEntities) {
 								theModel.sendCommand(new AttackCommand(i,targetID));
 							}
@@ -510,8 +504,8 @@ public class GameCanvas {
 				Console.log("(before) TILE: " + mouseTile.toString());
 				// A quick check to make sure that we did not miss the map
 				if(mouseTile.x >= 0.0) {
-					mouseTile.x = (int)(mouseTile.x / (255.0/GRID_WIDTH));
-					mouseTile.y = (int)(mouseTile.y / (255.0/GRID_WIDTH));
+					mouseTile.x = (int)(mouseTile.x / (255.0/GRID_WIDTH) + 0.5);
+					mouseTile.y = (int)(mouseTile.y / (255.0/GRID_WIDTH) + 0.5);
 				}
 				RootPanel.get("tile-info").getElement().setInnerHTML(mouseTile.toString());
 				Console.log("(after) TILE: " + mouseTile.toString());

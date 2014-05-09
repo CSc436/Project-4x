@@ -13,14 +13,9 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.ClosingEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.web.bindery.autobean.shared.AutoBean;
-import com.google.web.bindery.autobean.shared.AutoBeanCodex;
-import com.google.web.bindery.autobean.shared.AutoBeanUtils;
 import com.shared.model.commands.Command;
 import com.shared.model.control.CommandPacket;
 import com.shared.model.control.GameModel;
-//import com.sksamuel.gwt.websockets.Websocket;
-//import com.sksamuel.gwt.websockets.WebsocketListener;
 
 public class ClientModel {
 	
@@ -30,11 +25,8 @@ public class ClientModel {
 	private long lastUpdateTime;
 	private final SimpleSimulatorAsync simpleSimulator;
 	private GameModel model = new GameModel();
-	private int averageTurnInterval = 200;
 	private boolean readyForNext = true;
 	private int cycleTime = 100;
-	
-	//private Websocket socket;
 	
 	private Queue<Command> commandQueue = new LinkedList<Command>();
 	private Queue<Command> commandQueueCopy = new LinkedList<Command>();
@@ -52,33 +44,6 @@ public class ClientModel {
 
 			}
 		});
-		
-//		String webSocketURL = GWT.getModuleBaseURL().replace("http", "ws") + "webSocket";
-//		socket = new Websocket(webSocketURL);
-//		socket.addListener(new WebsocketListener() {
-//
-//			@Override
-//			public void onClose() {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//
-//			@Override
-//			public void onMessage(String msg) {
-//				// TODO Auto-generated method stub
-//				AutoBean<SimpleGameModel> bean = AutoBeanCodex.decode(myFactory, SimpleGameModel.class, msg);     
-//			    nextModel = bean.as(); 
-//			}
-//
-//			@Override
-//			public void onOpen() {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//			
-//		});
-//		
-//		AutoBean<Request> bean = AutoBeanUtils.getAutoBean(delegate)
 
 	}
 	
@@ -140,8 +105,6 @@ public class ClientModel {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				
-				final long startTime = System.currentTimeMillis();
 				
 				if(!readyForNext) {
 					//Console.log("Not ready for next set of commands");

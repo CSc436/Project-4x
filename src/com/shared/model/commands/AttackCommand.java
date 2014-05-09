@@ -31,7 +31,7 @@ public class AttackCommand implements Command {
 		Attacker attacker = (Attacker) model.getGameObject(attackerID);
 		Combatable target = (Combatable) model.getGameObject(targetID);
 		attacker.setTarget(target);
-		// TODO Auto-generated method stub
+		attacker.startAttack();
 		return true;
 	}
 
