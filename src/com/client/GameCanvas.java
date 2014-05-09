@@ -501,14 +501,14 @@ public class GameCanvas {
 					GameCanvas.this.move = false;
 				}
 				mouseTile = objectSelector.pickTile(event.getClientX(), event.getClientY());
-				Console.log("(before) TILE: " + mouseTile.toString());
+				//Console.log("(before) TILE: " + mouseTile.toString());
 				// A quick check to make sure that we did not miss the map
 				if(mouseTile.x >= 0.0) {
 					mouseTile.x = (int)(mouseTile.x / (255.0/GRID_WIDTH) + 0.5);
 					mouseTile.y = (int)(mouseTile.y / (255.0/GRID_WIDTH) + 0.5);
 				}
 				RootPanel.get("tile-info").getElement().setInnerHTML(mouseTile.toString());
-				Console.log("(after) TILE: " + mouseTile.toString());
+				//Console.log("(after) TILE: " + mouseTile.toString());
 			}
 			
 		}, MouseMoveEvent.getType());

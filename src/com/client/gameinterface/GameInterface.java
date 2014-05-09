@@ -47,13 +47,7 @@ public class GameInterface {
 	 * interface
 	 */
 	public static void init(ClientModel cm, GameCanvas c) {
-		/*
-		 * clientModel = cm; int playerID = clientModel.getPlayerID(); gameModel
-		 * = clientModel.getGameModel(); // TODO: need to set me, this currently
-		 * doesn't work // because playerID is never set in the ClientModel me =
-		 * gameModel.getPlayer(playerID);
-		 */
-
+		
 		// Change sidebar left value to calculated value
 		int width = $("#sidebar").outerWidth(true);
 		$("#sidebar").css("left", "-" + width);
@@ -64,32 +58,15 @@ public class GameInterface {
 		gameModel = null;
 		// Needed to delay getting gameModel, because it wasn't set to the one
 		// actually on the server.
-		Timer tim = new Timer() {
-			public void run() {
-				gameModel = clientModel.getGameModel(); // needs to be delayed?
-				int playerID = clientModel.getPlayerID();
-				me = gameModel.getPlayer(playerID);
-				// Upon init - if go with giant chat log, update chat to reflect
-				// log
-				initializeChat();
-			}
-		};
-		tim.schedule(10000); // Delay ensures that gameModel is set to the one
-								// on the server, not the placeholder in the
-								// Client model
-
-		// Schedule update from chat log at fixed rate.
-		// Timer
-		// TimerTask.
-		Timer timer = new Timer() {
-
-			@Override
-			public void run() {
-				updateChat();
-			}
-
-		};
-		timer.scheduleRepeating(250); // Check for new messages every second.
+		/*
+		 * Timer tim = new Timer() { public void run() { gameModel =
+		 * clientModel.getGameModel(); // needs to be delayed? int playerID =
+		 * clientModel.getPlayerID(); me = gameModel.getPlayer(playerID); //
+		 * Upon init - if go with giant chat log, update chat to reflect // log
+		 * initializeChat(); } }; tim.schedule(10000); // Delay ensures that
+		 * gameModel is set to the one // on the server, not the placeholder in
+		 * the // Client model
+		 */
 
 		// set canvas to c
 		canvas = c;
@@ -109,9 +86,34 @@ public class GameInterface {
 			playerName = n;
 		}
 	}
-	
+
+	/**
+	 * Sets the game model for this class
+	 * 
+	 * This is called from ClientModel.java when the GameModel is first loaded
+	 * 
+	 * Using this eliminates the need for a delay to wait; the loading screen doesn't disappear
+	 * until the game model is loaded anyways
+	 * 
+	 * @param gm - The GameModel object retrieved from the server
+	 */
 	public static void setGameModel(GameModel gm) {
+		// TODO: set the player object here, since everything should be set up
+		Console.log("setting game model");
 		gameModel = gm;
+		// Schedule update from chat log at fixed rate.
+		// Timer
+		// TimerTask.
+		Console.log("starting timer for chat update");
+		Timer timer = new Timer() {
+
+			@Override
+			public void run() {
+				updateChat();
+			}
+
+		};
+		timer.scheduleRepeating(250); // Check for new messages every second.
 	}
 
 	/**
@@ -565,6 +567,7 @@ public class GameInterface {
 				return sendMessage();
 			}
 		});
+		
 		// Support pressing enter too
 		$("#message").keypress(new Function() {
 			public boolean f(Event e) {
@@ -702,7 +705,7 @@ public class GameInterface {
 		// TODO add call, if length is even, and greater than size, reset chat
 		// log in gameModel.
 		// But for now who cares, ALL TEH MEMORY IS MINE.
-		Console.log(gameModel.toString());
+		// Console.log(gameModel.toString());
 		if (gameModel == null)
 			return;
 
@@ -716,7 +719,7 @@ public class GameInterface {
 				updateMessages(gameModel.getChatLog().get(i));
 			}
 		} else {
-			// Console.log("No new Messages to prepend");
+			//Console.log("No new Messages to prepend");
 		}
 	}
 
