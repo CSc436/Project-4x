@@ -5,6 +5,7 @@ import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.googlecode.gwtgl.array.Float32Array;
@@ -24,7 +25,7 @@ public class Mesh // implements Renderable {
 	// private WebGLBuffer colorBuffer;
 	private WebGLTexture texture;
 
-	private final ImageResource image;
+	private ImageResource image;
 
 	public float[] verts, texcoords, normals, colors;
 	public int[] triangles;
@@ -37,7 +38,7 @@ public class Mesh // implements Renderable {
 	public int id;
 	public int type;
 	public float healthPercentage;
-	//public int team;
+	// public int team;
 	public float teamRed, teamGreen, teamBlue;
 
 	private FloatMatrix modelMatrix;
@@ -61,7 +62,7 @@ public class Mesh // implements Renderable {
 		scale = 1.0f;
 		id = 0;
 		healthPercentage = 1.0f;
-		//team = 0;
+		// team = 0;
 
 		teamRed = 1.0f;
 		teamGreen = 1.0f;
@@ -252,7 +253,14 @@ public class Mesh // implements Renderable {
 
 	public int setTexture(WebGLRenderingContext glContext,
 			final ImageResource imageResource) {
+
+		image = imageResource;
 		initTexture(glContext, imageResource);
+		return 0;
+	}
+	
+	public int reloadTexture(WebGLRenderingContext glContext) {
+		initTexture(glContext, image);
 		return 0;
 	}
 
@@ -282,6 +290,22 @@ public class Mesh // implements Renderable {
 
 		glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
 		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
+	}
+
+	private Image loadNewImage(WebGLRenderingContext glContext,
+			final ImageResource imageResource) {
+		final Image img = new Image();
+		img.addLoadHandler(new LoadHandler() {
+			@Override
+			public void onLoad(LoadEvent event) {
+				RootPanel.get().remove(img);
+			}
+		});
+		img.setVisible(false);
+		RootPanel.get().add(img);
+
+		img.setUrl(imageResource.getSafeUri());
+		return img;
 	}
 
 	private Image getImage(final ImageResource imageResource) {
@@ -315,7 +339,7 @@ public class Mesh // implements Renderable {
 		teamGreen = g;
 		teamBlue = b;
 	}
-
+	
 	/**
 	 * Utilizes a custom Shader object to render the Mesh. The cam dictates
 	 * where to render the view from.
@@ -326,6 +350,7 @@ public class Mesh // implements Renderable {
 	 */
 	public void render(WebGLRenderingContext glContext, Shader shader,
 			Camera cam) {
+		
 		// Update the model matrix of the mesh in case things like position,
 		// rotation
 		// and scale have changed.

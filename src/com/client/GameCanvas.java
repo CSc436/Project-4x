@@ -143,7 +143,7 @@ public class GameCanvas {
 		entities.put(ent2.id, ent2);
 		
 		final Mesh castle1 = OBJImporter.objToMesh(ClientResources.INSTANCE.castleOBJ().getText(), glContext);
-		//castle1.setTexture(glContext, ClientResources.INSTANCE.castleTexture());
+		castle1.setTexture(glContext, ClientResources.INSTANCE.castleTexture());
 		castle1.posX = 2.5f;
 		castle1.posY = 2.5f;
 		castle1.posZ = 0.0f;
@@ -160,6 +160,16 @@ public class GameCanvas {
 		swordsman2.healthPercentage = 0.0f;
 		swordsman2.setTeamColor(1.0f,0.0f,1.0f);
 		entities.put(swordsman2.id, swordsman2);
+		
+		final Mesh archer1 = OBJImporter.objToMesh(ClientResources.INSTANCE.archerOBJ().getText(), glContext);
+		archer1.setTexture(glContext, ClientResources.INSTANCE.archerTexture());
+		archer1.posX = 5.5f;
+		archer1.posY = 5.5f;
+		archer1.posZ = 0.0f;
+		archer1.id = 70707;
+		archer1.healthPercentage = 0.99f;
+		archer1.setTeamColor(1.0f,0.0f,0.0f);
+		entities.put(archer1.id, archer1);
 		
 		/*// STRAIN THE SERVER AAAAAAHHHHH 
 		int idcount = 300;
@@ -330,7 +340,7 @@ public class GameCanvas {
 			selectionRing.healthPercentage = entities.get(selectedEntities.get(i)).healthPercentage;
 			selectionRing.render(glContext, selectedShader, camera);
 			// enable depth testing so the actual model draws correctly
-			//glContext.enable(WebGLRenderingContext.DEPTH_TEST);
+			//glContext.enable(WebGLRenderingContext.DEPTH_TEST); 
 			//glContext.disable(WebGLRenderingContext.BLEND);
 			// render the model over the outline
 			entities.get(selectedEntities.get(i)).render(glContext, unselectedShader, camera);
