@@ -131,6 +131,8 @@ public class ClientModel {
 					@Override
 					public void onSuccess(CommandPacket result) {
 						
+						// for chat commands, update the gameInterface. ClientModel likely needs reference to gameInterface?
+						// Will try
 						for (Command c: commandQueueCopy) {
 							// Remove every item in the copy from commandQueue
 							commandQueue.remove(c);
