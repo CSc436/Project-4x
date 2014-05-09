@@ -135,6 +135,9 @@ public class Camera {
 		camX = GameCanvas.GRID_WIDTH/2 * -1;
 		camY = GameCanvas.GRID_WIDTH * -1; 
 		camZ = 20.0f;
+		yaw = 0.0f; 
+		pitch = 225.0f; 
+		roll = 0.0f;
 	}
 
 	public void move(Vector3 moveVector) {
