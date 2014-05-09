@@ -119,40 +119,6 @@ public abstract class Building extends GameObject {
 		return buildingQ.isEmpty();
 	}
 
-	/*public Unit advanceUnitProduction() {
-		System.out.println("running");
-		if (buildingQ.size() == 0)
-			return null;
-		
-		if (turnsToExecute > 0) {
-			turnsToExecute--;
-			return null;
-		}
-		else {
-			turnsToExecute = 5;
-			return dequeueUnit();
-		}*/ // In case bellow one breaks....
-	/**
-	 * advanceUnitProduction(): increments how far along current unit production
-	 * is.
-	 * 
-	 * @param timestep
-	 *            - amount to increment player production
-	 * 
-	 * @return if not null add unit to player, if null, do nothing.
-	 */
-	public Unit advanceUnitProduction(int timestep) {
-		// add timestep to each unit
-		if (!productionQueueEmpty()) {
-			Unit u = buildingQ.peek();
-			u.decrementCreationTime(timestep);
-			if (u.getCreationTime() <= 0) {
-				return buildingQ.poll();
-			}
-		}
-		return null;
-	}
-
 	/**
 	 * 
 	 * @return

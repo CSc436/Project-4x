@@ -2,6 +2,7 @@ package com.shared.model.commands;
 
 import com.shared.model.behaviors.Producer;
 import com.shared.model.control.GameModel;
+import com.shared.model.entities.GameObject;
 import com.shared.model.units.UnitType;
 
 public class BuildingProductionCommand implements Command{
@@ -27,8 +28,9 @@ public class BuildingProductionCommand implements Command{
 
 	@Override
 	public boolean performCommand(GameModel model) {
-		Producer p = (Producer) model.getGameObject(buildingId);
-		p.queueProduction(unitType);
+		GameObject o = model.getGameObject(buildingId);
+		if(o instanceof Producer)
+			((Producer) o).queueProduction(unitType);
 		return true;
 	}
 

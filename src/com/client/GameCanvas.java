@@ -47,12 +47,14 @@ import com.googlecode.gwtgl.binding.WebGLUniformLocation;
 import com.shared.model.buildings.Building;
 import com.shared.model.buildings.BuildingType;
 import com.shared.model.commands.AttackCommand;
+import com.shared.model.commands.BuildingProductionCommand;
 import com.shared.model.commands.ConstructBuildingCommand;
 import com.shared.model.commands.MoveUnitCommand;
 import com.shared.model.commands.PlaceUnitCommand;
 import com.shared.model.entities.GameObject;
 import com.shared.model.units.Unit;
 import com.shared.model.units.UnitType;
+import com.shared.utils.ColorFunctions;
 import com.shared.utils.Coordinate;
 import com.shared.utils.Vector3;
 
@@ -79,7 +81,7 @@ public class GameCanvas {
 	
 	private float agentX = 0.0f, agentY = 0.0f, agentZ = -0.1f;
 
-	public static final int GRID_WIDTH = 12;
+	public static final int GRID_WIDTH = 256;
 	private long time;
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
 	
@@ -96,6 +98,9 @@ public class GameCanvas {
 	private Coordinate mouseTile = new Coordinate(0,0);
 	
 	public ArrayList<Integer> selectedEntities;
+	
+	private Mesh cannon1;
+	private Mesh selectionRing;
 
 	private boolean chatFlag = false; // if chat is selected, do not allow camera movment/input
 	
@@ -159,19 +164,39 @@ public class GameCanvas {
 	 * Populates with a few starter entities
 	 */
 	private void initEntities() {
-		
 		unitMeshes = new HashMap<UnitType,Mesh>();
 		buildingMeshes = new HashMap<BuildingType,Mesh>();
+		selectionRing = OBJImporter.objToMesh(ClientResources.INSTANCE.ringOBJ().getText(), glContext);
+
 		
 		final Mesh castle1 = OBJImporter.objToMesh(ClientResources.INSTANCE.castleOBJ().getText(), glContext);
 		castle1.setTexture(glContext, ClientResources.INSTANCE.castleTexture());
 		
-		final Mesh cannon1 = OBJImporter.objToMesh(ClientResources.INSTANCE.cannonOBJ().getText(), glContext);
+		final Mesh swordsman2 = OBJImporter.objToMesh(ClientResources.INSTANCE.swordsmanOBJ().getText(), glContext);
+		swordsman2.setTexture(glContext, ClientResources.INSTANCE.swordsmanTexture());
+
+		
+		/*// STRAIN THE SERVER AAAAAAHHHHH 
+		int idcount = 300;
+		for (int i = 0; i < 20; i++) {
+			for (int j = 0; j < 20; j++) {
+				entities.put(idcount, OBJImporter.objToMesh(ClientResources.INSTANCE.castleOBJ().getText(), glContext));
+				entities.get(idcount).id = idcount;
+				entities.get(idcount).posX = (float)(1.5 * (i+1));
+				entities.get(idcount).posY = (float)(1.5 * (j+1));
+				Console.log("Castle #" + (idcount - 300) + " complete!");
+				idcount++;
+			}
+		}*/
+		
+		cannon1 = OBJImporter.objToMesh(ClientResources.INSTANCE.cannonOBJ().getText(), glContext);
 		cannon1.setTexture(glContext, ClientResources.INSTANCE.cannonTexture());
 		
 		for(UnitType t : UnitType.values()) {
 			unitMeshes.put(t, cannon1);
 		}
+		unitMeshes.put(UnitType.INFANTRY, swordsman2);
+		
 		for(BuildingType t : BuildingType.values()) {
 			buildingMeshes.put(t, castle1);
 		}
@@ -202,6 +227,8 @@ public class GameCanvas {
 			//Console.log("Unit " + o.getId() + " at " + pos[0] + " " + pos[1]);
 			m.posX = (float) pos[0] + 0.5f;
 			m.posY = (float) pos[1] + 0.5f;
+			float[] color = ColorFunctions.intToHSV(o.getPlayerID());
+			m.setTeamColor(color[0], color[1], color[2]);
 			m.id = o.getId();
 			m.render(glContext, shader, camera);
 		}
@@ -298,7 +325,8 @@ public class GameCanvas {
 	}
 	
 	/**
-	 * Renders selected entities with the selection shader
+	 * Renders selected entities with an outline corresponding to their
+	 * remaing health
 	 * @param selectedShader
 	 */
 	public void renderSelectedEntities(Shader selectedShader) {
@@ -309,19 +337,12 @@ public class GameCanvas {
 		
 		for(Integer i : selectedEntities) {
 			GameObject o = gameObjects.get(i);
-			Mesh m;
-			if(o instanceof Unit) {
-				m = unitMeshes.get(((Unit) o).getUnitType());
-			} else if(o instanceof Building) {
-				m = buildingMeshes.get(((Building) o).getBuildingType());
-			} else {
-				m = unitMeshes.get(((Unit) o).getUnitType());
-			}
 			double[] pos = o.extrapolatePosition(timeSinceUpdate).toArray();
-			m.posX = (float) pos[0] + 0.5f;
-			m.posY = (float) pos[1] + 0.5f;
-			m.id = i;
-			m.render(glContext, selectedShader, camera);
+			selectionRing.posX = (float) pos[0] + 0.5f;
+			selectionRing.posY = (float) pos[1] + 0.5f;
+			selectionRing.healthPercentage = o.getHealthPercentage();
+			selectionRing.id = i;
+			selectionRing.render(glContext, selectedShader, camera);
 		}
 	}
 	
@@ -363,8 +384,15 @@ public class GameCanvas {
 					case KeyCodes.KEY_I: 
 						theModel.sendCommand(new PlaceUnitCommand( UnitType.CANNON, 1, mouseTile));
 						break;
+					case KeyCodes.KEY_K:
+						theModel.sendCommand(new PlaceUnitCommand( UnitType.INFANTRY, (int) (8*Math.random()), mouseTile));
+						break;
 					case KeyCodes.KEY_B:
-						theModel.sendCommand(new ConstructBuildingCommand( BuildingType.BARRACKS, 1, mouseTile));
+						theModel.sendCommand(new ConstructBuildingCommand( BuildingType.BARRACKS, (int) (8*Math.random()), mouseTile));
+						break;
+					case KeyCodes.KEY_N:
+						for( int i : selectedEntities )
+							theModel.sendCommand(new BuildingProductionCommand( i, UnitType.INFANTRY ));
 						break;
 					default: if (debug) Console.log("Unrecognized: " + event.getNativeKeyCode()); break;
 					}
@@ -595,6 +623,8 @@ public class GameCanvas {
 		glContext.clearDepth(1.0f);
 		glContext.enable(WebGLRenderingContext.DEPTH_TEST);
 		glContext.depthFunc(WebGLRenderingContext.LEQUAL);
+		glContext.pixelStorei(WebGLRenderingContext.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
+		glContext.blendFunc(WebGLRenderingContext.SRC_ALPHA, WebGLRenderingContext.ONE);
 
 		initTexture();
 		initShaders();
@@ -621,7 +651,7 @@ public class GameCanvas {
 				.idFS().getText());
 		
 		final Shader selectedShader = new Shader(glContext,ClientResources.INSTANCE
-				.simpleMeshVS().getText(),ClientResources.INSTANCE
+				.selectedVS().getText(),ClientResources.INSTANCE
 				.selectedFS().getText());
 		
 		final Mesh barrel = OBJImporter.objToMesh(ClientResources.INSTANCE.barrelOBJ().getText(), glContext);
@@ -645,6 +675,9 @@ public class GameCanvas {
 				barrel.posY = agentY;
 				barrel.posZ = (float) (agentZ + Math.sin(time/300));
 				barrel.rotX = barrel.rotX + 0.01f;
+				
+				cannon1.posX = 5.0f + (float) (Math.cos(time / 1000.0));
+				cannon1.posY = 5.0f + (float) (Math.sin(time / 1000.0));
 				
 				renderEntities(texturedPhongMeshShader);
 				renderSelectedEntities(selectedShader);

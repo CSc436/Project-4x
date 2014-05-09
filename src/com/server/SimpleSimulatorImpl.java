@@ -89,7 +89,7 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements SimpleS
 	 */
 	@Override
 	public GameModel getGame( int playerNumber, int lastTurnReceived ) {
-		playerTable.put(playerNumber, true);
+		playerTable.put(playerNumber, false);
 		return controller.getGameModel();
 	}
 	
@@ -133,6 +133,7 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements SimpleS
 			}
 		}
 		
+		keySet = playerTable.keySet();
 		for( Integer key : keySet ) {
 			playerTable.put(key, false);
 		}

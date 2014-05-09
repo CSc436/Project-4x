@@ -122,8 +122,7 @@ public class ClientController {
 				simpleSimulator.sendCommands(playerNumber, commandQueue, new AsyncCallback<CommandPacket>() {
 					@Override
 					public void onFailure(Throwable caught) {
-						if(debug) Console.log("    Unable to receive simulation state");
-						if(debug) Console.log(caught.getMessage());
+						Console.log("    Unable to receive simulation state");
 						readyForNext = true;
 						resetTimer();
 					}
@@ -143,7 +142,7 @@ public class ClientController {
 
 								@Override
 								public void onFailure(Throwable caught) {
-									if(debug) Console.log("Could not retrieve game.");
+									Console.log("Could not retrieve game.");
 								}
 
 								@Override
@@ -154,7 +153,7 @@ public class ClientController {
 								
 							});
 						} else {
-							if(debug) Console.log(result.getCommandQueue().size() + " commands received, simulate for " + result.getTime() + " ms");
+							Console.log("Turn " + result.getTurnNumber() + ", " + result.getCommandQueue().size() + " commands received, simulate for " + result.getTime() + " ms");
 							result.executeOn(model);
 							model.advanceTimeStep(result.getTime());
 							
@@ -191,7 +190,7 @@ public class ClientController {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				if(debug) Console.log("    Receipt failed, retrying...");
+				Console.log("    Receipt failed, retrying...");
 			}
 
 			@Override

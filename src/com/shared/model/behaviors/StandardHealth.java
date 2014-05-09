@@ -37,7 +37,6 @@ public class StandardHealth implements Attackable {
 	public void simulateDamage(int timeStep) {
 		// TODO Auto-generated method stub
 		if(!isDead) {
-			System.out.println("I have " + hp + " health left!");
 			hp += healthRegen * timeStep / 1000.0f;
 			hp -= damageToTake;
 			hp = hp > maxHP ? maxHP : hp ;
@@ -53,6 +52,11 @@ public class StandardHealth implements Attackable {
 	@Override
 	public boolean isDead() {
 		return isDead;
+	}
+
+	@Override
+	public float getHealthPercentage() {
+		return hp / maxHP;
 	}
 
 

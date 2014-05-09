@@ -26,13 +26,11 @@ public class Unit extends GameObject implements Attacker, Producible {
 	 */
 	private static final long serialVersionUID = -5568927886403172710L;
 	private UnitType unitType;
-	private int creationTime;
 	private Attacker attackBehavior;
 	
 	public Unit() {
 		super();
 		this.unitType = UnitType.ARCHER;
-		this.creationTime = baseStats.getCreationTime();
 	}
 
 	public Unit(int id, int playerId, BaseStatsEnum baseStats,
@@ -40,7 +38,6 @@ public class Unit extends GameObject implements Attacker, Producible {
 			float xco, float yco) {
 		super(id, playerId, baseStats, new_stats, GameObjectType.UNIT, xco, yco);
 		this.unitType = unitType;
-		this.creationTime = baseStats.getCreationTime();
 		attackBehavior = new StandardAttacker( stats.damage, stats.range, stats.actionSpeed, moveBehavior );
 	}
 	
@@ -59,16 +56,6 @@ public class Unit extends GameObject implements Attacker, Producible {
 	
 	public UnitType getUnitType() {
 		return unitType;
-	}
-	
-	/**
-	 * decrementCreationTime()
-	 * decrements remaining time for unit production
-	 * @param int timestep - how much to decrement by
-	 */
-	public void decrementCreationTime(int timestep)
-	{
-		this.creationTime -= timestep;
 	}
 
 	@Override
