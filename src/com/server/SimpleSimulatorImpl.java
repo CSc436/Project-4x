@@ -11,6 +11,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.shared.model.commands.Command;
 import com.shared.model.control.CommandPacket;
 import com.shared.model.control.GameModel;
+import com.shared.model.gameboard.Tile;
 
 /**
  * Server-side implementation of RPC framework. Keeps track of which players are connected
@@ -103,6 +104,10 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements SimpleS
 		if(playerTable.isEmpty())
 			controller.stop();
 		return nextPlayerSlot;
+	}
+	
+	public Tile[][] getTiles() {
+		return controller.getGameModel().getBoard().getTiles();
 	}
 	
 	/**

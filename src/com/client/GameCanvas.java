@@ -76,9 +76,9 @@ public class GameCanvas {
 	
 	private float agentX = 0.0f, agentY = 0.0f, agentZ = -0.1f;
 
-	public static final int GRID_WIDTH = 12;
+	public static int GRID_WIDTH = 12;
 	private long time;
-	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
+	private int NUM_TILES;
 	
 	private final boolean debug = false;
 	private final boolean commandDebug = true;
@@ -114,6 +114,9 @@ public class GameCanvas {
 	
 	public GameCanvas(ClientModel theModel) {
 		// CODE FOR MINIMAP DEV/CLICK SELECTING
+		this.GRID_WIDTH = theModel.getGameModel().getBoard().getCols();
+		this.NUM_TILES = GRID_WIDTH *GRID_WIDTH;
+		
 		selectedEntities = new ArrayList<Integer>();
 		this.mouseVector = new Vector3(0,0,0);
 		// END OF CODE
@@ -869,7 +872,7 @@ public class GameCanvas {
 		tileTexCoordData = Float32Array.create(NUM_TILES * 6 * 2);
 		tileSelectData = Float32Array.create(NUM_TILES * 6 * 2);
 		
-		RenderTile[][] map = RenderTile.makeMap(System.currentTimeMillis(), GRID_WIDTH);
+		RenderTile[][] map = RenderTile.makeMap(this.theModel.getGameModel().getBoard(), GRID_WIDTH);
 		
 		int index = 0;
 		for (int x = 0; x < GRID_WIDTH; x++)

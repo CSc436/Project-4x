@@ -131,6 +131,7 @@ public class GameBoard implements Serializable {
 		// 5 - 1-4 place in corner, 5 place in center.
 		// attempt to distribute near resources.
 
+		System.out.println(toString());
 		endTime = System.currentTimeMillis();
 		System.out.println("Total execution time: " + (endTime - startTime)
 				+ "\n");
@@ -878,6 +879,27 @@ public class GameBoard implements Serializable {
 			sideLength /= 2;
 			rough *= .8;
 		}
+	}
+	
+	@Override
+	public String toString() {
+		String r = "";
+		for (int i = 0; i < this.rows; i++) {
+			for (int j = 0; j < this.cols; j++) {
+				r += this.map[i][j].getTerrainType().toString() + "\t";
+			}
+			r += "\n";
+		}
+		return r;
+	}
+
+	public Tile[][] getTiles() {
+		// TODO Auto-generated method stub
+		return this.map;
+	}
+	
+	public void setTiles(Tile[][] map) {
+		this.map = map;
 	}
 
 }

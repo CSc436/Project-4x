@@ -59,7 +59,7 @@ public class GameModel implements Serializable {
 		producers   = new HashMap<Integer, Producer>();
 		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
 		
-		map = new GameBoard(500, 500);
+		map = new GameBoard(12, 12);
 		
 		chatLog = new ArrayList<String>();
 	}

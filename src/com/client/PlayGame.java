@@ -46,8 +46,10 @@ public class PlayGame implements EntryPoint {
 						theModel.run();
 						// Set actions on loading screen
 						$("#loading-actions").html("SETTING CANVAS");
-						GameCanvas canvas = new GameCanvas(theModel);
-						GameInterface.init(theModel, canvas);
+						
+						Console.log("check clientmodel load number 2"); 
+				 		Console.log(theModel.getGameModel().getBoard().toString());
+						
 						// Set actions on loading screen
 						$("#loading-actions").html("RETRIEVING GAME STATE");
 						/** NOTE: loading screen now gets removed once the game model is set **/
