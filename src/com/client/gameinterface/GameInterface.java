@@ -56,17 +56,6 @@ public class GameInterface {
 
 		clientModel = cm;
 		gameModel = null;
-		// Needed to delay getting gameModel, because it wasn't set to the one
-		// actually on the server.
-		/*
-		 * Timer tim = new Timer() { public void run() { gameModel =
-		 * clientModel.getGameModel(); // needs to be delayed? int playerID =
-		 * clientModel.getPlayerID(); me = gameModel.getPlayer(playerID); //
-		 * Upon init - if go with giant chat log, update chat to reflect // log
-		 * initializeChat(); } }; tim.schedule(10000); // Delay ensures that
-		 * gameModel is set to the one // on the server, not the placeholder in
-		 * the // Client model
-		 */
 
 		// set canvas to c
 		canvas = c;
@@ -101,13 +90,14 @@ public class GameInterface {
 		// TODO: set the player object here, since everything should be set up
 		Console.log("setting game model");
 		gameModel = gm;
+		me = gameModel.getPlayer(clientModel.getPlayerID());
+		
 		// Schedule update from chat log at fixed rate.
 		// Timer
 		// TimerTask.
 		Console.log("starting timer for chat update");
 		Timer timer = new Timer() {
 
-			@Override
 			public void run() {
 				updateChat();
 			}
@@ -647,7 +637,7 @@ public class GameInterface {
 		// Send message - currently just local
 		// updateMessages(playerName + ": " + $("#message").val());
 		clientModel.sendCommand(new SendMessageCommand(playerName + ": "
-				+ $("#message").val()));
+				+ $("#message").val(), clientModel.getPlayerID()));
 		// Console.log("Chat Command sent to server ");
 
 		// Scroll back up to the top of messages, wait a couple of ms
@@ -672,16 +662,61 @@ public class GameInterface {
 	 * @param mssg
 	 *            - message to append, should ONLY contain message with users
 	 *            name with Users name. i.e. "Bob: gg"
+	 * @param id
+	 * 			  Used to pick a color for the player
 	 * 
 	 */
-	public static void updateMessages(String mssg) {
+	public static void updateMessages(String mssg, int id) {
 		// Log to messages.
-		// based on message count, pick a color
-		if (msgCount % 2 == 0) {
+		
+		int numberOfColors = 10; // number of colors supported
+		Console.log("ID: " + id);
+		switch(id % numberOfColors)
+		{
+		case 0:
+			// Use default color
 			$("#messages").prepend("<br />" + mssg);
-		} else {
+			break;
+		case 1:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"red\">" + mssg + "</font>");
+			$("#messages").prepend("<font color=\"#F0F8FF\">" + mssg + "</font>");
+			break;
+		case 2:
+			$("#messages").prepend("<br />");
+			$("#messages").prepend("<font color=\"#7FFF00\">" + mssg + "</font>");
+			break;
+		case 3:
+			$("#messages").prepend("<br />");
+			$("#messages").prepend("<font color=\"#00FFFF\">" + mssg + "</font>");
+			break;
+		case 4:
+			$("#messages").prepend("<br />");
+			$("#messages").prepend("<font color=\"#FF1493\">" + mssg + "</font>");
+			break;
+		case 5:
+			$("#messages").prepend("<br />");
+			$("#messages").prepend("<font color=\"#FFD700\">" + mssg + "</font>");
+			break;
+		case 6:
+			$("#messages").prepend("<br />");
+			$("#messages").prepend("<font color=\"#FF0000\">" + mssg + "</font>");
+			break;
+		case 7:
+			$("#messages").prepend("<br />");
+			$("#messages").prepend("<font color=\"#F5DEB3\">" + mssg + "</font>");
+			break;
+		case 8:
+			$("#messages").prepend("<br />");
+			$("#messages").prepend("<font color=\"#00FF7F\">" + mssg + "</font>");
+			break;
+		case 9:
+			$("#messages").prepend("<br />");
+			$("#messages").prepend("<font color=\"#87CEEB\">" + mssg + "</font>");
+			break;
+		default:
+			// Use default color
+			$("#messages").prepend("<br />" + mssg);
+			break;
 		}
 
 		msgCount++; // increment message count, only matters locally.
@@ -714,9 +749,8 @@ public class GameInterface {
 			// update chat with new messages - msgCount is updated by
 			// updateMessages call.
 			for (int i = msgCount; i < chatLogLength; i++) {
-				// Console.log("msgCount: "+ msgCount + "\tchatLogLength: "+
-				// chatLogLength + "i: " + i);
-				updateMessages(gameModel.getChatLog().get(i));
+				updateMessages(gameModel.getChatLog().get(i).getMessage(),
+						       gameModel.getChatLog().get(i).getPlayerID());
 			}
 		} else {
 			//Console.log("No new Messages to prepend");
@@ -730,8 +764,8 @@ public class GameInterface {
 		if (gameModel.getChatLog().size() == 0)
 			Console.log("No chats in the chat log!");
 
-		for (String msg : gameModel.getChatLog()) {
-			updateMessages(msg);
+		for (SendMessageCommand msg : gameModel.getChatLog()) {
+			updateMessages(msg.getMessage(), msg.getPlayerID());
 		}
 	}
 
