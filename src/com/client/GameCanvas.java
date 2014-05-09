@@ -28,6 +28,8 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.resources.client.ImageResource;
@@ -66,6 +68,7 @@ public class GameCanvas {
 	private WebGLUniformLocation texUniform, matrixUniform, camPosUniform;
 	private WebGLBuffer tileVertexBuffer, tileTexCoordBuffer, tileSelectBuffer;
 	private WebGLBuffer entityVertBuffer, entityTexBuffer;
+	private WebGLBuffer selectVertBuffer;
 	
 	private Float32Array tileVertexData, tileTexCoordData, tileSelectData;
 	private Float32Array agentVertData, agentTexData;
@@ -94,6 +97,7 @@ public class GameCanvas {
 	private HashMap<BuildingType,Mesh> buildingMeshes;
 	
 	private Coordinate mouseTile = new Coordinate(0,0);
+	private Coordinate first, curr;
 	
 	public ArrayList<Integer> selectedEntities;
 	
@@ -471,6 +475,8 @@ public class GameCanvas {
 							if(commandDebug) Console.log("This entity DOES NOT exist!");
 						}
 					}
+					first = new Coordinate(event.getClientX(), event.getClientY());
+					curr = first;
 					break;
 				}
 				
@@ -509,9 +515,39 @@ public class GameCanvas {
 				}
 				RootPanel.get("tile-info").getElement().setInnerHTML(mouseTile.toString());
 				//Console.log("(after) TILE: " + mouseTile.toString());
+				if (first != null){
+					curr = new Coordinate(event.getClientX(), event.getClientY());
+				}
 			}
 			
 		}, MouseMoveEvent.getType());
+		
+		RootPanel.get().addDomHandler(new MouseUpHandler() {
+
+			@Override
+			public void onMouseUp(MouseUpEvent event) {
+				// TODO Auto-generated method stub
+				int x1 = (int) Math.min(first.x, curr.x);
+				int x2 = (int) (x1 + Math.abs(first.x - curr.x));
+				
+				int y1 = (int) Math.min(first.y, curr.y);
+				int y2 = (int) (y1 + Math.abs(first.y - curr.y));
+				
+				Integer[] ids = objectSelector.pickEntities(x1, y1, x2, y2);
+				for (int selectedID : ids){
+					if(commandDebug) Console.log("Selected entity with ID " + selectedID + ".");
+					if (theModel.getGameModel().getGameObjects().containsKey(selectedID)) {
+						if(commandDebug) Console.log("This entity exists! Adding to selected entities...");
+						selectedEntities.add(selectedID);
+					} else {
+						if(commandDebug) Console.log("This entity DOES NOT exist!");
+					}
+				}
+				first = null;
+			}
+		
+		}, MouseUpEvent.getType());
+
 	}
 	
 	private Vector3 getCenterOfMap() {
@@ -617,6 +653,11 @@ public class GameCanvas {
 				.selectedVS().getText(),ClientResources.INSTANCE
 				.selectedFS().getText());
 		
+		final Shader selectBoxShader = new Shader(glContext,ClientResources.INSTANCE
+				.selectboxVS().getText(),ClientResources.INSTANCE
+				.selectboxFS().getText());
+		
+		
 		final Mesh barrel = OBJImporter.objToMesh(ClientResources.INSTANCE.barrelOBJ().getText(), glContext);
 		
 		final long startTime = System.currentTimeMillis();
@@ -641,6 +682,7 @@ public class GameCanvas {
 				
 				renderEntities(texturedPhongMeshShader);
 				renderSelectedEntities(selectedShader);
+				renderSelection(selectBoxShader);
 			}
 		};
 		t.scheduleRepeating(33); // roughly 30 FPS
@@ -792,6 +834,8 @@ public class GameCanvas {
 
 		glContext.bufferData(glContext.ARRAY_BUFFER, tileSelectData,
 				WebGLRenderingContext.DYNAMIC_DRAW);
+		
+		selectVertBuffer = glContext.createBuffer();
 	}
 	
 	private void makeAgent(){
@@ -920,4 +964,53 @@ public class GameCanvas {
 		glContext.flush();
 	}
 	
+	public void renderSelection(Shader selectShader){
+		if (first == null)
+			return;
+		
+		Console.log("Rendering Selection");
+		Console.log(first + ", " + curr);
+		
+		
+		
+		float x1 = (float) ((2 * first.x - WIDTH ) / WIDTH);
+		float y1 = -(float) ((2 * first.y - HEIGHT ) / HEIGHT);
+		
+		float x2 = (float) ((2 * curr.x - WIDTH ) / WIDTH);
+		float y2 = -(float) ((2 * curr.y - HEIGHT ) / HEIGHT);
+		
+		Float32Array selectData = Float32Array.create(new float [] {
+				x1, y1,
+				x2, y1,
+				x1, y2,
+				
+				x1, y2,
+				x2, y2,
+				x2, y1
+		});
+		
+		Console.log(new Coordinate(x1, y1) + ", " + new Coordinate(x2, y2));
+		
+		glContext.useProgram(selectShader.shaderProgram);
+		
+		glContext.enable(WebGLRenderingContext.BLEND);
+		glContext.blendFunc(WebGLRenderingContext.SRC_ALPHA, WebGLRenderingContext.ONE);
+		
+		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, selectVertBuffer);
+		glContext.bufferData(glContext.ARRAY_BUFFER, selectData,
+				WebGLRenderingContext.DYNAMIC_DRAW);
+		
+		int selectVertAttrib = glContext.getAttribLocation(selectShader.shaderProgram, "vertices");
+		glContext.enableVertexAttribArray(selectVertAttrib);
+		glContext.vertexAttribPointer(selectVertAttrib, 2, WebGLRenderingContext.FLOAT, false, 0, 0);
+		
+		glContext.disable(WebGLRenderingContext.DEPTH_TEST);
+		
+		glContext.drawArrays(WebGLRenderingContext.TRIANGLES, 0, 6);
+		
+		glContext.enable(WebGLRenderingContext.DEPTH_TEST);
+		glContext.disable(WebGLRenderingContext.BLEND);
+		
+		glContext.flush();
+	}
 }

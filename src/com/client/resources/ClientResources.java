@@ -68,6 +68,12 @@ public interface ClientResources extends ClientBundle{
     @Source(value={"tileId.vs"})
     TextResource tileIdVS();
     
+    @Source(value={"selectbox.fs"})
+    TextResource selectboxFS();
+    
+    @Source(value={"selectbox.vs"})
+    TextResource selectboxVS();
+    
     // OBJ definitions
     @Source(value={"barrel.obj"})
     TextResource barrelOBJ();
