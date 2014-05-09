@@ -98,7 +98,6 @@ public class GameInterface {
 		Console.log("starting timer for chat update");
 		Timer timer = new Timer() {
 
-			@Override
 			public void run() {
 				updateChat();
 			}
