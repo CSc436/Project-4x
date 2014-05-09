@@ -63,10 +63,6 @@ public abstract class AbstractIntervalTrade implements ITrade {
 	public int getTimeRemaining() {
 		return ((int) timeRemaining) / 60;
 	}
-
-	public abstract int getPlayer1();
-
-	public abstract int getPlayer2();
 	
 	public abstract int getId();
 }

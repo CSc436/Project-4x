@@ -213,7 +213,7 @@ public class GameInterface {
 									+ "<tr>"
 									+ "<td>"
 									+ "<div>To: "
-									+ sentAgreements.get(i).getPlayer2()
+									+ sentAgreements.get(i).getReceivingPlayer()
 									+ "</div>"
 									+ "</td>"
 									+ "<td>"
@@ -229,7 +229,7 @@ public class GameInterface {
 									+ "<tr>"
 									+ "<td>"
 									+ "<div>From: "
-									+ receivedAgreements.get(i).getPlayer1()
+									+ receivedAgreements.get(i).getCreatingPlayer()
 									+ "</div>"
 									+ "</td>"
 									+ "<td>"
@@ -245,7 +245,7 @@ public class GameInterface {
 									+ "<tr>"
 									+ "<td>"
 									+ "<div>From: "
-									+ acceptedAgreements.get(i).getPlayer1()
+									+ acceptedAgreements.get(i).getCreatingPlayer()
 									+ "</div>"
 									+ "</td>"
 									+ "<td>"

@@ -42,8 +42,8 @@ public class TradeManager implements ITradeManager {
 			if (!trade.isActive()) {
 				removables.add(trade);
 			} else if (trade.update(delta)) {
-				trade.act(game.getPlayer(trade.getPlayer1()),
-						game.getPlayer(trade.getPlayer2()));
+				trade.act(game.getPlayer(trade.getCreatingPlayer()),
+						game.getPlayer(trade.getReceivingPlayer()));
 			}
 		}
 		for (ITrade remove : removables) {
@@ -56,8 +56,8 @@ public class TradeManager implements ITradeManager {
 		List<ITrade> results = new ArrayList<ITrade>();
 		for (Entry<Integer, ITrade> entry : activeTrades.entrySet()) {
 			ITrade trade = entry.getValue();
-			if (trade.getPlayer1() == playerId
-					|| trade.getPlayer2() == playerId) {
+			if (trade.getCreatingPlayer() == playerId
+					|| trade.getReceivingPlayer() == playerId) {
 				results.add(trade);
 			}
 		}
@@ -69,7 +69,7 @@ public class TradeManager implements ITradeManager {
 		List<ITrade> results = new ArrayList<ITrade>();
 		for (Entry<Integer, ITrade> entry : proposedTrades.entrySet()) {
 			ITrade trade = entry.getValue();
-			if (trade.getPlayer1() == playerId) {
+			if (trade.getCreatingPlayer() == playerId) {
 				results.add(trade);
 			}
 		}
@@ -81,7 +81,7 @@ public class TradeManager implements ITradeManager {
 		List<ITrade> results = new ArrayList<ITrade>();
 		for (Entry<Integer, ITrade> entry : proposedTrades.entrySet()) {
 			ITrade trade = entry.getValue();
-			if (trade.getPlayer2() == playerId) {
+			if (trade.getReceivingPlayer() == playerId) {
 				results.add(trade);
 			}
 		}
