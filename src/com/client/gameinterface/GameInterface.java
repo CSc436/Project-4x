@@ -46,12 +46,7 @@ public class GameInterface {
 	 * Responsible for registering callbacks that are purely bound to the
 	 * interface
 	 */
-
 	public static void init(ClientController cm, GameCanvas c) {
-		int playerID = cm.getPlayerID();
-		gameModel = cm.getGameModel();
-		// TODO: need to set me
-		me = gameModel.getPlayer(playerID);
 		// Change sidebar left value to calculated value
 		int width = $("#sidebar").outerWidth(true);
 		$("#sidebar").css("left", "-" + width);
@@ -85,10 +80,11 @@ public class GameInterface {
 	 * 
 	 * This is called from ClientModel.java when the GameModel is first loaded
 	 * 
-	 * Using this eliminates the need for a delay to wait; the loading screen doesn't disappear
-	 * until the game model is loaded anyways
+	 * Using this eliminates the need for a delay to wait; the loading screen
+	 * doesn't disappear until the game model is loaded anyways
 	 * 
-	 * @param gm - The GameModel object retrieved from the server
+	 * @param gm
+	 *            - The GameModel object retrieved from the server
 	 */
 	public static void setGameModel(GameModel gm) {
 		// TODO: set the player object here, since everything should be set up
@@ -561,7 +557,7 @@ public class GameInterface {
 				return sendMessage();
 			}
 		});
-		
+
 		// Support pressing enter too
 		$("#message").keypress(new Function() {
 			public boolean f(Event e) {
@@ -757,7 +753,7 @@ public class GameInterface {
 						       gameModel.getChatLog().get(i).getPlayerID());
 			}
 		} else {
-			//Console.log("No new Messages to prepend");
+			// Console.log("No new Messages to prepend");
 		}
 	}
 
@@ -823,5 +819,7 @@ public class GameInterface {
 			}
 			showing = toShow; // Change showing variable
 		}
+
 	}
+
 }
