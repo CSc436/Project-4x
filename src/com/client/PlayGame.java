@@ -4,7 +4,7 @@ import static com.google.gwt.query.client.GQuery.$;
 
 import com.client.gameinterface.Console;
 import com.client.gameinterface.GameInterface;
-import com.client.model.ClientModel;
+import com.client.model.ClientController;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
@@ -42,7 +42,7 @@ public class PlayGame implements EntryPoint {
 					public void run() {
 						// Set actions on loading screen
 						$("#loading-actions").html("INITIALIZING MODEL");
-						ClientModel theModel = new ClientModel();
+						ClientController theModel = new ClientController();
 						theModel.run();
 						// Set actions on loading screen
 						$("#loading-actions").html("SETTING CANVAS");

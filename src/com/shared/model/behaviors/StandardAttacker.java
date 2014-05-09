@@ -16,6 +16,7 @@ public class StandardAttacker implements Attacker {
 	private float range; // Attack range
 	private int strength; // Attack strength
 	private boolean isAttacking; // Whether or not I am actively attacking my target
+	private boolean isAnimatingAttack = false;
 	/*
 	 * Must have an associated movementBehavior in order to calculate distance from
 	 * target and in order to perform appropriate attack-move commands
@@ -30,9 +31,9 @@ public class StandardAttacker implements Attacker {
 	}
 	
 	public StandardAttacker(int strength, float range, float coolDown, Movable mb) {
-		this.coolDown = 1000;
+		this.coolDown = (int) coolDown * 1000;
 		this.range = range;
-		this.strength = 1;
+		this.strength = strength;
 		this.isAttacking = false;
 		this.moveBehavior = mb;
 	}
@@ -51,16 +52,20 @@ public class StandardAttacker implements Attacker {
 
 	@Override
 	public void simulateAttack(int timeStep) {
-		if(isAttacking) {
+		if(target != null && isAttacking && !target.isDead()) {
 			PhysicsVector targetPosition = target.getPosition();
 			PhysicsVector myPosition = moveBehavior.getPosition();
 			double distanceToTarget = targetPosition.sub(myPosition).magnitude();
 			
 			coolDownTimer += timeStep;
 			int numAttacks = coolDownTimer / coolDown;
+			if(numAttacks > 0) isAnimatingAttack = true;
 			coolDownTimer %= coolDown;
 			
 			if( distanceToTarget <= range ) {
+				double x = myPosition.getX();
+				double y = myPosition.getY();
+				moveBehavior.setMoveTarget(x, y);
 				target.takeDamage(numAttacks * strength);
 			} else {
 				double x = targetPosition.getX();
@@ -68,8 +73,17 @@ public class StandardAttacker implements Attacker {
 				moveBehavior.setMoveTarget(x, y);
 			}
 		} else {
-			coolDownTimer = coolDown;
+			stopAttack();
+			coolDownTimer += timeStep;
+			coolDownTimer = coolDownTimer > coolDown ? coolDown : coolDownTimer;
 		}
+	}
+
+	@Override
+	public boolean isAnimatingAttack() {
+		boolean temp = isAnimatingAttack;
+		isAnimatingAttack = false;
+		return temp;
 	}
 	
 }

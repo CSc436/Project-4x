@@ -52,6 +52,7 @@ public class StandardProduction implements Producer {
 				else {
 					timeInProduction = 0;
 					activelyProducing = false;
+					typeInProduction = null;
 				}
 			}
 		}

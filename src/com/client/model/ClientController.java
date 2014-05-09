@@ -1,7 +1,6 @@
 package com.client.model;
 
 import static com.google.gwt.query.client.GQuery.$;
-
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -18,7 +17,7 @@ import com.shared.model.commands.Command;
 import com.shared.model.control.CommandPacket;
 import com.shared.model.control.GameModel;
 
-public class ClientModel {
+public class ClientController {
 	
 	private int turnNumber = -1;
 	private int playerNumber = -1;
@@ -33,7 +32,7 @@ public class ClientModel {
 	private Queue<Command> commandQueueCopy = new LinkedList<Command>();
 	private boolean debug = false;
 	
-	public ClientModel() {
+	public ClientController() {
 		
 		simpleSimulator = GWT.create(SimpleSimulator.class);
 		
@@ -88,9 +87,7 @@ public class ClientModel {
 			public void onSuccess(GameModel result) {
 				if(debug) Console.log("Game retrieved!");
 				model = result;
-				// Give game model to interface
 				GameInterface.setGameModel(result);
-				// Remove loading screen
 				$("#loading-screen").remove();
 				beginPlaying();
 			}
@@ -129,8 +126,7 @@ public class ClientModel {
 				simpleSimulator.sendCommands(playerNumber, commandQueue, new AsyncCallback<CommandPacket>() {
 					@Override
 					public void onFailure(Throwable caught) {
-						if(debug) Console.log("    Unable to receive simulation state");
-						if(debug) Console.log(caught.getMessage());
+						Console.log("    Unable to receive simulation state");
 						readyForNext = true;
 						resetTimer();
 					}
@@ -138,8 +134,6 @@ public class ClientModel {
 					@Override
 					public void onSuccess(CommandPacket result) {
 						
-						// for chat commands, update the gameInterface. ClientModel likely needs reference to gameInterface?
-						// Will try
 						for (Command c: commandQueueCopy) {
 							// Remove every item in the copy from commandQueue
 							commandQueue.remove(c);
@@ -152,7 +146,7 @@ public class ClientModel {
 
 								@Override
 								public void onFailure(Throwable caught) {
-									if(debug) Console.log("Could not retrieve game.");
+									Console.log("Could not retrieve game.");
 								}
 
 								@Override
@@ -163,7 +157,7 @@ public class ClientModel {
 								
 							});
 						} else {
-							if(debug) Console.log(result.getCommandQueue().size() + " commands received, simulate for " + result.getTime() + " ms");
+							Console.log("Turn " + result.getTurnNumber() + ", " + result.getCommandQueue().size() + " commands received, simulate for " + result.getTime() + " ms");
 							result.executeOn(model);
 							model.advanceTimeStep(result.getTime());
 							
@@ -200,7 +194,7 @@ public class ClientModel {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				if(debug) Console.log("    Receipt failed, retrying...");
+				Console.log("    Receipt failed, retrying...");
 			}
 
 			@Override

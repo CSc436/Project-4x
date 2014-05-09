@@ -5,7 +5,7 @@ import static com.google.gwt.query.client.GQuery.$;
 import java.util.HashMap;
 import java.util.List;
 
-import com.client.model.ClientModel;
+import com.client.model.ClientController;
 import com.client.GameCanvas;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.query.client.Function;
@@ -31,7 +31,7 @@ public class GameInterface {
 	// ID of panel in sidebar currently showing
 	// Or "" if sidebar is hidden
 	private static String showing = "";
-	private static ClientModel clientModel;
+	private static ClientController clientModel;
 	private static GameModel gameModel;
 	private static Player me;
 
@@ -46,8 +46,12 @@ public class GameInterface {
 	 * Responsible for registering callbacks that are purely bound to the
 	 * interface
 	 */
-	public static void init(ClientModel cm, GameCanvas c) {
-		
+
+	public static void init(ClientController cm, GameCanvas c) {
+		int playerID = cm.getPlayerID();
+		gameModel = cm.getGameModel();
+		// TODO: need to set me
+		me = gameModel.getPlayer(playerID);
 		// Change sidebar left value to calculated value
 		int width = $("#sidebar").outerWidth(true);
 		$("#sidebar").css("left", "-" + width);

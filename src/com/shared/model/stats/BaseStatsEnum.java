@@ -19,94 +19,97 @@ public enum BaseStatsEnum implements Serializable {
 	/*
 	 * Each enumeration contains a UnitsStats object, which defines the stats
 	 * for the each type of unit
-	 * UnitsStats(damage,range,armor,health_regen,health
-	 * ,movementSpeed,actionSpeed,ProductionCost)
+	 * UnitsStats( damage, range, armor, health_regen, health ,movementSpeed, actionSpeed, ProductionCost)
 	 */
 
 	// UNITS
 
 	INFANTRY(new UnitStats(4, 1, 2, .5f, 40f, 3, 1.5f, new Resources(100, 0, 0,
-			0, 0))),
+			0, 0)), 5),
 
 	MILITIA(new UnitStats(1, 1, 0, .2f, 20f, 2, 1.0f, new Resources(100, 0, 0,
-			0, 0))),
+			0, 0)), 30),
 
 	SKIRMISHER(new UnitStats(2, 1, 1, .1f, 10f, 2, 1.7f, new Resources(100, 0,
-			0, 0, 0))),
+			0, 0, 0)), 30),
 
 	ARCHER(new UnitStats(2, 4, 0, 0, 20f, 3, 1.0f, new Resources(100, 0, 0, 0,
-			0))),
+			0)), 30),
 
 	KNIGHT(new UnitStats(5, 1, 3, .5f, 50f, 6, 2.0f, new Resources(100, 0, 0,
-			0, 0))),
+			0, 0)), 30),
 
 	RANGED_CALVARY(new UnitStats(4, 5, 2, .4f, 30f, 6, 2.0f, new Resources(100,
-			0, 0, 0, 0))),
+			0, 0, 0, 0)), 30),
 
 	TRANSPORT(new UnitStats(0, 0, 2, .2f, 100, 4, 1.0f, new Resources(100, 0,
-			0, 0, 0))),
+			0, 0, 0)), 30),
 
 	CATAPULT(new UnitStats(6, 8, 1, 0, 20f, 1, 1.0f, new Resources(100, 0, 0,
-			0, 0))),
+			0, 0)), 30),
 
 	BATTERING_RAM(new UnitStats(6, 1, 1, 0, 20f, 1, 1.0f, new Resources(100, 0,
-			0, 0, 0))),
+			0, 0, 0)), 30),
 
 	RIFLEMAN(new UnitStats(8, 4, 2, .4f, 50f, 4, 2.0f, new Resources(100, 0, 0,
-			0, 0))),
+			0, 0)), 30),
 
 	DRAGOON(new UnitStats(7, 2, 2, .4f, 40f, 6, 2.0f, new Resources(100, 0, 0,
-			0, 0))),
+			0, 0)), 30),
 
 	CANNON(new UnitStats(10, 5, 2, 0, 30f, 1, 2.0f, new Resources(100, 0, 0, 0,
-			0))),
+			0)), 30),
 
 	MEDIC(new UnitStats(-2, 5, 2, 0, 10f, 2, 2.0f, new Resources(100, 0, 0, 0,
-			0))),
+			0)), 30),
 
 	TRADE_CART(new UnitStats(0, 1, 1, .4f, 40f, 4, 1.0f, new Resources(100, 0,
-			0, 0, 0))),
+			0, 0, 0)), 30),
 
 	// AGENTS
 	GENERAL(new UnitStats(9, 1, 3, 60f, 10, 6, 3.0f, new Resources(100, 0, 0,
-			0, 0))),
+			0, 0)), 30),
 
 	PROSPECTOR(new UnitStats(1, 1, 2, .5f, 6, 6, 3.0f, new Resources(100, 0, 0,
-			0, 0))),
+			0, 0)), 30),
 
 	MERCHANT(new UnitStats(1, 1, 2, .5f, 6, 6, 3.0f, new Resources(100, 0, 0,
-			0, 0))),
+			0, 0)), 30),
 
 	// BUILDINGS
 
-	CASTLE(new UnitStats(0, 2, 200, 0, 2000, 0, 0, new Resources(100, 0, 0, 0,
-			0))),
+	CASTLE(new UnitStats(0, 2, 0, 0, 2000, 0, 0, new Resources(100, 0, 0, 0,
+			0)), 30),
 
-	BARRACKS(new UnitStats(0, 2, 100, 0, 1000, 0, 0, new Resources(100, 0, 0,
-			0, 0))),
+	BARRACKS(new UnitStats(0, 2, 0, 0, 1000, 0, 0, new Resources(100, 0, 0,
+			0, 0)), 30),
 
-	BANK(
-			new UnitStats(0, 2, 100, 0, 1000, 0, 0, new Resources(100, 0, 0, 0,
-					0))),
+	BANK( new UnitStats(0, 2, 0, 0, 1000, 0, 0, new Resources(100, 0, 0, 0,
+					0)), 30),
 
-	TOWN_HALL(new UnitStats(0, 2, 100, 0, 1000, 0, 0, new Resources(100, 0, 0,
-			0, 0))),
+	TOWN_HALL(new UnitStats(0, 2, 0, 0, 1000, 0, 0, new Resources(100, 0, 0,
+			0, 0)), 30),
 
 	// RESOURCE BUILDINGS
-	LUMBER_MILL(new UnitStats(0, 2, 100, 0, 1000, 0, 0, new Resources(100, 0,
-			0, 0, 0))),
+	LUMBER_MILL(new UnitStats(0, 2, 0, 0, 1000, 0, 0, new Resources(100, 0, 0,
+			0, 0)), 30),
 
-	STONE_MINE(new UnitStats(0, 2, 100, 0, 1000, 0, 0, new Resources(100, 0, 0,
-			0, 0))), GOLD_MINE(new UnitStats(0, 2, 100, 0, 1000, 0, 0,
-			new Resources(100, 0, 0, 0, 0))), FARM(new UnitStats(0, 2, 100, 0,
-			1000, 0, 0, new Resources(100, 0, 0, 0, 0))), UNIVERSITY(
-			new UnitStats(0, 2, 100, 0, 1000, 0, 0, new Resources(100, 0, 0, 0,
-					0))),
+	STONE_MINE(new UnitStats(0, 2, 0, 0, 1000, 0, 0, new Resources(100, 0, 0,
+			0, 0)), 30), 
+	
+	GOLD_MINE( new UnitStats(0, 2, 0, 0, 1000, 0, 0, new Resources(100, 0, 0,
+			0, 0)), 30),
+			
+	FARM( new UnitStats(0, 2, 0, 0, 1000, 0, 0, new Resources(100, 0, 0, 0,
+			0)), 30), 
+			
+	UNIVERSITY( new UnitStats(0, 2, 0, 0, 1000, 0, 0, new Resources(100, 0, 0,
+			0, 0)), 30),
 
 	// RESEARCH BUILDINGS
 
 	BLACKSMITH(new UnitStats(0, 0, 1, 0, 100, 0, 0, new Resources(100, 0, 0, 0,
-			0)));
+			0)), 30);
 
 	private UnitStats stats;
 	private int baseCreationTime;

@@ -36,7 +36,7 @@ public class GameObject implements Serializable, Combatable {
 		updateStats(baseStats, stats);
 		this.type = GameObjectType.ALL;
 		PhysicsVector position = new PhysicsVector(0,0);
-		moveBehavior = new StandardMover( position, stats.movementSpeed, stats.movementSpeed / 2.0 );
+		moveBehavior = new StandardMover( position, stats.movementSpeed, stats.movementSpeed * 2.0 );
 		healthBehavior = new StandardHealth( stats.health, stats.health_regen, stats.armor );
 	}
 
@@ -49,7 +49,7 @@ public class GameObject implements Serializable, Combatable {
 		updateStats(baseStats, new_stats);
 		this.type = type;
 		PhysicsVector position = new PhysicsVector(xco,yco);
-		moveBehavior = new StandardMover( position, stats.movementSpeed, stats.movementSpeed / 2.0 );
+		moveBehavior = new StandardMover( position, stats.movementSpeed, stats.movementSpeed * 2.0 );
 		healthBehavior = new StandardHealth( stats.health, stats.health_regen, stats.armor );
 	}
 
@@ -139,6 +139,10 @@ public class GameObject implements Serializable, Combatable {
 	@Override
 	public boolean isDead() {
 		return healthBehavior.isDead();
+	}
+
+	public float getHealthPercentage() {
+		return healthBehavior.getHealthPercentage();
 	}
 
 }

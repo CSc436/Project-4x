@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.client.gameinterface.Console;
-import com.client.model.ClientModel;
+import com.client.model.ClientController;
 import com.client.rendering.Camera;
 import com.client.rendering.Mesh;
 import com.client.rendering.OBJImporter;
@@ -45,11 +45,14 @@ import com.googlecode.gwtgl.binding.WebGLUniformLocation;
 import com.shared.model.buildings.Building;
 import com.shared.model.buildings.BuildingType;
 import com.shared.model.commands.AttackCommand;
+import com.shared.model.commands.BuildingProductionCommand;
+import com.shared.model.commands.ConstructBuildingCommand;
 import com.shared.model.commands.MoveUnitCommand;
 import com.shared.model.commands.PlaceUnitCommand;
 import com.shared.model.entities.GameObject;
 import com.shared.model.units.Unit;
 import com.shared.model.units.UnitType;
+import com.shared.utils.ColorFunctions;
 import com.shared.utils.Coordinate;
 import com.shared.utils.Vector3;
 
@@ -76,14 +79,14 @@ public class GameCanvas {
 	
 	private float agentX = 0.0f, agentY = 0.0f, agentZ = -0.1f;
 
-	public static final int GRID_WIDTH = 12;
+	public static final int GRID_WIDTH = 256;
 	private long time;
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
 	
 	private final boolean debug = false;
 	private final boolean commandDebug = true;
 	
-	private final ClientModel theModel;
+	private final ClientController theModel;
 	private final Canvas webGLCanvas = Canvas.createIfSupported();
 	
 	private Selector objectSelector;
@@ -93,6 +96,8 @@ public class GameCanvas {
 	private Coordinate mouseTile = new Coordinate(0,0);
 	
 	public ArrayList<Integer> selectedEntities;
+	
+	private Mesh selectionRing;
 
 	private boolean chatFlag = false; // if chat is selected, do not allow camera movment/input
 	
@@ -112,7 +117,7 @@ public class GameCanvas {
 	private static int buildingCounter = -1;
 	
 	
-	public GameCanvas(ClientModel theModel) {
+	public GameCanvas(ClientController theModel) {
 		// CODE FOR MINIMAP DEV/CLICK SELECTING
 		selectedEntities = new ArrayList<Integer>();
 		this.mouseVector = new Vector3(0,0,0);
@@ -171,19 +176,44 @@ public class GameCanvas {
 	 * Populates with a few starter entities
 	 */
 	private void initEntities() {
-		
 		unitMeshes = new HashMap<UnitType,Mesh>();
 		buildingMeshes = new HashMap<BuildingType,Mesh>();
+		selectionRing = OBJImporter.objToMesh(ClientResources.INSTANCE.ringOBJ().getText(), glContext);
+
 		
 		final Mesh castle1 = OBJImporter.objToMesh(ClientResources.INSTANCE.castleOBJ().getText(), glContext);
 		castle1.setTexture(glContext, ClientResources.INSTANCE.castleTexture());
 		
+		final Mesh swordsman1 = OBJImporter.objToMesh(ClientResources.INSTANCE.swordsmanOBJ().getText(), glContext);
+		swordsman1.setTexture(glContext, ClientResources.INSTANCE.swordsmanTexture());
+		
+		final Mesh archer1 = OBJImporter.objToMesh(ClientResources.INSTANCE.archerOBJ().getText(), glContext);
+		archer1.setTexture(glContext, ClientResources.INSTANCE.archerTexture());
+		
 		final Mesh cannon1 = OBJImporter.objToMesh(ClientResources.INSTANCE.cannonOBJ().getText(), glContext);
 		cannon1.setTexture(glContext, ClientResources.INSTANCE.cannonTexture());
+		
+		/*// STRAIN THE SERVER AAAAAAHHHHH 
+		int idcount = 300;
+		for (int i = 0; i < 20; i++) {
+			for (int j = 0; j < 20; j++) {
+				entities.put(idcount, OBJImporter.objToMesh(ClientResources.INSTANCE.castleOBJ().getText(), glContext));
+				entities.get(idcount).id = idcount;
+				entities.get(idcount).posX = (float)(1.5 * (i+1));
+				entities.get(idcount).posY = (float)(1.5 * (j+1));
+				Console.log("Castle #" + (idcount - 300) + " complete!");
+				idcount++;
+			}
+		}*/
+		
+
 		
 		for(UnitType t : UnitType.values()) {
 			unitMeshes.put(t, cannon1);
 		}
+		unitMeshes.put(UnitType.INFANTRY, swordsman1);
+		unitMeshes.put(UnitType.ARCHER, archer1);
+		
 		for(BuildingType t : BuildingType.values()) {
 			buildingMeshes.put(t, castle1);
 		}
@@ -212,8 +242,10 @@ public class GameCanvas {
 			//Console.log("Extrapolating position " + timeSinceUpdate + " ms forward");
 			double[] pos = o.extrapolatePosition(timeSinceUpdate).toArray();
 			//Console.log("Unit " + o.getId() + " at " + pos[0] + " " + pos[1]);
-			m.posX = (float) pos[0];
-			m.posY = (float) pos[1];
+			m.posX = (float) pos[0] + 0.5f;
+			m.posY = (float) pos[1] + 0.5f;
+			float[] color = ColorFunctions.intToHSV(o.getPlayerID());
+			m.setTeamColor(color[0], color[1], color[2]);
 			m.id = o.getId();
 			m.render(glContext, shader, camera);
 		}
@@ -266,51 +298,11 @@ public class GameCanvas {
 		
 		glContext.disableVertexAttribArray(vertexPositionAttribute);
 		glContext.disableVertexAttribArray(tileSelectAttrib);
-		
-		//glContext.flush();
-
-		//-------------------------------------------
-//		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT
-//				| WebGLRenderingContext.DEPTH_BUFFER_BIT);
-//
-//		glContext.useProgram(shaderProgram);
-//
-//		glContext.enableVertexAttribArray(vertexPositionAttribute);
-//		glContext.enableVertexAttribArray(vertexTexCoordAttrib);
-//
-//		// vertices
-//		glContext.uniformMatrix4fv(matrixUniform, false, camera.getCameraMatrix());
-//		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileVertexBuffer);
-//		glContext.vertexAttribPointer(vertexPositionAttribute, 3,
-//				WebGLRenderingContext.FLOAT, false, 0, 0);
-//
-//		// texture coordinates
-//		glContext
-//				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileTexCoordBuffer);
-//		glContext.vertexAttribPointer(vertexTexCoordAttrib, 2,
-//				WebGLRenderingContext.FLOAT, false, 0, 0);
-//
-//		// uniforms
-//		glContext.uniform3f(camPosUniform, camera.getX(), camera.getY(), camera.getZ());
-//
-//		// texture
-//		glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
-//		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
-//		glContext.uniform1i(texUniform, 0);
-//
-//		// draw geometry
-//		glContext.drawArrays(WebGLRenderingContext.TRIANGLES, 0, NUM_TILES * 6);
-//		
-//		glContext.disableVertexAttribArray(vertexPositionAttribute);
-//		glContext.disableVertexAttribArray(vertexTexCoordAttrib);
-//
-//		renderAgent();
-//		
-//		glContext.flush();
 	}
 	
 	/**
-	 * Renders selected entities with the selection shader
+	 * Renders selected entities with an outline corresponding to their
+	 * remaing health
 	 * @param selectedShader
 	 */
 	public void renderSelectedEntities(Shader selectedShader) {
@@ -321,19 +313,12 @@ public class GameCanvas {
 		
 		for(Integer i : selectedEntities) {
 			GameObject o = gameObjects.get(i);
-			Mesh m;
-			if(o instanceof Unit) {
-				m = unitMeshes.get(((Unit) o).getUnitType());
-			} else if(o instanceof Building) {
-				m = buildingMeshes.get(((Building) o).getBuildingType());
-			} else {
-				m = unitMeshes.get(((Unit) o).getUnitType());
-			}
 			double[] pos = o.extrapolatePosition(timeSinceUpdate).toArray();
-			m.posX = (float) pos[0];
-			m.posY = (float) pos[1];
-			m.id = i;
-			m.render(glContext, selectedShader, camera);
+			selectionRing.posX = (float) pos[0] + 0.5f;
+			selectionRing.posY = (float) pos[1] + 0.5f;
+			selectionRing.healthPercentage = o.getHealthPercentage();
+			selectionRing.id = i;
+			selectionRing.render(glContext, selectedShader, camera);
 		}
 	}
 	
@@ -373,8 +358,20 @@ public class GameCanvas {
 					case KeyCodes.KEY_E: rotateRight = true; break;
 					case KeyCodes.KEY_X: center = true; break;
 					case KeyCodes.KEY_I: 
-						Console.log("pressed I");
 						theModel.sendCommand(new PlaceUnitCommand( UnitType.CANNON, 1, mouseTile));
+						break;
+					case KeyCodes.KEY_K:
+						theModel.sendCommand(new PlaceUnitCommand( UnitType.INFANTRY, (int) (8*Math.random()), mouseTile));
+						break;
+					case KeyCodes.KEY_L:
+						theModel.sendCommand(new PlaceUnitCommand( UnitType.ARCHER, (int) (8*Math.random()), mouseTile));
+						break;
+					case KeyCodes.KEY_H:
+						theModel.sendCommand(new ConstructBuildingCommand( BuildingType.BARRACKS, (int) (8*Math.random()), mouseTile));
+						break;
+					case KeyCodes.KEY_N:
+						for( int i : selectedEntities )
+							theModel.sendCommand(new BuildingProductionCommand( i, UnitType.INFANTRY ));
 						break;
 					case KeyCodes.KEY_B:
 						if (event.getNativeEvent().getShiftKey()) {
@@ -447,7 +444,10 @@ public class GameCanvas {
 			public void onMouseDown(MouseDownEvent event) {
 				switch(event.getNativeButton()) {
 				case NativeEvent.BUTTON_LEFT:
-					if(event.isShiftKeyDown()) {
+					if(currMode == Mode.BUILDING) {
+						// Build the type that is specified
+						theModel.sendCommand(new ConstructBuildingCommand( BuildingType.BARRACKS, (int) (8*Math.random()), mouseTile));
+					} else if(event.isShiftKeyDown()) {
 						int targetID = objectSelector.pickEntity(event.getClientX(), event.getClientY());
 						if(commandDebug) Console.log("Target ID: " + targetID);
 						if(targetID == 0) {
@@ -586,6 +586,8 @@ public class GameCanvas {
 		glContext.clearDepth(1.0f);
 		glContext.enable(WebGLRenderingContext.DEPTH_TEST);
 		glContext.depthFunc(WebGLRenderingContext.LEQUAL);
+		glContext.pixelStorei(WebGLRenderingContext.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
+		glContext.blendFunc(WebGLRenderingContext.SRC_ALPHA, WebGLRenderingContext.ONE);
 
 		initTexture();
 		initShaders();
@@ -612,7 +614,7 @@ public class GameCanvas {
 				.idFS().getText());
 		
 		final Shader selectedShader = new Shader(glContext,ClientResources.INSTANCE
-				.simpleMeshVS().getText(),ClientResources.INSTANCE
+				.selectedVS().getText(),ClientResources.INSTANCE
 				.selectedFS().getText());
 		
 		final Mesh barrel = OBJImporter.objToMesh(ClientResources.INSTANCE.barrelOBJ().getText(), glContext);

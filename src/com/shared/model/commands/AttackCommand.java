@@ -3,6 +3,7 @@ package com.shared.model.commands;
 import com.shared.model.behaviors.Attacker;
 import com.shared.model.behaviors.Combatable;
 import com.shared.model.control.GameModel;
+import com.shared.model.entities.GameObject;
 
 public class AttackCommand implements Command {
 	
@@ -28,10 +29,12 @@ public class AttackCommand implements Command {
 
 	@Override
 	public boolean performCommand(GameModel model) {
-		Attacker attacker = (Attacker) model.getGameObject(attackerID);
-		Combatable target = (Combatable) model.getGameObject(targetID);
-		attacker.setTarget(target);
-		attacker.startAttack();
+		GameObject attacker = model.getGameObject(attackerID);
+		GameObject target = model.getGameObject(targetID);
+		if( attacker != null && attacker instanceof Attacker && target != null ) {
+			((Attacker) attacker).setTarget(target);
+			((Attacker) attacker).startAttack();
+		}
 		return true;
 	}
 

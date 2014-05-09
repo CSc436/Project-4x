@@ -3,6 +3,7 @@ package com.shared.model.control;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -37,6 +38,8 @@ public class GameModel implements Serializable {
 	private HashMap<Integer, Producer> producers;
 	private HashMap<Integer, ResourceGenerator> resourceGenerators;
 	
+	private LinkedList<GameObject> producedBuildings = new LinkedList<GameObject>();
+
 	private int turnNumber = 0;
 	private int nextPlayerID = 1;
 	private TradeManager tradeManager;
@@ -179,13 +182,17 @@ public class GameModel implements Serializable {
 	
 	private void updateHealth( int timeStep ) {
 		Set<Integer> keySet = attackables.keySet();
+		LinkedList<Integer> dead = new LinkedList<Integer>();
 		for( int i : keySet ) {
 			Attackable a = attackables.get(i);
 			a.simulateDamage(timeStep);
 			if(a.isDead()) {
-				removeFromAll((GameObject) a);
+				System.out.println("Object with ID " + i + " is dead!");
+				dead.add(i);
 			}
 		}
+		for( int i : dead )
+			removeFromAll(gameObjects.get(i));
 	}
 	
 	private void removeFromAll(GameObject o) {
@@ -197,14 +204,11 @@ public class GameModel implements Serializable {
 		resourceGenerators.remove(id);
 		producers.remove(id);
 		
-		int playerID = o.getPlayerID();
-		getPlayer( playerID ).getGameObjects().removeGameObject(id);
+		//int playerID = o.getPlayerID();
+		//getPlayer( playerID ).getGameObjects().removeGameObject(id);
 	}
 
 	private void placeNewObjects() {
-		
-		
-		
 		
 		Set<Integer> keySet = producers.keySet();
 		for( int k : keySet ) {
@@ -256,6 +260,15 @@ public class GameModel implements Serializable {
 				attackables.put(unitID, u);
 			}
 		}
+		for( GameObject o : producedBuildings ) {
+			int id = o.getId();
+			gameObjects.put(id, o);
+			movables.put(id, o);
+			attackables.put(id, o);
+			if(o instanceof Producer) producers.put(id, (Producer) o);
+			if(o instanceof ResourceGenerator) resourceGenerators.put(id, (ResourceGenerator) o);
+		}
+		producedBuildings.clear();
 	}
 
 	public void modelState() {
@@ -373,6 +386,10 @@ public class GameModel implements Serializable {
 	
 	public HashMap<Integer,GameObject> getGameObjects() {
 		return gameObjects;
+	}
+	
+	public LinkedList<GameObject> getProducedBuildings() {
+		return producedBuildings;
 	}
 	
 	public void createUnit( UnitType ut, int pn, Coordinate c ) {
