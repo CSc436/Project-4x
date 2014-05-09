@@ -1,62 +1,43 @@
 package com.shared.model.buildings;
 
-import com.shared.model.units.Unit;
 
-public interface ProductionBuilding {
+import java.util.Queue;
 
+import com.shared.model.behaviors.Producer;
+import com.shared.model.stats.BaseStatsEnum;
+import com.shared.model.stats.UnitStats;
+import com.shared.model.units.UnitType;
+
+public class ProductionBuilding extends Building implements Producer {
+	
 	/**
-	 * advanceUnitProduction(): increments how far along current unit production
-	 * is.
 	 * 
-	 * @param timestep
-	 *            - amount to increment player production
-	 * @param class1
-	 * 
-	 * @return if not null add unit to player, if null, do nothing.
 	 */
+	private static final long serialVersionUID = -6350344177302593568L;
+	Producer productionBehavior;
 
-	public Unit advanceUnitProduction(int timestep);
+	public ProductionBuilding(int id, int playerId, BaseStatsEnum baseStats,
+			UnitStats new_stats, BuildingType buildingType, float xco,
+			float yco, int height, int width, Producer p) {
+		super(id, playerId, baseStats, new_stats, buildingType, xco, yco, height, width);
+		productionBehavior = p;
+	}
+	
+	public ProductionBuilding() {}
 
-	/**
-	 * queueUnit(): queues unit u on the building production queue
-	 * 
-	 * Holding the Queue for the units that the building is responsible for
-	 * producing. It can add units to its queue or remove finished units from
-	 * its queue
-	 * 
-	 * When a unit is ordered to be produced, the player is charged the
-	 * production costs. If the player decides to cancel the order, he is
-	 * refunded.
-	 * 
-	 * If the unit costs more resources than the player has, the unit is not
-	 * queued, and false is returned
-	 * 
-	 * @return true if the unit was queued, false on failure
-	 */
-	public boolean queueUnit(Unit u);
+	@Override
+	public void simulateProduction(int timeStep) {
+		productionBehavior.simulateProduction(timeStep);
+	}
 
-	/**
-	 * dequeueUnit(): takes a unit off of the production queue for this
-	 * building, and returns said unit
-	 * 
-	 * @return Unit that building finished creating
-	 */
-	public Unit dequeueUnit();
+	@Override
+	public void queueProduction(UnitType type) {
+		productionBehavior.queueProduction(type);
+	}
 
-	/**
-	 * productionQueueEmpty() returns true if the production queue for this
-	 * building is empty
-	 * 
-	 * @return true if queue is empty
-	 */
-	public boolean productionQueueEmpty();
-
-	/**
-	 * getProducingUnit() returns a reference to the Unit on the top of the
-	 * queue if it is there [queue.peek]
-	 * 
-	 * @return first unit on the building queue or null if no units are queued
-	 */
-	public Unit getProducingUnit();
+	@Override
+	public Queue<UnitType> getProducedUnits() {
+		return productionBehavior.getProducedUnits();
+	}
 
 }

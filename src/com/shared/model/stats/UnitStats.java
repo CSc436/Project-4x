@@ -1,8 +1,14 @@
 package com.shared.model.stats;
 
+import java.io.Serializable;
+
 import com.shared.model.resources.Resources;
 
-public class UnitStats {
+public class UnitStats implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8429058443626181693L;
 	public int damage; // how much damage this unit can deal out
 	public float range; // range of attack for this unit (archers have greater
 						// range than knights)
@@ -54,6 +60,8 @@ public class UnitStats {
 		this.productionCost = productionCost;
 
 	}
+	
+	public UnitStats() {}
 
 	public UnitStats clone() {
 		return new UnitStats(damage, range, armor, health_regen, max_health,

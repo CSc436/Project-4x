@@ -31,24 +31,25 @@
 	<div id="login-screen" class="text-center">
 		<div>
 			<h2>Login</h2>
-			Username : <input type="text" id="login-username"/>
-			<button type="button" id="login-button">Login</button><br>
-			Password : <input type="password" id="login-password"/>
+			Username : <input type="text" id="login-username" />
+			<button type="button" id="login-button">Login</button>
+			<br> Password : <input type="password" id="login-password" />
 		</div>
 	</div>
 	<div id="loading-screen" class="text-center">
 		<div>
 			<h1>Loading...</h1>
 			<p id="loading-message"></p>
+			<p id="loading-actions"></p>
 		</div>
 	</div>
 	<div id="toolbar-div">
 		<span id="banner">Legacy of Kings</span>
 		<ul id="toolbar">
-			<li><a href="#" id="agent-button" title="Agents"><img
-					src="assets/Icons/AgentsIcon.png" /></a></li>
-			<li><a href="#" id="cities-button" title="Cities"><img
-					src="assets/Icons/CitiesIcon.png" /></a></li>
+			<li><a href="#" id="units-button" title="Units"><img
+					src="assets/Icons/UnitsIcon.png" /></a></li>
+			<li><a href="#" id="buildings-button" title="Buildings"><img
+					src="assets/Icons/BuildingsIcon.png" /></a></li>
 			<li><a href="#" id="diplomacy-button" title="Diplomacy"><img
 					src="assets/Icons/DiplomacyIcon.png" /></a></li>
 			<li><a href="#" id="economies-button" title="Economies"><img
@@ -57,33 +58,36 @@
 			<!-- Goes from right to left -->
 			<li id="menu" class="toolbar-right"><a href="#" id="menu-button"
 				title="Menu">Menu</a></li>
-			<li id="game-resources" class="toolbar-right">
-				<span><img class="resource-icon" src="assets/Icons/GoldResourceIcon.png"> 100
-						<img class="resource-icon" src="assets/Icons/WoodResourceIcon.png"> 200
-						<img class="resource-icon" src="assets/Icons/FoodResourceIcon.png"> 350
-						<img class="resource-icon" src="assets/Icons/StoneResourceIcon.png"> 79
-						<img class="resource-icon" src="assets/Icons/ResearchResourceIcon.png"> 1000</span>
-			</li>
+			<li id="game-resources" class="toolbar-right"><span><img
+					class="resource-icon" src="assets/Icons/GoldResourceIcon.png">
+					100 <img class="resource-icon"
+					src="assets/Icons/WoodResourceIcon.png"> 200 <img
+					class="resource-icon" src="assets/Icons/FoodResourceIcon.png">
+					350 <img class="resource-icon"
+					src="assets/Icons/StoneResourceIcon.png"> 79 <img
+					class="resource-icon" src="assets/Icons/ResearchResourceIcon.png">
+					1000</span></li>
 		</ul>
 	</div>
 	<div id="sidebar">
-		<!-- AGENT MENU -->
-		<div id="agent-menu" class="sidebar-menu">
+		<!-- UNIT MENU -->
+		<div id="units-menu" class="sidebar-menu">
 			<div class="text-center">
-				<h2>Agents</h2>
+				<h2>Units</h2>
 			</div>
+			<!--
 			<div>
-				<button type="button" id="agent-create"
-					class="btn btn-green full-size">Create Agent</button>
+				<button type="button" id="units-create"
+					class="btn btn-green full-size">Create Unit</button>
 			</div>
+			-->
 			<hr>
-			<table class="sidebar-table">
+			<table class="sidebar-table" id="units-table">
 				<tbody>
 					<tr>
 						<td>
-							<div>Kelsey</div>
 							<div>General</div>
-							<button type="button" class="btn btn-green agent-detail-button">View</button>
+							<button type="button" class="btn btn-green units-detail-button">View</button>
 						</td>
 						<td>
 							<button type="button" class="btn btn-green">Goto</button>
@@ -91,9 +95,8 @@
 					</tr>
 					<tr>
 						<td>
-							<div>Mike</div>
 							<div>Banker</div>
-							<button type="button" class="btn btn-green agent-detail-button">View</button>
+							<button type="button" class="btn btn-green units-detail-button">View</button>
 						</td>
 						<td>
 							<button type="button" class="btn btn-green">Goto</button>
@@ -101,9 +104,8 @@
 					</tr>
 					<tr>
 						<td>
-							<div>Porkins</div>
 							<div>Prospector</div>
-							<button type="button" class="btn btn-green agent-detail-button">View</button>
+							<button type="button" class="btn btn-green units-detail-button">View</button>
 						</td>
 						<td>
 							<button type="button" class="btn btn-green">Goto</button>
@@ -112,14 +114,15 @@
 				</tbody>
 			</table>
 		</div>
-		<!-- AGENT MENU DETAIL -->
-		<div id="agent-menu-detail" class="sidebar-menu">
+		<!-- UNIT MENU DETAIL -->
+		<div id="units-menu-detail" class="sidebar-menu">
+			<!-- 
 			<div class="text-center">
 				<h2>Kelsey</h2>
 			</div>
+			-->
 			<div class="text-center">
-				<div>General</div>
-				<div>Current Action</div>
+				<div id="unit-info">Unit info here</div>
 				<div>
 					<button type="button" class="btn btn-green">Goto</button>
 				</div>
@@ -127,55 +130,60 @@
 			<div class="text-center">
 				<button type="button" class="btn btn-red">Dismiss</button>
 				<button type="button" class="btn btn-red detail-return"
-					data-return="agent-menu">Back</button>
+					data-return="units-menu">Back</button>
 			</div>
 		</div>
-		<!-- AGENT MENU CREATE -->
-		<div id="agent-menu-create" class="sidebar-menu">
+		<!-- UNIT MENU CREATE -->
+		<!--  
+		<div id="units-menu-create" class="sidebar-menu">
 			<div class="text-center">
-				<h2>Create an Agent</h2>
+				<h2>Create a Unit</h2>
 			</div>
 			<hr>
 			<div>
-				<label class="form-label" for="agent-name">Name:</label><input
-					type="text" id="agent-name" />
+				<label class="form-label" for="unit-name">Name:</label><input
+					type="text" id="unit-name" />
 			</div>
 			<div>
-				<label class="form-label" for="agent-type">Type:</label> <select
-					id="agent-type">
-					<option value="Banker">Banker</option>
-					<option value="General">General</option>
+				<label class="form-label" for="unit-type">Type:</label> <select
+					id="unit-type">
+					<option value="Militia">Militia</option>
 					<option value="Infantry">Infantry</option>
-					<option value="Prospector">Prospector</option>
+					<option value="Skirmisher">Skirmisher</option>
+					<option value="Archer">Archer</option>
+					<option value="Knight">Knight</option>
+					<option value="Skirmisher">Skirmisher</option>
 				</select>
 			</div>
 			<div>
-				<label class="form-label" for="agent-action">Set Action:</label> <select
-					id="agent-action">
+				<label class="form-label" for="unit-action">Set Action:</label> <select
+					id="unit-action">
 					<option value="?">?</option>
 					<option value="?">?</option>
 					<option value="?">?</option>
 				</select>
 			</div>
 			<div class="text-center">
-				<button type="button" class="btn btn-red" id="agent-create-confirm">Create
-					Agent</button>
+				<button type="button" class="btn btn-red" id="units-create-confirm">Create
+					Unit</button>
 				<button type="button" class="btn btn-red detail-return"
-					data-return="agent-menu">Back</button>
+					data-return="units-menu">Back</button>
 			</div>
 		</div>
-		<!-- CITIES MENU -->
-		<div id="cities-menu" class="sidebar-menu">
+		-->
+		<!-- BUILDINGS MENU -->
+		<div id="buildings-menu" class="sidebar-menu">
 			<div class="text-center">
-				<h2>Cities</h2>
+				<h2>Buildings</h2>
 			</div>
 			<hr>
-			<table class="sidebar-table">
+			<table class="sidebar-table" id="buildings-table">
 				<tbody>
 					<tr>
 						<td>
 							<div>Metropolis</div>
-							<button type="button" class="btn btn-green cities-detail-button">View</button>
+							<button type="button"
+								class="btn btn-green buildings-detail-button">View</button>
 						</td>
 						<td>
 							<button type="button" class="btn btn-green">Goto</button>
@@ -184,7 +192,8 @@
 					<tr>
 						<td>
 							<div>Mike</div>
-							<button type="button" class="btn btn-green cities-detail-button">View</button>
+							<button type="button"
+								class="btn btn-green buildings-detail-button">View</button>
 						</td>
 						<td>
 							<button type="button" class="btn btn-green">Goto</button>
@@ -193,7 +202,8 @@
 					<tr>
 						<td>
 							<div>Porkins</div>
-							<button type="button" class="btn btn-green cities-detail-button">View</button>
+							<button type="button"
+								class="btn btn-green buildings-detail-button">View</button>
 						</td>
 						<td>
 							<button type="button" class="btn btn-green">Goto</button>
@@ -202,23 +212,43 @@
 				</tbody>
 			</table>
 		</div>
-		<!-- CITIES MENU DETAIL -->
-		<div id="cities-menu-detail" class="sidebar-menu">
-			<div class="text-center">
+		<!-- BUILDINGS MENU DETAIL -->
+		<div id="buildings-menu-detail" class="sidebar-menu">
+			<input type="hidden" id="building-id" value="" />
+			<div class="text-center" id="building-name">
 				<h2>Metropolis</h2>
 			</div>
-			<div class="text-center">
-				<div>Days Since Creation</div>
-				<div>Population</div>
-				<div>Resource info</div>
-				<div>
-					<button type="button" class="btn btn-green">Goto</button>
-				</div>
+			<div class="text-center" id="building-data">
+				<div>Health</div>
 			</div>
 			<div class="text-center">
+				<button type="button" class="btn btn-green">Goto</button>
 				<button type="button" class="btn btn-red">Destroy</button>
+			</div>
+			<div class="text-center">
 				<button type="button" class="btn btn-red detail-return"
-					data-return="cities-menu">Back</button>
+					data-return="buildings-menu">Back</button>
+			</div>
+			<div>
+				<h4>Create Unit</h4>
+				<label class="form-label" for="unit-type">Unit Type </label>
+				<select id="unit-type">
+					<option value="Militia">Militia</option>
+					<option value="Infantry">Infantry</option>
+					<option value="Skirmisher">Skirmisher</option>
+					<option value="Archer">Archer</option>
+					<option value="Knight">Knight</option>
+					<option value="Ranged_Calvary">Ranged Calvary</option>
+					<option value="Transport">Transport</option>
+					<option value="Catapult">Catapult</option>
+					<option value="Battering_Ram">Battering Ram</option>
+					<option value="Rifleman">Rifleman</option>
+					<option value="Dragoon">Dragoon</option>
+					<option value="Cannon">Cannon</option>
+					<option value="Medic">Medic</option>
+					<option value="Trade_Cart">Trade Cart</option>
+				</select>
+				<button type="button" class="btn btn-red" id="buildings-detail-create-unit">Create Unit</button>
 			</div>
 		</div>
 		<!-- DIPLOMACY MENU -->
@@ -234,7 +264,7 @@
 			<div>
 				<h3 class="text-center">Sent Agreements</h3>
 				<hr>
-				<table class="sidebar-table">
+				<table class="sidebar-table" id="sent-agreements-table">
 					<tbody>
 						<tr>
 							<td>
@@ -256,12 +286,11 @@
 						</tr>
 					</tbody>
 				</table>
-
 			</div>
 			<div>
 				<h3 class="text-center">Received Agreements</h3>
 				<hr>
-				<table class="sidebar-table">
+				<table class="sidebar-table" id="received-agreements-table">
 					<tbody>
 						<tr>
 							<td>
@@ -291,7 +320,7 @@
 			<div>
 				<h3 class="text-center">Accepted Agreements</h3>
 				<hr>
-				<table class="sidebar-table">
+				<table class="sidebar-table" id="accepted-agreements-table">
 					<tbody>
 						<tr>
 							<td>
@@ -326,36 +355,44 @@
 		</div>
 		<!-- DIPLOMACY MENU DETAIL -->
 		<div id="diplomacy-menu-detail" class="sidebar-menu">
+			<!--
 			<div class="text-center">
 				<h2>Agreement: Gooby pls</h2>
 			</div>
 			<hr>
-			<div class="text-center">
+			-->
+			<div class="text-center" id="diplomacy-detail-info">
 				<div>Agreement With</div>
 				<div>They Receive</div>
 				<div>You Receive</div>
-				<div>Time Unit</div>
 				<div>Expires in</div>
 			</div>
 			<div class="text-center">
-				<button type="button" class="btn btn-red">Cancel Agreement</button>
+				<button type="button" class="btn btn-green" id="diplomacy-accept-trade">Accept</button>
+				<button type="button" class="btn btn-red" id="diplomacy-decline-trade">Decline</button>
 				<button type="button" class="btn btn-red detail-return"
 					data-return="diplomacy-menu">Back</button>
 			</div>
 		</div>
-		<!-- DIPLOMACY MENY CREATE -->
+		<!-- DIPLOMACY MENU CREATE -->
 		<div id="diplomacy-menu-create" class="sidebar-menu">
 			<div class="text-center">
 				<h2>Propose Agreement</h2>
 			</div>
 			<hr>
+			<!--
 			<div>
 				<label class="form-label" for="diplomacy-name">Name:</label><input
 					type="text" id="diplomacy-name" />
 			</div>
+			-->
 			<div>
+				<label class="form-label" for="diplomacy-send-user">Send To </label>
+				<input type="text" id="diplomacy-send-user" />
+			</div>
+			<div class="clearfix">
 				<label class="form-label" for="diplomacy-send-quantity">They
-					Receive:</label> <input type="text" id="diplomacy-send-quantity" /> <select
+					Receive </label><input type="text" id="diplomacy-send-quantity" /> <select
 					id="diplomacy-send-type">
 					<option value="Gold">Gold</option>
 					<option value="Wood">Wood</option>
@@ -363,9 +400,9 @@
 					<option value="Stone">Stone</option>
 				</select>
 			</div>
-			<div>
+			<div class="clearfix">
 				<label class="form-label" for="diplomacy-receive-quantity">You
-					Receive:</label> <input type="text" id="diplomacy-receive-quantity" /> <select
+					Receive </label> <input type="text" id="diplomacy-receive-quantity" /> <select
 					id="diplomacy-receive-type">
 					<option value="Gold">Gold</option>
 					<option value="Wood">Wood</option>
@@ -373,13 +410,15 @@
 					<option value="Stone">Stone</option>
 				</select>
 			</div>
+			<!--
 			<div>
 				<label class="form-label" for="diplomacy-time-unit">Trade
-					Every:</label> <input type="text" id="diplomacy-time-unit" /> Time Units
+					Every:</label> <input type="text" id="diplomacy-time-unit" /> Minutes
 			</div>
-			<div>
-				<label class="form-label" for="diplomacy-expire">Expires In:</label>
-				<input type="text" id="diplomacy-expire" /> Time Units
+			-->
+			<div class="clearfix">
+				<label class="form-label" for="diplomacy-expire">Expires In </label>
+				<input type="text" id="diplomacy-expire" /> Minutes
 			</div>
 			<div class="text-center">
 				<button type="button" class="btn btn-red"
@@ -394,18 +433,21 @@
 				<h2>Economies</h2>
 			</div>
 			<hr>
-			<div>Gold: 25</div>
-			<div>Wood: 100</div>
-			<div>Stone: 57</div>
-			<div>Food: 74</div>
-			<div>Research: 30</div>
-			<h3>City Resources</h3>
-			<table class="sidebar-table">
+			<div id="economies-resource-info">
+				<div>Gold: 25</div>
+				<div>Wood: 100</div>
+				<div>Stone: 57</div>
+				<div>Food: 74</div>
+				<div>Research: 30</div>
+			</div>
+			<h3>Resource Generating Buildings</h3>
+			<table class="sidebar-table" id="economies-building-info">
 				<tbody>
 					<tr>
 						<td>
 							<div>Metropolis</div>
-							<button type="button" class="btn btn-green economies-detail-button">View</button>
+							<button type="button"
+								class="btn btn-green economies-detail-button">View</button>
 						</td>
 						<td>
 							<button type="button" class="btn btn-green">Goto</button>
@@ -414,16 +456,8 @@
 					<tr>
 						<td>
 							<div>Mike</div>
-							<button type="button" class="btn btn-green economies-detail-button">View</button>
-						</td>
-						<td>
-							<button type="button" class="btn btn-green">Goto</button>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div>Porkins</div>
-							<button type="button" class="btn btn-green economies-detail-button">View</button>
+							<button type="button"
+								class="btn btn-green economies-detail-button">View</button>
 						</td>
 						<td>
 							<button type="button" class="btn btn-green">Goto</button>
@@ -432,26 +466,6 @@
 				</tbody>
 			</table>
 		</div>
-		<!-- ECONOMIES MENU DETAIL (same as cities-menu-detail) -->
-		<div id="economies-menu-detail" class="sidebar-menu">
-			<div class="text-center">
-				<h2>Metropolis</h2>
-			</div>
-			<div class="text-center">
-				<div>Days Since Creation</div>
-				<div>Population</div>
-				<div>Resource info</div>
-				<div>
-					<button type="button" class="btn btn-green">Goto</button>
-				</div>
-			</div>
-			<div class="text-center">
-				<button type="button" class="btn btn-red">Destroy</button>
-				<button type="button" class="btn btn-red detail-return"
-					data-return="economies-menu">Back</button>
-			</div>
-		</div>
-		<!-- <div id="sidebar-hide">&lt;&lt;</div> -->
 	</div>
 
 	<!-- This div displays the WebGL -->
@@ -460,28 +474,28 @@
 	<div id="game-menu">
 		<div id="menu-content">
 			<div>
-				<button type="button" id="menuButton1"
-					class="btn btn-red full-size">Menu Item #1</button>
+				<button type="button" id="menuButton1" class="btn btn-red full-size">Menu
+					Item #1</button>
 			</div>
 			<div>
-				<button type="button" id="menuButton2"
-					class="btn btn-red full-size">Menu Item #2</button>
+				<button type="button" id="menuButton2" class="btn btn-red full-size">Menu
+					Item #2</button>
 			</div>
 			<div>
-				<button type="button" id="menuButton3"
-					class="btn btn-red full-size">Menu Item #3</button>
+				<button type="button" id="menuButton3" class="btn btn-red full-size">Menu
+					Item #3</button>
 			</div>
 			<div>
-				<button type="button" id="menuButton4"
-					class="btn btn-red full-size">Menu Item #4</button>
+				<button type="button" id="menuButton4" class="btn btn-red full-size">Menu
+					Item #4</button>
 			</div>
 			<div>
-				<button type="button" id="menuButton5"
-					class="btn btn-red full-size">Menu Item #5</button>
+				<button type="button" id="menuButton5" class="btn btn-red full-size">Menu
+					Item #5</button>
 			</div>
 			<div>
-				<button type="button" id="menuButton6"
-					class="btn btn-red full-size">Menu Item #6</button>
+				<button type="button" id="menuButton6" class="btn btn-red full-size">Menu
+					Item #6</button>
 			</div>
 
 		</div>
@@ -489,24 +503,15 @@
 			<button type="button" id="close-menu" class="btn btn-red">Close</button>
 		</div>
 	</div>
+	
+	<div id="building-toolbar">
+	</div>
 
 	<div id="chat-container">
 		<div id="chat-trigger" class="full-size text-center">Chat</div>
 		<div id="chat-box" class="full-size">
 			<div id="messages">
 				<!-- Messages go here -->
-				"The quick brown fox jumps over the lazy dog."<br /> Five hexing
-				wizard bots jump quickly.<br /> My jocks box, get hard, unzip,
-				quiver, flow. <br /> "HA. HA. MIKE YOU'RE SO ECCENTRIC. MAN I AM
-				HILARIOUS!" - Kelsey Young, March 2014<br /> oh-- TARTS!<br />
-				"Overloading is making a lot of functions do things while Overriding
-				overrides exceptions for things that would be problems."<br /> Is
-				this the real life? Is this just fantasy? Caught in a landslide, No
-				escape from reality. Open your eyes, Look up to the skies and see,
-				I'm just a poor boy, I need no sympathy, Because I'm easy come, easy
-				go, Little high, little low, Anyway the wind blows doesn't really
-				matter to me, to me.<br /> test<br /> test<br /> test<br /> test<br />
-				test<br />
 			</div>
 			<div id="chat-send-box" class="text-center">
 				<input type="text" id="message" autocomplete="off"
@@ -527,15 +532,24 @@
 	
 		var loadingHints = [
 			"Blink and you'll miss it",
-			"This isn't your mother's MMORPG",
-			"Hidden Easter Egg: our own version of 'Hall of Tortured Souls'"
+			"This isn't your mother's MMORPG. Mostly because it's not an MMORPG.",
+			"Hidden Easter Egg: our own version of 'Hall of Tortured Souls'",
+			"In the next Soviet iteration, the chart burns down YOU!",
+			"If I had a dollar for every compile error, I'd have, like, a million dollars",
+			"Were You Aware? - The phrase 'Did You Know' has very expensive copyright permissions",
+			"Every pizza is a personal pizza if you try hard and believe in yourself",
+			"Tell me I'm witty",
+			"You're grammar is bad and you should feel bad",
+			"Strange women lying in ponds distributing swords is no basis for a system of government<br>- Abraham Lincoln",
+			"It's not a pillage if you yell 'Surprise!'",
+			"'Oh look they changed the cursor. How novel.'"
 		];
 		
 		$(document).ready(function() {
 			
 			// Set loading message
 			var randInt = Math.floor(Math.random() * (loadingHints.length));
-			$("#loading-message").text(loadingHints[randInt]);
+			$("#loading-message").html(loadingHints[randInt]);
 			
 			// Prevents '#' from appending to url when
 			// clicking menu icons

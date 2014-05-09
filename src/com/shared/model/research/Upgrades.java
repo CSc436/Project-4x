@@ -1,12 +1,18 @@
 package com.shared.model.research;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.shared.model.entities.GameObjectType;
 import com.shared.model.stats.BuffStats;
 
-public class Upgrades {
+public class Upgrades implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5748974532072650087L;
+
 	public HashMap<String, BuffStats> mapping;
 	
 	public Upgrades() {

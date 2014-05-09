@@ -1,22 +1,32 @@
 package com.shared.model.buildings;
 
-import java.util.UUID;
 
-import com.shared.model.control.Tools;
+import java.util.LinkedList;
+import java.util.Queue;
+
+import com.shared.model.behaviors.StandardMover;
 import com.shared.model.entities.GameObject;
 import com.shared.model.entities.GameObjectType;
 import com.shared.model.stats.BaseStatsEnum;
 import com.shared.model.stats.UnitStats;
+import com.shared.model.units.Unit;
+import com.shared.utils.PhysicsVector;
 
 public abstract class Building extends GameObject {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3938726121964982851L;
 	private int height; // height of the structure
 	private int width; // width of the structure
-	private long castleId = Tools.generateUniqueId();// this is how a building
-														// knows what 'city' it
-														// belongs to
-	private BuildingType buildingType;
+	private int cityID;
 
+	private BuildingType buildingType;
+	
+	private Queue<Unit> buildingQ = new LinkedList<Unit>();
+//	private int turnsToExecute = 5; // Incase new implementation does not work. 
+	
 	/**
 	 * ResourceBuidling(): Base constructor for Resource Type buildings, calls
 	 * super building constructor and sets base amount of resources.
@@ -40,17 +50,18 @@ public abstract class Building extends GameObject {
 	 * @param int height - how many tiles high building takes up
 	 * @param int width - how many tiles wide the building takes up
 	 */
-	public Building(UUID id, int playerId, BaseStatsEnum baseStats,
-			UnitStats new_stats, BuildingType buildingType, float xco,
-			float yco, int height, int width) {
-		super(id, playerId, baseStats, new_stats, GameObjectType.BUILDING, xco,
-				yco);
+	public Building(int id, int playerId, BaseStatsEnum baseStats,
+			UnitStats new_stats,
+			BuildingType buildingType, float xco, float yco, int height,
+			int width) {
+		super(id, playerId, baseStats, new_stats, GameObjectType.BUILDING, xco, yco);
 		this.buildingType = buildingType;
 		this.height = height;
 		this.width = width;
-
+		this.moveBehavior = new StandardMover(new PhysicsVector(xco,yco), 0, 0);
 	}
 
+	public Building() {}
 	/**
 	 * getHeight() returns the height of the building
 	 * 
@@ -69,18 +80,92 @@ public abstract class Building extends GameObject {
 		return width;
 	}
 
+	/*
+	 * Holding the Queue for the units that the building is responsible for
+	 * producing. It can add units to its queue or remove finished units from
+	 * its queue
+	 */
+	public boolean queueUnit(Unit u) {
+		return buildingQ.offer(u);
+	}
+
+	/**
+	 * dequeueUnit(): takes a unit off of the production queue for this
+	 * building, and returns said unit
+	 * 
+	 * @return Unit that building finished creating
+	 */
+	public Unit dequeueUnit() {
+		return buildingQ.poll();
+	}
+
 	/**
 	 * getCastleID() Returns the castle ID that is associated with this building
 	 * 
-	 * @return ong for castle id
+	 * @return int for castle id
 	 */
-	public long getCastleId() {
-		return castleId;
+	public int getCastleId() {
+		return cityID;
 	}
 
+	/**
+	 * productionQueueEmpty() returns true if the production queue for this
+	 * building is empty
+	 * 
+	 * @return true if queue is empty
+	 */
+	public boolean productionQueueEmpty() {
+
+		return buildingQ.isEmpty();
+	}
+
+	/*public Unit advanceUnitProduction() {
+		System.out.println("running");
+		if (buildingQ.size() == 0)
+			return null;
+		
+		if (turnsToExecute > 0) {
+			turnsToExecute--;
+			return null;
+		}
+		else {
+			turnsToExecute = 5;
+			return dequeueUnit();
+		}*/ // In case bellow one breaks....
+	/**
+	 * advanceUnitProduction(): increments how far along current unit production
+	 * is.
+	 * 
+	 * @param timestep
+	 *            - amount to increment player production
+	 * 
+	 * @return if not null add unit to player, if null, do nothing.
+	 */
+	public Unit advanceUnitProduction(int timestep) {
+		// add timestep to each unit
+		if (!productionQueueEmpty()) {
+			Unit u = buildingQ.peek();
+			u.decrementCreationTime(timestep);
+			if (u.getCreationTime() <= 0) {
+				return buildingQ.poll();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public Unit getProducingUnit() {
+		return buildingQ.peek();
+	}
+
+	//will have to pla
 	public BuildingType getBuildingType() {
 
 		return buildingType;
 	}
+	
 
 }

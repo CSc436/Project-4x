@@ -1,29 +1,46 @@
 package com.shared.model.entities;
 
+import java.io.Serializable;
 import java.util.HashMap;
-import java.util.PriorityQueue;
-import java.util.UUID;
 
-import com.shared.model.control.GameModel;
-import com.shared.model.control.Player;
+import com.shared.model.behaviors.Attackable;
+import com.shared.model.behaviors.Combatable;
+import com.shared.model.behaviors.Movable;
+import com.shared.model.behaviors.StandardHealth;
+import com.shared.model.behaviors.StandardMover;
 import com.shared.model.stats.BaseStatsEnum;
 import com.shared.model.stats.UnitStats;
 import com.shared.utils.PhysicsVector;
 
-import com.shared.utils.Coordinate;
-
-public abstract class GameObject implements Locatable {
-	private final UUID id;
-	private final int playerId;
+public class GameObject implements Serializable, Combatable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -449525545957280452L;
+	private int id;
+	private int playerId;
 	protected HashMap<String, String> allActions;
 	protected GameObjectType type;
-	private UnitStats stats;
+	protected UnitStats stats;
 	protected BaseStatsEnum baseStats;
-	private Player owner;
-	protected PhysicsVector position;
-	protected PriorityQueue<Action> actionQueue;
+	protected Movable moveBehavior;
+	protected Attackable healthBehavior;
 
-	public GameObject(UUID id, int playerId, BaseStatsEnum baseStats,
+	
+	public GameObject() {
+		this.id = 0;
+		this.playerId = 0;
+		this.baseStats = BaseStatsEnum.INFANTRY;
+		stats = baseStats.getStats();
+		updateStats(baseStats, stats);
+		this.type = GameObjectType.ALL;
+		PhysicsVector position = new PhysicsVector(0,0);
+		moveBehavior = new StandardMover( position, stats.movementSpeed, stats.movementSpeed / 2.0 );
+		healthBehavior = new StandardHealth( stats.health, stats.health_regen, stats.armor );
+	}
+
+	public GameObject(int id, int playerId, BaseStatsEnum baseStats,
 			UnitStats new_stats, GameObjectType type, float xco, float yco) {
 		this.id = id;
 		this.playerId = playerId;
@@ -31,9 +48,18 @@ public abstract class GameObject implements Locatable {
 		stats = baseStats.getStats();
 		updateStats(baseStats, new_stats);
 		this.type = type;
-		position = new PhysicsVector(xco, yco);
-		actionQueue = new PriorityQueue<Action>();
+		PhysicsVector position = new PhysicsVector(xco,yco);
+		moveBehavior = new StandardMover( position, stats.movementSpeed, stats.movementSpeed / 2.0 );
+		healthBehavior = new StandardHealth( stats.health, stats.health_regen, stats.armor );
+	}
 
+	public int getId() {
+		return id;
+	}
+
+	
+	public int getPlayerID() {
+		return playerId;
 	}
 
 	/**
@@ -47,55 +73,8 @@ public abstract class GameObject implements Locatable {
 			stats.health = stats.max_health * percentage_health;
 		}
 	}
-
+	
 	/**
-	 * setLocation(float x,float y):
-	 * 
-	 * @param x
-	 *            - x coordinate of the unit.
-	 * @param y
-	 *            - y coordinate of the unit.
-	 * @return - true on success ( in range)
-	 */
-	public boolean setLocation(float x, float y) {
-
-		if (x >= 0 && y >= 0) {
-			position.set(x, y);
-			return true;
-		} else
-			return false;
-	}
-
-	/**
-	 * setHealth(float n):
-	 * 
-	 * @param n
-	 *            - set the health of the Unit to the specified amount. - n must
-	 *            be a positive number 0 <= n <= max_health - if n < max_health,
-	 *            n = max_health
-	 * @return - whether the unit is still alive.
-	 */
-	public boolean setHealth(float n) {
-
-		if (n >= 0) {
-			stats.health = n;
-			if (stats.health > stats.max_health)
-				stats.health = stats.max_health;
-
-		}
-
-		if (stats.health <= 0)
-			return false;
-		else
-			return true;
-	}
-
-	public void setOwner(Player p) {
-		this.owner = p;
-	}
-
-	/**
-	 * modifyHealthBy(float n):
 	 * 
 	 * @param n
 	 *            - the amount of health to modify the unit by. can be a
@@ -116,7 +95,6 @@ public abstract class GameObject implements Locatable {
 	}
 
 	/**
-	 * getHealth():
 	 * 
 	 * @return - the current health of the Unit.
 	 */
@@ -124,54 +102,43 @@ public abstract class GameObject implements Locatable {
 		return stats.health;
 	}
 
-	public Player getPlayer() {
-		return owner;
-	}
-
 	public UnitStats getStats() {
 		return stats;
 	}
 
+	@Override
+	public void takeDamage(int damage) {
+		healthBehavior.takeDamage(damage);
+	}
+
+	@Override
 	public PhysicsVector getPosition() {
-		return position;
+		return moveBehavior.getPosition();
 	}
 
-	public float getX() {
-		return (float) getPosition().getX();
+	@Override
+	public void setMoveTarget(double x, double y) {
+		moveBehavior.setMoveTarget(x, y);
 	}
 
-	public float getY() {
-		return (float) getPosition().getY();
+	@Override
+	public void simulateMovement(int timeStep) {
+		moveBehavior.simulateMovement(timeStep);
 	}
 
-	public UUID getId() {
-		return id;
+	@Override
+	public PhysicsVector extrapolatePosition(int timeStep) {
+		return moveBehavior.extrapolatePosition(timeStep);
 	}
 
-	public int getPlayerID() {
-		return playerId;
+	@Override
+	public void simulateDamage(int timeStep) {
+		healthBehavior.simulateDamage(timeStep);
 	}
 
-	protected abstract void setActions();// might get rid
+	@Override
+	public boolean isDead() {
+		return healthBehavior.isDead();
+	}
 
-	public abstract HashMap<String, String> getActions();// might get rid of
-	
-	public abstract void tick(int timeScale, GameModel model);
-
-	// /**
-	// *
-	// * @param a
-	// * - add an action to the PriorityQueue to be performed during
-	// * the turn.
-	// */
-	// public void addAction(Action a) {
-	// actionQueue.add(a);
-	// getOwner().getCommandQueue().push(a, this);
-	// }
-
-	// /**
-	// * Logic to handle actions that the Unit may do. TODO: add all necessary
-	// * actions
-	// */
-	// public void performActions()
 }

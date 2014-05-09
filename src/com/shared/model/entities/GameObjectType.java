@@ -3,7 +3,11 @@
 package com.shared.model.entities;
 
 
-public enum GameObjectType {
+import java.io.Serializable;
+
+
+public enum GameObjectType implements Serializable {
+
 	ALL, WALL, BUILDING, UNIT;
 	
 //	public BuffStats getStats(Player p) {

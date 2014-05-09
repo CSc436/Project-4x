@@ -14,6 +14,10 @@ import com.shared.model.diplomacy.DiplomacyStandingEnum;
  * 
  */
 public class LockedDiplomacy extends AbstractDiplomacy {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5024396589043174338L;
 	/** Whether changes to alliances are allowed. */
 	private boolean locked = false;
 
@@ -30,6 +34,8 @@ public class LockedDiplomacy extends AbstractDiplomacy {
 		super(num_players, initial);
 		locked = true;
 	}
+	
+	public LockedDiplomacy() {};
 
 	/**
 	 * Constructor that takes an array of player's team numbers. All players

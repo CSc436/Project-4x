@@ -1,11 +1,13 @@
 package com.shared.model.buildings;
 
+import java.io.Serializable;
+
 /**
  * BuildingType
  * 
  * @author NRTop Specifies the type of building, or resource building
  */
-public enum BuildingType {
+public enum BuildingType implements Serializable {
 	
 	// Production
 	

@@ -1,5 +1,7 @@
 package com.shared.model.research;
 
+
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -7,12 +9,22 @@ import java.util.Set;
 import com.shared.model.annotations.TechDisabledByDefault;
 import com.shared.model.control.Player;
 
-public class TechnologyTree {
+public class TechnologyTree implements Serializable {
+
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9027010150167051838L;
+
 	private Player p;
 
 	public HashMap<String, Technology> technologies;
-	public HashMap<String, Integer> currently_researching;
+	private HashMap<String, Integer> currently_researching;
 	private HashMap<String, Integer> researched;
+	
+	public TechnologyTree() {}
+	
 
 	public TechnologyTree(Player player) {
 		p = player;
@@ -23,6 +35,8 @@ public class TechnologyTree {
 		for (TechnologyEnum t : TechnologyEnum.values()) {
 			Technology tech = null;
 			// Don't mind this hack. Move along.
+			// GWT minds this hack, it's gone till we find a better solution
+			/*
 			try {
 				Class<? extends Technology> techClass = t.getValue();
 				if (!techClass.isAnnotationPresent(TechDisabledByDefault.class)) {
@@ -32,6 +46,7 @@ public class TechnologyTree {
 			} catch (InstantiationException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
+			*/
 		}
 		p.getCivilization().modifyTechnologies(technologies);
 	}
@@ -136,5 +151,14 @@ public class TechnologyTree {
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * returns current tree since it was changed to private. 
+	 * @return currently_researching tree
+	 */
+	public HashMap<String, Integer> getCurrentlyResearching()
+	{
+		return currently_researching;
 	}
 }

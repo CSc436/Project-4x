@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import com.shared.model.control.Controller;
+import com.server.Controller;
 import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
 import com.shared.model.diplomacy.trading.TradeFactory;
@@ -22,7 +22,8 @@ public class TestDiplomacyTrading {
 		ArrayList<String> plist = new ArrayList<>();
 		plist.add("Greg");
 		plist.add("Pedro");
-		GameModel model = new GameModel(plist, 500);
+
+		GameModel model = new GameModel();
 		Controller controller = new Controller(model);
 
 		Player p1 = model.getPlayer(1);

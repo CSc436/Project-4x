@@ -5,6 +5,11 @@ import com.shared.model.entities.GameObjectType;
 import com.shared.model.resources.Resources;
 
 public class RangedLOS extends Technology {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1791318320055304137L;
+
 	public RangedLOS() {
 		super(3);
 

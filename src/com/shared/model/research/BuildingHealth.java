@@ -4,6 +4,11 @@ import com.shared.model.entities.GameObjectType;
 import com.shared.model.resources.Resources;
 
 public class BuildingHealth extends Technology {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public BuildingHealth() {
 		// SUPER constructor takes max level of research.
 		super(3);

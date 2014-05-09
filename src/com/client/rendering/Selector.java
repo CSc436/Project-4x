@@ -66,11 +66,12 @@ public class Selector {
 		
 		Uint8Array pixelData = Uint8Array.create(4);
 		glContext.readPixels(x, canvas.HEIGHT - y, 1, 1, WebGLRenderingContext.RGBA,WebGLRenderingContext.UNSIGNED_BYTE, pixelData);
+		/*
 		String s = "[";
 		for (int i = 0; i < 4; i ++)
 			s = s + pixelData.get(i) + (i < 3 ? ", " : "");
 		Console.log(s + "]");
-		
+		*/
 		if (invalidMap){
 			//resetFramebuffer();
 			invalidMap = false;
@@ -85,7 +86,7 @@ public class Selector {
 	}
 	
 	private void renderTileFrameBuffer() {
-		Console.log("Rendering tile frame buffe");
+		//Console.log("Rendering tile frame buffer");
 		// Bind our framebuffer so that we can render these entities off screen
 		glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, tileFrameBuffer);
 		// Clear the current framebuffer 

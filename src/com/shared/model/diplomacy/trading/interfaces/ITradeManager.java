@@ -1,5 +1,6 @@
 package com.shared.model.diplomacy.trading.interfaces;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,13 +11,13 @@ import java.util.List;
  * @date Apr 3, 2014
  * 
  */
-public interface ITradeManager {
+public interface ITradeManager extends Serializable {
 	/**
 	 * This method allows for defining how to update Trades that the
 	 * ITradeManager manages.
 	 * 
 	 * @param delta
-	 *            - the time step in the gameloop
+	 *            - the time step in the gameloop in seconds
 	 */
 	public void update(float delta);
 
@@ -56,19 +57,27 @@ public interface ITradeManager {
 	 * @param proposal
 	 *            - the Trade proposal we have received that we are accepting.
 	 */
-	public void acceptProposal(ITrade proposal);
+	public void acceptProposal(int proposalId);
 
 	/**
 	 * 
 	 * @param proposal
 	 *            - the Trade proposal we have received that we are rejecting.
 	 */
-	public void rejectProposal(ITrade proposal);
+	public void rejectProposal(int proposalId);
 
 	/**
 	 * 
 	 * @param trade
 	 *            - the currently active trade to disable and remove.
 	 */
-	public void rejectActive(ITrade trade);
+	public void rejectActive(int tradeId);
+	
+	/**
+	 * 
+	 * @param id - The unique ID of the trade we want to get
+	 *
+	 */
+	public ITrade getTrade(int id);
+	
 }

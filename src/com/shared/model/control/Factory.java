@@ -1,223 +1,146 @@
 package com.shared.model.control;
 
-import java.util.UUID;
+import java.io.Serializable;
+import java.util.ArrayList;
 
-import com.shared.model.buildings.Barracks;
-import com.shared.model.buildings.Blacksmith;
-import com.shared.model.buildings.Building;
-import com.shared.model.buildings.BuildingType;
-import com.shared.model.buildings.Castle;
-import com.shared.model.buildings.Farm;
-import com.shared.model.buildings.GoldMine;
-import com.shared.model.buildings.LumberMill;
-import com.shared.model.buildings.StoneMine;
-import com.shared.model.buildings.University;
+import com.shared.model.behaviors.Producer;
+import com.shared.model.behaviors.StandardProduction;
+import com.shared.model.buildings.*;
 import com.shared.model.gameboard.GameBoard;
 import com.shared.model.resources.Resources;
 import com.shared.model.stats.BaseStatsEnum;
+import com.shared.model.units.Unit;
+import com.shared.model.units.UnitType;
 
-import com.shared.model.units.*;
-import com.shared.model.units.pawns.*;
-
-/**
- * Factory
- * 
- * @author NRTop, Ben D, etc. This class allows for easy creation of unit,
- *         building, agent, etc. objects User needs to only pass a the player
- *         who will own the object, type of object, and where object will be
- *         spawned.
- * 
- */
-public class Factory {
-
+public class Factory implements Serializable {
+	
 	/**
-	 * getId(): generates a UUID which will be associated with a constructed
-	 * object
 	 * 
-	 * @return a UUID to be associated with a GameObject
 	 */
-	private static synchronized UUID getId() {
-		return UUID.randomUUID();
+	public static final long serialVersionUID = -8480151288632582040L;
+	static int nextID = 1;
+	
+	public static int getUniqueID() {
+		return nextID++;
 	}
 
-	/**
-	 * buildUnit(): builds a new unit object based on the given UnitType
-	 * 
-	 * @param p
-	 *            - player who will own the object, so object can be added to
-	 *            their PlayerUnits objects.
-	 * @param playerId
-	 *            - id of player
-	 * @param unitType
-	 *            - type of unit to construct
-	 * @param xco
-	 *            - x coordinate on gameboard of unit to be constructed
-	 * @param yco
-	 *            - y coordinate on gameboard of unit to be constructed
-	 * @return
-	 */
 	public static Unit buildUnit(Player p, int playerId, UnitType unitType,
 			float xco, float yco) {
 
-		UUID newId = getId();
+		int id = getUniqueID();
 		Unit result = null;
 		switch (unitType) {
 
 		case MILITIA:
-			result = new Militia(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.MILITIA, BaseStatsEnum.MILITIA.getStats(), UnitType.MILITIA, xco, yco);
 			break;
 		case INFANTRY:
-			result = new Infantry(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.INFANTRY, BaseStatsEnum.INFANTRY.getStats(), UnitType.INFANTRY, xco, yco);
 			break;
 		case ARCHER:
-			result = new Archer(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.ARCHER, BaseStatsEnum.ARCHER.getStats(), UnitType.ARCHER, xco, yco);
 			break;
-/*		case SKIRMISHER:
-			result = new Skirmisher(newId, playerId, xco, yco);
-			break;*/
+		case SKIRMISHER:
+			result = new Unit(id, playerId, BaseStatsEnum.SKIRMISHER, BaseStatsEnum.SKIRMISHER.getStats(), UnitType.SKIRMISHER, xco, yco);
+			break;
 		case KNIGHT:
-			result = new Knight(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.KNIGHT, BaseStatsEnum.KNIGHT.getStats(), UnitType.KNIGHT, xco, yco);
 			break;
 		case RANGED_CALVARY:
-			result = new Ranged_Calvary(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.RANGED_CALVARY, BaseStatsEnum.RANGED_CALVARY.getStats(), UnitType.RANGED_CALVARY, xco, yco);
 			break;
 		case TRANSPORT:
-			result = new Transport(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.TRANSPORT, BaseStatsEnum.TRANSPORT.getStats(), UnitType.TRANSPORT, xco, yco);
 			break;
 		case CATAPULT:
-			result = new Catapult(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.CATAPULT, BaseStatsEnum.CATAPULT.getStats(), UnitType.CATAPULT, xco, yco);
 			break;
-/*		case BATTERING_RAM:
-			result = new Battering_Ram(newId, playerId, xco, yco);
-			break;*/
+		case BATTERING_RAM:
+			result = new Unit(id, playerId, BaseStatsEnum.BATTERING_RAM, BaseStatsEnum.BATTERING_RAM.getStats(), UnitType.BATTERING_RAM, xco, yco);
+			break;
 		case RIFLEMAN:
-			result = new Rifleman(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.RIFLEMAN, BaseStatsEnum.RIFLEMAN.getStats(), UnitType.RIFLEMAN, xco, yco);
 			break;
 		case DRAGOON:
-			result = new Dragoon(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.DRAGOON, BaseStatsEnum.DRAGOON.getStats(), UnitType.DRAGOON, xco, yco);
 			break;
-
 		case CANNON:
-			result = new Cannon(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.CANNON, BaseStatsEnum.CANNON.getStats(), UnitType.CANNON, xco, yco);
 			break;
-
-/*		case MEDIC:
-			result = new Medic(newId, playerId, xco, yco);
-			break;*/
-
+		case MEDIC:
+			result = new Unit(id, playerId, BaseStatsEnum.MEDIC, BaseStatsEnum.MEDIC.getStats(), UnitType.MEDIC, xco, yco);
+			break;
 		case TRADE_CART:
-			result = new Infantry(newId, playerId, xco, yco);
+			result = new Unit(id, playerId, BaseStatsEnum.TRADE_CART, BaseStatsEnum.TRADE_CART.getStats(), UnitType.TRADE_CART, xco, yco);
 			break;
 
 		default:
 			break;
 		}
-		p.getGameObjects().addUnit(result);
-		result.setOwner(p);
+		if( p != null) p.getGameObjects().addUnit(result);
 		return result;
 
 	}
 
-	/**
-	 * buildBuilding() builds a new building object based on the specified
-	 * BuildingType
-	 * 
-	 * @param p
-	 *            - PLayer who will own constructed building, needed to add to
-	 *            player's collection of buildings
-	 * @param playerId
-	 *            - id of player who will own buildingd
-	 * @param buildingType
-	 *            - type of building to construct
-	 * @param xco
-	 *            - x coordinate on gameboard where building will be constructed
-	 * @param yco
-	 *            - y coordinate on gameboard where building will be constructed
-	 * @param gb
-	 *            - gameboard on which building will be placed.
-	 * @return
-	 */
+	// Do not remove Player p arg. It is needed to maintain the collection of
+	// buildings for the player
+
 	public static Building buildBuilding(Player p, int playerId,
 			BuildingType buildingType, float xco, float yco, GameBoard gb) {
-		UUID newId = getId();
+		int newId = getUniqueID();
 		Building result = null;
 
-		String enumString = (buildingType.name());
-		Resources buildingCost = BaseStatsEnum.valueOf(enumString)
-				.getProductionCost();
-
-		// if the tile is not occupied, can be placed on the map, and the player
-		// has the available
-		// resources to spend
-		if (!gb.getTileAt((int) xco, (int) yco).isOccupiedByBuilding()
-				&& p.resources.can_spend(buildingCost)
-				&& gb.canPlaceBuildingAt(buildingType, (int) xco, (int) yco)) {
+		// if the tile is not occupied
+		if (!gb.getTileAt((int) xco, (int) yco).isOccupiedByBuilding()) {
 
 			switch (buildingType) {
 			case TOWN_HALL:
 				result = new Barracks(newId, playerId, xco, yco);
 				break;
-
+				
 			case BARRACKS:
-				result = new Barracks(newId, playerId, xco, yco);
+				ArrayList<UnitType> producibleUnitTypes = new ArrayList<UnitType>();
+				producibleUnitTypes.add(UnitType.INFANTRY);
+				producibleUnitTypes.add(UnitType.ARCHER);
+				Producer producer = new StandardProduction( producibleUnitTypes );
+				result = new ProductionBuilding(newId, playerId, BaseStatsEnum.BARRACKS, BaseStatsEnum.BARRACKS.getStats(),
+						BuildingType.BARRACKS, xco, yco, 2, 4, producer);
 				break;
 			case BANK:
 				result = new Barracks(newId, playerId, xco, yco);
 				break;
 			case CASTLE:
-				result = new Castle(newId, playerId, xco, yco, 100, 100); // last
-																			// two
-																			// args
-																			// are
-																			// populationCap
-																			// and
-																			// influenceArea
+				result = new Castle(newId, playerId, xco, yco, 100, 100); // last two args are populationCap and influenceArea 
 				break;
 			case LUMBER_MILL:
-				result = new LumberMill(newId, playerId, xco, yco);
+				result = new ResourceBuilding(newId, playerId, BaseStatsEnum.LUMBER_MILL, BaseStatsEnum.LUMBER_MILL.getStats(), 
+						BuildingType.LUMBER_MILL, xco, yco, 1, 1, new Resources(0, 20, 0, 0, 0));
 				break;
 			case STONE_MINE:
-				result = new StoneMine(newId, playerId, xco, yco);
+				result = new ResourceBuilding(newId, playerId, BaseStatsEnum.STONE_MINE, BaseStatsEnum.STONE_MINE.getStats(), 
+						BuildingType.STONE_MINE, xco, yco, 1, 1, new Resources(0, 0, 0, 20, 0));
 				break;
 			case GOLD_MINE:
-				result = new GoldMine(newId, playerId, xco, yco);
+				result = new ResourceBuilding(newId, playerId, BaseStatsEnum.GOLD_MINE, BaseStatsEnum.GOLD_MINE.getStats(), 
+						BuildingType.GOLD_MINE, xco, yco, 1, 1, new Resources(20, 0, 0, 0, 0));
 				break;
 			case FARM:
-				result = new Farm(newId, playerId, xco, yco);
+				result = new ResourceBuilding(newId, playerId, BaseStatsEnum.FARM, BaseStatsEnum.FARM.getStats(), 
+						BuildingType.FARM, xco, yco, 1, 1, new Resources(0, 0, 20, 0, 0));
 				break;
 			case UNIVERSITY:
-				result = new University(newId, playerId, xco, yco);
-				break;
-			case BLACKSMITH:
-				result = new Blacksmith(newId, playerId, xco, yco);
+				result = new ResourceBuilding(newId, playerId, BaseStatsEnum.UNIVERSITY, BaseStatsEnum.UNIVERSITY.getStats(), 
+						BuildingType.UNIVERSITY, xco, yco, 1, 1, new Resources(0, 0, 0, 0, 20));
 				break;
 			default:
 				result = null;
 				break;
+				// result = new Barracks(p, 1, 1, uniqueid);
 			}
-
-			// Deleting the following 3 lines will break test cases. Its
-			// probably not a good idea to delete them
-			// The building needs a reference to its owner
-			// The player needs to know what buildings it has. This is the
-			// purpose of the playerUnits class.
-			// The player needs to be charged the resources for building the
-			// unit
-			//
-			result.setOwner(p);
-			p.getGameObjects().addBuilding(result);
-			p.resources.spend(buildingCost);
-			gb.placeBuildingAt(result, (int) xco, (int) yco);
-
 		} else {
-
-			if (!p.resources.can_spend(buildingCost))
-				System.out
-						.println("Building placement error; Not enough resources to build!");
-			else
 				System.out
 						.println("Building placement error;  Out of range, or overlap");
-			result = null;
+				result = null;
 		}
 		return result;
 

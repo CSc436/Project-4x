@@ -4,10 +4,9 @@ import static com.google.gwt.query.client.GQuery.$;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 import com.client.gameinterface.Console;
+import com.client.model.ClientModel;
 import com.client.rendering.Camera;
 import com.client.rendering.Mesh;
 import com.client.rendering.OBJImporter;
@@ -31,9 +30,7 @@ import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.query.client.Function;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Image;
@@ -45,7 +42,14 @@ import com.googlecode.gwtgl.binding.WebGLRenderingContext;
 import com.googlecode.gwtgl.binding.WebGLShader;
 import com.googlecode.gwtgl.binding.WebGLTexture;
 import com.googlecode.gwtgl.binding.WebGLUniformLocation;
-import com.shared.model.EntityModel;
+import com.shared.model.buildings.Building;
+import com.shared.model.buildings.BuildingType;
+import com.shared.model.commands.AttackCommand;
+import com.shared.model.commands.MoveUnitCommand;
+import com.shared.model.commands.PlaceUnitCommand;
+import com.shared.model.entities.GameObject;
+import com.shared.model.units.Unit;
+import com.shared.model.units.UnitType;
 import com.shared.utils.Coordinate;
 import com.shared.utils.Vector3;
 
@@ -76,15 +80,38 @@ public class GameCanvas {
 	private long time;
 	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
 	
-	private final boolean debug = true;
+	private final boolean debug = false;
+	private final boolean commandDebug = true;
 	
 	private final ClientModel theModel;
 	private final Canvas webGLCanvas = Canvas.createIfSupported();
 	
 	private Selector objectSelector;
-	private HashMap<Integer,Mesh> entities;
+	private HashMap<UnitType,Mesh> unitMeshes;
+	private HashMap<BuildingType,Mesh> buildingMeshes;
+	
+	private Coordinate mouseTile = new Coordinate(0,0);
+	
 	public ArrayList<Integer> selectedEntities;
 
+	private boolean chatFlag = false; // if chat is selected, do not allow camera movment/input
+	
+	// Game mode
+	private enum Mode {
+		BUILDING, NONE
+	}
+
+	private static Mode currMode = Mode.NONE; // Set initial mode to NONE
+
+	// Location of mouse X and Y
+	private static int mouseX;
+	private static int mouseY;
+
+	// Collection of BuildingType enum
+	private static BuildingType[] buildingTypes = BuildingType.values();
+	private static int buildingCounter = -1;
+	
+	
 	public GameCanvas(ClientModel theModel) {
 		// CODE FOR MINIMAP DEV/CLICK SELECTING
 		selectedEntities = new ArrayList<Integer>();
@@ -124,54 +151,43 @@ public class GameCanvas {
 	}
 	
 	/**
+	 * sets chatFlag to true, turning off input to game canvas
+	 */
+	public void turnOnChatFlag()
+	{
+		chatFlag = true;
+	}
+	
+	/**
+	 * sets chatFlag to false, turning input to game canvas back on 
+	 */
+	public void turnOffChatFlag()
+	{
+		chatFlag = false;
+	}
+	
+	/**
 	 * Creates the unit id -> Mesh map used to render entities,
 	 * Populates with a few starter entities
 	 */
 	private void initEntities() {
-		entities = new HashMap<Integer,Mesh>();
 		
-		final Mesh ent2 = OBJImporter.objToMesh(ClientResources.INSTANCE.cubeOBJ().getText(), glContext);
-		ent2.posX = 20.0f;
-		ent2.id = 65432;
-		entities.put(ent2.id, ent2);
+		unitMeshes = new HashMap<UnitType,Mesh>();
+		buildingMeshes = new HashMap<BuildingType,Mesh>();
 		
 		final Mesh castle1 = OBJImporter.objToMesh(ClientResources.INSTANCE.castleOBJ().getText(), glContext);
 		castle1.setTexture(glContext, ClientResources.INSTANCE.castleTexture());
-		castle1.posX = 2.5f;
-		castle1.posY = 2.5f;
-		castle1.posZ = 0.0f;
-		castle1.id = 123321;
-		entities.put(castle1.id, castle1);
 		
 		final Mesh cannon1 = OBJImporter.objToMesh(ClientResources.INSTANCE.cannonOBJ().getText(), glContext);
 		cannon1.setTexture(glContext, ClientResources.INSTANCE.cannonTexture());
-		cannon1.posX = 4.5f;
-		cannon1.posY = 4.5f;
-		cannon1.posZ = 0.0f;
-		cannon1.id = 777777;
-		entities.put(cannon1.id, cannon1);
-
-		final Mesh unit1 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
-		final Mesh unit2 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
-		final Mesh unit3 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
-		final Mesh unit4 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
-		final Mesh unit5 = OBJImporter.objToMesh(ClientResources.INSTANCE.tileOBJ().getText(), glContext);
-		unit1.id = 1;
-		unit1.posZ = -0.1f;
-		unit2.id = 2;
-		unit2.posZ = -0.1f;
-		unit3.id = 3;
-		unit3.posZ = -0.1f;
-		unit4.id = 4;
-		unit4.posZ = -0.1f;
-		unit5.id = 5;
-		unit5.posZ = -0.1f;
-
-		entities.put(1, unit1);
-		entities.put(2, unit2);
-		entities.put(3, unit3);
-		entities.put(4, unit4);
-		entities.put(5, unit5);
+		
+		for(UnitType t : UnitType.values()) {
+			unitMeshes.put(t, cannon1);
+		}
+		for(BuildingType t : BuildingType.values()) {
+			buildingMeshes.put(t, castle1);
+		}
+		
 	}
 	
 	/**
@@ -179,11 +195,27 @@ public class GameCanvas {
 	 * @param shader
 	 */
 	public void renderEntities(Shader shader) {
-		Set<Integer> keys = entities.keySet();
-		Integer[] keysArr = new Integer[entities.size()];
-		keysArr = keys.toArray(keysArr);
-		for(int i = 0; i< keysArr.length; i++) {
-			entities.get(keysArr[i]).render(glContext, shader, camera);
+		HashMap<Integer, GameObject> gameObjects = theModel.getGameModel().getGameObjects();
+		if(debug) Console.log(gameObjects.size() + " objects to render");
+		
+		int timeSinceUpdate = theModel.timeSinceLastUpdate();
+		
+		for(GameObject o : gameObjects.values()) {
+			Mesh m;
+			if(o instanceof Unit) {
+				m = unitMeshes.get(((Unit) o).getUnitType());
+			} else if(o instanceof Building) {
+				m = buildingMeshes.get(((Building) o).getBuildingType());
+			} else {
+				m = unitMeshes.get(((Unit) o).getUnitType());
+			}
+			//Console.log("Extrapolating position " + timeSinceUpdate + " ms forward");
+			double[] pos = o.extrapolatePosition(timeSinceUpdate).toArray();
+			//Console.log("Unit " + o.getId() + " at " + pos[0] + " " + pos[1]);
+			m.posX = (float) pos[0];
+			m.posY = (float) pos[1];
+			m.id = o.getId();
+			m.render(glContext, shader, camera);
 		}
 	}
 	
@@ -198,16 +230,16 @@ public class GameCanvas {
 		
 		// These attribute locations are hard coded. I don't know if they change on
 		//different hardware though, so be wary of that.
-		int tileSelectAttrib = 0;
-		int vertexPositionAttribute = 1;
+		//int tileSelectAttrib = 0;
+		//int vertexPositionAttribute = 1;
 		
 		// These keeps returning -1 meaning it could not find the attributes. No clue why.
-		//int tileSelectAttrib = glContext.getAttribLocation(shader.shaderProgram, "tileSelectColor");
+		int tileSelectAttrib = glContext.getAttribLocation(shader.shaderProgram, "tileSelectColor");
 		//Console.log("tileSelectAttrib = " + tileSelectAttrib);
-		//int vertexPositionAttribute = glContext.getAttribLocation(shader.shaderProgram, "vertexPositoin");
+		int vertexPositionAttribute = glContext.getAttribLocation(shader.shaderProgram, "vertexPosition");
 		//Console.log("vertexPositionAttribute = " + vertexPositionAttribute);
 		
-		Console.log("Rendering tile selection");
+		if(debug) Console.log("Rendering tile selection");
 		glContext.enableVertexAttribArray(tileSelectAttrib);
 		glContext.enableVertexAttribArray(vertexPositionAttribute);
 		
@@ -282,9 +314,26 @@ public class GameCanvas {
 	 * @param selectedShader
 	 */
 	public void renderSelectedEntities(Shader selectedShader) {
-		int size = selectedEntities.size();
-		for(int i = 0; i < size; i++) {
-			entities.get(selectedEntities.get(i)).render(glContext, selectedShader, camera);
+		HashMap<Integer, GameObject> gameObjects = theModel.getGameModel().getGameObjects();
+		if(debug) Console.log(gameObjects.size() + " objects to render");
+		
+		int timeSinceUpdate = theModel.timeSinceLastUpdate();
+		
+		for(Integer i : selectedEntities) {
+			GameObject o = gameObjects.get(i);
+			Mesh m;
+			if(o instanceof Unit) {
+				m = unitMeshes.get(((Unit) o).getUnitType());
+			} else if(o instanceof Building) {
+				m = buildingMeshes.get(((Building) o).getBuildingType());
+			} else {
+				m = unitMeshes.get(((Unit) o).getUnitType());
+			}
+			double[] pos = o.extrapolatePosition(timeSinceUpdate).toArray();
+			m.posX = (float) pos[0];
+			m.posY = (float) pos[1];
+			m.id = i;
+			m.render(glContext, selectedShader, camera);
 		}
 	}
 	
@@ -300,29 +349,68 @@ public class GameCanvas {
 				objectSelector.invalidMap = true;
 				
 				if (debug) Console.log("Pressed: " + event.getNativeKeyCode());
-				switch (event.getNativeKeyCode()) {
-				case KeyCodes.KEY_UP:
-				case KeyCodes.KEY_W:
-					up = true;
-					break;
-				case KeyCodes.KEY_DOWN:
-				case KeyCodes.KEY_S:
-					down = true;
-					break;
-				case KeyCodes.KEY_LEFT:
-				case KeyCodes.KEY_A:
-					left = true;
-					break;
-				case KeyCodes.KEY_RIGHT:
-				case KeyCodes.KEY_D:
-					right = true;
-					break;
-				case KeyCodes.KEY_P: out = true; break;
-				case KeyCodes.KEY_O: in = true; break;
-				case KeyCodes.KEY_Q: rotateLeft = true; break;
-				case KeyCodes.KEY_E: rotateRight = true; break;
-				case KeyCodes.KEY_X: center = true; break;
-				default: if (debug) Console.log("Unrecognized: " + event.getNativeKeyCode()); break;
+				if (!chatFlag)
+				{
+					switch (event.getNativeKeyCode()) {
+					case KeyCodes.KEY_UP:
+					case KeyCodes.KEY_W:
+						up = true;
+						break;
+					case KeyCodes.KEY_DOWN:
+					case KeyCodes.KEY_S:
+						down = true;
+						break;
+					case KeyCodes.KEY_LEFT:
+					case KeyCodes.KEY_A:
+						left = true;
+						break;
+					case KeyCodes.KEY_RIGHT:
+					case KeyCodes.KEY_D:
+						right = true;
+						break;
+					case KeyCodes.KEY_P: out = true; break;
+					case KeyCodes.KEY_O: in = true; break;
+					case KeyCodes.KEY_Q: rotateLeft = true; break;
+					case KeyCodes.KEY_E: rotateRight = true; break;
+					case KeyCodes.KEY_X: center = true; break;
+					case KeyCodes.KEY_I: 
+						Console.log("pressed I");
+						theModel.sendCommand(new PlaceUnitCommand( UnitType.CANNON, 1, mouseTile));
+						break;
+					case KeyCodes.KEY_B:
+						if (event.getNativeEvent().getShiftKey()) {
+							Console.log("pressed shift-b");
+							// Cycle through building types
+							buildingCounter++;
+							String currBuilding = buildingTypes[(buildingTypes.length + buildingCounter) % buildingTypes.length].toString();
+							// Display in the menu
+							$("#building-toolbar").html(currBuilding);
+						} else {
+							Console.log("pressed b");
+							// Toggle building mode
+							currMode = currMode == Mode.NONE ? Mode.BUILDING
+									: Mode.NONE;
+							// Show/hide building toolbar
+							$("#building-toolbar").toggle();
+							if (currMode == Mode.BUILDING) {
+								// Set div to mouse position
+								$("#building-toolbar").css("left", mouseX + "px");
+								$("#building-toolbar").css("top", mouseY + "px");
+								// Set current building type
+								String currBuilding = buildingTypes[(buildingTypes.length + buildingCounter) % buildingTypes.length].toString();
+								// Display in the menu
+								$("#building-toolbar").html(currBuilding);
+							}
+						}
+						break;
+					default: if (debug) Console.log("Unrecognized: " + event.getNativeKeyCode()); break;
+					}
+				} else // chatFlag is set, make sure all camera flags are false
+				{
+					up    = false;
+					down  = false; 
+					right = false;
+					left  = false; 
 				}
 			}
 		}, KeyDownEvent.getType());
@@ -362,30 +450,26 @@ public class GameCanvas {
 				case NativeEvent.BUTTON_LEFT:
 					if(event.isShiftKeyDown()) {
 						int targetID = objectSelector.pickEntity(event.getClientX(), event.getClientY());
-						System.out.println("Selected entity with ID " + targetID + ".");
-						if (entities.containsKey(targetID)) {
-							System.out.println("This entity exists! Adding to selected entities...");
-							double x = entities.get(targetID).posX;
-							double y = entities.get(targetID).posY;
+						if(commandDebug) Console.log("Target ID: " + targetID);
+						if(targetID == 0) {
 							for(Integer i : selectedEntities) {
-								theModel.setTarget(i, x, y);
+								theModel.sendCommand(new MoveUnitCommand(i, mouseTile.x, mouseTile.y));
 							}
-						}
-						else {
-							System.out.println("This entity DOES NOT exist!");
+						} else {
+							if(commandDebug) Console.log("Selected units attacking unit " + targetID);
+							for(Integer i : selectedEntities) {
+								theModel.sendCommand(new AttackCommand(i,targetID));
+							}
 						}
 					} else {
 						if(!event.isControlKeyDown()) selectedEntities.clear();
 						int selectedID = objectSelector.pickEntity(event.getClientX(), event.getClientY());
-						if(selectedID < 50 || true) {
-							System.out.println("Selected entity with ID " + selectedID + ".");
-							if (entities.containsKey(selectedID)) {
-								System.out.println("This entity exists! Adding to selected entities...");
-								selectedEntities.add(selectedID);
-							}
-							else {
-								System.out.println("This entity DOES NOT exist!");
-							}
+						if(commandDebug) Console.log("Selected entity with ID " + selectedID + ".");
+						if (theModel.getGameModel().getGameObjects().containsKey(selectedID)) {
+							if(commandDebug) Console.log("This entity exists! Adding to selected entities...");
+							selectedEntities.add(selectedID);
+						} else {
+							if(commandDebug) Console.log("This entity DOES NOT exist!");
 						}
 					}
 					break;
@@ -399,6 +483,17 @@ public class GameCanvas {
 
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
+				// Functionality for Building Mode
+				mouseX = event.getX();
+				mouseY = event.getY();
+				if (currMode == Mode.BUILDING) {
+					// Set building css
+					// $("#building-toolbar").css("left: '" + mouseX +
+					// "px'; top: '" + mouseY + "px';");
+					$("#building-toolbar").css("left", mouseX + "px");
+					$("#building-toolbar").css("top", mouseY + "px");
+				}
+				
 				//Console.log("X: " + event.getClientX() + ", Y: " + event.getClientY());
 				if (GameCanvas.this.onEdgeOfMap(event)) {
 					GameCanvas.this.mouseVector = Vector3.getVectorBetween(GameCanvas.this.getCenterOfMap(), new Vector3(event.getClientX(), event.getClientY(), 0));
@@ -406,14 +501,15 @@ public class GameCanvas {
 				} else {
 					GameCanvas.this.move = false;
 				}
-				Coordinate c = objectSelector.pickTile(event.getClientX(), event.getClientY());
+				mouseTile = objectSelector.pickTile(event.getClientX(), event.getClientY());
+				//Console.log("(before) TILE: " + mouseTile.toString());
 				// A quick check to make sure that we did not miss the map
-				if(c.x >= 0.0) {
-					c.x = (int)(c.x / (255/GRID_WIDTH));
-					c.y = (int)(c.y / (255/GRID_WIDTH));
+				if(mouseTile.x >= 0.0) {
+					mouseTile.x = (int)(mouseTile.x / (255.0/GRID_WIDTH) + 0.5);
+					mouseTile.y = (int)(mouseTile.y / (255.0/GRID_WIDTH) + 0.5);
 				}
-				RootPanel.get("tile-info").getElement().setInnerHTML(c.toString());
-				Console.log("TILE: " + c.toString());
+				RootPanel.get("tile-info").getElement().setInnerHTML(mouseTile.toString());
+				//Console.log("(after) TILE: " + mouseTile.toString());
 			}
 			
 		}, MouseMoveEvent.getType());
@@ -451,65 +547,8 @@ public class GameCanvas {
 			}
 		});
 
-		initClickHandlers();
 		camera.makeCameraMatrix();
 	}
-
-	/**
-	 * Registers handlers for Interface buttons
-	 */
-	private void initClickHandlers() {
-		// City Menu Button
-		$("#city-button").click(new Function() {
-			public boolean f(Event e) {
-				// Show city menu
-				toggleSidebar(false);
-				$("#agent-menu").hide();
-				$("#city-menu").show();
-				// Change content to city menu
-				return true; // Default return true
-			}
-		});
-
-		// Agent Menu Button
-		$("#agent-button").click(new Function() {
-			public boolean f(Event e) {
-				// Show agent menu
-				toggleSidebar(false);
-				$("#city-menu").hide();
-				$("#agent-menu").show();
-				// Change content to agent menu
-				return true; // Default return true
-			}
-		});
-
-		// Sidebar close/open
-		$("#sidebar-hide").click(new Function() {
-			public boolean f(Event e) {
-				// Hide sidebar
-				toggleSidebar(true);
-				return true; // Default return true
-			}
-		});
-	}
-	
-	/**
-	 * Registers handlers for showing/hiding sidebar
-	 */
-	private void toggleSidebar(boolean hideIfShowing) {
-		String left = $("#sidebar").css("left");
-		if (left.equals("0px")) {
-			//Hide only if param is true
-			if (hideIfShowing) {
-				int width = $("#sidebar").outerWidth(true);
-				int closeWidth = $("#sidebar-hide").outerWidth(true);
-				$("#sidebar").animate("left:-" + (width + closeWidth));
-			}
-		} else {
-			//Show sidebar
-			$("#sidebar").animate("left:0");
-		}
-	}	
 	
 	/**
 	 * Updates the position of the camera
@@ -578,26 +617,19 @@ public class GameCanvas {
 				.selectedFS().getText());
 		
 		final Mesh barrel = OBJImporter.objToMesh(ClientResources.INSTANCE.barrelOBJ().getText(), glContext);
-
+		
+		final long startTime = System.currentTimeMillis();
+		
 		// repaint timer
 		Timer t = new Timer() {
 			@Override
 			public void run() {
 				time = System.currentTimeMillis();
-				
-				float[] pos;
-				agentX = 0;
-				agentY = 0;
-				
-				Map<Integer,EntityModel> modelEntities = theModel.getGameModel().getEntities();
-				Set<Integer> keySet = modelEntities.keySet();
-				for(Integer i : keySet) {
-					Mesh currMesh = entities.get(i);
-					pos = theModel.getPosition(i, System.currentTimeMillis());
-					currMesh.posX = pos[0];
-					currMesh.posY = pos[1];
-				}
-				
+				int deltaT = (int) (time - startTime);
+
+				agentX = (float) Math.sin(deltaT / 1000.0);
+				agentY = (float) Math.cos(deltaT / 1000.0);
+
 				updateCamera();
 				drawScene();
 				
@@ -610,7 +642,7 @@ public class GameCanvas {
 				renderSelectedEntities(selectedShader);
 			}
 		};
-		t.scheduleRepeating(16); // roughly 30 FPS
+		t.scheduleRepeating(33); // roughly 30 FPS
 	}
 	
 	/**

@@ -1,19 +1,17 @@
 package com.shared.model.commands;
 
-import com.shared.model.buildings.Building;
+
 import com.shared.model.buildings.ResearchBuilding;
 import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
-import com.shared.model.entities.GameObject;
-import com.shared.model.research.DisabledTechnology;
-import com.shared.model.research.InfantryArmor;
-import com.shared.model.research.InfantryDamage;
-import com.shared.model.research.RangedDamage;
-import com.shared.model.research.RangedLOS;
 import com.shared.model.research.TechnologyEnum;
 
 public class ResearchTechnologyCommand implements Command {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 875077524529421027L;
 	private Player p;
 	private ResearchBuilding b;
 	private TechnologyEnum t;
@@ -26,11 +24,13 @@ public class ResearchTechnologyCommand implements Command {
 		this.t = t;
 
 	}
+	
+	public ResearchTechnologyCommand() {}
 
 	@Override
 	public boolean validateCommand(GameModel model) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class ResearchTechnologyCommand implements Command {
 			}
 		}
 
-		return false;
+		return true;
 	}
 
 }

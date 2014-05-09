@@ -1,3 +1,4 @@
+
 package entities;
 
 import static org.junit.Assert.*;
@@ -17,8 +18,8 @@ public class TestUnit {
 	@Test
 	public void testGet() {
 		assertEquals(20, 0, u.getHealth());
-		assertEquals(1.0, 0, u.getX());
-		assertEquals(1.0, 0, u.getY());
+		assertEquals(1.0, 0, u.getPosition().getX());
+		assertEquals(1.0, 0, u.getPosition().getY());
 		assertEquals(0, u.getPlayerID());
 		//assertEquals(GameObjectType.UNIT, u.type);
 		assertEquals(100, u.getCreationTime());
@@ -47,11 +48,11 @@ public class TestUnit {
 
 		// test SetLocation
 
-		assertEquals(1.0, 0, u.getX());
-		assertEquals(1.0, 0, u.getY());
+		assertEquals(1.0, 0, u.getPosition().getX());
+		assertEquals(1.0, 0, u.getPosition().getY());
 		u.setLocation(2.0f, 2.0f);
-		assertEquals(2.0, 0, u.getX());
-		assertEquals(2.0, 0, u.getY());
+		assertEquals(2.0, 0, u.getPosition().getX());
+		assertEquals(2.0, 0, u.getPosition().getY());
 	}
 
 }

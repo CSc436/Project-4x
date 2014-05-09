@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import com.shared.model.control.GameModel;
+import com.shared.model.control.Player;
 import com.shared.model.research.TechnologyEnum;
 import com.shared.model.stats.BaseStatsEnum;
 
@@ -12,7 +13,7 @@ public class Blacksmith extends Building implements ResearchBuilding {
 
 	ArrayList<TechnologyEnum> techlist = new ArrayList<TechnologyEnum>();
 
-	public Blacksmith(UUID id, int playerId, float xco, float yco) {
+	public Blacksmith(int id, int playerId, float xco, float yco) {
 		super(id, playerId, BaseStatsEnum.BLACKSMITH, BaseStatsEnum.BLACKSMITH
 				.getStats(), BuildingType.BLACKSMITH, xco, yco,
 				BuildingType.BLACKSMITH.getX(), BuildingType.BLACKSMITH.getY());
@@ -24,6 +25,8 @@ public class Blacksmith extends Building implements ResearchBuilding {
 		this.addTechnology(TechnologyEnum.RANGEDDAMAGE);
 
 	}
+	
+	public Blacksmith() {}
 
 	@Override
 	public ArrayList<TechnologyEnum> getTechnologyList() {
@@ -42,21 +45,9 @@ public class Blacksmith extends Building implements ResearchBuilding {
 	}
 
 	@Override
-	protected void setActions() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public HashMap<String, String> getActions() {
+	public Player getPlayer() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public void tick(int timeScale, GameModel model) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

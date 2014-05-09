@@ -5,6 +5,11 @@ import com.shared.model.entities.GameObjectType;
 import com.shared.model.resources.Resources;
 
 public class InfantryArmor extends Technology {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7934147427076665833L;
+
 	public InfantryArmor() {
 		super(3);
 

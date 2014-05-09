@@ -33,6 +33,7 @@
 	padding: 3px;
 	background-color: rgba(25, 25, 25, 0.5);
 	overflow: auto;
+	word-wrap: break-word;
 }
 
 /* Where user inputs chat text */

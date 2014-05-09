@@ -1,24 +1,79 @@
 package com.shared.model.buildings;
 
+import com.shared.model.behaviors.ResourceGenerator;
+import com.shared.model.behaviors.StandardResourceGenerator;
 import com.shared.model.resources.Resources;
+import com.shared.model.stats.BaseStatsEnum;
+import com.shared.model.stats.UnitStats;
 
-public interface ResourceBuilding {
 
-	/**
-	 * generateResource(): returns a Resource object that contains the amount of
-	 * resources for one timestep of the building's life. The baseResourceAmount
-	 * should be decremented by this value in this method.
-	 * 
-	 * @return the resource amount that is to be added to the building owner
-	 */
-	public Resources generateResource();
+// TODO for construction, need to add check to make sure resource building is 
+// being placed on correct tile type (food on food, gold on gold, etc.)
+
+public class ResourceBuilding extends Building implements ResourceGenerator {
 
 	/**
-	 * advanceResourceProduction(): adds the amount of resources for 1 tick to
-	 * the building owner's resource pool
 	 * 
-	 * @return
 	 */
-	public void advanceResourceProduction();
+	private static final long serialVersionUID = -214411844510536374L;
+	protected Resources baseResourceAmount;
+	protected Resources resourceAmount;
+	protected ResourceGenerator resourceGenerationBehavior;
+
+	// Global resource rate modifier that affects all resource buildings
+	private static Resources globalRateModifier = new Resources(1, 1, 1, 1, 1);
+
+	/**
+	 * ResourceBuidling():
+	 * Base constructor for Resource Type buildings, calls super building constructor and sets base amount of 
+	 * resources. 
+	 * 
+	 * Parameters
+	 * @param UUID id - the unique identifier for this Resource Building 
+	 * @param int playerId - the id of the player who owns this resource building 
+	 * @param baseStats - the basic stats for this building (ie health, capacity, etc.)
+	 * @param new_stats - the current stats of this unit (less than or equal to baseStats generally)
+	 * @param buildingType Type of building - 
+	 * @param float xco - initial x coordinate
+	 * @param float yco - initial y coordinate
+	 * @param int height - how many tiles high building takes up 
+	 * @param int width - how many tiles wide the building takes up
+	 * @param Reosources resourceAmount - base amount of resource building generates
+	 * 
+	 */
+	public ResourceBuilding(int id, int playerId, BaseStatsEnum baseStats, UnitStats new_stats, 
+		    BuildingType buildingType, float xco,
+			float yco, int height, int width, Resources resourceAmount) {
+		super(id,playerId, baseStats, new_stats, 
+				buildingType, xco,
+				yco, height, width);
+		baseResourceAmount = resourceAmount;
+		this.resourceAmount = resourceAmount;
+		resourceGenerationBehavior = new StandardResourceGenerator(resourceAmount);
+	}
+	
+	public ResourceBuilding() {
+		super();
+	}
+	
+	/* Setters and Getters */
+	public void setGlobalRateModifier(Resources newRate) {
+		globalRateModifier = newRate;
+		resourceAmount = baseResourceAmount.scale(globalRateModifier);
+	}
+
+	public Resources getGlobalRateModifier() {
+		return globalRateModifier;
+	}
+
+	public Resources generateResource()
+	{
+		return resourceAmount;
+	}
+
+	@Override
+	public Resources generateResources(int timeStep) {
+		return resourceGenerationBehavior.generateResources(timeStep);
+	}
 
 }

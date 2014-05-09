@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import com.server.Controller;
 import com.shared.model.buildings.Building;
 import com.shared.model.buildings.BuildingType;
-import com.shared.model.control.Controller;
 import com.shared.model.control.Factory;
 import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
@@ -23,7 +23,9 @@ public class TestResources {
 		ArrayList<String> plist = new ArrayList<>();
 		plist.add("Greg");
 		plist.add("Pedro");
-		GameModel model = new GameModel(plist, 500);
+		GameModel model = new GameModel(500);
+		model.addPlayer("Greg");
+		model.addPlayer("Pedro");
 		Controller controller = new Controller(model);
 		Thread t = new Thread(controller);
 		t.start();

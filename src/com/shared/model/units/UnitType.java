@@ -1,12 +1,14 @@
 package com.shared.model.units;
 
+import java.io.Serializable;
+
 
 /**
  * UnitType
  * @author NRTop
  * The more specific type of unit 
  */
-public enum UnitType {
+public enum UnitType implements Serializable {
 	// BASE UNITS
 	MILITIA,
 

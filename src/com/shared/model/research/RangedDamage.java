@@ -5,6 +5,11 @@ import com.shared.model.entities.GameObjectType;
 import com.shared.model.resources.Resources;
 
 public class RangedDamage extends Technology {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1553940276170048103L;
+
 	public RangedDamage() {
 		super(3);
 

@@ -1,5 +1,7 @@
 package com.shared.model.diplomacy.trading.interfaces;
 
+import java.io.Serializable;
+
 import com.shared.model.control.Player;
 
 /**
@@ -10,7 +12,7 @@ import com.shared.model.control.Player;
  * @date Apr 3, 2014
  * 
  */
-public interface ITrade {
+public interface ITrade extends Serializable {
 	/**
 	 * Timestep updating of a Trade Agreement between two players, returns
 	 * whether to act on the agreement during this game step.
@@ -51,4 +53,10 @@ public interface ITrade {
 	 * @return - the id of the second player.
 	 */
 	public int getPlayer2();
+	
+	/**
+	 * 
+	 * @return - the auto-generated Id of the trade.
+	 */
+	public int getId();
 }

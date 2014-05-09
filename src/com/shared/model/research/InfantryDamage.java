@@ -5,6 +5,12 @@ import com.shared.model.entities.GameObjectType;
 import com.shared.model.resources.Resources;
 
 public class InfantryDamage extends Technology {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4701049621446129892L;
+
 	public InfantryDamage() {
 		// SUPER constructor takes max level of research.
 		super(3);
