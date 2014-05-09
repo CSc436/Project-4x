@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.client.gameinterface.Console;
 import com.shared.model.commands.Command;
+import com.shared.model.commands.SendMessageCommand;
 
 /**
  * 

@@ -15,6 +15,7 @@ import com.shared.model.buildings.Building;
 import com.shared.model.buildings.ResourceBuilding;
 import com.shared.model.commands.BuildingProductionCommand;
 import com.shared.model.commands.TradeCommand;
+import com.shared.model.commands.SendMessageCommand;
 import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
 import com.shared.model.diplomacy.trading.IntervalResourceTrade;
@@ -30,8 +31,8 @@ public class GameInterface {
 	// ID of panel in sidebar currently showing
 	// Or "" if sidebar is hidden
 	private static String showing = "";
-	private static GameModel gameModel;
 	private static ClientModel clientModel;
+	private static GameModel gameModel;
 	private static Player me;
 
 	private static String playerName;
@@ -46,12 +47,12 @@ public class GameInterface {
 	 * interface
 	 */
 	public static void init(ClientModel cm, GameCanvas c) {
-		clientModel = cm;
-		int playerID = clientModel.getPlayerID();
-		gameModel = clientModel.getGameModel();
-		// TODO: need to set me, this currently doesn't work
-		// because playerID is never set in the ClientModel
-		me = gameModel.getPlayer(playerID);
+		/*
+		 * clientModel = cm; int playerID = clientModel.getPlayerID(); gameModel
+		 * = clientModel.getGameModel(); // TODO: need to set me, this currently
+		 * doesn't work // because playerID is never set in the ClientModel me =
+		 * gameModel.getPlayer(playerID);
+		 */
 
 		// Change sidebar left value to calculated value
 		int width = $("#sidebar").outerWidth(true);
@@ -59,7 +60,36 @@ public class GameInterface {
 
 		initClickHandlers();
 
-		// Upon init - if go with giant chat log, update chat to reflect log
+		clientModel = cm;
+		gameModel = null;
+		// Needed to delay getting gameModel, because it wasn't set to the one
+		// actually on the server.
+		Timer tim = new Timer() {
+			public void run() {
+				gameModel = clientModel.getGameModel(); // needs to be delayed?
+				int playerID = clientModel.getPlayerID();
+				me = gameModel.getPlayer(playerID);
+				// Upon init - if go with giant chat log, update chat to reflect
+				// log
+				initializeChat();
+			}
+		};
+		tim.schedule(10000); // Delay ensures that gameModel is set to the one
+								// on the server, not the placeholder in the
+								// Client model
+
+		// Schedule update from chat log at fixed rate.
+		// Timer
+		// TimerTask.
+		Timer timer = new Timer() {
+
+			@Override
+			public void run() {
+				updateChat();
+			}
+
+		};
+		timer.scheduleRepeating(250); // Check for new messages every second.
 
 		// set canvas to c
 		canvas = c;
@@ -78,6 +108,10 @@ public class GameInterface {
 		} else {
 			playerName = n;
 		}
+	}
+	
+	public static void setGameModel(GameModel gm) {
+		gameModel = gm;
 	}
 
 	/**
@@ -361,8 +395,10 @@ public class GameInterface {
 				// Get agreement ID and type from btn
 				int id = Integer.parseInt($(this).attr("data-id"));
 				String type = $(this).attr("data-type");
-				// Get Trade info (we're assuming right now it's a IntervalResourceTrade
-				IntervalResourceTrade t = (IntervalResourceTrade) gameModel.getTradeManager().getTrade(id);
+				// Get Trade info (we're assuming right now it's a
+				// IntervalResourceTrade
+				IntervalResourceTrade t = (IntervalResourceTrade) gameModel
+						.getTradeManager().getTrade(id);
 				// Clear out old info
 				$("#diplomacy-detail-info").empty();
 				// Figure out what is going where
@@ -374,18 +410,21 @@ public class GameInterface {
 					theyGet = t.getReceivingPlayerResources();
 					youGet = t.getCreatingPlayerResources();
 				} else {
-					// someone else created the trade, either received or accepted
+					// someone else created the trade, either received or
+					// accepted
 					tradingWith = t.getCreatingPlayer();
 					theyGet = t.getCreatingPlayerResources();
 					youGet = t.getReceivingPlayerResources();
 				}
 				// Re-populate info
-				$("#diplomacy-detail-append").append("" +
-					"<div>Trade With " + tradingWith + "</div>" +
-					"<div>They Receive: " + theyGet.toStringOneLine() + "</div>" +
-					"<div>You Receive: " + youGet.toStringOneLine() + "</div>" +
-					"<div>Time Remaining: " + t.getTimeRemaining() + " minutes</div>"
-				);
+				$("#diplomacy-detail-append").append(
+						"" + "<div>Trade With " + tradingWith + "</div>"
+								+ "<div>They Receive: "
+								+ theyGet.toStringOneLine() + "</div>"
+								+ "<div>You Receive: "
+								+ youGet.toStringOneLine() + "</div>"
+								+ "<div>Time Remaining: "
+								+ t.getTimeRemaining() + " minutes</div>");
 				if (type.equals("sent") || type.equals("accepted")) {
 					// Hide accept/decline controls
 					$("#diplomacy-accept-trade").hide();
@@ -395,7 +434,7 @@ public class GameInterface {
 					$("#diplomacy-accept-trade").show();
 					$("#diplomacy-decline-trade").show();
 				}
-				
+
 				return true; // Default return true
 			}
 		});
@@ -467,11 +506,11 @@ public class GameInterface {
 						"#diplomacy-receive-quantity").val());
 				int tradeExpire = Integer
 						.parseInt($("#diplomacy-expire").val());
-				// TODO: error check (not important right now)
+				// TODO: error check entered values (not important right now)
 				// Create the Resources objects
 				Resources sending = new Resources();
 				Resources receiving = new Resources();
-				switch(resourceSend) {
+				switch (resourceSend) {
 				case "Food":
 					sending.setFood(resourceSendQuantity);
 					break;
@@ -485,7 +524,7 @@ public class GameInterface {
 					sending.setGold(resourceSendQuantity);
 					break;
 				}
-				switch(resourceReceive) {
+				switch (resourceReceive) {
 				case "Food":
 					receiving.setFood(resourceReceiveQuantity);
 					break;
@@ -501,7 +540,8 @@ public class GameInterface {
 				}
 				// Create and send command
 				// TODO: need to get ID of other player
-				clientModel.sendCommand(new TradeCommand(tradeExpire, me.getId(), 0, sending, receiving));
+				clientModel.sendCommand(new TradeCommand(tradeExpire, me
+						.getId(), 0, sending, receiving));
 				return true;
 			}
 		});
@@ -602,7 +642,10 @@ public class GameInterface {
 		Console.log(playerName + ": " + $("#message").val());
 
 		// Send message - currently just local
-		updateMessages(playerName + ": " + $("#message").val());
+		// updateMessages(playerName + ": " + $("#message").val());
+		clientModel.sendCommand(new SendMessageCommand(playerName + ": "
+				+ $("#message").val()));
+		// Console.log("Chat Command sent to server ");
 
 		// Scroll back up to the top of messages, wait a couple of ms
 		Timer timer = new Timer() {
@@ -648,6 +691,44 @@ public class GameInterface {
 															// yourself, get rid
 															// of when at
 															// scrollTop() = 0.
+		}
+	}
+
+	/**
+	 * After chat has been initialized, need to update it to see new messages,
+	 * prepend any new messages to messages.
+	 */
+	public static void updateChat() {
+		// TODO add call, if length is even, and greater than size, reset chat
+		// log in gameModel.
+		// But for now who cares, ALL TEH MEMORY IS MINE.
+		Console.log(gameModel.toString());
+		if (gameModel == null)
+			return;
+
+		int chatLogLength = gameModel.getChatLog().size();
+		if (chatLogLength > msgCount) {
+			// update chat with new messages - msgCount is updated by
+			// updateMessages call.
+			for (int i = msgCount; i < chatLogLength; i++) {
+				// Console.log("msgCount: "+ msgCount + "\tchatLogLength: "+
+				// chatLogLength + "i: " + i);
+				updateMessages(gameModel.getChatLog().get(i));
+			}
+		} else {
+			// Console.log("No new Messages to prepend");
+		}
+	}
+
+	/**
+	 * initializes the chat based on contents of chat log.
+	 */
+	public static void initializeChat() {
+		if (gameModel.getChatLog().size() == 0)
+			Console.log("No chats in the chat log!");
+
+		for (String msg : gameModel.getChatLog()) {
+			updateMessages(msg);
 		}
 	}
 

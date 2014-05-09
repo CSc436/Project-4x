@@ -8,6 +8,7 @@ import java.util.Queue;
 import com.client.SimpleSimulator;
 import com.client.SimpleSimulatorAsync;
 import com.client.gameinterface.Console;
+import com.client.gameinterface.GameInterface;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -86,9 +87,11 @@ public class ClientModel {
 			@Override
 			public void onSuccess(GameModel result) {
 				if(debug) Console.log("Game retrieved!");
+				model = result;
+				// Give game model to interface
+				GameInterface.setGameModel(result);
 				// Remove loading screen
 				$("#loading-screen").remove();
-				model = result;
 				beginPlaying();
 			}
 			
@@ -135,6 +138,8 @@ public class ClientModel {
 					@Override
 					public void onSuccess(CommandPacket result) {
 						
+						// for chat commands, update the gameInterface. ClientModel likely needs reference to gameInterface?
+						// Will try
 						for (Command c: commandQueueCopy) {
 							// Remove every item in the copy from commandQueue
 							commandQueue.remove(c);
