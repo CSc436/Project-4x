@@ -17,7 +17,7 @@ vec4 healthToColor(float);
 
 void main(void)
 {
-  float scale = 1.1;
+  float scale = 0.9;
   vec3 newVertexPosition = vertexPosition * scale;
 
   texCoord = vertexTexCoord;

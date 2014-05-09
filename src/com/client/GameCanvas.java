@@ -86,6 +86,7 @@ public class GameCanvas {
 	public ArrayList<Integer> selectedEntities;
 	
 	private Mesh cannon1;
+	private Mesh selectionRing;
 
 	public GameCanvas(ClientModel theModel) {
 		// CODE FOR MINIMAP DEV/CLICK SELECTING
@@ -132,6 +133,9 @@ public class GameCanvas {
 	private void initEntities() {
 		entities = new HashMap<Integer,Mesh>();
 		
+		selectionRing = OBJImporter.objToMesh(ClientResources.INSTANCE.ringOBJ().getText(), glContext);
+		//selectionRing.setTexture(glContext, ClientResources.INSTANCE.ringTexture());
+		
 		final Mesh ent2 = OBJImporter.objToMesh(ClientResources.INSTANCE.cubeOBJ().getText(), glContext);
 		ent2.posX = 20.0f;
 		ent2.id = 65432;
@@ -146,6 +150,16 @@ public class GameCanvas {
 		castle1.id = 123321;
 		castle1.healthPercentage = 0.6f;
 		entities.put(castle1.id, castle1);
+		
+		final Mesh swordsman2 = OBJImporter.objToMesh(ClientResources.INSTANCE.swordsmanOBJ().getText(), glContext);
+		swordsman2.setTexture(glContext, ClientResources.INSTANCE.swordsmanTexture());
+		swordsman2.posX = 4.5f;
+		swordsman2.posY = 4.5f;
+		swordsman2.posZ = 0.0f;
+		swordsman2.id = 60606;
+		swordsman2.healthPercentage = 0.0f;
+		swordsman2.setTeamColor(1.0f,0.0f,1.0f);
+		entities.put(swordsman2.id, swordsman2);
 		
 		/*// STRAIN THE SERVER AAAAAAHHHHH 
 		int idcount = 300;
@@ -305,11 +319,19 @@ public class GameCanvas {
 		int size = selectedEntities.size();
 		for(int i = 0; i < size; i++) {
 			// disable depth testing so the outline draws on top of everything
-			glContext.disable(WebGLRenderingContext.DEPTH_TEST);
+			//glContext.disable(WebGLRenderingContext.DEPTH_TEST);
+			// Alpha blending, very important!
+			//glContext.enable(WebGLRenderingContext.BLEND);
+
 			// render the outline
-			entities.get(selectedEntities.get(i)).render(glContext, selectedShader, camera);
+			//entities.get(selectedEntities.get(i)).render(glContext, selectedShader, camera);
+			selectionRing.posX = entities.get(selectedEntities.get(i)).posX;
+			selectionRing.posY = entities.get(selectedEntities.get(i)).posY;
+			selectionRing.healthPercentage = entities.get(selectedEntities.get(i)).healthPercentage;
+			selectionRing.render(glContext, selectedShader, camera);
 			// enable depth testing so the actual model draws correctly
-			glContext.enable(WebGLRenderingContext.DEPTH_TEST);
+			//glContext.enable(WebGLRenderingContext.DEPTH_TEST);
+			//glContext.disable(WebGLRenderingContext.BLEND);
 			// render the model over the outline
 			entities.get(selectedEntities.get(i)).render(glContext, unselectedShader, camera);
 		}
@@ -574,6 +596,8 @@ public class GameCanvas {
 		glContext.clearDepth(1.0f);
 		glContext.enable(WebGLRenderingContext.DEPTH_TEST);
 		glContext.depthFunc(WebGLRenderingContext.LEQUAL);
+		glContext.pixelStorei(WebGLRenderingContext.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
+		glContext.blendFunc(WebGLRenderingContext.SRC_ALPHA, WebGLRenderingContext.ONE);
 
 		initTexture();
 		initShaders();
