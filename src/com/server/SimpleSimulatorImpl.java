@@ -89,13 +89,13 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements SimpleS
 	 */
 	@Override
 	public GameModel getGame( int playerNumber, int lastTurnReceived ) {
-		playerTable.put(playerNumber, false);
+		playerTable.put(playerNumber, true);
 		return controller.getGameModel();
 	}
 	
 	public Integer joinGame() {
 		if(!controller.isRunning) controller.run();
-		playerTable.put(nextPlayerSlot, false);
+		playerTable.put(nextPlayerSlot, true);
 		return nextPlayerSlot++;
 	}
 	

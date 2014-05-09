@@ -99,7 +99,6 @@ public class GameCanvas {
 	
 	public ArrayList<Integer> selectedEntities;
 	
-	private Mesh cannon1;
 	private Mesh selectionRing;
 
 	private boolean chatFlag = false; // if chat is selected, do not allow camera movment/input
@@ -172,9 +171,14 @@ public class GameCanvas {
 		final Mesh castle1 = OBJImporter.objToMesh(ClientResources.INSTANCE.castleOBJ().getText(), glContext);
 		castle1.setTexture(glContext, ClientResources.INSTANCE.castleTexture());
 		
-		final Mesh swordsman2 = OBJImporter.objToMesh(ClientResources.INSTANCE.swordsmanOBJ().getText(), glContext);
-		swordsman2.setTexture(glContext, ClientResources.INSTANCE.swordsmanTexture());
-
+		final Mesh swordsman1 = OBJImporter.objToMesh(ClientResources.INSTANCE.swordsmanOBJ().getText(), glContext);
+		swordsman1.setTexture(glContext, ClientResources.INSTANCE.swordsmanTexture());
+		
+		final Mesh archer1 = OBJImporter.objToMesh(ClientResources.INSTANCE.archerOBJ().getText(), glContext);
+		archer1.setTexture(glContext, ClientResources.INSTANCE.archerTexture());
+		
+		final Mesh cannon1 = OBJImporter.objToMesh(ClientResources.INSTANCE.cannonOBJ().getText(), glContext);
+		cannon1.setTexture(glContext, ClientResources.INSTANCE.cannonTexture());
 		
 		/*// STRAIN THE SERVER AAAAAAHHHHH 
 		int idcount = 300;
@@ -189,13 +193,13 @@ public class GameCanvas {
 			}
 		}*/
 		
-		cannon1 = OBJImporter.objToMesh(ClientResources.INSTANCE.cannonOBJ().getText(), glContext);
-		cannon1.setTexture(glContext, ClientResources.INSTANCE.cannonTexture());
+
 		
 		for(UnitType t : UnitType.values()) {
 			unitMeshes.put(t, cannon1);
 		}
-		unitMeshes.put(UnitType.INFANTRY, swordsman2);
+		unitMeshes.put(UnitType.INFANTRY, swordsman1);
+		unitMeshes.put(UnitType.ARCHER, archer1);
 		
 		for(BuildingType t : BuildingType.values()) {
 			buildingMeshes.put(t, castle1);
@@ -281,47 +285,6 @@ public class GameCanvas {
 		
 		glContext.disableVertexAttribArray(vertexPositionAttribute);
 		glContext.disableVertexAttribArray(tileSelectAttrib);
-		
-		//glContext.flush();
-
-		//-------------------------------------------
-//		glContext.clear(WebGLRenderingContext.COLOR_BUFFER_BIT
-//				| WebGLRenderingContext.DEPTH_BUFFER_BIT);
-//
-//		glContext.useProgram(shaderProgram);
-//
-//		glContext.enableVertexAttribArray(vertexPositionAttribute);
-//		glContext.enableVertexAttribArray(vertexTexCoordAttrib);
-//
-//		// vertices
-//		glContext.uniformMatrix4fv(matrixUniform, false, camera.getCameraMatrix());
-//		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileVertexBuffer);
-//		glContext.vertexAttribPointer(vertexPositionAttribute, 3,
-//				WebGLRenderingContext.FLOAT, false, 0, 0);
-//
-//		// texture coordinates
-//		glContext
-//				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileTexCoordBuffer);
-//		glContext.vertexAttribPointer(vertexTexCoordAttrib, 2,
-//				WebGLRenderingContext.FLOAT, false, 0, 0);
-//
-//		// uniforms
-//		glContext.uniform3f(camPosUniform, camera.getX(), camera.getY(), camera.getZ());
-//
-//		// texture
-//		glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
-//		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
-//		glContext.uniform1i(texUniform, 0);
-//
-//		// draw geometry
-//		glContext.drawArrays(WebGLRenderingContext.TRIANGLES, 0, NUM_TILES * 6);
-//		
-//		glContext.disableVertexAttribArray(vertexPositionAttribute);
-//		glContext.disableVertexAttribArray(vertexTexCoordAttrib);
-//
-//		renderAgent();
-//		
-//		glContext.flush();
 	}
 	
 	/**
@@ -386,6 +349,9 @@ public class GameCanvas {
 						break;
 					case KeyCodes.KEY_K:
 						theModel.sendCommand(new PlaceUnitCommand( UnitType.INFANTRY, (int) (8*Math.random()), mouseTile));
+						break;
+					case KeyCodes.KEY_L:
+						theModel.sendCommand(new PlaceUnitCommand( UnitType.ARCHER, (int) (8*Math.random()), mouseTile));
 						break;
 					case KeyCodes.KEY_B:
 						theModel.sendCommand(new ConstructBuildingCommand( BuildingType.BARRACKS, (int) (8*Math.random()), mouseTile));
@@ -675,9 +641,6 @@ public class GameCanvas {
 				barrel.posY = agentY;
 				barrel.posZ = (float) (agentZ + Math.sin(time/300));
 				barrel.rotX = barrel.rotX + 0.01f;
-				
-				cannon1.posX = 5.0f + (float) (Math.cos(time / 1000.0));
-				cannon1.posY = 5.0f + (float) (Math.sin(time / 1000.0));
 				
 				renderEntities(texturedPhongMeshShader);
 				renderSelectedEntities(selectedShader);

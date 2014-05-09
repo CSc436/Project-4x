@@ -84,20 +84,26 @@ public interface ClientResources extends ClientBundle{
     @Source(value={"swordsman.obj"})
     TextResource swordsmanOBJ();
     
+    @Source(value={"archer.obj"})
+    TextResource archerOBJ();
+    
     @Source(value={"floorSprite.obj"})
     TextResource floorSpriteOBJ();
     
     @Source(value={"ring.obj"})
     TextResource ringOBJ();
     
-    @Source("castle_base_colors_medium.png")
+    @Source("castle_base_colors_medium.jpg")
     ImageResource castleTexture();
 	
-    @Source("cannon_base_colors_medium.png")
+    @Source("cannon_base_colors_small.png")
     ImageResource cannonTexture();
     
     @Source("swordsman_base_colors_medium.png")
     ImageResource swordsmanTexture();
+    
+    @Source("archer_base_colors_medium.jpg")
+    ImageResource archerTexture();
     
     @Source("ring_medium.png")
     ImageResource ringTexture();
