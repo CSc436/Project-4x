@@ -13,6 +13,7 @@ import com.shared.model.behaviors.Movable;
 import com.shared.model.behaviors.Producer;
 import com.shared.model.behaviors.ResourceGenerator;
 import com.shared.model.buildings.Building;
+import com.shared.model.commands.SendMessageCommand;
 import com.shared.model.diplomacy.trading.TradeManager;
 import com.shared.model.entities.GameObject;
 import com.shared.model.gameboard.GameBoard;
@@ -40,11 +41,7 @@ public class GameModel implements Serializable {
 	private int nextPlayerID = 1;
 	private TradeManager tradeManager;
 
-	private ArrayList<String> chatLog; 
-	
-	// ADdd chat log. 
-	// add functionality to see if chat log has updated
-	// once all players have checked a message, remove from new messages?
+	private ArrayList<SendMessageCommand> chatLog; 
 	
 	
 	// simple test model start up.
@@ -61,7 +58,7 @@ public class GameModel implements Serializable {
 		
 		map = new GameBoard(500, 500);
 		
-		chatLog = new ArrayList<String>();
+		chatLog = new ArrayList<SendMessageCommand>();
 	}
 	
 	/**
@@ -82,14 +79,14 @@ public class GameModel implements Serializable {
 		
 		map = new GameBoard(width, width);
 		
-		chatLog = new ArrayList<String>();
+		chatLog = new ArrayList<SendMessageCommand>();
 	}
 	
 	/**
 	 * updates chat log with a new message
 	 * @param message
 	 */
-	public void updateChatLog(String message)
+	public void updateChatLog(SendMessageCommand message)
 	{
 		chatLog.add(message);
 	}
@@ -98,7 +95,7 @@ public class GameModel implements Serializable {
 	 * returns current chat log.
 	 * @return
 	 */
-	public ArrayList<String> getChatLog()
+	public ArrayList<SendMessageCommand> getChatLog()
 	{
 		return chatLog; 
 	}
@@ -126,7 +123,7 @@ public class GameModel implements Serializable {
 	}
 
 	public Player getPlayer(int playerId) {
-		return players.get(playerId);
+		return players.get((playerId +1)); // Client model is one off from gameModel, so add one....
 	}
 	
 	/**
