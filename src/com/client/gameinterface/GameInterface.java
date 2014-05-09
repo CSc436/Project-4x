@@ -14,8 +14,10 @@ import com.google.gwt.user.client.Event;
 import com.shared.model.buildings.Building;
 import com.shared.model.buildings.ResourceBuilding;
 import com.shared.model.commands.BuildingProductionCommand;
+import com.shared.model.commands.TradeCommand;
 import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
+import com.shared.model.diplomacy.trading.IntervalResourceTrade;
 import com.shared.model.diplomacy.trading.interfaces.ITrade;
 import com.shared.model.resources.Resources;
 import com.shared.model.units.Unit;
@@ -168,7 +170,6 @@ public class GameInterface {
 				$("#sent-agreements-table tbody").empty();
 				$("#received-agreements-table tbody").empty();
 				$("#accepted-agreements-table tbody").empty();
-				// TODO: detail buttons set ID
 				// Re-populate sent
 				for (int i = 0; i < sentAgreements.size(); i++) {
 					$("#sent-agreements-table tbody")
@@ -180,7 +181,9 @@ public class GameInterface {
 									+ "</div>"
 									+ "</td>"
 									+ "<td>"
-									+ "<button type='button' class='btn btn-green diplomacy-detail-button'>View</button>"
+									+ "<button type='button' data-id='"
+									+ sentAgreements.get(i).getId()
+									+ "' data-type='sent' class='btn btn-green diplomacy-detail-button'>View</button>"
 									+ "</td>" + "</tr>");
 				}
 				// Re-populate received
@@ -194,7 +197,9 @@ public class GameInterface {
 									+ "</div>"
 									+ "</td>"
 									+ "<td>"
-									+ "<button type='button' class='btn btn-green diplomacy-detail-button'>View</button>"
+									+ "<button type='button' data-id='"
+									+ receivedAgreements.get(i).getId()
+									+ "' data-type='received' class='btn btn-green diplomacy-detail-button'>View</button>"
 									+ "</td>" + "</tr>");
 				}
 				// Re-populate proposed
@@ -208,7 +213,9 @@ public class GameInterface {
 									+ "</div>"
 									+ "</td>"
 									+ "<td>"
-									+ "<button type='button' class='btn btn-green diplomacy-detail-button'>View</button>"
+									+ "<button type='button' data-id='"
+									+ acceptedAgreements.get(i).getId()
+									+ "' data-type='accepted' class='btn btn-green diplomacy-detail-button'>View</button>"
 									+ "</td>" + "</tr>");
 				}
 				return true; // Default return true
@@ -351,10 +358,45 @@ public class GameInterface {
 			public boolean f(Event e) {
 				// Show diplomacy detail menu
 				changeSidebarContent("diplomacy-menu-detail");
-				// TODO: actual functionality
-				// Get agreement ID from btn
-				// Populate diplomacy-menu-detail
-				return true;
+				// Get agreement ID and type from btn
+				int id = Integer.parseInt($(this).attr("data-id"));
+				String type = $(this).attr("data-type");
+				// Get Trade info (we're assuming right now it's a IntervalResourceTrade
+				IntervalResourceTrade t = (IntervalResourceTrade) gameModel.getTradeManager().getTrade(id);
+				// Clear out old info
+				$("#diplomacy-detail-info").empty();
+				// Figure out what is going where
+				int tradingWith;
+				Resources theyGet, youGet;
+				if (t.getCreatingPlayer() == me.getId()) {
+					// 'me' created the trade, either sent or accepted
+					tradingWith = t.getReceivingPlayer();
+					theyGet = t.getReceivingPlayerResources();
+					youGet = t.getCreatingPlayerResources();
+				} else {
+					// someone else created the trade, either received or accepted
+					tradingWith = t.getCreatingPlayer();
+					theyGet = t.getCreatingPlayerResources();
+					youGet = t.getReceivingPlayerResources();
+				}
+				// Re-populate info
+				$("#diplomacy-detail-append").append("" +
+					"<div>Trade With " + tradingWith + "</div>" +
+					"<div>They Receive: " + theyGet.toStringOneLine() + "</div>" +
+					"<div>You Receive: " + youGet.toStringOneLine() + "</div>" +
+					"<div>Time Remaining: " + t.getTimeRemaining() + " minutes</div>"
+				);
+				if (type.equals("sent") || type.equals("accepted")) {
+					// Hide accept/decline controls
+					$("#diplomacy-accept-trade").hide();
+					$("#diplomacy-decline-trade").hide();
+				} else {
+					// Is a received trade, show accept/decline controls
+					$("#diplomacy-accept-trade").show();
+					$("#diplomacy-decline-trade").show();
+				}
+				
+				return true; // Default return true
 			}
 		});
 
@@ -426,6 +468,40 @@ public class GameInterface {
 				int tradeExpire = Integer
 						.parseInt($("#diplomacy-expire").val());
 				// TODO: error check (not important right now)
+				// Create the Resources objects
+				Resources sending = new Resources();
+				Resources receiving = new Resources();
+				switch(resourceSend) {
+				case "Food":
+					sending.setFood(resourceSendQuantity);
+					break;
+				case "Stone":
+					sending.setStone(resourceSendQuantity);
+					break;
+				case "Wood":
+					sending.setWood(resourceSendQuantity);
+					break;
+				case "Gold":
+					sending.setGold(resourceSendQuantity);
+					break;
+				}
+				switch(resourceReceive) {
+				case "Food":
+					receiving.setFood(resourceReceiveQuantity);
+					break;
+				case "Stone":
+					receiving.setStone(resourceReceiveQuantity);
+					break;
+				case "Wood":
+					receiving.setWood(resourceReceiveQuantity);
+					break;
+				case "Gold":
+					receiving.setGold(resourceReceiveQuantity);
+					break;
+				}
+				// Create and send command
+				// TODO: need to get ID of other player
+				clientModel.sendCommand(new TradeCommand(tradeExpire, me.getId(), 0, sending, receiving));
 				return true;
 			}
 		});
@@ -509,7 +585,7 @@ public class GameInterface {
 				return true; // Default return true
 			}
 		});
-		
+
 	}// End initClickHandlers
 
 	/**

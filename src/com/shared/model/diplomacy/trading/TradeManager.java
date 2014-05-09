@@ -108,4 +108,12 @@ public class TradeManager implements ITradeManager {
 	public void rejectActive(int tradeId) {
 		activeTrades.remove(tradeId);
 	}
+
+	@Override
+	public ITrade getTrade(int id) {
+		if (proposedTrades.get(id) == null) {
+			return activeTrades.get(id);
+		}
+		return proposedTrades.get(id);
+	}
 }

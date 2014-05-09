@@ -488,6 +488,7 @@ public class GameCanvas {
 
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
+				// Functionality for Building Mode
 				mouseX = event.getX();
 				mouseY = event.getY();
 				if (currMode == Mode.BUILDING) {
@@ -506,13 +507,14 @@ public class GameCanvas {
 					GameCanvas.this.move = false;
 				}
 				mouseTile = objectSelector.pickTile(event.getClientX(), event.getClientY());
+				Console.log("(before) TILE: " + mouseTile.toString());
 				// A quick check to make sure that we did not miss the map
 				if(mouseTile.x >= 0.0) {
 					mouseTile.x = (int)(mouseTile.x / (255.0/GRID_WIDTH));
 					mouseTile.y = (int)(mouseTile.y / (255.0/GRID_WIDTH));
 				}
 				RootPanel.get("tile-info").getElement().setInnerHTML(mouseTile.toString());
-				//Console.log("TILE: " + mouseTile.toString());
+				Console.log("(after) TILE: " + mouseTile.toString());
 			}
 			
 		}, MouseMoveEvent.getType());

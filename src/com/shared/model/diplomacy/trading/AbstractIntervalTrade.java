@@ -55,6 +55,14 @@ public abstract class AbstractIntervalTrade implements ITrade {
 	public boolean isActive() {
 		return timeRemaining >= 0;
 	}
+	
+	/**
+	 * 
+	 * @return - The time remaining for this trade, in minutes
+	 */
+	public int getTimeRemaining() {
+		return ((int) timeRemaining) / 60;
+	}
 
 	public abstract int getPlayer1();
 

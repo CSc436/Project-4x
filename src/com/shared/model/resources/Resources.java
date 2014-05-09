@@ -224,6 +224,15 @@ public class Resources implements Serializable {
 		return "Gold: " + Gold + "\nWood: " + Wood + "\nFood: " + Food
 				+ "\nStone: " + Stone + "\nResearch: " + ResearchPts;
 	}
+	
+	/**
+	 * 
+	 * @return - same as toString method but with commas instead of newlines
+	 */
+	public String toStringOneLine() {
+		return "Gold: " + Gold + ", Wood: " + Wood + ", Food: " + Food
+				+ ", Stone: " + Stone + ", Research: " + ResearchPts;
+	}
 
 	/**
 	 * 
@@ -257,9 +266,24 @@ public class Resources implements Serializable {
 		return ResearchPts;
 	}
 
-	public void setGold(int i) {
-		Gold = i;
-
+	public void setGold(int gold) {
+		Gold = gold;
+	}
+	
+	public void setWood(int wood) {
+		Wood = wood;
+	}
+	
+	public void setStone(int stone) {
+		Stone = stone;
+	}
+	
+	public void setFood(int food) {
+		Food = food;
+	}
+	
+	public void setResearch(int research) {
+		ResearchPts = research;
 	}
 
 

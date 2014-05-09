@@ -72,4 +72,12 @@ public interface ITradeManager extends Serializable {
 	 *            - the currently active trade to disable and remove.
 	 */
 	public void rejectActive(int tradeId);
+	
+	/**
+	 * 
+	 * @param id - The unique ID of the trade we want to get
+	 *
+	 */
+	public ITrade getTrade(int id);
+	
 }
