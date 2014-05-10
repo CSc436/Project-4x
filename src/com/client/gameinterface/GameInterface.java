@@ -169,6 +169,7 @@ public class GameInterface {
 						.getGameObjects().getBuildings();
 				for (int u : buildings.keySet()) {
 					Building b = buildings.get(u);
+					Console.log(b.getBuildingType().toString());
 					$("#buildings-table tbody")
 							.append(""
 									+ "<tr>"
@@ -228,6 +229,7 @@ public class GameInterface {
 			public boolean f(Event e) {
 				// Show diplomacy menu
 				changeSidebarContent("diplomacy-menu");
+				Console.log(gameModel.getTradeManager().toString());
 				// Get all sent agreements
 				List<ITrade> sentAgreements = gameModel.getTradeManager()
 						.getSentTrades(me.getId());

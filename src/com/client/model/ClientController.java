@@ -160,7 +160,7 @@ public class ClientController {
 								
 							});
 						} else {
-							Console.log("Turn " + result.getTurnNumber() + ", " + result.getCommandQueue().size() + " commands received, simulate for " + result.getTime() + " ms");
+							//Console.log("Turn " + result.getTurnNumber() + ", " + result.getCommandQueue().size() + " commands received, simulate for " + result.getTime() + " ms");
 							result.executeOn(model);
 							model.advanceTimeStep(result.getTime());
 							
