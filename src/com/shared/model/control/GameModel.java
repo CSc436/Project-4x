@@ -74,7 +74,7 @@ public class GameModel implements Serializable {
 		chatLog = new ArrayList<SendMessageCommand>();
 		
 		/* Do Not Remove this or accidentally merge it away! */
-		tradeManager = new TradeManager();
+		tradeManager = new TradeManager(this);
 	}
 	
 	/**

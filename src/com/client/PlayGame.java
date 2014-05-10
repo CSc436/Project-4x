@@ -29,12 +29,17 @@ public class PlayGame implements EntryPoint {
 		// Callback for login button
 		$("#login-button").click(new Function() {
 			public boolean f(Event e) {
-				// TODO: check if username or password are blank?
 				username = $("#login-username").val();
 				password = $("#login-password").val();
-				
-				// Validate user through the client model
-				theModel.login(username, password);
+
+				// Check if username or password are blank
+				if (username == "" || password == "") {
+					Window.alert("Enter things pleeze");
+				} else {
+
+					// Validate user through the client model
+					theModel.login(username, password);
+				}
 
 				return true; // Default return true for click event
 			}
@@ -45,11 +50,11 @@ public class PlayGame implements EntryPoint {
 	 * This method gets called if the client model deems the login valid
 	 */
 	public static void startGame() {
-		
+
 		Console.log("user is valid, start game");
 		// Remove LOGIN SCREEN, NOT THE LOADING SCREEN KELSEY
 		$("#login-screen").remove();
-		
+
 		// Give the username to the Game Interface
 		GameInterface.setPlayerName(username);
 
@@ -63,14 +68,14 @@ public class PlayGame implements EntryPoint {
 				theModel.run(); // Start the client model
 				// Set actions on loading screen
 				$("#loading-actions").html("SETTING CANVAS");
-				GameCanvas canvas = new GameCanvas(theModel); // Create game canvas
+				GameCanvas canvas = new GameCanvas(theModel); // Create game
+																// canvas
 				GameInterface.init(theModel, canvas); // Init game interface
 				// Set actions on loading screen
 				$("#loading-actions").html("RETRIEVING GAME STATE");
 				/*
-				 * NOTE: loading screen now gets removed once the game model is set
-				 * Which happens in ClientController.java 
-				 * 
+				 * NOTE: loading screen now gets removed once the game model is
+				 * set Which happens in ClientController.java
 				 */
 			}
 		};

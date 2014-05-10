@@ -229,7 +229,6 @@ public class GameInterface {
 			public boolean f(Event e) {
 				// Show diplomacy menu
 				changeSidebarContent("diplomacy-menu");
-				Console.log(gameModel.getTradeManager().toString());
 				// Get all sent agreements
 				List<ITrade> sentAgreements = gameModel.getTradeManager()
 						.getSentTrades(me.getId());
@@ -582,11 +581,14 @@ public class GameInterface {
 					receiving.setGold(resourceReceiveQuantity);
 					break;
 				}
-				// Create and send command
-				// TODO: need to get ID of other player
-				clientModel.sendCommand(new TradeCommand(tradeExpire, me
-						.getId(), 0, sending, receiving));
-				return true;
+				// See if other player exists
+				Player otherPlayerObj = gameModel.getPlayerByUsername(toUser);
+				if (otherPlayerObj != null) {
+					// Create and send command
+					clientModel.sendCommand(new TradeCommand(tradeExpire, me
+							.getId(), otherPlayerObj.getId(), sending, receiving));
+				}
+				return true; // Return true for click callback
 			}
 		});
 
