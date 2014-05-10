@@ -43,6 +43,10 @@ public class RunGame {
 
 class draw extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1185015430197023481L;
 	GameBoard game;
 	int mult; 
 

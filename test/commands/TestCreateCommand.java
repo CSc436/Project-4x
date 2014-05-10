@@ -3,18 +3,17 @@ package commands;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
+
 import org.junit.Test;
+
 import com.server.Controller;
 import com.shared.model.buildings.Building;
 import com.shared.model.buildings.BuildingType;
-import com.shared.model.commands.BuildingProductionCommand;
 import com.shared.model.commands.Command;
 import com.shared.model.commands.ConstructBuildingCommand;
 import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
 import com.shared.model.resources.Resources;
-import com.shared.model.units.Unit;
-import com.shared.model.units.UnitType;
 import com.shared.utils.Coordinate;
 
 public class TestCreateCommand {
@@ -22,7 +21,7 @@ public class TestCreateCommand {
 	@Test
 	public void testCreate() {
 
-		GameModel model = new GameModel(500);
+		GameModel model = new GameModel();
 		model.addPlayer("Greg");
 		model.addPlayer("Pedro");
 		Controller controller = new Controller(model);
