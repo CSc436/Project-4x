@@ -1,9 +1,13 @@
 package entities;
 
 import com.shared.model.entities.Civilization;
-import com.shared.model.research.TechnologyEnum;
 
 public class TestCivilization extends Civilization {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6468932329072965439L;
 
 	public TestCivilization() {
 		super();
