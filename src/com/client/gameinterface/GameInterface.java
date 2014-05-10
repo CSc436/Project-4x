@@ -549,6 +549,11 @@ public class GameInterface {
 				// Hide/show chat
 				$("#chat-box").slideToggle(500);
 				chatBoxHidden = !chatBoxHidden; // toggle chatBoxHidden
+				if (!chatBoxHidden) // if chat box no longer hidden, makes sure chat-trigger text is just "Chat"
+				{
+					Console.log("Chat Box is not hidden, setting text");
+					$("#chat-trigger").text("Chat");
+				}
 				return true; // Default return true
 			}
 		});
@@ -595,11 +600,9 @@ public class GameInterface {
 		$("#messages").scroll(new Function() {
 			public boolean f(Event e) {
 				if ($("#messages").scrollTop() == 0) {
-					Console.log("At the top of messages!");
 					$("#chat-trigger").text("Chat");
 					return true;
 				}
-				Console.log("Scrolling in messages...");
 				return false;
 			}
 		});
@@ -674,7 +677,6 @@ public class GameInterface {
 		// Log to messages.
 		
 		int numberOfColors = 10; // number of colors supported
-		Console.log("ID: " + id);
 		switch(id % numberOfColors)
 		{
 		case 0:
