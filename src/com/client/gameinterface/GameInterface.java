@@ -1,6 +1,7 @@
 package com.client.gameinterface;
 
 import static com.google.gwt.query.client.GQuery.$;
+import com.google.gwt.dom.client.Document;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import com.google.gwt.query.client.GQuery;
 import com.google.gwt.user.client.Event;
 import com.shared.model.buildings.Building;
 import com.shared.model.buildings.ResourceBuilding;
+import com.shared.model.commands.AddPlayerCommand;
 import com.shared.model.commands.BuildingProductionCommand;
 import com.shared.model.commands.TradeCommand;
 import com.shared.model.commands.SendMessageCommand;
@@ -33,9 +35,11 @@ public class GameInterface {
 	private static String showing = "";
 	private static ClientController clientModel;
 	private static GameModel gameModel;
-	private static Player me;
 
+	private static Player me;
 	private static String playerName;
+	private static int playerID;
+
 	private static GameCanvas canvas; // canvas of game, so camera can be turned
 										// off
 	private static int msgCount = 0; // keeps count of number of messages.
@@ -46,12 +50,7 @@ public class GameInterface {
 	 * Responsible for registering callbacks that are purely bound to the
 	 * interface
 	 */
-
 	public static void init(ClientController cm, GameCanvas c) {
-		int playerID = cm.getPlayerID();
-		gameModel = cm.getGameModel();
-		// TODO: need to set me
-		me = gameModel.getPlayer(playerID);
 		// Change sidebar left value to calculated value
 		int width = $("#sidebar").outerWidth(true);
 		$("#sidebar").css("left", "-" + width);
@@ -78,6 +77,19 @@ public class GameInterface {
 		} else {
 			playerName = n;
 		}
+		// Put name in toolbar
+		$("#username-space span").html("Logged in as: " + playerName);
+	}
+
+	/**
+	 * Sets the player ID for this class, which was generated in the Simple
+	 * Simulator and is also for the Game Model
+	 * 
+	 * @param id
+	 *            - the ID for this player
+	 */
+	public static void setPlayerID(int id) {
+		playerID = id;
 	}
 
 	/**
@@ -85,20 +97,17 @@ public class GameInterface {
 	 * 
 	 * This is called from ClientModel.java when the GameModel is first loaded
 	 * 
-	 * Using this eliminates the need for a delay to wait; the loading screen doesn't disappear
-	 * until the game model is loaded anyways
+	 * Using this eliminates the need for a delay to wait; the loading screen
+	 * doesn't disappear until the game model is loaded anyways
 	 * 
-	 * @param gm - The GameModel object retrieved from the server
+	 * @param gm
+	 *            - The GameModel object retrieved from the server
 	 */
 	public static void setGameModel(GameModel gm) {
-		// TODO: set the player object here, since everything should be set up
 		Console.log("setting game model");
 		gameModel = gm;
-		me = gameModel.getPlayer(clientModel.getPlayerID());
-		
-		// Schedule update from chat log at fixed rate.
-		// Timer
-		// TimerTask.
+
+		// Schedule update from chat log at fixed rate
 		Console.log("starting timer for chat update");
 		Timer timer = new Timer() {
 
@@ -107,7 +116,44 @@ public class GameInterface {
 			}
 
 		};
-		timer.scheduleRepeating(250); // Check for new messages every second.
+		timer.scheduleRepeating(250); // Check for new messages every 1/4th
+										// second.
+
+		// Add the Player object to the game model
+		clientModel.sendCommand(new AddPlayerCommand(playerName, playerID));
+
+		Console.log("getting current players...");
+		HashMap<Integer, Player> tempPlayers = gameModel.getPlayers();
+		for (Integer i : tempPlayers.keySet()) {
+			Console.log("Player: " + tempPlayers.get(i).getAlias());
+		}
+
+		Timer playerTimer = new Timer() {
+
+			public void run() {
+				// TODO: this could just be getPlayer(id)
+				me = gameModel.getPlayerByUsername(playerName);
+				if (me == null) {
+					// Failed to retrieve Player object
+					Console.log("me was null");
+					Console.log("getting current players...");
+					HashMap<Integer, Player> tempPlayers = gameModel
+							.getPlayers();
+					for (Integer i : tempPlayers.keySet()) {
+						Console.log("Player: " + tempPlayers.get(i).getAlias());
+					}
+					this.schedule(1000);
+				} else {
+					Console.log("got player instance for " + playerName);
+					// Share player ID with the game canvas
+					canvas.setPlayerID(playerID);
+				}
+			}
+
+		};
+		playerTimer.schedule(1000); // Keep trying to get the player every
+									// second
+
 	}
 
 	/**
@@ -128,6 +174,7 @@ public class GameInterface {
 						.getGameObjects().getBuildings();
 				for (int u : buildings.keySet()) {
 					Building b = buildings.get(u);
+					Console.log(b.getBuildingType().toString());
 					$("#buildings-table tbody")
 							.append(""
 									+ "<tr>"
@@ -207,7 +254,8 @@ public class GameInterface {
 									+ "<tr>"
 									+ "<td>"
 									+ "<div>To: "
-									+ sentAgreements.get(i).getReceivingPlayer()
+									+ sentAgreements.get(i)
+											.getReceivingPlayer()
 									+ "</div>"
 									+ "</td>"
 									+ "<td>"
@@ -223,7 +271,8 @@ public class GameInterface {
 									+ "<tr>"
 									+ "<td>"
 									+ "<div>From: "
-									+ receivedAgreements.get(i).getCreatingPlayer()
+									+ receivedAgreements.get(i)
+											.getCreatingPlayer()
 									+ "</div>"
 									+ "</td>"
 									+ "<td>"
@@ -239,7 +288,8 @@ public class GameInterface {
 									+ "<tr>"
 									+ "<td>"
 									+ "<div>From: "
-									+ acceptedAgreements.get(i).getCreatingPlayer()
+									+ acceptedAgreements.get(i)
+											.getCreatingPlayer()
 									+ "</div>"
 									+ "</td>"
 									+ "<td>"
@@ -315,8 +365,10 @@ public class GameInterface {
 
 		// Unit Detail Button
 		// Callback to show units-menu-detail
-		$(".units-detail-button").click(new Function() {
+		// $(".units-detail-button").click(new Function() {
+		$(Document.get()).on("click", ".units-detail-button", new Function() {
 			public boolean f(Event e) {
+				Console.log("units-detail-button");
 				// Show unit detail menu
 				changeSidebarContent("units-menu-detail");
 				// Get unit ID from btn
@@ -337,103 +389,115 @@ public class GameInterface {
 
 		// Buildings Detail Button
 		// Callback to show buildings-menu-detail
-		$(".buildings-detail-button").click(new Function() {
-			public boolean f(Event e) {
-				// Show buildings detail menu
-				changeSidebarContent("buildings-menu-detail");
-				// Get building ID from btn
-				int id = Integer.parseInt($(this).attr("data-id"));
-				Building b = me.getGameObjects().getBuildings().get(id);
-				// Populate buildings-menu-detail with info
-				$("#buildings-menu-detail #building-name").html(
-						"" + "<h2>" + b.getBuildingType().toString() + "</h2>");
-				$("#buildings-menu-detail #building-data").html(
-						"" + "<div>Health: " + b.getHealth() + "</div>"
-								+ "<div>Position: "
-								+ (int) b.getPosition().getX() + ", "
-								+ (int) b.getPosition().getY() + "</div>");
-				if (b instanceof ResourceBuilding) {
-					$("#buildings-menu-detail #building-data").append(
-							""
-									+ "<div>Resource Generation:</div>"
-									+ "<div>Food: "
-									+ ((ResourceBuilding) b).generateResource()
-											.getFood()
-									+ "</div>"
-									+ "<div>Gold: "
-									+ ((ResourceBuilding) b).generateResource()
-											.getGold()
-									+ "</div>"
-									+ "<div>Stone: "
-									+ ((ResourceBuilding) b).generateResource()
-											.getStone()
-									+ "</div>"
-									+ "<div>Wood: "
-									+ ((ResourceBuilding) b).generateResource()
-											.getWood()
-									+ "</div>"
-									+ "<div>Research: "
-									+ ((ResourceBuilding) b).generateResource()
-											.getResearchPts() + "</div>");
-				}
-				// Set building-id value
-				$("#buildings-menu-detail #building-id").val("" + id);
-				return true; // Default return true
-			}
-		});
+		$(Document.get()).on("click", ".buildings-detail-button",
+				new Function() {
+					public boolean f(Event e) {
+						// Show buildings detail menu
+						changeSidebarContent("buildings-menu-detail");
+						// Get building ID from btn
+						int id = Integer.parseInt($(this).attr("data-id"));
+						Building b = me.getGameObjects().getBuildings().get(id);
+						// Populate buildings-menu-detail with info
+						$("#buildings-menu-detail #building-name").html(
+								"" + "<h2>" + b.getBuildingType().toString()
+										+ "</h2>");
+						$("#buildings-menu-detail #building-data").html(
+								"" + "<div>Health: " + b.getHealth() + "</div>"
+										+ "<div>Position: "
+										+ (int) b.getPosition().getX() + ", "
+										+ (int) b.getPosition().getY()
+										+ "</div>");
+						if (b instanceof ResourceBuilding) {
+							$("#buildings-menu-detail #building-data").append(
+									""
+											+ "<div>Resource Generation:</div>"
+											+ "<div>Food: "
+											+ ((ResourceBuilding) b)
+													.generateResource()
+													.getFood()
+											+ "</div>"
+											+ "<div>Gold: "
+											+ ((ResourceBuilding) b)
+													.generateResource()
+													.getGold()
+											+ "</div>"
+											+ "<div>Stone: "
+											+ ((ResourceBuilding) b)
+													.generateResource()
+													.getStone()
+											+ "</div>"
+											+ "<div>Wood: "
+											+ ((ResourceBuilding) b)
+													.generateResource()
+													.getWood()
+											+ "</div>"
+											+ "<div>Research: "
+											+ ((ResourceBuilding) b)
+													.generateResource()
+													.getResearchPts()
+											+ "</div>");
+						}
+						// Set building-id value
+						$("#buildings-menu-detail #building-id").val("" + id);
+						return true; // Default return true
+					}
+				});
 
 		// Diplomacy Detail Button
 		// Callback to show diplomacy-menu-detail
-		$(".diplomacy-detail-button").click(new Function() {
-			public boolean f(Event e) {
-				// Show diplomacy detail menu
-				changeSidebarContent("diplomacy-menu-detail");
-				// Get agreement ID and type from btn
-				int id = Integer.parseInt($(this).attr("data-id"));
-				String type = $(this).attr("data-type");
-				// Get Trade info (we're assuming right now it's a
-				// IntervalResourceTrade
-				IntervalResourceTrade t = (IntervalResourceTrade) gameModel
-						.getTradeManager().getTrade(id);
-				// Clear out old info
-				$("#diplomacy-detail-info").empty();
-				// Figure out what is going where
-				int tradingWith;
-				Resources theyGet, youGet;
-				if (t.getCreatingPlayer() == me.getId()) {
-					// 'me' created the trade, either sent or accepted
-					tradingWith = t.getReceivingPlayer();
-					theyGet = t.getReceivingPlayerResources();
-					youGet = t.getCreatingPlayerResources();
-				} else {
-					// someone else created the trade, either received or
-					// accepted
-					tradingWith = t.getCreatingPlayer();
-					theyGet = t.getCreatingPlayerResources();
-					youGet = t.getReceivingPlayerResources();
-				}
-				// Re-populate info
-				$("#diplomacy-detail-append").append(
-						"" + "<div>Trade With " + tradingWith + "</div>"
-								+ "<div>They Receive: "
-								+ theyGet.toStringOneLine() + "</div>"
-								+ "<div>You Receive: "
-								+ youGet.toStringOneLine() + "</div>"
-								+ "<div>Time Remaining: "
-								+ t.getTimeRemaining() + " minutes</div>");
-				if (type.equals("sent") || type.equals("accepted")) {
-					// Hide accept/decline controls
-					$("#diplomacy-accept-trade").hide();
-					$("#diplomacy-decline-trade").hide();
-				} else {
-					// Is a received trade, show accept/decline controls
-					$("#diplomacy-accept-trade").show();
-					$("#diplomacy-decline-trade").show();
-				}
+		$(Document.get()).on("click", ".diplomacy-detail-button",
+				new Function() {
+					public boolean f(Event e) {
+						// Show diplomacy detail menu
+						changeSidebarContent("diplomacy-menu-detail");
+						// Get agreement ID and type from btn
+						int id = Integer.parseInt($(this).attr("data-id"));
+						String type = $(this).attr("data-type");
+						// Get Trade info (we're assuming right now it's a
+						// IntervalResourceTrade
+						IntervalResourceTrade t = (IntervalResourceTrade) gameModel
+								.getTradeManager().getTrade(id);
+						// Clear out old info
+						$("#diplomacy-detail-info").empty();
+						// Figure out what is going where
+						int tradingWith;
+						Resources theyGet, youGet;
+						if (t.getCreatingPlayer() == me.getId()) {
+							// 'me' created the trade, either sent or accepted
+							tradingWith = t.getReceivingPlayer();
+							theyGet = t.getReceivingPlayerResources();
+							youGet = t.getCreatingPlayerResources();
+						} else {
+							// someone else created the trade, either received
+							// or
+							// accepted
+							tradingWith = t.getCreatingPlayer();
+							theyGet = t.getCreatingPlayerResources();
+							youGet = t.getReceivingPlayerResources();
+						}
+						// Re-populate info
+						$("#diplomacy-detail-append").append(
+								"" + "<div>Trade With " + tradingWith
+										+ "</div>" + "<div>They Receive: "
+										+ theyGet.toStringOneLine() + "</div>"
+										+ "<div>You Receive: "
+										+ youGet.toStringOneLine() + "</div>"
+										+ "<div>Time Remaining: "
+										+ t.getTimeRemaining()
+										+ " minutes</div>");
+						if (type.equals("sent") || type.equals("accepted")) {
+							// Hide accept/decline controls
+							$("#diplomacy-accept-trade").hide();
+							$("#diplomacy-decline-trade").hide();
+						} else {
+							// Is a received trade, show accept/decline controls
+							$("#diplomacy-accept-trade").show();
+							$("#diplomacy-decline-trade").show();
+						}
 
-				return true; // Default return true
-			}
-		});
+						return true; // Default return true
+					}
+				});
 
 		// Detail Return Button
 		// Callback to 'return' from a detail or create panel
@@ -534,11 +598,15 @@ public class GameInterface {
 					receiving.setGold(resourceReceiveQuantity);
 					break;
 				}
-				// Create and send command
-				// TODO: need to get ID of other player
-				clientModel.sendCommand(new TradeCommand(tradeExpire, me
-						.getId(), 0, sending, receiving));
-				return true;
+				// See if other player exists
+				Player otherPlayerObj = gameModel.getPlayerByUsername(toUser);
+				if (otherPlayerObj != null) {
+					// Create and send command
+					clientModel.sendCommand(new TradeCommand(tradeExpire, me
+							.getId(), otherPlayerObj.getId(), sending,
+							receiving));
+				}
+				return true; // Return true for click callback
 			}
 		});
 
@@ -549,7 +617,8 @@ public class GameInterface {
 				// Hide/show chat
 				$("#chat-box").slideToggle(500);
 				chatBoxHidden = !chatBoxHidden; // toggle chatBoxHidden
-				if (!chatBoxHidden) // if chat box no longer hidden, makes sure chat-trigger text is just "Chat"
+				if (!chatBoxHidden) // if chat box no longer hidden, makes sure
+									// chat-trigger text is just "Chat"
 				{
 					Console.log("Chat Box is not hidden, setting text");
 					$("#chat-trigger").text("Chat");
@@ -566,7 +635,7 @@ public class GameInterface {
 				return sendMessage();
 			}
 		});
-		
+
 		// Support pressing enter too
 		$("#message").keypress(new Function() {
 			public boolean f(Event e) {
@@ -670,54 +739,62 @@ public class GameInterface {
 	 *            - message to append, should ONLY contain message with users
 	 *            name with Users name. i.e. "Bob: gg"
 	 * @param id
-	 * 			  Used to pick a color for the player
+	 *            Used to pick a color for the player
 	 * 
 	 */
 	public static void updateMessages(String mssg, int id) {
 		// Log to messages.
-		
+
 		int numberOfColors = 10; // number of colors supported
-		switch(id % numberOfColors)
-		{
+		switch (id % numberOfColors) {
 		case 0:
 			// Use default color
 			$("#messages").prepend("<br />" + mssg);
 			break;
 		case 1:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"#F0F8FF\">" + mssg + "</font>");
+			$("#messages").prepend(
+					"<font color=\"#F0F8FF\">" + mssg + "</font>");
 			break;
 		case 2:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"#7FFF00\">" + mssg + "</font>");
+			$("#messages").prepend(
+					"<font color=\"#7FFF00\">" + mssg + "</font>");
 			break;
 		case 3:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"#00FFFF\">" + mssg + "</font>");
+			$("#messages").prepend(
+					"<font color=\"#00FFFF\">" + mssg + "</font>");
 			break;
 		case 4:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"#FF1493\">" + mssg + "</font>");
+			$("#messages").prepend(
+					"<font color=\"#FF1493\">" + mssg + "</font>");
 			break;
 		case 5:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"#FFD700\">" + mssg + "</font>");
+			$("#messages").prepend(
+					"<font color=\"#FFD700\">" + mssg + "</font>");
 			break;
 		case 6:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"#FF0000\">" + mssg + "</font>");
+			$("#messages").prepend(
+					"<font color=\"#FF0000\">" + mssg + "</font>");
 			break;
 		case 7:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"#F5DEB3\">" + mssg + "</font>");
+			$("#messages").prepend(
+					"<font color=\"#F5DEB3\">" + mssg + "</font>");
 			break;
 		case 8:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"#00FF7F\">" + mssg + "</font>");
+			$("#messages").prepend(
+					"<font color=\"#00FF7F\">" + mssg + "</font>");
 			break;
 		case 9:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"#87CEEB\">" + mssg + "</font>");
+			$("#messages").prepend(
+					"<font color=\"#87CEEB\">" + mssg + "</font>");
 			break;
 		default:
 			// Use default color
@@ -743,10 +820,6 @@ public class GameInterface {
 	 * prepend any new messages to messages.
 	 */
 	public static void updateChat() {
-		// TODO add call, if length is even, and greater than size, reset chat
-		// log in gameModel.
-		// But for now who cares, ALL TEH MEMORY IS MINE.
-		// Console.log(gameModel.toString());
 		if (gameModel == null)
 			return;
 
@@ -756,10 +829,13 @@ public class GameInterface {
 			// updateMessages call.
 			for (int i = msgCount; i < chatLogLength; i++) {
 				updateMessages(gameModel.getChatLog().get(i).getMessage(),
-						       gameModel.getChatLog().get(i).getPlayerID());
+						gameModel.getChatLog().get(i).getPlayerID());
 			}
-		} else {
-			//Console.log("No new Messages to prepend");
+		} else if (msgCount > chatLogLength)
+		{
+			// msgCount is greater, chatLog has been destroyed, reinitialize chat.
+			msgCount = 0; // reset message count
+			initializeChat();  // initialize chat again. 
 		}
 	}
 
@@ -825,5 +901,7 @@ public class GameInterface {
 			}
 			showing = toShow; // Change showing variable
 		}
+
 	}
+
 }

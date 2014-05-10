@@ -1,9 +1,12 @@
 package com.client.model;
 
 import static com.google.gwt.query.client.GQuery.$;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.client.PlayGame;
+import com.client.GameCanvas;
 import com.client.SimpleSimulator;
 import com.client.SimpleSimulatorAsync;
 import com.client.gameinterface.Console;
@@ -16,6 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.shared.model.commands.Command;
 import com.shared.model.control.CommandPacket;
 import com.shared.model.control.GameModel;
+import com.shared.model.gameboard.Tile;
 
 public class ClientController {
 	
@@ -68,6 +72,7 @@ public class ClientController {
 			public void onSuccess(Integer playerNum) {
 				if(debug) Console.log("Joined game");
 				playerNumber = playerNum;
+				GameInterface.setPlayerID(playerNumber); // Give the ID to the game interface
 				retrieveGame();
 			}
 
@@ -87,9 +92,26 @@ public class ClientController {
 			public void onSuccess(GameModel result) {
 				if(debug) Console.log("Game retrieved!");
 				model = result;
-				GameInterface.setGameModel(result);
-				$("#loading-screen").remove();
-				beginPlaying();
+				
+				simpleSimulator.getTiles(new AsyncCallback<Tile[][]>() {
+					@Override
+					public void onFailure(Throwable caught) {
+						Console.log("Could not grab tiles");
+					}
+					
+					@Override
+					public void onSuccess(Tile[][] map) {
+						Console.log("Tiles retrived!");
+						model.getBoard().setTiles(map);
+						
+						
+						// Remove loading screen
+						$("#loading-screen").remove();
+						
+						beginPlaying();
+					}
+				});
+
 			}
 			
 		});
@@ -99,6 +121,10 @@ public class ClientController {
 	
 	public void beginPlaying(){
 		readyForNext = true;
+		
+		GameCanvas canvas = new GameCanvas(this);
+		GameInterface.init(this, canvas);
+		GameInterface.setGameModel(model);
 		
 		pollTimer = new Timer() {
 
@@ -157,6 +183,7 @@ public class ClientController {
 								
 							});
 						} else {
+							//Console.log("Turn " + result.getTurnNumber() + ", " + result.getCommandQueue().size() + " commands received, simulate for " + result.getTime() + " ms");
 							if(debug)Console.log("Turn " + result.getTurnNumber() + ", " + result.getCommandQueue().size() + " commands received, simulate for " + result.getTime() + " ms");
 							result.executeOn(model);
 							model.advanceTimeStep(result.getTime());
@@ -212,6 +239,31 @@ public class ClientController {
 	
 	public int timeSinceLastUpdate() {
 		return (int) (System.currentTimeMillis() - lastUpdateTime);
+	}
+	
+	public void login(String user, String pass) {
+		
+		simpleSimulator.login(user, new AsyncCallback<Boolean> () {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Console.log("invalid");
+			}
+
+			@Override
+			public void onSuccess(Boolean result) {
+				if (result) {
+					Console.log("valid login");
+					// Callback to PlayGame
+					PlayGame.startGame();
+				} else {
+					Console.log("invalid login");
+					// TODO: show 'invalid' message in interface and don't start game
+					// Play game anyways for now
+					PlayGame.startGame();
+				}
+			}
+		});
 	}
 	
 }

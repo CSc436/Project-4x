@@ -17,14 +17,31 @@ import com.google.gwt.query.client.Function;
 
 public class PlayGame implements EntryPoint {
 
+	private static ClientController theModel = new ClientController();
+	private static String username;
+	private static String password;
+
 	public void onModuleLoad() {
 
 		// Set actions on loading screen
 		$("#loading-actions").html("INITIALIZING GAME");
-		
+
+		// Callback for login button
 		$("#login-button").click(new Function() {
 			public boolean f(Event e) {
-				return play();
+				username = $("#login-username").val();
+				password = $("#login-password").val();
+
+				// Check if username or password are blank
+				if (username == "" || password == "") {
+					Window.alert("Enter things pleeze");
+				} else {
+
+					// Validate user through the client model
+					theModel.login(username, password);
+				}
+
+				return true; // Default return true for click event
 			}
 		});
 		
@@ -34,9 +51,9 @@ public class PlayGame implements EntryPoint {
 			{
 				if (e.getKeyCode() == 13) 
 				{
-					return play();
+					$("#login-button").click();
 				}
-				return false;
+				return true;
 			}
 		});
 		// Allow use to press enter to loggin, that way we can test slightly faster
@@ -45,27 +62,26 @@ public class PlayGame implements EntryPoint {
 			{
 				if (e.getKeyCode() == 13) 
 				{
-					return play();
+					$("#login-button").click();
 				}
-				return false;
+				return true;
 			}
 		});
 		
 	}
+	
+	/**
+	 * This method gets called if the client model deems the login valid
+	 */
+	public static void startGame() {
 
-	private boolean play()
-	{
-		Console.log($("#login-username").val());
-		Console.log($("#login-password").val());
-
-		// Added quick hack to get loggin name to be chat name - Nick
-		// Possibly move to run method? 
-		GameInterface.setPlayerName($("#login-username").val());
-		
-		Window.alert("Login?!");
-		// Remove login screen
+		Console.log("user is valid, start game");
+		// Remove LOGIN SCREEN, NOT THE LOADING SCREEN KELSEY
 		$("#login-screen").remove();
-		
+
+		// Give the username to the Game Interface
+		GameInterface.setPlayerName(username);
+
 		// Init game in 1 second
 		// (This is purely to see the loading screen)
 		Timer t = new Timer() {
@@ -73,20 +89,22 @@ public class PlayGame implements EntryPoint {
 			public void run() {
 				// Set actions on loading screen
 				$("#loading-actions").html("INITIALIZING MODEL");
-				ClientController theModel = new ClientController();
-				theModel.run();
+				theModel.run(); // Start the client model
 				// Set actions on loading screen
 				$("#loading-actions").html("SETTING CANVAS");
-				GameCanvas canvas = new GameCanvas(theModel);
-				GameInterface.init(theModel, canvas);
+//				GameCanvas canvas = new GameCanvas(theModel); // Create game
+																// canvas
+//				GameInterface.init(theModel, canvas); // Init game interface
 				// Set actions on loading screen
 				$("#loading-actions").html("RETRIEVING GAME STATE");
-				/** NOTE: loading screen now gets removed once the game model is set **/
-				/** Which happens in ClientModel.java **/
+				/*
+				 * NOTE: loading screen now gets removed once the game model is
+				 * set Which happens in ClientController.java
+				 */
 			}
 		};
-		// Schedule the dummy timer
+		// Schedule the silly timer
 		t.schedule(1000);
-		return true;
 	}
+
 }

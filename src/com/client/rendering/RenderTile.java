@@ -3,9 +3,9 @@ package com.client.rendering;
 import com.client.GameCanvas;
 import com.client.gameinterface.Console;
 import com.googlecode.gwtgl.array.Float32Array;
-import com.googlecode.gwtgl.binding.WebGLRenderingContext;
 import com.shared.model.Terrain;
 import com.shared.model.gameboard.Resource;
+import com.shared.model.gameboard.GameBoard;
 import com.shared.utils.Coordinate;
 import com.shared.utils.DiamondSquare;
 
@@ -206,5 +206,64 @@ public class RenderTile {
 		};
 
 		selectColorBuffer.set(selectColor, index*selectColor.length);
+	}
+	
+	public static RenderTile[][] makeMap(GameBoard gameBoard, int dimension) {
+		// generate the height map
+		//float[][] heightmap = DiamondSquare.DSGen(dimension, 
+			//	seed, 0.2f);
+		
+		Console.log("2nd print");
+		Console.log(gameBoard.toString());
+		
+		// initialize the map
+		RenderTile[][] map = new RenderTile[dimension][dimension];
+		for (int x = 0; x < dimension; x++)
+			for (int y = 0; y < dimension; y++){
+				map[x][y] = new RenderTile(x, y, 1.0f, 0.0f, Resource.NONE);
+			}
+		
+		int n, s, e, w, val;
+		
+		// Auto tiling algorithm
+		for (Terrain t: Terrain.values()){
+			//if (t == Terrain.FOREST || t == Terrain.WATER)
+				//continue;
+			
+			val = t.getValue();
+			
+			for (int x = 0; x < dimension; x++)
+				for (int y = 0; y < dimension; y++)
+					if (gameBoard.getTileAt(x, y).getTerrainType().getValue() == t.getValue()){
+						RenderTile curr = map[x][y];
+						curr.setResource(gameBoard.getTileAt(x, y).getResource());
+						curr.setFlags(0, 0, 0, 0, val);
+						
+						e = (x + 1) % dimension;
+						w = (x - 1 + dimension) % dimension;
+						n = (y - 1 + dimension) % dimension;
+						s = (y + 1) % dimension;
+	
+						// cardinal directions
+						map[w][y].getEastFrom(curr, val);
+						map[e][y].getWestFrom(curr, val);
+						map[x][n].getSouthFrom(curr, val);
+						map[x][s].getNorthFrom(curr, val);
+						
+						// corners
+						map[w][n].getEastFrom(map[x][n], val);
+						map[w][n].getSouthFrom(map[w][y], val);
+						
+						map[w][s].getEastFrom(map[x][s], val);
+						map[w][s].getNorthFrom(map[w][y], val);
+						
+						map[e][n].getWestFrom(map[x][n], val);
+						map[e][n].getSouthFrom(map[e][y], val);
+						
+						map[e][s].getWestFrom(map[x][s], val);
+						map[e][s].getNorthFrom(map[e][y], val);
+					}
+		}
+		return map;		
 	}
 }

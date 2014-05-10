@@ -3,20 +3,16 @@ package com;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import com.server.Controller;
-import com.shared.model.control.GameState;
-import com.shared.model.control.PlayerCommands;
+import com.shared.model.commands.Command;
 
 //might break this into two threads. one for input, one for update
 public class PlayerTextInput implements Runnable {
-	private PlayerCommands instructions;
 	private ArrayList<Object> payload;
-	private GameState gs;
+	//private GameState gs;
 
-	public PlayerTextInput(PlayerCommands instructions) {
-		this.instructions = instructions;
+	public PlayerTextInput(Command instructions) {
 		payload = new ArrayList<Object>();
-		gs = new GameState();
+		//gs = new GameState();
 	}
 
 	@Override
@@ -69,8 +65,9 @@ public class PlayerTextInput implements Runnable {
 
 	private void gameObjectSelection(int player, Scanner keyboard) {
 		System.out.println("Which gameObject would you like to select?");
-		System.out.println(gs.getPlayerSelectables(player));
+		//System.out.println(gs.getPlayerSelectables(player));
 		long choice = keyboard.nextLong();// will need to input id
+		System.out.println("You selected option " + choice);
 	}
 
 }

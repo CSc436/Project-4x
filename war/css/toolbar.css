@@ -68,3 +68,13 @@
 	padding: 5px;
 	text-align: left !important;
 }
+
+#username-space {
+	padding-left: 15px;
+	vertical-align: middle;
+}
+
+#username-space > span {
+	height: 40px;
+	line-height: 40px;
+}
