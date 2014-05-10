@@ -1,5 +1,7 @@
 package com.client.rendering;
 
+import java.util.TreeSet;
+
 import com.client.GameCanvas;
 import com.client.gameinterface.Console;
 import com.client.resources.ClientResources;
@@ -53,6 +55,14 @@ public class Selector {
 		entID = getID(x,y);
 		resetFramebuffer();
 		return entID;
+	}
+	
+	public Integer[] pickEntities(int x1, int y1, int x2, int y2){
+		Integer[] ids;
+		renderEntitiesAsColors();
+		ids = getIDS(x1,y1, x2, y2);
+		resetFramebuffer();
+		return ids;
 	}
 	
 	public Coordinate pickTile(int x, int y){
@@ -144,6 +154,21 @@ public class Selector {
 		// Convert the pixel rgb components to an entity id
 		id = pixelData.get(2) + (pixelData.get(1) * 256) + (pixelData.get(0) * 65536);
 		return id;
+	}
+	
+	private Integer[] getIDS(int x1, int y1, int x2, int y2){
+		TreeSet<Integer> set = new TreeSet<Integer>();
+		Uint8Array pixelData = Uint8Array.create((x2 - x1) * (y2 - y1) * 4);
+		glContext.readPixels(x1, canvas.HEIGHT - y2, (x2 - x1), (y2 - y1), WebGLRenderingContext.RGBA, WebGLRenderingContext.UNSIGNED_BYTE, pixelData);
+		
+		int id;
+		for (int x = 0; x < pixelData.getLength(); x += 4){
+			id = pixelData.get(x + 2) + (pixelData.get(x + 1) * 256) + (pixelData.get(x) * 65536);
+			set.add(id);
+			Console.log("" + id);
+		}
+		
+		return set.toArray(new Integer[set.size()]);
 	}
 	
 	/**
