@@ -8,7 +8,6 @@ import com.shared.model.control.Player;
 import com.shared.model.gameboard.GameBoard;
 import com.shared.utils.Coordinate;
 
-
 public class ConstructBuildingCommand implements Command {
 
 	/**
@@ -19,15 +18,16 @@ public class ConstructBuildingCommand implements Command {
 	private BuildingType buildingType;
 	private Coordinate c;
 
-	public ConstructBuildingCommand( BuildingType bt, int playerId, Coordinate c ) {
+	public ConstructBuildingCommand(BuildingType bt, int playerId, Coordinate c) {
 
 		this.playerId = playerId;
 		this.buildingType = bt;
 		this.c = c;
 
 	}
-	
-	public ConstructBuildingCommand() {}
+
+	public ConstructBuildingCommand() {
+	}
 
 	@Override
 	public boolean validateCommand(GameModel model) {
@@ -37,17 +37,18 @@ public class ConstructBuildingCommand implements Command {
 
 	@Override
 	public boolean performCommand(GameModel model) {
-		
-		Player p = model.getPlayer(playerId);
+
+		Player p = model.getPlayers().get(playerId);
 		GameBoard gb = model.getBoard();
-		
-		Building b = Factory.buildBuilding(p, playerId, buildingType, c.fx(), c.fy(),
-				gb);
-		
+
+		Building b = Factory.buildBuilding(p, playerId, buildingType, c.fx(),
+				c.fy(), gb);
+
 		if (b == null) {
 			return false;
 		} else {
 			model.getProducedBuildings().add(b);
+			p.addBuilding(b);
 			return true;
 		}
 
