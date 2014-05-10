@@ -70,7 +70,7 @@ public class ClientController {
 			public void onSuccess(Integer playerNum) {
 				if(debug) Console.log("Joined game");
 				playerNumber = playerNum;
-				GameInterface.setPlayerID(playerNumber);
+				GameInterface.setPlayerID(playerNumber); // Give the ID to the game interface
 				retrieveGame();
 			}
 
@@ -91,7 +91,7 @@ public class ClientController {
 				if(debug) Console.log("Game retrieved!");
 				model = result;
 				beginPlaying();
-				GameInterface.setGameModel(result);
+				GameInterface.setGameModel(result); // Give the GameModel to the interface
 				$("#loading-screen").remove();
 			}
 			
@@ -160,7 +160,7 @@ public class ClientController {
 								
 							});
 						} else {
-							//Console.log("Turn " + result.getTurnNumber() + ", " + result.getCommandQueue().size() + " commands received, simulate for " + result.getTime() + " ms");
+							Console.log("Turn " + result.getTurnNumber() + ", " + result.getCommandQueue().size() + " commands received, simulate for " + result.getTime() + " ms");
 							result.executeOn(model);
 							model.advanceTimeStep(result.getTime());
 							
@@ -228,14 +228,13 @@ public class ClientController {
 
 			@Override
 			public void onSuccess(Boolean result) {
-				Console.log("" + result);
 				if (result) {
 					Console.log("valid login");
 					// Callback to PlayGame
 					PlayGame.startGame();
 				} else {
 					Console.log("invalid login");
-					// TODO: show 'invalid' message in interface, and don't start game
+					// TODO: show 'invalid' message in interface and don't start game
 					// Play game anyways for now
 					PlayGame.startGame();
 				}

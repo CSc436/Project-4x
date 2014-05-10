@@ -1,9 +1,8 @@
 package com.client.gameinterface;
 
 import static com.google.gwt.query.client.GQuery.$;
+import com.google.gwt.dom.client.Document;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,10 +35,11 @@ public class GameInterface {
 	private static String showing = "";
 	private static ClientController clientModel;
 	private static GameModel gameModel;
+	
 	private static Player me;
-
 	private static String playerName;
 	private static int playerID;
+	
 	private static GameCanvas canvas; // canvas of game, so camera can be turned
 										// off
 	private static int msgCount = 0; // keeps count of number of messages.
@@ -77,8 +77,15 @@ public class GameInterface {
 		} else {
 			playerName = n;
 		}
+		// Put name in toolbar
+		$("#username-space span").html("Logged in as: " + playerName);
 	}
 	
+	/**
+	 * Sets the player ID for this class, which was generated in the Simple Simulator
+	 * 		and is also for the Game Model
+	 * @param id - the ID for this player
+	 */
 	public static void setPlayerID(int id) {
 		playerID = id;
 	}
@@ -112,7 +119,7 @@ public class GameInterface {
 		// Add the Player object to the game model
 		clientModel.sendCommand(new AddPlayerCommand(playerName, playerID));
 
-		Console.log("getting players...");
+		Console.log("getting current players...");
 		HashMap<Integer, Player> tempPlayers = gameModel.getPlayers();
 		for(Integer i : tempPlayers.keySet()) {
 			Console.log("Player: " + tempPlayers.get(i).getAlias());
@@ -126,7 +133,7 @@ public class GameInterface {
 				if (me == null) {
 					// Failed to retrieve Player object
 					Console.log("me was null");
-					Console.log("getting players...");
+					Console.log("getting current players...");
 					HashMap<Integer, Player> tempPlayers = gameModel.getPlayers();
 					for(Integer i : tempPlayers.keySet()) {
 						Console.log("Player: " + tempPlayers.get(i).getAlias());
@@ -140,7 +147,7 @@ public class GameInterface {
 			}
 
 		};
-		playerTimer.schedule(1000);
+		playerTimer.schedule(1000); // Keep trying to get the player every second
 		
 	}
 
@@ -352,8 +359,10 @@ public class GameInterface {
 
 		// Unit Detail Button
 		// Callback to show units-menu-detail
-		$(".units-detail-button").click(new Function() {
+		//$(".units-detail-button").click(new Function() {
+		$(Document.get()).on("click", ".units-detail-button", new Function() {
 			public boolean f(Event e) {
+				Console.log("units-detail-button");
 				// Show unit detail menu
 				changeSidebarContent("units-menu-detail");
 				// Get unit ID from btn
@@ -374,7 +383,7 @@ public class GameInterface {
 
 		// Buildings Detail Button
 		// Callback to show buildings-menu-detail
-		$(".buildings-detail-button").click(new Function() {
+		$(Document.get()).on("click", ".buildings-detail-button", new Function() {
 			public boolean f(Event e) {
 				// Show buildings detail menu
 				changeSidebarContent("buildings-menu-detail");
@@ -421,7 +430,7 @@ public class GameInterface {
 
 		// Diplomacy Detail Button
 		// Callback to show diplomacy-menu-detail
-		$(".diplomacy-detail-button").click(new Function() {
+		$(Document.get()).on("click", ".diplomacy-detail-button", new Function() {
 			public boolean f(Event e) {
 				// Show diplomacy detail menu
 				changeSidebarContent("diplomacy-menu-detail");

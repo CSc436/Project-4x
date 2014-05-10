@@ -156,6 +156,10 @@ public class GameCanvas {
 		Console.log("done with Game Canvas");
 	}
 	
+	/**
+	 * Sets the player ID for sending commands
+	 * @param id - ID of the player on this client
+	 */
 	public void setPlayerID(int id) {
 		playerID = id;
 	}

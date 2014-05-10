@@ -26,10 +26,9 @@ public class PlayGame implements EntryPoint {
 		// Set actions on loading screen
 		$("#loading-actions").html("INITIALIZING GAME");
 
+		// Callback for login button
 		$("#login-button").click(new Function() {
 			public boolean f(Event e) {
-				Console.log($("#login-username").val());
-				Console.log($("#login-password").val());
 				// TODO: check if username or password are blank?
 				username = $("#login-username").val();
 				password = $("#login-password").val();
@@ -51,12 +50,9 @@ public class PlayGame implements EntryPoint {
 		// Remove LOGIN SCREEN, NOT THE LOADING SCREEN KELSEY
 		$("#login-screen").remove();
 		
-		// Added quick hack to get loggin name to be chat name -
-		// Nick
-		// Possibly move to run method?
+		// Give the username to the Game Interface
 		GameInterface.setPlayerName(username);
 
-		//Window.alert("Login?!");
 		// Init game in 1 second
 		// (This is purely to see the loading screen)
 		Timer t = new Timer() {
@@ -64,19 +60,21 @@ public class PlayGame implements EntryPoint {
 			public void run() {
 				// Set actions on loading screen
 				$("#loading-actions").html("INITIALIZING MODEL");
-				theModel.run();
+				theModel.run(); // Start the client model
 				// Set actions on loading screen
 				$("#loading-actions").html("SETTING CANVAS");
-				GameCanvas canvas = new GameCanvas(theModel);
-				GameInterface.init(theModel, canvas);
+				GameCanvas canvas = new GameCanvas(theModel); // Create game canvas
+				GameInterface.init(theModel, canvas); // Init game interface
 				// Set actions on loading screen
 				$("#loading-actions").html("RETRIEVING GAME STATE");
-				/**
+				/*
 				 * NOTE: loading screen now gets removed once the game model is set
-				 * Which happens in ClientController.java **/
+				 * Which happens in ClientController.java 
+				 * 
+				 */
 			}
 		};
-		// Schedule the dummy timer
+		// Schedule the silly timer
 		t.schedule(1000);
 	}
 
