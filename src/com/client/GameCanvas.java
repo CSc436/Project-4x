@@ -106,6 +106,9 @@ public class GameCanvas {
 
 	private boolean chatFlag = false; // if chat is selected, do not allow camera movment/input
 	
+	private boolean gotoLocation = false;
+	private Vector3 moveVector;
+	
 	// Game mode
 	private enum Mode {
 		BUILDING, NONE
@@ -632,6 +635,9 @@ public class GameCanvas {
 			camera.defaultPosition();
 		if (move)
 			camera.move(mouseVector);
+	
+		if (gotoLocation)
+			camera.move(moveVector);
 	}
 
 	/**

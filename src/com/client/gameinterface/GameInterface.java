@@ -220,12 +220,23 @@ public class GameInterface {
 									+ "' class='btn btn-green units-detail-button'>View</button>"
 									+ "</td>"
 									+ "<td>"
-									+ "<button type='button' class='btn btn-green'>Goto</button>"
+									+ "<button type='button' data-x="
+									+ a.getPosition().getX()
+									+ " data-y="
+									+ a.getPosition().getY()
+									+ "class='btn btn-green units-goto'>Goto</button>"
 									+ "</td>" + "</tr>");
 				}
+
 				// Populate units-menu
 				return true; // Default return true
 			}
+		});
+
+		$(Document.get()).on("click", ".units-goto", new Function() {
+			String xCoord = $(this).attr("data-x");
+			String yCoord = $(this).attr("data-y");
+
 		});
 
 		// Diplomacy Menu Button
@@ -831,11 +842,11 @@ public class GameInterface {
 				updateMessages(gameModel.getChatLog().get(i).getMessage(),
 						gameModel.getChatLog().get(i).getPlayerID());
 			}
-		} else if (msgCount > chatLogLength)
-		{
-			// msgCount is greater, chatLog has been destroyed, reinitialize chat.
+		} else if (msgCount > chatLogLength) {
+			// msgCount is greater, chatLog has been destroyed, reinitialize
+			// chat.
 			msgCount = 0; // reset message count
-			initializeChat();  // initialize chat again. 
+			initializeChat(); // initialize chat again.
 		}
 	}
 
