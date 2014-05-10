@@ -807,7 +807,8 @@ public class GameBoard implements Serializable {
 			float roughness) {
 		// size is the nearest power of 2 that fully contains SIZE plus 1
 		int size = (1 << (int) Math.ceil(Math.log(SIZE) / Math.log(2))) + 1;
-
+		System.out.println(Math.ceil(Math.log(SIZE) / Math.log(2)));
+		System.out.println(size);
 		// seed random number generator
 		rand.setSeed(seed);
 		float[][] noise = new float[size][size];

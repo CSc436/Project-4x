@@ -59,7 +59,7 @@ public class GameModel implements Serializable {
 		producers   = new HashMap<Integer, Producer>();
 		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
 		
-		map = new GameBoard(12, 12);
+	//	map = new GameBoard(255, 255);
 		
 		chatLog = new ArrayList<String>();
 	}
@@ -80,7 +80,7 @@ public class GameModel implements Serializable {
 		producers = new HashMap<Integer, Producer>();
 		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
 		
-		map = new GameBoard(width, width);
+	//	map = new GameBoard(width, width);
 		
 		chatLog = new ArrayList<String>();
 	}
@@ -288,7 +288,8 @@ public class GameModel implements Serializable {
 	}
 
 	public GameBoard getBoard() {
-
+		if (map == null)
+			map = new GameBoard(255, 255);
 		return map;
 	}
 
