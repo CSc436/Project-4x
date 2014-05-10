@@ -28,6 +28,7 @@ public class GameModel implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -3911016502183103473L;
+	private static final int chatLogMaxLength = 10; 
 	private HashMap<Integer, Player> players;
 	private GameBoard map;
 	// Hashmap of all gameObjects
@@ -83,6 +84,11 @@ public class GameModel implements Serializable {
 	 */
 	public void updateChatLog(SendMessageCommand message)
 	{
+		// if chat log has gotten to big, reset. 
+		if (chatLog.size() > chatLogMaxLength)
+		{
+			chatLog.clear();
+		}
 		chatLog.add(message);
 	}
 	
