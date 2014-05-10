@@ -1,5 +1,6 @@
 package com.client;
 
+import java.util.HashMap;
 import java.util.Queue;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;

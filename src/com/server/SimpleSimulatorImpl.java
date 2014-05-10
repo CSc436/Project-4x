@@ -156,5 +156,5 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 
 		return login.addUserToGame(username, "1");
 	}
-
+	
 }

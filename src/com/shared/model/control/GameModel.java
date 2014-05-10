@@ -121,12 +121,28 @@ public class GameModel implements Serializable {
 		players.put(nextPlayerID, new Player(playerName, nextPlayerID++));
 	}
 	
+	public void addPlayer(int id, String playerName) {
+		players.put(id, new Player(playerName, id));
+		nextPlayerID = id + 1;
+	}
+	
 	public HashMap<Integer, Player> getPlayers() {
 		return players;
 	}
 
 	public Player getPlayer(int playerId) {
 		return players.get((playerId +1)); // Client model is one off from gameModel, so add one....
+	}
+	
+	public Player getPlayerByUsername(String username) {
+		for (Integer i : players.keySet()) {
+			Player p = players.get(i);
+			if (p.getAlias().equals(username)) {
+				return p;
+			}
+		}
+		
+		return null;
 	}
 	
 	/**

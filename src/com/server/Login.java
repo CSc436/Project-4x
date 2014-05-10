@@ -29,17 +29,14 @@ public class Login implements Serializable {
 	 */
 	private static final long serialVersionUID = 7009566566451237218L;
 	private HashMap<String, String> accounts;
-	private ArrayList<String> players;
 	Controller controller;
 	int width;
 	GameModel model;
-	File users = new File(System.getProperty("user.dir") + "/src/users.txt");
+	File users = new File(System.getProperty("user.dir") + "/4x/users.txt");
 
 	public Login() {
 		accounts = new HashMap<String, String>();
-		players = new ArrayList<String>();
 		loadObjects();
-
 	}
 
 	/**
@@ -50,6 +47,7 @@ public class Login implements Serializable {
 	 */
 
 	private void loadObjects() {
+		System.out.println("in loadObjects");
 		FileReader fi;
 		BufferedReader bi;
 
@@ -65,6 +63,8 @@ public class Login implements Serializable {
 
 				String user = split[0];
 				String pw = split[1];
+				System.out.println("username: " + user);
+				System.out.println("password: "+ pw);
 				accounts.put(user, pw);
 
 			}
@@ -156,42 +156,7 @@ public class Login implements Serializable {
 
 	public boolean addUserToGame(String user, String pass) {
 		// validate user
-		if (accounts.containsKey(user) && pass.equals(accounts.get(user))
-				&& !players.contains(user)) {
-			players.add(user);
-			return true;
-		} else
-			return false;
-	}
-
-	/**
-	 * removeUserFromGame()
-	 * 
-	 * @returns true when the user was successfully removed from the game list
-	 */
-
-	public boolean removeUserFromGame(String user) {
-
-		if (players.contains(user)) {
-			players.remove(user);
-			return true;
-		} else
-			return false;
-	}
-
-	/**
-	 * createGame() : This method should be called when all the players are
-	 * added to the game and the dimensions are set.
-	 * 
-	 * @return true if the game has at least 2 players and the board has at
-	 *         least 1 tile. (the game was created successfully).
-	 */
-
-	public boolean createGame() {
-
-		if (players.size() > 1 && width > 0) {
-			model = new GameModel();
-			controller = new Controller(model);
+		if (accounts.containsKey(user) && pass.equals(accounts.get(user))) {
 			return true;
 		} else
 			return false;
@@ -219,32 +184,16 @@ public class Login implements Serializable {
 		return accounts.containsKey(user);
 	}
 
-	/**
-	 * hasPlayers()
-	 * 
-	 * @return true if the player list is not empty
-	 */
-
-	public boolean hasPlayers() {
-		return !players.isEmpty();
-	}
-
-	/**
-	 * getGamePlayers()
-	 * 
-	 * @return a list of the list of current Game Players
-	 */
-
-	public ArrayList<String> getGamePlayers() {
-		return players;
-	}
-
 	public GameModel getGameModel() {
 		return model;
 	}
 
 	public Controller getController() {
 		return controller;
+	}
+	
+	public HashMap<String, String> getAccounts() {
+		return accounts;
 	}
 
 }

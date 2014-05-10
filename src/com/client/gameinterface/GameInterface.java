@@ -2,6 +2,8 @@ package com.client.gameinterface;
 
 import static com.google.gwt.query.client.GQuery.$;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,6 +15,7 @@ import com.google.gwt.query.client.GQuery;
 import com.google.gwt.user.client.Event;
 import com.shared.model.buildings.Building;
 import com.shared.model.buildings.ResourceBuilding;
+import com.shared.model.commands.AddPlayerCommand;
 import com.shared.model.commands.BuildingProductionCommand;
 import com.shared.model.commands.TradeCommand;
 import com.shared.model.commands.SendMessageCommand;
@@ -36,6 +39,7 @@ public class GameInterface {
 	private static Player me;
 
 	private static String playerName;
+	private static int playerID;
 	private static GameCanvas canvas; // canvas of game, so camera can be turned
 										// off
 	private static int msgCount = 0; // keeps count of number of messages.
@@ -74,6 +78,10 @@ public class GameInterface {
 			playerName = n;
 		}
 	}
+	
+	public static void setPlayerID(int id) {
+		playerID = id;
+	}
 
 	/**
 	 * Sets the game model for this class
@@ -87,14 +95,10 @@ public class GameInterface {
 	 *            - The GameModel object retrieved from the server
 	 */
 	public static void setGameModel(GameModel gm) {
-		// TODO: set the player object here, since everything should be set up
 		Console.log("setting game model");
 		gameModel = gm;
-		me = gameModel.getPlayer(clientModel.getPlayerID());
-		
-		// Schedule update from chat log at fixed rate.
-		// Timer
-		// TimerTask.
+
+		// Schedule update from chat log at fixed rate
 		Console.log("starting timer for chat update");
 		Timer timer = new Timer() {
 
@@ -103,7 +107,41 @@ public class GameInterface {
 			}
 
 		};
-		timer.scheduleRepeating(250); // Check for new messages every second.
+		timer.scheduleRepeating(250); // Check for new messages every 1/4th second.
+		
+		// Add the Player object to the game model
+		clientModel.sendCommand(new AddPlayerCommand(playerName, playerID));
+
+		Console.log("getting players...");
+		HashMap<Integer, Player> tempPlayers = gameModel.getPlayers();
+		for(Integer i : tempPlayers.keySet()) {
+			Console.log("Player: " + tempPlayers.get(i).getAlias());
+		}
+
+		Timer playerTimer = new Timer() {
+
+			public void run() {
+				// TODO: this could just be getPlayer(id)
+				me = gameModel.getPlayerByUsername(playerName);
+				if (me == null) {
+					// Failed to retrieve Player object
+					Console.log("me was null");
+					Console.log("getting players...");
+					HashMap<Integer, Player> tempPlayers = gameModel.getPlayers();
+					for(Integer i : tempPlayers.keySet()) {
+						Console.log("Player: " + tempPlayers.get(i).getAlias());
+					}
+					this.schedule(1000);
+				} else {
+					Console.log("got player instance for " + playerName);
+					// Share player ID with the game canvas
+					canvas.setPlayerID(playerID);
+				}
+			}
+
+		};
+		playerTimer.schedule(1000);
+		
 	}
 
 	/**
@@ -203,7 +241,8 @@ public class GameInterface {
 									+ "<tr>"
 									+ "<td>"
 									+ "<div>To: "
-									+ sentAgreements.get(i).getReceivingPlayer()
+									+ sentAgreements.get(i)
+											.getReceivingPlayer()
 									+ "</div>"
 									+ "</td>"
 									+ "<td>"
@@ -219,7 +258,8 @@ public class GameInterface {
 									+ "<tr>"
 									+ "<td>"
 									+ "<div>From: "
-									+ receivedAgreements.get(i).getCreatingPlayer()
+									+ receivedAgreements.get(i)
+											.getCreatingPlayer()
 									+ "</div>"
 									+ "</td>"
 									+ "<td>"
@@ -235,7 +275,8 @@ public class GameInterface {
 									+ "<tr>"
 									+ "<td>"
 									+ "<div>From: "
-									+ acceptedAgreements.get(i).getCreatingPlayer()
+									+ acceptedAgreements.get(i)
+											.getCreatingPlayer()
 									+ "</div>"
 									+ "</td>"
 									+ "<td>"
@@ -663,55 +704,63 @@ public class GameInterface {
 	 *            - message to append, should ONLY contain message with users
 	 *            name with Users name. i.e. "Bob: gg"
 	 * @param id
-	 * 			  Used to pick a color for the player
+	 *            Used to pick a color for the player
 	 * 
 	 */
 	public static void updateMessages(String mssg, int id) {
 		// Log to messages.
-		
+
 		int numberOfColors = 10; // number of colors supported
 		Console.log("ID: " + id);
-		switch(id % numberOfColors)
-		{
+		switch (id % numberOfColors) {
 		case 0:
 			// Use default color
 			$("#messages").prepend("<br />" + mssg);
 			break;
 		case 1:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"#F0F8FF\">" + mssg + "</font>");
+			$("#messages").prepend(
+					"<font color=\"#F0F8FF\">" + mssg + "</font>");
 			break;
 		case 2:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"#7FFF00\">" + mssg + "</font>");
+			$("#messages").prepend(
+					"<font color=\"#7FFF00\">" + mssg + "</font>");
 			break;
 		case 3:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"#00FFFF\">" + mssg + "</font>");
+			$("#messages").prepend(
+					"<font color=\"#00FFFF\">" + mssg + "</font>");
 			break;
 		case 4:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"#FF1493\">" + mssg + "</font>");
+			$("#messages").prepend(
+					"<font color=\"#FF1493\">" + mssg + "</font>");
 			break;
 		case 5:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"#FFD700\">" + mssg + "</font>");
+			$("#messages").prepend(
+					"<font color=\"#FFD700\">" + mssg + "</font>");
 			break;
 		case 6:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"#FF0000\">" + mssg + "</font>");
+			$("#messages").prepend(
+					"<font color=\"#FF0000\">" + mssg + "</font>");
 			break;
 		case 7:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"#F5DEB3\">" + mssg + "</font>");
+			$("#messages").prepend(
+					"<font color=\"#F5DEB3\">" + mssg + "</font>");
 			break;
 		case 8:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"#00FF7F\">" + mssg + "</font>");
+			$("#messages").prepend(
+					"<font color=\"#00FF7F\">" + mssg + "</font>");
 			break;
 		case 9:
 			$("#messages").prepend("<br />");
-			$("#messages").prepend("<font color=\"#87CEEB\">" + mssg + "</font>");
+			$("#messages").prepend(
+					"<font color=\"#87CEEB\">" + mssg + "</font>");
 			break;
 		default:
 			// Use default color
@@ -750,7 +799,7 @@ public class GameInterface {
 			// updateMessages call.
 			for (int i = msgCount; i < chatLogLength; i++) {
 				updateMessages(gameModel.getChatLog().get(i).getMessage(),
-						       gameModel.getChatLog().get(i).getPlayerID());
+						gameModel.getChatLog().get(i).getPlayerID());
 			}
 		} else {
 			// Console.log("No new Messages to prepend");

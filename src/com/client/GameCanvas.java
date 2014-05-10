@@ -116,6 +116,7 @@ public class GameCanvas {
 	private static BuildingType[] buildingTypes = BuildingType.values();
 	private static int buildingCounter = -1;
 	
+	private int playerID;
 	
 	public GameCanvas(ClientController theModel) {
 		// CODE FOR MINIMAP DEV/CLICK SELECTING
@@ -153,6 +154,10 @@ public class GameCanvas {
 		camera.makeCameraMatrix();
 		start();
 		Console.log("done with Game Canvas");
+	}
+	
+	public void setPlayerID(int id) {
+		playerID = id;
 	}
 	
 	/**
@@ -358,16 +363,19 @@ public class GameCanvas {
 					case KeyCodes.KEY_E: rotateRight = true; break;
 					case KeyCodes.KEY_X: center = true; break;
 					case KeyCodes.KEY_I: 
-						theModel.sendCommand(new PlaceUnitCommand( UnitType.CANNON, 1, mouseTile));
+						theModel.sendCommand(new PlaceUnitCommand( UnitType.CANNON, playerID, mouseTile));
 						break;
 					case KeyCodes.KEY_K:
-						theModel.sendCommand(new PlaceUnitCommand( UnitType.INFANTRY, (int) (8*Math.random()), mouseTile));
+						//theModel.sendCommand(new PlaceUnitCommand( UnitType.INFANTRY, (int) (8*Math.random()), mouseTile));
+						theModel.sendCommand(new PlaceUnitCommand( UnitType.INFANTRY, playerID, mouseTile));
 						break;
 					case KeyCodes.KEY_L:
-						theModel.sendCommand(new PlaceUnitCommand( UnitType.ARCHER, (int) (8*Math.random()), mouseTile));
+						//theModel.sendCommand(new PlaceUnitCommand( UnitType.ARCHER, (int) (8*Math.random()), mouseTile));
+						theModel.sendCommand(new PlaceUnitCommand( UnitType.ARCHER, playerID, mouseTile));
 						break;
 					case KeyCodes.KEY_H:
-						theModel.sendCommand(new ConstructBuildingCommand( BuildingType.BARRACKS, (int) (8*Math.random()), mouseTile));
+						//theModel.sendCommand(new ConstructBuildingCommand( BuildingType.BARRACKS, (int) (8*Math.random()), mouseTile));
+						theModel.sendCommand(new ConstructBuildingCommand( BuildingType.BARRACKS, playerID, mouseTile));
 						break;
 					case KeyCodes.KEY_N:
 						for( int i : selectedEntities )
@@ -446,7 +454,10 @@ public class GameCanvas {
 				case NativeEvent.BUTTON_LEFT:
 					if(currMode == Mode.BUILDING) {
 						// Build the type that is specified
-						theModel.sendCommand(new ConstructBuildingCommand( BuildingType.BARRACKS, (int) (8*Math.random()), mouseTile));
+						//theModel.sendCommand(new ConstructBuildingCommand( BuildingType.BARRACKS, (int) (8*Math.random()), mouseTile));
+						// Get Enum from string
+						BuildingType bt = BuildingType.valueOf($("#building-toolbar").html());
+						theModel.sendCommand(new ConstructBuildingCommand( bt, playerID, mouseTile));
 					} else if(event.isShiftKeyDown()) {
 						int targetID = objectSelector.pickEntity(event.getClientX(), event.getClientY());
 						if(commandDebug) Console.log("Target ID: " + targetID);

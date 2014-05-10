@@ -17,48 +17,67 @@ import com.google.gwt.query.client.Function;
 
 public class PlayGame implements EntryPoint {
 
+	private static ClientController theModel = new ClientController();
+	private static String username;
+	private static String password;
+
 	public void onModuleLoad() {
 
 		// Set actions on loading screen
 		$("#loading-actions").html("INITIALIZING GAME");
-		
+
 		$("#login-button").click(new Function() {
 			public boolean f(Event e) {
 				Console.log($("#login-username").val());
 				Console.log($("#login-password").val());
+				// TODO: check if username or password are blank?
+				username = $("#login-username").val();
+				password = $("#login-password").val();
+				
+				// Validate user through the client model
+				theModel.login(username, password);
 
-				// Added quick hack to get loggin name to be chat name - Nick
-				// Possibly move to run method? 
-				GameInterface.setPlayerName($("#login-username").val());
-				
-				Window.alert("Login?!");
-				// Remove login screen
-				$("#login-screen").remove();
-				
-				// Init game in 1 second
-				// (This is purely to see the loading screen)
-				Timer t = new Timer() {
-					@Override
-					public void run() {
-						// Set actions on loading screen
-						$("#loading-actions").html("INITIALIZING MODEL");
-						ClientController theModel = new ClientController();
-						theModel.run();
-						// Set actions on loading screen
-						$("#loading-actions").html("SETTING CANVAS");
-						GameCanvas canvas = new GameCanvas(theModel);
-						GameInterface.init(theModel, canvas);
-						// Set actions on loading screen
-						$("#loading-actions").html("RETRIEVING GAME STATE");
-						/** NOTE: loading screen now gets removed once the game model is set **/
-						/** Which happens in ClientModel.java **/
-					}
-				};
-				// Schedule the dummy timer
-				t.schedule(1000);
-				return true;
+				return true; // Default return true for click event
 			}
 		});
+	}
+
+	/**
+	 * This method gets called if the client model deems the login valid
+	 */
+	public static void startGame() {
+		
+		Console.log("user is valid, start game");
+		// Remove LOGIN SCREEN, NOT THE LOADING SCREEN KELSEY
+		$("#login-screen").remove();
+		
+		// Added quick hack to get loggin name to be chat name -
+		// Nick
+		// Possibly move to run method?
+		GameInterface.setPlayerName(username);
+
+		//Window.alert("Login?!");
+		// Init game in 1 second
+		// (This is purely to see the loading screen)
+		Timer t = new Timer() {
+			@Override
+			public void run() {
+				// Set actions on loading screen
+				$("#loading-actions").html("INITIALIZING MODEL");
+				theModel.run();
+				// Set actions on loading screen
+				$("#loading-actions").html("SETTING CANVAS");
+				GameCanvas canvas = new GameCanvas(theModel);
+				GameInterface.init(theModel, canvas);
+				// Set actions on loading screen
+				$("#loading-actions").html("RETRIEVING GAME STATE");
+				/**
+				 * NOTE: loading screen now gets removed once the game model is set
+				 * Which happens in ClientController.java **/
+			}
+		};
+		// Schedule the dummy timer
+		t.schedule(1000);
 	}
 
 }
