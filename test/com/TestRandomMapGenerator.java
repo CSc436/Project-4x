@@ -16,15 +16,12 @@ public class TestRandomMapGenerator extends Thread {
 
 		String h;
 		String w;
-		String pl;
 
 		h = JOptionPane.showInputDialog("Enter height");
 		w = JOptionPane.showInputDialog("Enter width");
-		pl = JOptionPane.showInputDialog("Enter player amount");
 
 		int x = Integer.parseInt(w);
 		int y = Integer.parseInt(h);
-		int p = Integer.parseInt(pl);
 
 		GameBoard game = new GameBoard(x, y);
 
