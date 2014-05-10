@@ -50,18 +50,7 @@ public class GameModel implements Serializable {
 	// simple test model start up.
 	// A different constructor should be used for different
 	public GameModel() {
-		players = new HashMap<Integer, Player>();
-		
-		gameObjects = new HashMap<Integer, GameObject>();
-		attackers   = new HashMap<Integer, Attacker>();
-		movables    = new HashMap<Integer, Movable>();
-		attackables = new HashMap<Integer, Attackable>();
-		producers   = new HashMap<Integer, Producer>();
-		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
-		
-		map = new GameBoard(500, 500);
-		
-		chatLog = new ArrayList<SendMessageCommand>();
+		this(500);
 	}
 	
 	/**
@@ -83,6 +72,9 @@ public class GameModel implements Serializable {
 		map = new GameBoard(width, width);
 		
 		chatLog = new ArrayList<SendMessageCommand>();
+		
+		/* Do Not Remove this or accidentally merge it away! */
+		tradeManager = new TradeManager();
 	}
 	
 	/**
