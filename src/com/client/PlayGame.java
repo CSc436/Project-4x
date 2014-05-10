@@ -44,8 +44,32 @@ public class PlayGame implements EntryPoint {
 				return true; // Default return true for click event
 			}
 		});
+		
+		// Allow use to press enter to loggin, that way we can test slightly faster
+		$("#login-username").keypress(new Function() {
+			public boolean f (Event e)
+			{
+				if (e.getKeyCode() == 13) 
+				{
+					$("#login-button").click();
+				}
+				return true;
+			}
+		});
+		// Allow use to press enter to loggin, that way we can test slightly faster
+		$("#login-password").keypress(new Function() {
+			public boolean f (Event e)
+			{
+				if (e.getKeyCode() == 13) 
+				{
+					$("#login-button").click();
+				}
+				return true;
+			}
+		});
+		
 	}
-
+	
 	/**
 	 * This method gets called if the client model deems the login valid
 	 */
