@@ -71,7 +71,7 @@ public class GameBoard implements Serializable {
 		// create a noisemap
 		System.out.println("Building noisemap...");
 		long startTime = System.currentTimeMillis();
-		float[][] noisemap = diamondSquareGenerator(row,
+		float[][] noisemap = diamondSquareGenerator(row + massageEdge,
 				System.currentTimeMillis(), 0.1f);
 		long endTime = System.currentTimeMillis();
 		System.out.println("Total execution time: " + (endTime - startTime));
