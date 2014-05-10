@@ -600,7 +600,7 @@ public class GameCanvas {
 			camera.left(delta);
 		if (right)
 			camera.right(delta);
-		if (in && camZ >= 2.0)
+		if (in && camZ >= 1.0)
 			camera.zoomIn();
 		if (out && camZ <= 25.0f)
 			camera.zoomOut();
