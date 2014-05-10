@@ -325,8 +325,10 @@ public class GameModel implements Serializable {
 	}
 
 	public GameBoard getBoard() {
-		if (map == null)
+		if (map == null){
 			map = new GameBoard(255, 255);
+			map.resourceDistNat();
+		}
 		return map;
 	}
 

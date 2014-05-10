@@ -227,14 +227,14 @@ public class RenderTile {
 		
 		// Auto tiling algorithm
 		for (Terrain t: Terrain.values()){
-			//if (t == Terrain.FOREST || t == Terrain.WATER)
-				//continue;
+			if (t == Terrain.FOREST || t == Terrain.WATER)
+				continue;
 			
 			val = t.getValue();
 			
 			for (int x = 0; x < dimension; x++)
 				for (int y = 0; y < dimension; y++)
-					if (gameBoard.getTileAt(x, y).getTerrainType().getValue() == t.getValue()){
+					if (gameBoard.getTileAt(x, y).getTerrainType().getLower() >= t.getLower()){
 						RenderTile curr = map[x][y];
 						curr.setResource(gameBoard.getTileAt(x, y).getResource());
 						curr.setFlags(0, 0, 0, 0, val);
