@@ -28,6 +28,7 @@ public class GameModel implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -3911016502183103473L;
+	private static final int chatLogMaxLength = 10; 
 	private HashMap<Integer, Player> players;
 	private GameBoard map;
 	// Hashmap of all gameObjects
@@ -50,26 +51,16 @@ public class GameModel implements Serializable {
 	// simple test model start up.
 	// A different constructor should be used for different
 	public GameModel() {
-		this(500);
-	}
-	
-	/**
-	 * if we don't actually initialize a list of players anymore, might as
-	 * well have a new constructor....
-	 * 
-	 * @param width width of gameboard
-	 */
-	public GameModel(int width) {
-		players = new HashMap<Integer,Player>();
+		players = new HashMap<Integer, Player>();
 		
 		gameObjects = new HashMap<Integer, GameObject>();
-		attackers = new HashMap<Integer, Attacker>();
-		movables = new HashMap<Integer, Movable>();
+		attackers   = new HashMap<Integer, Attacker>();
+		movables    = new HashMap<Integer, Movable>();
 		attackables = new HashMap<Integer, Attackable>();
-		producers = new HashMap<Integer, Producer>();
+		producers   = new HashMap<Integer, Producer>();
 		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
 		
-		map = new GameBoard(width, width);
+	//	map = new GameBoard(255, 255);
 		
 		chatLog = new ArrayList<SendMessageCommand>();
 		
@@ -78,11 +69,39 @@ public class GameModel implements Serializable {
 	}
 	
 	/**
+	 * if we don't actually initialize a list of players anymore, might as
+	 * well have a new constructor....
+	 * 
+	 * @param width width of gameboard
+	 */
+//	public GameModel(int width) {
+//		players = new HashMap<Integer,Player>();
+//		
+//		gameObjects = new HashMap<Integer, GameObject>();
+//		attackers = new HashMap<Integer, Attacker>();
+//		movables = new HashMap<Integer, Movable>();
+//		attackables = new HashMap<Integer, Attackable>();
+//		producers = new HashMap<Integer, Producer>();
+//		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
+//		
+//	//	map = new GameBoard(width, width);
+//		
+//		chatLog = new ArrayList<SendMessageCommand>();
+//		
+//		
+//	}
+	
+	/**
 	 * updates chat log with a new message
 	 * @param message
 	 */
 	public void updateChatLog(SendMessageCommand message)
 	{
+		// if chat log has gotten to big, reset. 
+		if (chatLog.size() > chatLogMaxLength)
+		{
+			chatLog.clear();
+		}
 		chatLog.add(message);
 	}
 	
@@ -306,7 +325,8 @@ public class GameModel implements Serializable {
 	}
 
 	public GameBoard getBoard() {
-
+		if (map == null)
+			map = new GameBoard(255, 255);
 		return map;
 	}
 

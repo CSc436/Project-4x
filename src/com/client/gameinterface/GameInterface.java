@@ -820,10 +820,6 @@ public class GameInterface {
 	 * prepend any new messages to messages.
 	 */
 	public static void updateChat() {
-		// TODO add call, if length is even, and greater than size, reset chat
-		// log in gameModel.
-		// But for now who cares, ALL TEH MEMORY IS MINE.
-		// Console.log(gameModel.toString());
 		if (gameModel == null)
 			return;
 
@@ -835,8 +831,11 @@ public class GameInterface {
 				updateMessages(gameModel.getChatLog().get(i).getMessage(),
 						gameModel.getChatLog().get(i).getPlayerID());
 			}
-		} else {
-			// Console.log("No new Messages to prepend");
+		} else if (msgCount > chatLogLength)
+		{
+			// msgCount is greater, chatLog has been destroyed, reinitialize chat.
+			msgCount = 0; // reset message count
+			initializeChat();  // initialize chat again. 
 		}
 	}
 

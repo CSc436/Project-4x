@@ -92,9 +92,9 @@ public class PlayGame implements EntryPoint {
 				theModel.run(); // Start the client model
 				// Set actions on loading screen
 				$("#loading-actions").html("SETTING CANVAS");
-				GameCanvas canvas = new GameCanvas(theModel); // Create game
+//				GameCanvas canvas = new GameCanvas(theModel); // Create game
 																// canvas
-				GameInterface.init(theModel, canvas); // Init game interface
+//				GameInterface.init(theModel, canvas); // Init game interface
 				// Set actions on loading screen
 				$("#loading-actions").html("RETRIEVING GAME STATE");
 				/*

@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import com.client.PlayGame;
+import com.client.GameCanvas;
 import com.client.SimpleSimulator;
 import com.client.SimpleSimulatorAsync;
 import com.client.gameinterface.Console;
@@ -18,6 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.shared.model.commands.Command;
 import com.shared.model.control.CommandPacket;
 import com.shared.model.control.GameModel;
+import com.shared.model.gameboard.Tile;
 
 public class ClientController {
 	
@@ -90,9 +92,26 @@ public class ClientController {
 			public void onSuccess(GameModel result) {
 				if(debug) Console.log("Game retrieved!");
 				model = result;
-				beginPlaying();
-				GameInterface.setGameModel(result); // Give the GameModel to the interface
-				$("#loading-screen").remove();
+				
+				simpleSimulator.getTiles(new AsyncCallback<Tile[][]>() {
+					@Override
+					public void onFailure(Throwable caught) {
+						Console.log("Could not grab tiles");
+					}
+					
+					@Override
+					public void onSuccess(Tile[][] map) {
+						Console.log("Tiles retrived!");
+						model.getBoard().setTiles(map);
+						
+						
+						// Remove loading screen
+						$("#loading-screen").remove();
+						
+						beginPlaying();
+					}
+				});
+
 			}
 			
 		});
@@ -102,6 +121,10 @@ public class ClientController {
 	
 	public void beginPlaying(){
 		readyForNext = true;
+		
+		GameCanvas canvas = new GameCanvas(this);
+		GameInterface.init(this, canvas);
+		GameInterface.setGameModel(model);
 		
 		pollTimer = new Timer() {
 
