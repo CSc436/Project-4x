@@ -50,7 +50,21 @@ public class GameModel implements Serializable {
 	// simple test model start up.
 	// A different constructor should be used for different
 	public GameModel() {
-		this(500);
+		players = new HashMap<Integer, Player>();
+		
+		gameObjects = new HashMap<Integer, GameObject>();
+		attackers   = new HashMap<Integer, Attacker>();
+		movables    = new HashMap<Integer, Movable>();
+		attackables = new HashMap<Integer, Attackable>();
+		producers   = new HashMap<Integer, Producer>();
+		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
+		
+	//	map = new GameBoard(255, 255);
+		
+		chatLog = new ArrayList<SendMessageCommand>();
+		
+		/* Do Not Remove this or accidentally merge it away! */
+		tradeManager = new TradeManager(this);
 	}
 	
 	/**
@@ -59,23 +73,22 @@ public class GameModel implements Serializable {
 	 * 
 	 * @param width width of gameboard
 	 */
-	public GameModel(int width) {
-		players = new HashMap<Integer,Player>();
-		
-		gameObjects = new HashMap<Integer, GameObject>();
-		attackers = new HashMap<Integer, Attacker>();
-		movables = new HashMap<Integer, Movable>();
-		attackables = new HashMap<Integer, Attackable>();
-		producers = new HashMap<Integer, Producer>();
-		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
-		
-		map = new GameBoard(width, width);
-		
-		chatLog = new ArrayList<SendMessageCommand>();
-		
-		/* Do Not Remove this or accidentally merge it away! */
-		tradeManager = new TradeManager(this);
-	}
+//	public GameModel(int width) {
+//		players = new HashMap<Integer,Player>();
+//		
+//		gameObjects = new HashMap<Integer, GameObject>();
+//		attackers = new HashMap<Integer, Attacker>();
+//		movables = new HashMap<Integer, Movable>();
+//		attackables = new HashMap<Integer, Attackable>();
+//		producers = new HashMap<Integer, Producer>();
+//		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
+//		
+//	//	map = new GameBoard(width, width);
+//		
+//		chatLog = new ArrayList<SendMessageCommand>();
+//		
+//		
+//	}
 	
 	/**
 	 * updates chat log with a new message
@@ -306,7 +319,8 @@ public class GameModel implements Serializable {
 	}
 
 	public GameBoard getBoard() {
-
+		if (map == null)
+			map = new GameBoard(255, 255);
 		return map;
 	}
 

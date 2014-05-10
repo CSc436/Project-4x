@@ -12,6 +12,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.shared.model.commands.Command;
 import com.shared.model.control.CommandPacket;
 import com.shared.model.control.GameModel;
+import com.shared.model.gameboard.Tile;
 
 /**
  * Server-side implementation of RPC framework. Keeps track of which players are
@@ -110,7 +111,11 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 			controller.stop();
 		return nextPlayerSlot;
 	}
-
+	
+	public Tile[][] getTiles() {
+		return controller.getGameModel().getBoard().getTiles();
+	}
+	
 	/**
 	 * Tries to send the next set of commands out to players if they are all
 	 * ready.
