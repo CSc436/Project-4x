@@ -29,6 +29,9 @@ public class Controller implements Runnable, Serializable {
 	private int movingAverage;
 	private int numTimesSaved = 3; // Keep track of the last n cycle times to compute moving average
 	private boolean packetReady = false;
+	// FINDBUG - added unused suppress warning for unused GWT import.
+	// TODO: Does this field need to remain?
+	@SuppressWarnings("unused")
 	private boolean stop = false;
 	public boolean isRunning;
 	private boolean debug = true;

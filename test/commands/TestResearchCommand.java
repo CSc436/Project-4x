@@ -2,10 +2,8 @@ package commands;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import org.junit.Test;
 
@@ -18,9 +16,9 @@ import com.shared.model.commands.ConstructBuildingCommand;
 import com.shared.model.commands.ResearchTechnologyCommand;
 import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
-import com.shared.model.research.Technology;
 import com.shared.model.research.TechnologyEnum;
 import com.shared.model.resources.Resources;
+import com.shared.utils.Coordinate;
 
 public class TestResearchCommand {
 
@@ -29,7 +27,7 @@ public class TestResearchCommand {
 	//	ArrayList<Player> plist = new ArrayList<>();
 		//plist.add(new Player("Greg", 0));
 		//plist.add(new Player("Pedro", 1));
-		GameModel model = new GameModel(500);
+		GameModel model = new GameModel();
 		model.addPlayer("Greg");
 		model.addPlayer("Pedro");
 		Controller controller = new Controller(model);
@@ -47,8 +45,8 @@ public class TestResearchCommand {
 		HashMap<String, Integer> temp = p.getTechTree().getCurrentlyResearching();
 		assertEquals(0, temp.size());
 
-		Command comm = new ConstructBuildingCommand(p, p.getId(),
-				BuildingType.BLACKSMITH, 1, 1, model.getBoard());
+		//Command comm = new ConstructBuildingCommand(p, p.getId(), BuildingType.BLACKSMITH, 1, 1, model.getBoard());
+		Command comm = new ConstructBuildingCommand(BuildingType.BLACKSMITH, p.getId(), new Coordinate(2, 2));
 		controller.addCommand(comm);
 
 		try {

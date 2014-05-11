@@ -16,15 +16,12 @@ public class TestRandomMapGenerator extends Thread {
 
 		String h;
 		String w;
-		String pl;
 
 		h = JOptionPane.showInputDialog("Enter height");
 		w = JOptionPane.showInputDialog("Enter width");
-		pl = JOptionPane.showInputDialog("Enter player amount");
 
 		int x = Integer.parseInt(w);
 		int y = Integer.parseInt(h);
-		int p = Integer.parseInt(pl);
 
 		GameBoard game = new GameBoard(x, y);
 
@@ -72,8 +69,8 @@ class draw2 extends JPanel {
 						g.setColor(new Color(255, 241, 212));
 					else if (game.getTileAt(r, c).getTerrainType() == Terrain.WATER)
 						g.setColor(new Color(51, 126, 255));
-					else if (game.getTileAt(r, c).getTerrainType() == Terrain.FOREST)
-						g.setColor(new Color(139, 131, 120));
+					/*else if (game.getTileAt(r, c).getTerrainType() == Terrain.FOREST)
+						g.setColor(new Color(139, 131, 120));*/
 					else if (game.getTileAt(r, c).getTerrainType() == Terrain.MOUNTAIN)
 						g.setColor(new Color(238, 238, 224));
 					else if (game.getTileAt(r, c).getTerrainType() == Terrain.SNOW)

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.client.gameinterface.Console;
+import com.client.gameinterface.GameInterface;
 import com.client.model.ClientController;
 import com.client.rendering.Camera;
 import com.client.rendering.Mesh;
@@ -123,6 +124,8 @@ public class GameCanvas {
 	
 	private int playerID;
 	
+	
+	
 	public GameCanvas(ClientController theModel) {
 		// CODE FOR MINIMAP DEV/CLICK SELECTING
 		this.GRID_WIDTH = theModel.getGameModel().getBoard().getCols();
@@ -136,9 +139,10 @@ public class GameCanvas {
 		glContext = (WebGLRenderingContext) webGLCanvas
 				.getContext("experimental-webgl");
 
-		if (glContext == null) {
-			Window.alert("Sorry, your browser doesn't support WebGL!");
-		}
+		// FINDBUG - Refactored below to avoid null pointer
+		//if (glContext == null) {
+			//Window.alert("Sorry, your browser doesn't support WebGL!");
+		//}
 		
 		// These lines make the viewport fullscreen
 		webGLCanvas.setCoordinateSpaceHeight(webGLCanvas.getParent()
@@ -148,8 +152,12 @@ public class GameCanvas {
 		HEIGHT = webGLCanvas.getParent().getOffsetHeight();
 		WIDTH = webGLCanvas.getParent().getOffsetWidth();
 		camera = new Camera();
-
-		glContext.viewport(0, 0, WIDTH, HEIGHT);
+		if (glContext != null){
+			glContext.viewport(0, 0, WIDTH, HEIGHT);
+		}else{
+			Window.alert("Sorry, your browser doesn't support WebGL!");
+		}
+			
 		
 		// MORE CLICK CODE
 		objectSelector = new Selector(glContext, this);
@@ -342,8 +350,12 @@ public class GameCanvas {
 	/**
 	 * Binds keys to browser window to move map around and zoom in/out
 	 */
+	
 	private void registerMapMovements() {
 		RootPanel.get().addDomHandler(new KeyDownHandler() {
+			//TODO: Check SuppressWarnings.
+			// FINDBUG - Added Suppress Warning to local variable
+			@SuppressWarnings("unused")
 			private long lastHit = System.currentTimeMillis();
 
 			@Override
@@ -489,8 +501,14 @@ public class GameCanvas {
 						int selectedID = objectSelector.pickEntity(event.getClientX(), event.getClientY());
 						if(commandDebug) Console.log("Selected entity with ID " + selectedID + ".");
 						if (theModel.getGameModel().getGameObjects().containsKey(selectedID)) {
-							if(commandDebug) Console.log("This entity exists! Adding to selected entities...");
+							Console.log("This entity exists! Adding to selected entities x: " + event.getX() + "y: " + event.getY());
 							selectedEntities.add(selectedID);
+							GameObject  temp = theModel.getGameModel().getGameObject(selectedID);
+						//	if (theModel.getGameModel().getGameObjects().)
+							$("#unit-toolbar").toggle();
+							$("#unit-toolbar").css("left", (event.getX()+25) + "px");
+							$("#unit-toolbar").css("top", (event.getY()-25) + "px");
+							$("#unit-toolbar").html(GameInterface.getInfo(selectedID));
 						} else {
 							if(commandDebug) Console.log("This entity DOES NOT exist!");
 						}
@@ -546,7 +564,6 @@ public class GameCanvas {
 
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
-				// TODO Auto-generated method stub
 				int x1 = (int) Math.min(first.x, curr.x);
 				int x2 = (int) (x1 + Math.abs(first.x - curr.x));
 				
@@ -554,11 +571,13 @@ public class GameCanvas {
 				int y2 = (int) (y1 + Math.abs(first.y - curr.y));
 				
 				Integer[] ids = objectSelector.pickEntities(x1, y1, x2, y2);
+				
 				for (int selectedID : ids){
 					if(commandDebug) Console.log("Selected entity with ID " + selectedID + ".");
 					if (theModel.getGameModel().getGameObjects().containsKey(selectedID)) {
 						if(commandDebug) Console.log("This entity exists! Adding to selected entities...");
-						selectedEntities.add(selectedID);
+							if(theModel.getGameModel().getGameObjects().get(selectedID).getPlayerID() == playerID);
+								selectedEntities.add(selectedID);
 					} else {
 						if(commandDebug) Console.log("This entity DOES NOT exist!");
 					}
@@ -577,7 +596,6 @@ public class GameCanvas {
 	}
 
 	private boolean onEdgeOfMap(MouseMoveEvent event) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -620,7 +638,7 @@ public class GameCanvas {
 			camera.left(delta);
 		if (right)
 			camera.right(delta);
-		if (in && camZ >= 2.0)
+		if (in && camZ >= 1.0)
 			camera.zoomIn();
 		if (out && camZ <= 25.0f)
 			camera.zoomOut();
@@ -637,6 +655,9 @@ public class GameCanvas {
 	/**
 	 * 
 	 */
+	//TODO: Check SuppressWarnings.
+	// FINDBUG - Added SuppressWarning for unuesed Local Variabls.
+	@SuppressWarnings("unused")
 	private void start() {
 		glContext.clearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glContext.clearDepth(1.0f);
@@ -834,6 +855,8 @@ public class GameCanvas {
 	/**
 	 * Creates the vertex and texture coordinate buffer for  rendering
 	 */
+	//TODO: Check SuppressWarnings.
+	@SuppressWarnings("static-access")
 	private void initBuffers() {
 		tileVertexBuffer = glContext.createBuffer();
 		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileVertexBuffer);
@@ -858,6 +881,8 @@ public class GameCanvas {
 		selectVertBuffer = glContext.createBuffer();
 	}
 	
+	//TODO: Check SuppressWarnings.
+	@SuppressWarnings("static-access")
 	private void makeAgent(){
 		float[] verts = { 
 				0.0f, 0.0f, 0.0f,
@@ -936,6 +961,8 @@ public class GameCanvas {
 		tileSelectData = Float32Array.create(NUM_TILES * 6 * 2);
 		
 		RenderTile[][] map = RenderTile.makeMap(this.theModel.getGameModel().getBoard(), GRID_WIDTH);
+		// Testing - remove and replace with above for shipment
+		//RenderTile[][] map = RenderTile.makeFlatMap(this.theModel.getGameModel().getBoard(), GRID_WIDTH);
 		
 		int index = 0;
 		for (int x = 0; x < GRID_WIDTH; x++)
@@ -984,6 +1011,8 @@ public class GameCanvas {
 		glContext.flush();
 	}
 	
+	//TODO: Check SuppressWarnings.
+	@SuppressWarnings("static-access")
 	public void renderSelection(Shader selectShader){
 		if (first == null)
 			return;

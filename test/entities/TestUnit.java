@@ -1,13 +1,14 @@
 
 package entities;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import com.shared.model.control.Factory;
 import com.shared.model.control.Player;
-import com.shared.model.entities.GameObjectType;
 import com.shared.model.units.Unit;
 import com.shared.model.units.UnitType;
 
@@ -29,16 +30,17 @@ public class TestUnit {
 	@Test
 	public void testSet() {
 
+		// Commented because this method has been removed.
 		// test SetHealth
-		assertEquals(20, 0, u.getHealth());
-		assertTrue(u.setHealth(40.0f));
-		assertEquals(20.0, 0, u.getHealth());
-		assertTrue(u.setHealth(-40.0f));
-		assertEquals(20.0, 0, u.getHealth());
-		assertTrue(u.setHealth(10.0f));
-		assertEquals(10.0, 0, u.getHealth());
-		assertFalse(u.setHealth(0.0f));
-		assertEquals(0.0, 0, u.getHealth());
+//		assertEquals(20, 0, u.getHealth());
+//		assertTrue(u.setHealth(40.0f));
+//		assertEquals(20.0, 0, u.getHealth());
+//		assertTrue(u.setHealth(-40.0f));
+//		assertEquals(20.0, 0, u.getHealth());
+//		assertTrue(u.setHealth(10.0f));
+//		assertEquals(10.0, 0, u.getHealth());
+//		assertFalse(u.setHealth(0.0f));
+//		assertEquals(0.0, 0, u.getHealth());
 
 		// test ModifyHealth
 		assertTrue(u.modifyHealthBy(10.0f));
@@ -50,7 +52,7 @@ public class TestUnit {
 
 		assertEquals(1.0, 0, u.getPosition().getX());
 		assertEquals(1.0, 0, u.getPosition().getY());
-		u.setLocation(2.0f, 2.0f);
+		u.setMoveTarget(2.0f, 2.0f);
 		assertEquals(2.0, 0, u.getPosition().getX());
 		assertEquals(2.0, 0, u.getPosition().getY());
 	}

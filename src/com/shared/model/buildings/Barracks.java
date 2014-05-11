@@ -43,13 +43,14 @@ public class Barracks extends Building {
 		level++;
 	}
 	
+	// FINDBUGS - Added break statements for each case.
 	public void setCapacity(){
 		switch(level){
-		case 1: capacity=1;
-		case 2: capacity=5;
-		case 3: capacity=10;
-		case 4: capacity=17;
-		case 5: capacity=25;
+		case 1: capacity=1; break;
+		case 2: capacity=5; break;
+		case 3: capacity=10; break;
+		case 4: capacity=17; break;
+		case 5: capacity=25; break;
 		}
 	}
 
