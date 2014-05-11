@@ -128,7 +128,8 @@ public class GameCanvas {
 	
 	public GameCanvas(ClientController theModel) {
 		// CODE FOR MINIMAP DEV/CLICK SELECTING
-		this.GRID_WIDTH = theModel.getGameModel().getBoard().getCols();
+		// FINDBUG - Changed GRID_WIDTH to be accessed in a static way
+		GRID_WIDTH = theModel.getGameModel().getBoard().getCols();
 		this.NUM_TILES = GRID_WIDTH *GRID_WIDTH;
 		
 		selectedEntities = new ArrayList<Integer>();
@@ -509,7 +510,8 @@ public class GameCanvas {
 						if (theModel.getGameModel().getGameObjects().containsKey(selectedID)) {
 							Console.log("This entity exists! Adding to selected entities x: " + event.getX() + "y: " + event.getY());
 							selectedEntities.add(selectedID);
-							GameObject  temp = theModel.getGameModel().getGameObject(selectedID);
+							// FINDBUG - temp unused.
+							//GameObject  temp = theModel.getGameModel().getGameObject(selectedID);
 						//	if (theModel.getGameModel().getGameObjects().)
 							$("#unit-toolbar").toggle();
 							$("#unit-toolbar").css("left", (event.getX()+25) + "px");
@@ -582,7 +584,8 @@ public class GameCanvas {
 					if(commandDebug) Console.log("Selected entity with ID " + selectedID + ".");
 					if (theModel.getGameModel().getGameObjects().containsKey(selectedID)) {
 						if(commandDebug) Console.log("This entity exists! Adding to selected entities...");
-							if(theModel.getGameModel().getGameObjects().get(selectedID).getPlayerID() == playerID);
+						//FINDBUG - Removed erroneous semicolon in following control statement.
+							if(theModel.getGameModel().getGameObjects().get(selectedID).getPlayerID() == playerID)
 								selectedEntities.add(selectedID);
 					} else {
 						if(commandDebug) Console.log("This entity DOES NOT exist!");
@@ -662,7 +665,7 @@ public class GameCanvas {
 	 * 
 	 */
 	//TODO: Check SuppressWarnings.
-	// FINDBUG - Added SuppressWarning for unuesed Local Variabls.
+	// FINDBUG - Added SuppressWarning for unused Local Variables.
 	@SuppressWarnings("unused")
 	private void start() {
 		glContext.clearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -1018,7 +1021,7 @@ public class GameCanvas {
 	}
 	
 	//TODO: Check SuppressWarnings.
-	@SuppressWarnings("static-access")
+	//@SuppressWarnings("static-access")
 	public void renderSelection(Shader selectShader){
 		if (first == null)
 			return;
@@ -1052,7 +1055,8 @@ public class GameCanvas {
 		glContext.blendFunc(WebGLRenderingContext.SRC_ALPHA, WebGLRenderingContext.ONE);
 		
 		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, selectVertBuffer);
-		glContext.bufferData(glContext.ARRAY_BUFFER, selectData,
+		// FINDBUG - Changed ARRAY_BUFFER to be accessed in a static way.
+		glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER, selectData,
 				WebGLRenderingContext.DYNAMIC_DRAW);
 		
 		int selectVertAttrib = glContext.getAttribLocation(selectShader.shaderProgram, "vertices");
