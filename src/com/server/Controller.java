@@ -60,39 +60,39 @@ public class Controller implements Runnable, Serializable {
 		lastTime = System.currentTimeMillis();
 		stop = false;
 		
-		Timer timer = new Timer();
-		TimerTask task = new TimerTask() {
+		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				simulateFrame();
+				while(true) {
+					long currTime = System.currentTimeMillis();
+					if( currTime < lastTime + timeStep || !continueSimulation ) {
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						continue;
+					}
+					
+					continueSimulation = false;
+					updateRunningAverage( (int) (currTime - lastTime) );
+					lastTime = currTime;
+					
+					packetToSend = commandPacket;
+					commandPacket = new CommandPacket();
+					packetToSend.executeOn(model);
+					
+					if(debug) System.out.println(packetToSend.getCommandQueue().size() + " commands processed this turn");
+					
+					model.advanceTimeStep( movingAverage );
+					packetToSend.setTime( movingAverage );
+					packetToSend.setTurnNumber(turnNumber);
+					turnNumber++;
+					packetReady = true; // Game updated, ready to update clients
+				}
 			}
-		};
-
-		timer.scheduleAtFixedRate(task, 0, 10);
-
-	}
-	
-	public synchronized void simulateFrame() {
-		
-		long currTime = System.currentTimeMillis();
-		if( currTime < lastTime + timeStep || !continueSimulation ) return;
-		
-		continueSimulation = false;
-		updateRunningAverage( (int) (currTime - lastTime) );
-		lastTime = currTime;
-		
-		packetToSend = commandPacket;
-		commandPacket = new CommandPacket();
-		packetToSend.executeOn(model);
-		
-		if(debug) System.out.println(packetToSend.getCommandQueue().size() + " commands processed this turn");
-		
-		model.advanceTimeStep( movingAverage );
-		packetToSend.setTime( movingAverage );
-		packetToSend.setTurnNumber(turnNumber);
-		turnNumber++;
-		packetReady = true; // Game updated, ready to update clients
-		
+			
+		}).start();
 	}
 	
 	public synchronized void continueSimulation() {

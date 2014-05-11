@@ -18,13 +18,17 @@ public class Factory implements Serializable {
 	 * 
 	 */
 	public static final long serialVersionUID = -8480151288632582040L;
-	static int nextID = 1;
+	int nextID = 1;
 	
-	public static int getUniqueID() {
+	public void setId(int id) {
+		nextID = id;
+	}
+	
+	public int getUniqueID() {
 		return nextID++;
 	}
 
-	public static Unit buildUnit(Player p, int playerId, UnitType unitType,
+	public Unit buildUnit(Player p, int playerId, UnitType unitType,
 			float xco, float yco) {
 
 		int id = getUniqueID();
@@ -85,7 +89,7 @@ public class Factory implements Serializable {
 	// Do not remove Player p arg. It is needed to maintain the collection of
 	// buildings for the player
 
-	public static Building buildBuilding(Player p, int playerId,
+	public Building buildBuilding(Player p, int playerId,
 			BuildingType buildingType, float xco, float yco, GameBoard gb) {
 		int newId = getUniqueID();
 		Building result = null;
@@ -145,5 +149,4 @@ public class Factory implements Serializable {
 		return result;
 
 	}
-
 }

@@ -166,6 +166,7 @@ public class ClientController {
 								public void onSuccess(GameModel result) {
 									if(debug) Console.log("Game retrieved!");
 									model = result;
+									confirmReceipt();
 								}
 								
 							});
@@ -181,7 +182,7 @@ public class ClientController {
 							if(debug) Console.log("    Simulation state received! Cycle time: " + cycleTime + " ms");
 							confirmReceipt();
 						}
-						resetTimer();
+						
 					}
 				});
 			}
@@ -214,6 +215,7 @@ public class ClientController {
 			public void onSuccess(String result) {
 				Console.log("    Receipt success!");
 				readyForNext = true;
+				resetTimer();
 			}
 
 		});
