@@ -87,6 +87,9 @@ public interface ClientResources extends ClientBundle{
     @Source(value={"archer.obj"})
     TextResource archerOBJ();
     
+    @Source(value={"barracks.obj"})
+    TextResource barracksOBJ();
+    
     @Source(value={"floorSprite.obj"})
     TextResource floorSpriteOBJ();
     
@@ -104,6 +107,9 @@ public interface ClientResources extends ClientBundle{
     
     @Source("archer_base_colors_medium.jpg")
     ImageResource archerTexture();
+    
+    @Source("barracks_base_colors_medium.jpg")
+    ImageResource barracksTexture();
     
     @Source("ring_medium.png")
     ImageResource ringTexture();
