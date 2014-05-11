@@ -216,6 +216,16 @@ public class GameCanvas {
 		final Mesh cannon1 = OBJImporter.objToMesh(ClientResources.INSTANCE.cannonOBJ().getText(), glContext);
 		cannon1.setTexture(glContext, ClientResources.INSTANCE.cannonTexture());
 		
+		final Mesh barracks1 = OBJImporter.objToMesh(ClientResources.INSTANCE.barracksOBJ().getText(), glContext);
+		barracks1.setTexture(glContext, ClientResources.INSTANCE.barracksTexture());
+		barracks1.posX = 6.5f;
+		barracks1.posY = 5.5f;
+		barracks1.posZ = 0.0f;
+		barracks1.id = 17261;
+		barracks1.healthPercentage = 0.99f;
+		barracks1.setTeamColor(0.0f,1.0f,0.0f);
+		entities.put(barracks1.id, barracks1);
+		
 		/*// STRAIN THE SERVER AAAAAAHHHHH 
 		int idcount = 300;
 		for (int i = 0; i < 20; i++) {
