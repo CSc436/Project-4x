@@ -129,9 +129,7 @@ public class ClientController {
 		pollTimer = new Timer() {
 
 			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				
+			public void run() {				
 				if(!readyForNext) {
 					//Console.log("Not ready for next set of commands");
 					resetTimer();

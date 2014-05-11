@@ -75,7 +75,8 @@ public class Selector {
 		glContext.bindFramebuffer(WebGLRenderingContext.FRAMEBUFFER, tileFrameBuffer);
 		
 		Uint8Array pixelData = Uint8Array.create(4);
-		glContext.readPixels(x, canvas.HEIGHT - y, 1, 1, WebGLRenderingContext.RGBA,WebGLRenderingContext.UNSIGNED_BYTE, pixelData);
+		// FINDBUG - Refactored canvas.HEIGHT to GAMECANVAS.HEIGHT
+		glContext.readPixels(x, GameCanvas.HEIGHT - y, 1, 1, WebGLRenderingContext.RGBA,WebGLRenderingContext.UNSIGNED_BYTE, pixelData);
 		/*
 		String s = "[";
 		for (int i = 0; i < 4; i ++)
@@ -149,7 +150,8 @@ public class Selector {
 		// A simple array for storing a single pixel of 4 (rgba) components.
 		// This may change to allow for box selection later on.
 		Uint8Array pixelData = Uint8Array.create(4);
-		glContext.readPixels(x, canvas.HEIGHT - y, 1, 1, WebGLRenderingContext.RGBA,WebGLRenderingContext.UNSIGNED_BYTE, pixelData);
+		// FINDBUG - Refactored canvas.HEIGHT to GAMECANVAS.HEIGHT
+		glContext.readPixels(x, GameCanvas.HEIGHT - y, 1, 1, WebGLRenderingContext.RGBA,WebGLRenderingContext.UNSIGNED_BYTE, pixelData);
 		//System.out.println("R:" + pixelData.get(0) + " G:" + pixelData.get(1) +" B:" + pixelData.get(2) +" A:" + pixelData.get(3));
 		// Convert the pixel rgb components to an entity id
 		id = pixelData.get(2) + (pixelData.get(1) * 256) + (pixelData.get(0) * 65536);
@@ -159,8 +161,10 @@ public class Selector {
 	private Integer[] getIDS(int x1, int y1, int x2, int y2){
 		TreeSet<Integer> set = new TreeSet<Integer>();
 		Uint8Array pixelData = Uint8Array.create((x2 - x1) * (y2 - y1) * 4);
-		glContext.readPixels(x1, canvas.HEIGHT - y2, (x2 - x1), (y2 - y1), WebGLRenderingContext.RGBA, WebGLRenderingContext.UNSIGNED_BYTE, pixelData);
- 		
+
+		// FINDBUG - Refactored canvas.HEIGHT to GAMECANVAS.HEIGHT
+		glContext.readPixels(x1, GameCanvas.HEIGHT - y2, (x2 - x1), (y2 - y1), WebGLRenderingContext.RGBA, WebGLRenderingContext.UNSIGNED_BYTE, pixelData);
+
 		int id;
 		for (int x = 0; x < pixelData.getLength(); x += 20){
 			id = pixelData.get(x + 2) + (pixelData.get(x + 1) * 256) + (pixelData.get(x) * 65536);

@@ -33,7 +33,8 @@ public class PlayGame implements EntryPoint {
 				password = $("#login-password").val();
 
 				// Check if username or password are blank
-				if (username == "" || password == "") {
+				// FINDBUG - Changed == to .equals
+				if (username.equals("")|| password.equals("")) {
 					Window.alert("Enter things pleeze");
 				} else {
 
