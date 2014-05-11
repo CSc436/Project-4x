@@ -2,32 +2,32 @@ package com.client.gameinterface;
 
 import static com.google.gwt.query.client.GQuery.$;
 
-import com.google.gwt.dom.client.Document;
-
 import java.util.HashMap;
 import java.util.List;
 
-import com.client.model.ClientController;
 import com.client.GameCanvas;
+import com.client.model.ClientController;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Random;
+import com.google.gwt.user.client.Timer;
 import com.shared.model.buildings.Building;
 import com.shared.model.buildings.ResourceBuilding;
 import com.shared.model.commands.AddPlayerCommand;
 import com.shared.model.commands.BuildingProductionCommand;
-import com.shared.model.commands.TradeCommand;
 import com.shared.model.commands.SendMessageCommand;
+import com.shared.model.commands.TradeCommand;
 import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
 import com.shared.model.diplomacy.trading.IntervalResourceTrade;
 import com.shared.model.diplomacy.trading.interfaces.ITrade;
+import com.shared.model.entities.GameObject;
 import com.shared.model.resources.Resources;
 import com.shared.model.units.Unit;
 import com.shared.model.units.UnitType;
-import com.google.gwt.user.client.Random;
-import com.google.gwt.user.client.Timer;
 
 public class GameInterface {
 
@@ -93,6 +93,35 @@ public class GameInterface {
 	 */
 	public static void setPlayerID(int id) {
 		playerID = id;
+	}
+	
+	public static String getInfo(int id) {
+		if (me.getGameObjects().getUnits().containsKey(id))
+			return getUnitInfo(me.getGameObjects().getUnits().get(id));
+		else
+			return getBuildingInfo(me.getGameObjects().getBuildings().get(id));
+	}
+	
+	private static String getUnitInfo(Unit u) {
+		return "" + "<div>Type: " + u.getUnitType().toString()
+				+ "</div>" + "<div>Health: " + u.getHealth()
+				+ "</div>" + "<div>Position: "
+				+ u.getPosition().getX() + ", "
+				+ u.getPosition().getY() + "</div>";
+	}
+	
+	private static String getBuildingInfo(Building b) {
+		String info = "";
+		
+		info += "" + "<h2>" + b.getBuildingType().toString()
+		+ "</h2>";
+		info += "<div>Health: " + b.getHealth() + "</div>"
+		+ "<div>Position: "
+		+ (int) b.getPosition().getX() + ", "
+		+ (int) b.getPosition().getY()
+		+ "</div>";
+		
+		return info;
 	}
 
 	/**
@@ -376,16 +405,10 @@ public class GameInterface {
 				changeSidebarContent("units-menu-detail");
 				// Get unit ID from btn
 				int id = Integer.parseInt($(this).attr("data-id"));
-				Unit u = me.getGameObjects().getUnits().get(id);
 				// Clear out unit-info
 				$("#unit-info").empty();
 				// Populate units-menu-detail with info
-				$("#unit-info").append(
-						"" + "<div>Type: " + u.getUnitType().toString()
-								+ "</div>" + "<div>Health: " + u.getHealth()
-								+ "</div>" + "<div>Position: "
-								+ u.getPosition().getX() + ", "
-								+ u.getPosition().getY() + "</div>");
+				$("#unit-info").append(GameInterface.getInfo(id));
 				return true; // Default return true
 			}
 		});

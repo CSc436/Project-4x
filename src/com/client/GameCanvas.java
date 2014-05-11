@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.client.gameinterface.Console;
+import com.client.gameinterface.GameInterface;
 import com.client.model.ClientController;
 import com.client.rendering.Camera;
 import com.client.rendering.Mesh;
@@ -122,6 +123,8 @@ public class GameCanvas {
 	private static int buildingCounter = -1;
 	
 	private int playerID;
+	
+	
 	
 	public GameCanvas(ClientController theModel) {
 		// CODE FOR MINIMAP DEV/CLICK SELECTING
@@ -498,8 +501,14 @@ public class GameCanvas {
 						int selectedID = objectSelector.pickEntity(event.getClientX(), event.getClientY());
 						if(commandDebug) Console.log("Selected entity with ID " + selectedID + ".");
 						if (theModel.getGameModel().getGameObjects().containsKey(selectedID)) {
-							if(commandDebug) Console.log("This entity exists! Adding to selected entities...");
+							Console.log("This entity exists! Adding to selected entities x: " + event.getX() + "y: " + event.getY());
 							selectedEntities.add(selectedID);
+							GameObject  temp = theModel.getGameModel().getGameObject(selectedID);
+						//	if (theModel.getGameModel().getGameObjects().)
+							$("#unit-toolbar").toggle();
+							$("#unit-toolbar").css("left", (event.getX()+25) + "px");
+							$("#unit-toolbar").css("top", (event.getY()-25) + "px");
+							$("#unit-toolbar").html(GameInterface.getInfo(selectedID));
 						} else {
 							if(commandDebug) Console.log("This entity DOES NOT exist!");
 						}
