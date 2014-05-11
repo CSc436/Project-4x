@@ -4,6 +4,7 @@ import com.client.GameCanvas;
 import com.client.gameinterface.Console;
 import com.googlecode.gwtgl.array.Float32Array;
 import com.shared.model.Terrain;
+import com.shared.model.gameboard.Resource;
 import com.shared.model.gameboard.GameBoard;
 import com.shared.utils.Coordinate;
 import com.shared.utils.DiamondSquare;
@@ -15,11 +16,13 @@ public class RenderTile {
 	private int ne, nw, se, sw, iter; // flags used for auto-tiling
 	private float size; // length of the tile
 	private float depth; // z coordinate
+	private Resource resource;
 	
-	public RenderTile(float x, float y, float size, float depth){
+	public RenderTile(float x, float y, float size, float depth, Resource resource){
 		position = new Coordinate(x, y);
 		this.size = size;
 		this.depth = depth;
+		this.resource = resource;
 		
 		ne = 0;
 		nw = 0;
@@ -27,6 +30,10 @@ public class RenderTile {
 		sw = 0;
 		
 		iter = -1;
+	}
+	
+	public void setResource(Resource resource){
+		this.resource = resource;
 	}
 	
 	/* ========== Auto-tiling Helper Functions ========== */
@@ -96,7 +103,7 @@ public class RenderTile {
 		RenderTile[][] map = new RenderTile[dimension][dimension];
 		for (int x = 0; x < dimension; x++)
 			for (int y = 0; y < dimension; y++){
-				map[x][y] = new RenderTile(x, y, 1.0f, 0.0f);
+				map[x][y] = new RenderTile(x, y, 1.0f, 0.0f, Resource.NONE);
 			}
 		
 		int n, s, e, w, val;
@@ -154,14 +161,19 @@ public class RenderTile {
 		float startx = (iter < 0 ? 15 : flagVals()) / 16.0f, starty = (iter < 0 ? 0 : iter) / 16.0f;
 		float delta = 32.0f / 512.0f;
 		
+		if (resource != Resource.NONE){
+			starty = 4.0f / 16.0f;
+			startx = resource.ordinal() / 16.0f;
+		}
+		
 		float[] texCoords = new float[] { 
-				startx, starty, 
-				startx + delta, starty,
-				startx, starty + delta,
-				
-				startx, starty + delta,
-				startx + delta, starty + delta,
-				startx + delta, starty
+			startx, starty, 
+			startx + delta, starty,
+			startx, starty + delta,
+			
+			startx, starty + delta,
+			startx + delta, starty + delta,
+			startx + delta, starty
 		};
 		
 		texCoordBuffer.set(texCoords, index*texCoords.length);
@@ -208,22 +220,23 @@ public class RenderTile {
 		RenderTile[][] map = new RenderTile[dimension][dimension];
 		for (int x = 0; x < dimension; x++)
 			for (int y = 0; y < dimension; y++){
-				map[x][y] = new RenderTile(x, y, 1.0f, 0.0f);
+				map[x][y] = new RenderTile(x, y, 1.0f, 0.0f, Resource.NONE);
 			}
 		
 		int n, s, e, w, val;
 		
 		// Auto tiling algorithm
 		for (Terrain t: Terrain.values()){
-			//if (t == Terrain.FOREST || t == Terrain.WATER)
-				//continue;
+			if (t == Terrain.FOREST || t == Terrain.WATER)
+				continue;
 			
 			val = t.getValue();
 			
 			for (int x = 0; x < dimension; x++)
 				for (int y = 0; y < dimension; y++)
-					if (gameBoard.getTileAt(x, y).getTerrainType().getValue() == t.getValue()){
+					if (gameBoard.getTileAt(x, y).getTerrainType().getLower() >= t.getLower()){
 						RenderTile curr = map[x][y];
+						curr.setResource(gameBoard.getTileAt(x, y).getResource());
 						curr.setFlags(0, 0, 0, 0, val);
 						
 						e = (x + 1) % dimension;

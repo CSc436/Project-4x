@@ -8,7 +8,7 @@ public class Camera {
 	private float[] cameraMatrix;
 	private float camX = GameCanvas.GRID_WIDTH/2 * -1, camY = GameCanvas.GRID_WIDTH * -1, camZ = 20.0f;
 	private float yaw = 0.0f, pitch = 225.0f, roll = 0.0f;
-	private static float DELTA_ROTATE = 0.5f;
+	private static float DELTA_ROTATE = 1.0f;
 	
 	public Camera() {
 		makeCameraMatrix();

@@ -554,11 +554,13 @@ public class GameCanvas {
 				int y2 = (int) (y1 + Math.abs(first.y - curr.y));
 				
 				Integer[] ids = objectSelector.pickEntities(x1, y1, x2, y2);
+				
 				for (int selectedID : ids){
 					if(commandDebug) Console.log("Selected entity with ID " + selectedID + ".");
 					if (theModel.getGameModel().getGameObjects().containsKey(selectedID)) {
 						if(commandDebug) Console.log("This entity exists! Adding to selected entities...");
-						selectedEntities.add(selectedID);
+							if(theModel.getGameModel().getGameObjects().get(selectedID).getPlayerID() == playerID);
+								selectedEntities.add(selectedID);
 					} else {
 						if(commandDebug) Console.log("This entity DOES NOT exist!");
 					}
@@ -620,7 +622,7 @@ public class GameCanvas {
 			camera.left(delta);
 		if (right)
 			camera.right(delta);
-		if (in && camZ >= 2.0)
+		if (in && camZ >= 1.0)
 			camera.zoomIn();
 		if (out && camZ <= 25.0f)
 			camera.zoomOut();

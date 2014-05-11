@@ -160,9 +160,9 @@ public class Selector {
 		TreeSet<Integer> set = new TreeSet<Integer>();
 		Uint8Array pixelData = Uint8Array.create((x2 - x1) * (y2 - y1) * 4);
 		glContext.readPixels(x1, canvas.HEIGHT - y2, (x2 - x1), (y2 - y1), WebGLRenderingContext.RGBA, WebGLRenderingContext.UNSIGNED_BYTE, pixelData);
-		
+ 		
 		int id;
-		for (int x = 0; x < pixelData.getLength(); x += 4){
+		for (int x = 0; x < pixelData.getLength(); x += 20){
 			id = pixelData.get(x + 2) + (pixelData.get(x + 1) * 256) + (pixelData.get(x) * 65536);
 			set.add(id);
 			Console.log("" + id);
@@ -171,7 +171,7 @@ public class Selector {
 		return set.toArray(new Integer[set.size()]);
 	}
 	
-	/**
+	/*
 	 * Reset the framebuffer to the default framebuffer
 	 */
 	private void resetFramebuffer() {
