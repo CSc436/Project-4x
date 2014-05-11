@@ -46,8 +46,7 @@ public class GameInterface {
 	private static int msgCount = 0; // keeps count of number of messages.
 	private static boolean chatBoxHidden = true; // if chat box is hidden,
 													// changed when toggled.
-	
-	
+
 	/**
 	 * Responsible for registering callbacks that are purely bound to the
 	 * interface
@@ -94,33 +93,29 @@ public class GameInterface {
 	public static void setPlayerID(int id) {
 		playerID = id;
 	}
-	
+
 	public static String getInfo(int id) {
 		if (me.getGameObjects().getUnits().containsKey(id))
 			return getUnitInfo(me.getGameObjects().getUnits().get(id));
 		else
 			return getBuildingInfo(me.getGameObjects().getBuildings().get(id));
 	}
-	
+
 	private static String getUnitInfo(Unit u) {
-		return "" + "<div>Type: " + u.getUnitType().toString()
-				+ "</div>" + "<div>Health: " + u.getHealth()
-				+ "</div>" + "<div>Position: "
-				+ u.getPosition().getX() + ", "
+		return "" + "<div>Type: " + u.getUnitType().toString() + "</div>"
+				+ "<div>Health: " + u.getHealth() + "</div>"
+				+ "<div>Position: " + u.getPosition().getX() + ", "
 				+ u.getPosition().getY() + "</div>";
 	}
-	
+
 	private static String getBuildingInfo(Building b) {
 		String info = "";
-		
-		info += "" + "<h2>" + b.getBuildingType().toString()
-		+ "</h2>";
-		info += "<div>Health: " + b.getHealth() + "</div>"
-		+ "<div>Position: "
-		+ (int) b.getPosition().getX() + ", "
-		+ (int) b.getPosition().getY()
-		+ "</div>";
-		
+
+		info += "" + "<h2>" + b.getBuildingType().toString() + "</h2>";
+		info += "<div>Health: " + b.getHealth() + "</div>" + "<div>Position: "
+				+ (int) b.getPosition().getX() + ", "
+				+ (int) b.getPosition().getY() + "</div>";
+
 		return info;
 	}
 
@@ -189,7 +184,7 @@ public class GameInterface {
 		startResourcesTimer();
 
 	}
-	
+
 	/**
 	 * Creates a timer to continually update the resources in the toolbar
 	 * Updates every second
@@ -368,7 +363,7 @@ public class GameInterface {
 						"" + "<div>Gold: " + r.getGold() + "</div>"
 								+ "<div>Wood: " + r.getWood() + "</div>"
 								+ "<div>Stone: " + r.getStone() + "</div>"
-								+ "<div>Food :" + r.getFood() + "</div>"
+								+ "<div>Food: " + r.getFood() + "</div>"
 								+ "<div>Research: " + r.getResearchPts()
 								+ "</div>");
 				// Clear out buildings table
@@ -584,9 +579,6 @@ public class GameInterface {
 				String unitType = $("#buildings-menu-detail #unit-type").val();
 				int buildingID = Integer.parseInt($(
 						"#buildings-menu-detail #building-id").val());
-				Console.log("" + buildingID);
-				UnitType ut = UnitType.valueOf(unitType.toUpperCase());
-				Console.log(ut.toString());
 				// Send command through clientModel
 				clientModel.sendCommand(new BuildingProductionCommand(
 						buildingID, UnitType.valueOf(unitType.toUpperCase())));
@@ -657,6 +649,22 @@ public class GameInterface {
 							receiving));
 				}
 				return true; // Return true for click callback
+			}
+		});
+		
+		// Toggle camera flag when typing for diplomacy-send-user
+		$("#diplomacy-send-user").focus(new Function() {
+			public boolean f(Event e) {
+				canvas.turnOnChatFlag();
+				return true;
+			}
+		});
+		
+		// Toggle camera flag when not typing in diplomacy-send-user
+		$("#diplomacy-send-user").blur(new Function() {
+			public boolean f(Event e) {
+				canvas.turnOffChatFlag();
+				return true;
 			}
 		});
 
@@ -881,11 +889,11 @@ public class GameInterface {
 				updateMessages(gameModel.getChatLog().get(i).getMessage(),
 						gameModel.getChatLog().get(i).getPlayerID());
 			}
-		} else if (msgCount > chatLogLength)
-		{
-			// msgCount is greater, chatLog has been destroyed, reinitialize chat.
+		} else if (msgCount > chatLogLength) {
+			// msgCount is greater, chatLog has been destroyed, reinitialize
+			// chat.
 			msgCount = 0; // reset message count
-			initializeChat();  // initialize chat again. 
+			initializeChat(); // initialize chat again.
 		}
 	}
 
@@ -907,7 +915,7 @@ public class GameInterface {
 	 * @param hideIfShowing
 	 *            true/false if we want to hide the sidebar and it's showing
 	 */
-	private static void toggleSidebar(boolean hideIfShowing) {
+	public static void toggleSidebar(boolean hideIfShowing) {
 		String left = $("#sidebar").css("left");
 		int width = $("#sidebar").outerWidth(true);
 		// int closeWidth = $("#sidebar-hide").outerWidth(true);
