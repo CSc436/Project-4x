@@ -194,6 +194,7 @@ public class GameInterface {
 
 			public void run() {
 				Resources r = me.getResources();
+				Console.log("my stone: " + r.getStone());
 				$("#toolbar-gold").html(" " + r.getGold() + " ");
 				$("#toolbar-wood").html(" " + r.getWood() + " ");
 				$("#toolbar-food").html(" " + r.getFood() + " ");
