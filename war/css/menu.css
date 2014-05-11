@@ -18,6 +18,7 @@
 /* Main div to hold buttons excluding the Close button */
 #menu-content {
 	height: 85%;
+	overflow: auto;
 }
 
 #building-toolbar {

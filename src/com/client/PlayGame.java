@@ -25,6 +25,9 @@ public class PlayGame implements EntryPoint {
 
 		// Set actions on loading screen
 		$("#loading-actions").html("INITIALIZING GAME");
+		
+		// Set focus on login-username
+		$("#login-username").focus();
 
 		// Callback for login button
 		$("#login-button").click(new Function() {
