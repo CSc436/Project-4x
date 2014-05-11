@@ -24,6 +24,7 @@ import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
 import com.shared.model.diplomacy.trading.IntervalResourceTrade;
 import com.shared.model.diplomacy.trading.interfaces.ITrade;
+import com.shared.model.entities.GameObject;
 import com.shared.model.resources.Resources;
 import com.shared.model.units.Unit;
 import com.shared.model.units.UnitType;

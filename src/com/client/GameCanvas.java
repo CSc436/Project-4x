@@ -125,6 +125,7 @@ public class GameCanvas {
 	private int playerID;
 	
 	
+	
 	public GameCanvas(ClientController theModel) {
 		// CODE FOR MINIMAP DEV/CLICK SELECTING
 		this.GRID_WIDTH = theModel.getGameModel().getBoard().getCols();
