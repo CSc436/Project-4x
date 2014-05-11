@@ -22,8 +22,8 @@ public class Player implements Serializable {
 	private static final long serialVersionUID = -3426296427536759563L;
 	private String name;
 	private int id;
-	public Map<Agent,Integer> prestige;
-	public Map<Goods,Integer> goodsNumber;
+	public Map<Agent, Integer> prestige;
+	public Map<Goods, Integer> goodsNumber;
 	private PlayerUnits objects; // the objects that the player owns, including
 									// the currently selected units
 	private TechnologyTree techTree;
@@ -31,12 +31,12 @@ public class Player implements Serializable {
 	public Resources resources;
 	public Goods goods;
 	private Civilization civ;
-	
+
 	public Player() {
 		this("", 0, new PerfectCivilization());
 	}
-	
-	// Bare constructor 
+
+	// Bare constructor
 	public Player(String name, int id) {
 		this(name, id, new PerfectCivilization());
 	}
@@ -61,7 +61,7 @@ public class Player implements Serializable {
 		upgrades = new Upgrades();
 		techTree = new TechnologyTree(this);
 		this.id = id;
-		
+
 	}
 
 	public String getAlias() {
@@ -88,11 +88,10 @@ public class Player implements Serializable {
 		return civ;
 	}
 
-
 	public Upgrades getUpgrades() {
 		return upgrades;
 	}
-	
+
 	public Building getBuilding(int buildingId) {
 		return objects.getBuildings().get(buildingId);
 	}
@@ -105,28 +104,12 @@ public class Player implements Serializable {
 		objects.addBuilding(b);
 	}
 
-	/*
-	public void selectUnit(Unit u) {
-		selectedUnits.put(u.getId(), u);
-	}
-
-	public void selectBuilding(Building b) {
-		selectedBuildings.put(b.getId(), b);
-	}
-
-	public void deselectBuilding(Building b) {
-		selectedBuildings.remove(b);
-	}
-
-	public void deselect() {
-		selectedBuildings = new HashMap<Integer, Building>();
-		selectedUnits = new HashMap<Integer, Unit>();
-	}
-
-	*/
-	// TODO implement the right way? Graham 
-	public int getGoodsNumber(Goods g)
-	{
+	public int getGoodsNumber(Goods g) {
 		return 1;
+	}
+
+	public void addUnit(Unit u) {
+		objects.addUnit(u);
+
 	}
 }
