@@ -339,7 +339,6 @@ public class GameModel implements Serializable {
 	}
 
 	public GameObject getGameObject(int entityID) {
-		// TODO Auto-generated method stub
 		return gameObjects.get(entityID);
 	}
 	
