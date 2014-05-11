@@ -280,6 +280,8 @@ public class GameModel implements Serializable {
 			int playerID = ((GameObject) p).getPlayerID();
 			for( UnitType ut : unitQueue ) {
 				Unit u = Factory.buildUnit(getPlayer(playerID), playerID, ut, x, y+1);
+				Player player = players.get(playerID);
+				player.addUnit(u);
 				int unitID = u.getId();
 				gameObjects.put(unitID, u);
 				attackers.put(unitID, u);
