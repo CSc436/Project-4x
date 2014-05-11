@@ -1,6 +1,7 @@
 package com.client.gameinterface;
 
 import static com.google.gwt.query.client.GQuery.$;
+
 import com.google.gwt.dom.client.Document;
 
 import java.util.HashMap;
@@ -45,7 +46,8 @@ public class GameInterface {
 	private static int msgCount = 0; // keeps count of number of messages.
 	private static boolean chatBoxHidden = true; // if chat box is hidden,
 													// changed when toggled.
-
+	
+	
 	/**
 	 * Responsible for registering callbacks that are purely bound to the
 	 * interface
@@ -62,6 +64,7 @@ public class GameInterface {
 
 		// set canvas to c
 		canvas = c;
+
 	}
 
 	/**

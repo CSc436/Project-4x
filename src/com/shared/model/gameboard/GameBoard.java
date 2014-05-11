@@ -2,6 +2,7 @@ package com.shared.model.gameboard;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import com.shared.model.Terrain;
@@ -131,7 +132,7 @@ public class GameBoard implements Serializable {
 		// 5 - 1-4 place in corner, 5 place in center.
 		// attempt to distribute near resources.
 
-		System.out.println(toString());
+		//System.out.println(toString());
 		endTime = System.currentTimeMillis();
 		System.out.println("Total execution time: " + (endTime - startTime)
 				+ "\n");
@@ -196,6 +197,9 @@ public class GameBoard implements Serializable {
 		// Body Analysis - if a body of a terrain type is smaller than threshold, 
 		// change body to surrounding?
 		mtSingleton();
+		
+		// Make sure two layers of sand along shore line. 
+		mtDoubleSand();
 		
 		System.out.println("Terrain Massage Complete!");
 	}
@@ -373,116 +377,59 @@ public class GameBoard implements Serializable {
 		}
 	}
 	
-	/** @deprecated use resourceDistNat instead
-	 * resourceDistNatural(): Description: Default resource distribution, uses
-	 * constants at top of file. Allocates tile types into a variety of
-	 * linkedlists, attempts to perform 'realistic' resource distribution
+	/**
+	 * makes sure that there is two layes of sand for up/down left/right water transitions. 
 	 */
-	public void resourceDistNatural() {
-		ArrayList<ArrayList<Coordinate>> terrainList = new ArrayList<ArrayList<Coordinate>>();
-		// Init lists for terain types
-		for (int i = 0; i < 6; i++) {
-			terrainList.add(new ArrayList<Coordinate>());
-		}
-
-		// Add different tiles to lists.
-		for (int i = 0; i < map.length; i++) {
-			for (int j = 0; j < map[i].length; j++) {
-				terrainList.get(map[i][j].getTerrainType().ordinal()).add(
-						new Coordinate(i, j));
-			}
-		}
-
-		System.out.println("Distributing resources in Natural Fashion...");
-		System.out.println("Distributing food...");
-		int numFood = (int) (foodMult * (terrainList.get(
-				Terrain.WATER.ordinal()).size()
-				+ terrainList.get(Terrain.SAND.ordinal()).size() + terrainList
-				.get(Terrain.GRASS.ordinal()).size()));
-		// food can exist in lists 0,1,2
-		terrainList = resourceDistNaturalHelp(terrainList, numFood,
-				Resource.FOOD, 0, 3);
-
-		System.out.println("Distributing wood...");
-		int numWood = (int) (woodMult * (terrainList.get(
-				Terrain.GRASS.ordinal()).size() + terrainList.get(
-				Terrain.FOREST.ordinal()).size()));
-		terrainList = resourceDistNaturalHelp(terrainList, numWood,
-				Resource.WOOD, 2, 2);
-		// Wood can exist in lists 2 and 3
-
-		System.out.println("Distributing stone...");
-		int numStone = (int) (stoneMult * (terrainList.get(
-				Terrain.FOREST.ordinal()).size()
-				+ terrainList.get(Terrain.MOUNTAIN.ordinal()).size() + terrainList
-				.get(Terrain.SNOW.ordinal()).size()));
-		terrainList = resourceDistNaturalHelp(terrainList, numStone,
-				Resource.STONE, 3, 3);
-
-		System.out.println("Distributing gold...");
-		int numGold = (int) (goldMult * (terrainList.get(
-				Terrain.FOREST.ordinal()).size()
-				+ terrainList.get(Terrain.MOUNTAIN.ordinal()).size() + terrainList
-				.get(Terrain.SNOW.ordinal()).size()));
-		terrainList = resourceDistNaturalHelp(terrainList, numGold,
-				Resource.GOLD, 3, 3);
-	}
-
-	/** @deprecated use resourceDistNat
-	 * resourceDistNaturalHelp(): Description: Distributes one given resource.
-	 * 
-	 * Parameters:
-	 * 
-	 * @param terrainList
-	 *            - list of available terrain tiles that can have resources
-	 * 
-	 * @param numRes
-	 *            - number of specific resource to distribute
-	 * 
-	 * @param res
-	 *            - resource to distribute
-	 * 
-	 * @param offset
-	 *            - offset in terrainList, first list this resource can appear
-	 *            in
-	 * 
-	 * @param numLists
-	 *            - number of lists this resource can appear in.
-	 * 
-	 *            Return Value:
-	 * 
-	 * @retrun the altered terrainList
-	 */
-	private ArrayList<ArrayList<Coordinate>> resourceDistNaturalHelp(
-			ArrayList<ArrayList<Coordinate>> terrainList, int numRes, Resource res,
-			int offset, int numLists) {
-		if (terrainList.size() == 0)
-			return terrainList;
-
-		Coordinate temp;
-		Random rnd = new Random();
-		int r, rp, rpp;
-		while (numRes > 0) {
-			r = Math.abs(rnd.nextInt());
-			rp = offset + r % numLists;
-			if (terrainList.get(rp).size() == 0) {
-				continue;
-			}
-			rpp = r % terrainList.get(rp).size();
-			do {
-				if (terrainList.get(rp).size() == 0) {
-					break;
+	private void mtDoubleSand()
+	{
+		boolean wsgArr [] = new boolean[Terrain.values().length];
+		for (int i = 2; i < map.length - 2; i++)
+		{
+			for (int j = 2; j < map[i].length - 2; j++)
+			{
+				// check up/down if 1 grass, 1 sand, 1 water replace water
+				// with sand
+				Arrays.fill(wsgArr, Boolean.FALSE);
+				wsgArr[map[i-1][j].getTerrainType().ordinal()] = true;
+				wsgArr[map[i][j].getTerrainType().ordinal()]   = true;
+				wsgArr[map[i+1][j].getTerrainType().ordinal()] = true;
+				// if three are set, replace the water one with sand.
+				if (wsgArr[Terrain.WATER.ordinal()] && wsgArr[Terrain.SAND.ordinal()] &&
+					wsgArr[Terrain.GRASS.ordinal()])
+				{
+					for (int k = i-1; k < i+2; k++)
+					{
+						if (map[k][j].getTerrainType() == Terrain.WATER)
+						{
+							map[k][j].setTerrainType(Terrain.SAND);
+							break;
+						}
+					}
 				}
-				temp = terrainList.get(rp)
-						.get(rpp % terrainList.get(rp).size());
-				map[(int) Math.round(temp.x)][(int) Math.round(temp.y)].setResource(res);
-				terrainList.get(rp).remove(rpp % terrainList.get(rp).size());
-				numRes--;
-			} while (rnd.nextBoolean());
+				
+				// check left/right if 1 grass, 1 sand, 1 water. 
+				Arrays.fill(wsgArr, Boolean.FALSE);
+				wsgArr[map[i][j-1].getTerrainType().ordinal()] = true;
+				wsgArr[map[i][j].getTerrainType().ordinal()]   = true;
+				wsgArr[map[i][j+1].getTerrainType().ordinal()] = true;
+				// if three are set, replace the water one with sand.
+				if (wsgArr[Terrain.WATER.ordinal()] && wsgArr[Terrain.SAND.ordinal()] &&
+					wsgArr[Terrain.GRASS.ordinal()])
+				{
+					for (int k = j-1; k < j+2; k++)
+					{
+						if (map[i][k].getTerrainType() == Terrain.WATER)
+						{
+							map[i][k].setTerrainType(Terrain.SAND);
+							break;
+						}
+					}
+				}
+			}
 		}
-		return terrainList;
 	}
-
+	
+	
 	/**
 	 * resourceDistNat():
 	 * Description:
