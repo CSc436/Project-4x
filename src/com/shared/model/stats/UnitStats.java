@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 import com.shared.model.resources.Resources;
 
-public class UnitStats implements Serializable {
+//FINDBUG - Declared Cloneable interface for clone method.
+public class UnitStats implements Serializable, Cloneable {
 	/**
 	 * 
 	 */

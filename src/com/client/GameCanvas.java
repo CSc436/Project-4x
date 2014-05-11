@@ -48,7 +48,6 @@ import com.googlecode.gwtgl.binding.WebGLUniformLocation;
 import com.shared.model.buildings.Building;
 import com.shared.model.buildings.BuildingType;
 import com.shared.model.commands.AttackCommand;
-import com.shared.model.commands.BuildingProductionCommand;
 import com.shared.model.commands.ConstructBuildingCommand;
 import com.shared.model.commands.MoveUnitCommand;
 import com.shared.model.commands.PlaceUnitCommand;
@@ -352,9 +351,9 @@ public class GameCanvas {
 	
 	private void registerMapMovements() {
 		RootPanel.get().addDomHandler(new KeyDownHandler() {
-			//TODO: Check SuppressWarnings.
+			
 			// FINDBUG - Added Suppress Warning to local variable
-			@SuppressWarnings("unused")
+			//TODO Evaluate this Field
 			private long lastHit = System.currentTimeMillis();
 
 			@Override
@@ -386,7 +385,15 @@ public class GameCanvas {
 					case KeyCodes.KEY_E: rotateRight = true; break;
 					case KeyCodes.KEY_X: center = true; break;
 					case KeyCodes.KEY_I: 
-						theModel.sendCommand(new PlaceUnitCommand( UnitType.CANNON, playerID, mouseTile));
+						int selectedID = objectSelector.pickEntity(mouseX, mouseY);
+						if (theModel.getGameModel().getGameObjects().containsKey(selectedID)) {
+							Console.log("id " + selectedID);
+							$("#unit-toolbar").empty();
+							$("#unit-toolbar").toggle();
+							$("#unit-toolbar").css("left", (mouseX+25) + "px");
+							$("#unit-toolbar").css("top", (mouseY-25) + "px");
+							$("#unit-toolbar").html(GameInterface.getInfo(selectedID));
+						}
 						break;
 					/*
 					case KeyCodes.KEY_K:
@@ -507,13 +514,6 @@ public class GameCanvas {
 						if (theModel.getGameModel().getGameObjects().containsKey(selectedID)) {
 							Console.log("This entity exists! Adding to selected entities x: " + event.getX() + "y: " + event.getY());
 							selectedEntities.add(selectedID);
-							// FINDBUG - temp unused.
-							//GameObject  temp = theModel.getGameModel().getGameObject(selectedID);
-						//	if (theModel.getGameModel().getGameObjects().)
-							$("#unit-toolbar").toggle();
-							$("#unit-toolbar").css("left", (event.getX()+25) + "px");
-							$("#unit-toolbar").css("top", (event.getY()-25) + "px");
-							$("#unit-toolbar").html(GameInterface.getInfo(selectedID));
 						} else {
 							if(commandDebug) Console.log("This entity DOES NOT exist!");
 						}
@@ -661,9 +661,6 @@ public class GameCanvas {
 	/**
 	 * 
 	 */
-	//TODO: Check SuppressWarnings.
-	// FINDBUG - Added SuppressWarning for unused Local Variables.
-	@SuppressWarnings("unused")
 	private void start() {
 		glContext.clearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glContext.clearDepth(1.0f);
@@ -680,6 +677,8 @@ public class GameCanvas {
 		makeAgent();
 		initBuffers();
 		
+		// FINDBUG - After this assignment, this shader is never used again. Is it required? 
+		//TODO Evaluate this Field
 		final Shader texturedMeshShader = new Shader(glContext,ClientResources.INSTANCE
 				.simpleMeshVS().getText(),ClientResources.INSTANCE
 				.texturedMeshFS().getText());
@@ -688,10 +687,14 @@ public class GameCanvas {
 				.simpleMeshVS().getText(),ClientResources.INSTANCE
 				.texturedMeshPhongFS().getText());
 		
+		// FINDBUG - After this assignment, this shader is never used again. Is it required? 
+		//TODO Evaluate this Field
 		final Shader normalShader = new Shader(glContext,ClientResources.INSTANCE
 				.simpleMeshVS().getText(),ClientResources.INSTANCE
 				.normalsMeshFS().getText());
 		
+		// FINDBUG - After this assignment, this shader is never used again. Is it required? 
+		//TODO Evaluate this Field
 		final Shader idShader = new Shader(glContext,ClientResources.INSTANCE
 				.simpleMeshVS().getText(),ClientResources.INSTANCE
 				.idFS().getText());
@@ -861,34 +864,33 @@ public class GameCanvas {
 	/**
 	 * Creates the vertex and texture coordinate buffer for  rendering
 	 */
-	//TODO: Check SuppressWarnings.
-	@SuppressWarnings("static-access")
+
 	private void initBuffers() {
+		// FINDBUG - Refactored ARRAY_BUFFER to be accessed in a static way.
 		tileVertexBuffer = glContext.createBuffer();
 		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileVertexBuffer);
 
-		glContext.bufferData(glContext.ARRAY_BUFFER, tileVertexData,
+		glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER, tileVertexData,
 				WebGLRenderingContext.DYNAMIC_DRAW);
 
 		tileTexCoordBuffer = glContext.createBuffer();
 		glContext
 				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileTexCoordBuffer);
 
-		glContext.bufferData(glContext.ARRAY_BUFFER, tileTexCoordData,
+		glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER, tileTexCoordData,
 				WebGLRenderingContext.DYNAMIC_DRAW);
 		
 		tileSelectBuffer = glContext.createBuffer();
 		glContext
 				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileSelectBuffer);
 
-		glContext.bufferData(glContext.ARRAY_BUFFER, tileSelectData,
+		glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER, tileSelectData,
 				WebGLRenderingContext.DYNAMIC_DRAW);
 		
 		selectVertBuffer = glContext.createBuffer();
 	}
 	
-	//TODO: Check SuppressWarnings.
-	@SuppressWarnings("static-access")
+// FINDBUG - Refactored ARRAY_BUFFER to be accessed in a static way.
 	private void makeAgent(){
 		float[] verts = { 
 				0.0f, 0.0f, 0.0f,
@@ -916,7 +918,7 @@ public class GameCanvas {
 		entityVertBuffer = glContext.createBuffer();
 		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, entityVertBuffer);
 
-		glContext.bufferData(glContext.ARRAY_BUFFER, agentVertData,
+		glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER, agentVertData,
 				WebGLRenderingContext.DYNAMIC_DRAW);
 
 		entityTexBuffer = glContext.createBuffer();
@@ -924,7 +926,7 @@ public class GameCanvas {
 				.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, entityTexBuffer);
 
 
-		glContext.bufferData(glContext.ARRAY_BUFFER, agentTexData,
+		glContext.bufferData(WebGLRenderingContext.ARRAY_BUFFER, agentTexData,
 				WebGLRenderingContext.DYNAMIC_DRAW);
 	}
 	
@@ -1017,8 +1019,7 @@ public class GameCanvas {
 		glContext.flush();
 	}
 	
-	//TODO: Check SuppressWarnings.
-	//@SuppressWarnings("static-access")
+	
 	public void renderSelection(Shader selectShader){
 		if (first == null)
 			return;

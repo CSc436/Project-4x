@@ -14,7 +14,8 @@ import com.shared.model.units.UnitType;
 
 public class TestUnit {
 	Player p = new Player("meathook", 0);
-	Unit u = Factory.buildUnit(p, p.getId(), UnitType.ARCHER, 1.0f, 1.0f);
+	Factory f = new Factory();
+	Unit u = f.buildUnit(p, p.getId(), UnitType.ARCHER, 1.0f, 1.0f);
 
 	@Test
 	public void testGet() {

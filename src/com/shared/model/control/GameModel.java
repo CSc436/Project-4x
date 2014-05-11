@@ -281,9 +281,12 @@ public class GameModel implements Serializable {
 				
 			}*/
 			
+			
 			int playerID = ((GameObject) p).getPlayerID();
 			for( UnitType ut : unitQueue ) {
 				Unit u = factory.buildUnit(getPlayer(playerID), playerID, ut, x, y+1);
+				Player p2 = players.get(playerID);
+				p2.addUnit(u);
 				int unitID = u.getId();
 				gameObjects.put(unitID, u);
 				attackers.put(unitID, u);
@@ -337,7 +340,6 @@ public class GameModel implements Serializable {
 	}
 
 	public GameObject getGameObject(int entityID) {
-		// TODO Auto-generated method stub
 		return gameObjects.get(entityID);
 	}
 	
@@ -428,6 +430,8 @@ public class GameModel implements Serializable {
 	
 	public void createUnit( UnitType ut, int pn, Coordinate c ) {
 		Unit u = factory.buildUnit(players.get(pn), pn, ut, c.fx(), c.fy());
+		Player p = players.get(pn);
+		p.addUnit(u);
 		int unitID = u.getId();
 		gameObjects.put(unitID, u);
 		attackers.put(unitID, u);

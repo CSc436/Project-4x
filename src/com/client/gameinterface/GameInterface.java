@@ -28,6 +28,7 @@ import com.shared.model.entities.GameObject;
 import com.shared.model.resources.Resources;
 import com.shared.model.units.Unit;
 import com.shared.model.units.UnitType;
+import com.shared.utils.ColorFunctions;
 
 public class GameInterface {
 
@@ -95,6 +96,7 @@ public class GameInterface {
 	}
 
 	public static String getInfo(int id) {
+		Console.log(me.getGameObjects().getUnits().toString());
 		if (me.getGameObjects().getUnits().containsKey(id))
 			return getUnitInfo(me.getGameObjects().getUnits().get(id));
 		else
@@ -102,6 +104,7 @@ public class GameInterface {
 	}
 
 	private static String getUnitInfo(Unit u) {
+		Console.log(u.toString());
 		return "" + "<div>Type: " + u.getUnitType().toString() + "</div>"
 				+ "<div>Health: " + u.getHealth() + "</div>"
 				+ "<div>Position: " + u.getPosition().getX() + ", "
@@ -425,6 +428,7 @@ public class GameInterface {
 				// Clear out unit-info
 				$("#unit-info").empty();
 				// Populate units-menu-detail with info
+				Console.log("show id " + id);
 				$("#unit-info").append(GameInterface.getInfo(id));
 				return true; // Default return true
 			}
@@ -803,8 +807,13 @@ public class GameInterface {
 	 */
 	public static void updateMessages(String mssg, int id) {
 		// Log to messages.
-
+		$("#messages").prepend("<br />");
+		$("#messages").prepend(
+				"<font color=\"#" + ColorFunctions.intToHexString(id) + "\">" + mssg + "</font>");
+		Console.log("" + id + ": " + ColorFunctions.intToHexString(id));
+		/*
 		int numberOfColors = 10; // number of colors supported
+		
 		switch (id % numberOfColors) {
 		case 0:
 			// Use default color
@@ -860,6 +869,7 @@ public class GameInterface {
 			$("#messages").prepend("<br />" + mssg);
 			break;
 		}
+		*/
 
 		msgCount++; // increment message count, only matters locally.
 

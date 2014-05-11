@@ -13,7 +13,8 @@ import com.shared.model.units.UnitType;
 
 public class TestStats {
 	Player p = new Player("meathook", 0);
-	Unit u = Factory.buildUnit(p, p.getId(), UnitType.ARCHER, 1.0f, 1.0f);
+	Factory f = new Factory();
+	Unit u = f.buildUnit(p, p.getId(), UnitType.ARCHER, 1.0f, 1.0f);
 	UnitStats us = u.getStats();
 
 	@Test

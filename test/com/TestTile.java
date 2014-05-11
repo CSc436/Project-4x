@@ -16,7 +16,8 @@ public class TestTile {
 
 	GameBoard board = new GameBoard(200, 200);
 	Player p = new Player("meathook", 0);
-	Building b = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f, 2.0f,
+	Factory f = new Factory();
+	Building b = f.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f, 2.0f,
 			board);
 	Tile t = board.getTileAt(0, 0);
 

@@ -28,8 +28,8 @@ public class ClientController {
 	float[] position = { 0.0F, 0.0F };
 	private long lastUpdateTime;
 	private final SimpleSimulatorAsync simpleSimulator;
-	private GameModel model = new GameModel();
 	private volatile boolean readyForNext = false;
+	private GameModel model;// = new GameModel();
 	private int cycleTime = 100;
 	
 	private Queue<Command> commandQueue = new LinkedList<Command>();
@@ -93,7 +93,6 @@ public class ClientController {
 			public void onSuccess(GameModel result) {
 				if(debug) Console.log("Game retrieved!");
 				model = result;
-				$("#loading-screen").remove();
 				turnNumber = result.getTurnNumber();
 				simpleSimulator.confirmReceipt(playerNumber, turnNumber, new AsyncCallback<String>() {
 
@@ -102,11 +101,10 @@ public class ClientController {
 						Console.log("    Receipt failed, retrying...");
 					}
 
-					@Override
 					public void onSuccess(String result) {
 						if(debug) Console.log("    Receipt success!");
 						readyForNext = true;
-						getTiles();
+						getUntrimmedTiles();
 					}
 				});
 			}
@@ -114,9 +112,9 @@ public class ClientController {
 		});
 	}
 	
-	public void getTiles() {
+	public void getUntrimmedTiles() {
 		
-		simpleSimulator.getTiles(new AsyncCallback<Tile[][]>() {
+		simpleSimulator.getUntrimmedTiles(new AsyncCallback<Tile[][]>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				Console.log("Could not grab tiles");
@@ -125,8 +123,8 @@ public class ClientController {
 			@Override
 			public void onSuccess(Tile[][] map) {
 				Console.log("Tiles retrived!");
-				model.getBoard().setTiles(map);
-				
+				model.getBoard().setUntrimmedTiles(map);
+				model.getBoard().getMapFromUntrimmed();
 				
 				// Remove loading screen
 				$("#loading-screen").remove();
@@ -243,7 +241,7 @@ public class ClientController {
 
 			@Override
 			public void onSuccess(String result) {
-				Console.log("    Receipt success!");
+				if(debug) Console.log("    Receipt success!");
 				readyForNext = true;
 				resetTimer();
 			}

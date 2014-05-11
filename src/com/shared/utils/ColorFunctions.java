@@ -37,4 +37,15 @@ public class ColorFunctions implements Serializable {
 		return hsvToRgb(intToHue(i), 1, 1);
 	}
 	
+	public static String intToHexString(int i) {
+		float[] rgb = hsvToRgb( intToHue(i), 1, 1 );
+		String rs = Integer.toHexString((int)(rgb[0] * 255));
+	    String gs = Integer.toHexString((int)(rgb[1] * 255));
+	    String bs = Integer.toHexString((int)(rgb[2] * 255));
+	    if(rs.length() == 1) rs = "0" + rs;
+	    if(gs.length() == 1) gs = "0" + gs;
+	    if(bs.length() == 1) bs = "0" + bs;
+	    return rs + gs + bs;
+	}
+	
 }
