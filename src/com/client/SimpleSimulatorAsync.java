@@ -28,7 +28,7 @@ public interface SimpleSimulatorAsync {
 
 	void exitGame(int playerNumber, AsyncCallback<Integer> callback);
 	
-	void getTiles(AsyncCallback<Tile[][]> callback);
+	void getUntrimmedTiles(AsyncCallback<Tile[][]> callback);
 
 	void login(String username, AsyncCallback<Boolean> callback);
 

@@ -28,7 +28,7 @@ public class ClientController {
 	float[] position = { 0.0F, 0.0F };
 	private long lastUpdateTime;
 	private final SimpleSimulatorAsync simpleSimulator;
-	private GameModel model = new GameModel();
+	private GameModel model;// = new GameModel();
 	private boolean readyForNext = true;
 	private int cycleTime = 100;
 	
@@ -93,7 +93,7 @@ public class ClientController {
 				if(debug) Console.log("Game retrieved!");
 				model = result;
 				
-				simpleSimulator.getTiles(new AsyncCallback<Tile[][]>() {
+				simpleSimulator.getUntrimmedTiles(new AsyncCallback<Tile[][]>() {
 					@Override
 					public void onFailure(Throwable caught) {
 						Console.log("Could not grab tiles");
@@ -102,8 +102,8 @@ public class ClientController {
 					@Override
 					public void onSuccess(Tile[][] map) {
 						Console.log("Tiles retrived!");
-						model.getBoard().setTiles(map);
-						
+						model.getBoard().setUntrimmedTiles(map);
+						model.getBoard().getMapFromUntrimmed();
 						
 						// Remove loading screen
 						$("#loading-screen").remove();

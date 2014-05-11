@@ -112,8 +112,8 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 		return nextPlayerSlot;
 	}
 	
-	public Tile[][] getTiles() {
-		return controller.getGameModel().getBoard().getTiles();
+	public Tile[][] getUntrimmedTiles() {
+		return controller.getGameModel().getBoard().getUntrimmedTiles();
 	}
 	
 	/**
