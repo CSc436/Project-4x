@@ -195,7 +195,7 @@ public class GameInterface {
 			}
 		});
 
-		// Agent Menu Button
+		// Units Menu Button
 		// Callback to show units-menu
 		$("#units-button").click(new Function() {
 			public boolean f(Event e) {
@@ -407,6 +407,8 @@ public class GameInterface {
 										+ (int) b.getPosition().getX() + ", "
 										+ (int) b.getPosition().getY()
 										+ "</div>");
+						// Set building-id value
+						$("#buildings-menu-detail #building-id").val("" + id);
 						if (b instanceof ResourceBuilding) {
 							$("#buildings-menu-detail #building-data").append(
 									""
@@ -437,8 +439,6 @@ public class GameInterface {
 													.getResearchPts()
 											+ "</div>");
 						}
-						// Set building-id value
-						$("#buildings-menu-detail #building-id").val("" + id);
 						return true; // Default return true
 					}
 				});
@@ -537,6 +537,9 @@ public class GameInterface {
 				String unitType = $("#buildings-menu-detail #unit-type").val();
 				int buildingID = Integer.parseInt($(
 						"#buildings-menu-detail #building-id").val());
+				Console.log("" + buildingID);
+				UnitType ut = UnitType.valueOf(unitType.toUpperCase());
+				Console.log(ut.toString());
 				// Send command through clientModel
 				clientModel.sendCommand(new BuildingProductionCommand(
 						buildingID, UnitType.valueOf(unitType.toUpperCase())));
