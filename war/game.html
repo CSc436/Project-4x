@@ -53,20 +53,28 @@
 			<li><a href="#" id="diplomacy-button" title="Diplomacy"><img
 					src="assets/Icons/DiplomacyIcon.png" /></a></li>
 			<li><a href="#" id="economies-button" title="Economies"><img
-					src="assets/Icons/EconomyIcon.ico" /></a></li>
+					src="assets/Icons/EconomyIcon.ico" /></a></li>	
+			<li id="username-space">
+				<span></span>
+			</li>
 
 			<!-- Goes from right to left -->
 			<li id="menu" class="toolbar-right"><a href="#" id="menu-button"
 				title="Menu">Menu</a></li>
-			<li id="game-resources" class="toolbar-right"><span><img
-					class="resource-icon" src="assets/Icons/GoldResourceIcon.png">
-					100 <img class="resource-icon"
-					src="assets/Icons/WoodResourceIcon.png"> 200 <img
-					class="resource-icon" src="assets/Icons/FoodResourceIcon.png">
-					350 <img class="resource-icon"
-					src="assets/Icons/StoneResourceIcon.png"> 79 <img
-					class="resource-icon" src="assets/Icons/ResearchResourceIcon.png">
-					1000</span></li>
+			<li id="game-resources" class="toolbar-right">
+				<span>
+					<img class="resource-icon" src="assets/Icons/GoldResourceIcon.png">
+					<span id="toolbar-gold"></span>
+					<img class="resource-icon" src="assets/Icons/WoodResourceIcon.png">
+					<span id="toolbar-wood"></span>
+					<img class="resource-icon" src="assets/Icons/FoodResourceIcon.png">
+					<span id="toolbar-food"></span>
+					<img class="resource-icon" src="assets/Icons/StoneResourceIcon.png">
+					<span id="toolbar-stone"></span>
+					<img class="resource-icon" src="assets/Icons/ResearchResourceIcon.png">
+					<span id="toolbar-research"></span>
+				</span>
+			</li>
 		</ul>
 	</div>
 	<div id="sidebar">
@@ -506,6 +514,8 @@
 	
 	<div id="building-toolbar">
 	</div>
+	<div id="unit-toolbar">
+	</div>
 
 	<div id="chat-container">
 		<div id="chat-trigger" class="full-size text-center">Chat</div>
@@ -542,7 +552,12 @@
 			"You're grammar is bad and you should feel bad",
 			"Strange women lying in ponds distributing swords is no basis for a system of government<br>- Abraham Lincoln",
 			"It's not a pillage if you yell 'Surprise!'",
-			"'Oh look they changed the cursor. How novel.'"
+			"'Oh look they changed the cursor. How novel.'",
+			"You miss 100% percent of the shots you don't take.",
+			"All your base are belong to us.",
+			"You know what you doing, set up us the bomb.",
+			"Move Zig."
+			
 		];
 		
 		$(document).ready(function() {

@@ -16,6 +16,8 @@ import com.googlecode.gwtgl.binding.WebGLTexture;
 import com.googlecode.gwtgl.binding.WebGLUniformLocation;
 import com.shared.utils.FloatMatrix;
 
+// FINDBUG - added unused suppress warning for unused GWT import.
+@SuppressWarnings("unused")
 public class Mesh // implements Renderable {
 {
 	private WebGLBuffer vertexBuffer;
@@ -43,9 +45,25 @@ public class Mesh // implements Renderable {
 
 	private FloatMatrix modelMatrix;
 
-	private WebGLUniformLocation texUniform, resolutionUniform, timeUniform,
-			matrixUniform, camPosUniform, cameraPosUniform, idUniform,
-			healthPercentageUniform, teamColorUniform;
+	private WebGLUniformLocation texUniform;
+
+	// FINDBUG - added unused suppress warning for unused GWT import.
+	// TODO: Does this field need to remain?
+	//@SuppressWarnings("unused")
+	private WebGLUniformLocation resolutionUniform;
+	// FINDBUG - added unused suppress warning for unused GWT import.
+	// TODO: Does this field need to remain?
+	//@SuppressWarnings("unused")
+	private WebGLUniformLocation timeUniform;
+	// FINDBUG - added unused suppress warning for unused GWT import.
+	// TODO: Does this field need to remain?
+	//@SuppressWarnings("unused")
+	private WebGLUniformLocation matrixUniform;
+	private WebGLUniformLocation camPosUniform;
+	private WebGLUniformLocation cameraPosUniform;
+	private WebGLUniformLocation idUniform;
+	private WebGLUniformLocation healthPercentageUniform;
+	private WebGLUniformLocation teamColorUniform;
 
 	public Mesh(float[] vs, float[] ts, float[] ns, int tris,
 			WebGLRenderingContext glContext) {
@@ -111,6 +129,9 @@ public class Mesh // implements Renderable {
 	 * 
 	 * @param arr
 	 */
+	// FINDBUG - added unused suppress warning for unused GWT import.
+	// TODO: Does this method need to remain?
+	//@SuppressWarnings("unused")
 	private void printArray(float[] arr) {
 		for (int i = 0; i < arr.length; i++) {
 			if (i % 3 == 0)
@@ -292,6 +313,9 @@ public class Mesh // implements Renderable {
 		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
 	}
 
+	// FINDBUG - added unused suppress warning for unused GWT import.
+	// TODO: Does this method need to remain?
+	//@SuppressWarnings("unused")
 	private Image loadNewImage(WebGLRenderingContext glContext,
 			final ImageResource imageResource) {
 		final Image img = new Image();

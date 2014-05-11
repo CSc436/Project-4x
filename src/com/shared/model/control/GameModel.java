@@ -28,6 +28,7 @@ public class GameModel implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -3911016502183103473L;
+	private static final int chatLogMaxLength = 10; 
 	private HashMap<Integer, Player> players;
 	private GameBoard map;
 	// Hashmap of all gameObjects
@@ -61,10 +62,13 @@ public class GameModel implements Serializable {
 		producers   = new HashMap<Integer, Producer>();
 		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
 		
-		map = new GameBoard(500, 500);
+	//	map = new GameBoard(255, 255);
 		
 		factory = new Factory();
 		chatLog = new ArrayList<SendMessageCommand>();
+		
+		/* Do Not Remove this or accidentally merge it away! */
+		tradeManager = new TradeManager(this);
 	}
 	
 	/**
@@ -73,20 +77,22 @@ public class GameModel implements Serializable {
 	 * 
 	 * @param width width of gameboard
 	 */
-	public GameModel(int width) {
-		players = new HashMap<Integer,Player>();
-		
-		gameObjects = new HashMap<Integer, GameObject>();
-		attackers = new HashMap<Integer, Attacker>();
-		movables = new HashMap<Integer, Movable>();
-		attackables = new HashMap<Integer, Attackable>();
-		producers = new HashMap<Integer, Producer>();
-		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
-		
-		map = new GameBoard(width, width);
-		
-		chatLog = new ArrayList<SendMessageCommand>();
-	}
+//	public GameModel(int width) {
+//		players = new HashMap<Integer,Player>();
+//		
+//		gameObjects = new HashMap<Integer, GameObject>();
+//		attackers = new HashMap<Integer, Attacker>();
+//		movables = new HashMap<Integer, Movable>();
+//		attackables = new HashMap<Integer, Attackable>();
+//		producers = new HashMap<Integer, Producer>();
+//		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
+//		
+//	//	map = new GameBoard(width, width);
+//		
+//		chatLog = new ArrayList<SendMessageCommand>();
+//		
+//		
+//	}
 	
 	/**
 	 * updates chat log with a new message
@@ -94,6 +100,11 @@ public class GameModel implements Serializable {
 	 */
 	public void updateChatLog(SendMessageCommand message)
 	{
+		// if chat log has gotten to big, reset. 
+		if (chatLog.size() > chatLogMaxLength)
+		{
+			chatLog.clear();
+		}
 		chatLog.add(message);
 	}
 	
@@ -124,12 +135,28 @@ public class GameModel implements Serializable {
 		players.put(nextPlayerID, new Player(playerName, nextPlayerID++));
 	}
 	
+	public void addPlayer(int id, String playerName) {
+		players.put(id, new Player(playerName, id));
+		nextPlayerID = id + 1;
+	}
+	
 	public HashMap<Integer, Player> getPlayers() {
 		return players;
 	}
 
 	public Player getPlayer(int playerId) {
 		return players.get((playerId +1)); // Client model is one off from gameModel, so add one....
+	}
+	
+	public Player getPlayerByUsername(String username) {
+		for (Integer i : players.keySet()) {
+			Player p = players.get(i);
+			if (p.getAlias().equals(username)) {
+				return p;
+			}
+		}
+		
+		return null;
 	}
 	
 	/**
@@ -301,7 +328,10 @@ public class GameModel implements Serializable {
 	}
 
 	public GameBoard getBoard() {
-
+		if (map == null){
+			map = new GameBoard(255, 255);
+			map.resourceDistPretty();
+		}
 		return map;
 	}
 

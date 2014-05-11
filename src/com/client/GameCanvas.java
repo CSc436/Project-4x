@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.client.gameinterface.Console;
+import com.client.gameinterface.GameInterface;
 import com.client.model.ClientController;
 import com.client.rendering.Camera;
 import com.client.rendering.Mesh;
@@ -28,6 +29,8 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.resources.client.ImageResource;
@@ -66,6 +69,7 @@ public class GameCanvas {
 	private WebGLUniformLocation texUniform, matrixUniform, camPosUniform;
 	private WebGLBuffer tileVertexBuffer, tileTexCoordBuffer, tileSelectBuffer;
 	private WebGLBuffer entityVertBuffer, entityTexBuffer;
+	private WebGLBuffer selectVertBuffer;
 	
 	private Float32Array tileVertexData, tileTexCoordData, tileSelectData;
 	private Float32Array agentVertData, agentTexData;
@@ -79,9 +83,10 @@ public class GameCanvas {
 	
 	private float agentX = 0.0f, agentY = 0.0f, agentZ = -0.1f;
 
-	public static final int GRID_WIDTH = 256;
+
+	public static int GRID_WIDTH = 12;
 	private long time;
-	private final int NUM_TILES = GRID_WIDTH * GRID_WIDTH;
+	private int NUM_TILES;
 	
 	private final boolean debug = false;
 	private final boolean commandDebug = true;
@@ -94,6 +99,7 @@ public class GameCanvas {
 	private HashMap<BuildingType,Mesh> buildingMeshes;
 	
 	private Coordinate mouseTile = new Coordinate(0,0);
+	private Coordinate first, curr;
 	
 	public ArrayList<Integer> selectedEntities;
 	
@@ -116,9 +122,13 @@ public class GameCanvas {
 	private static BuildingType[] buildingTypes = BuildingType.values();
 	private static int buildingCounter = -1;
 	
+	private int playerID;
 	
 	public GameCanvas(ClientController theModel) {
 		// CODE FOR MINIMAP DEV/CLICK SELECTING
+		this.GRID_WIDTH = theModel.getGameModel().getBoard().getCols();
+		this.NUM_TILES = GRID_WIDTH *GRID_WIDTH;
+		
 		selectedEntities = new ArrayList<Integer>();
 		this.mouseVector = new Vector3(0,0,0);
 		// END OF CODE
@@ -127,9 +137,10 @@ public class GameCanvas {
 		glContext = (WebGLRenderingContext) webGLCanvas
 				.getContext("experimental-webgl");
 
-		if (glContext == null) {
-			Window.alert("Sorry, your browser doesn't support WebGL!");
-		}
+		// FINDBUG - Refactored below to avoid null pointer
+		//if (glContext == null) {
+			//Window.alert("Sorry, your browser doesn't support WebGL!");
+		//}
 		
 		// These lines make the viewport fullscreen
 		webGLCanvas.setCoordinateSpaceHeight(webGLCanvas.getParent()
@@ -139,8 +150,12 @@ public class GameCanvas {
 		HEIGHT = webGLCanvas.getParent().getOffsetHeight();
 		WIDTH = webGLCanvas.getParent().getOffsetWidth();
 		camera = new Camera();
-
-		glContext.viewport(0, 0, WIDTH, HEIGHT);
+		if (glContext != null){
+			glContext.viewport(0, 0, WIDTH, HEIGHT);
+		}else{
+			Window.alert("Sorry, your browser doesn't support WebGL!");
+		}
+			
 		
 		// MORE CLICK CODE
 		objectSelector = new Selector(glContext, this);
@@ -153,6 +168,14 @@ public class GameCanvas {
 		camera.makeCameraMatrix();
 		start();
 		Console.log("done with Game Canvas");
+	}
+	
+	/**
+	 * Sets the player ID for sending commands
+	 * @param id - ID of the player on this client
+	 */
+	public void setPlayerID(int id) {
+		playerID = id;
 	}
 	
 	/**
@@ -325,8 +348,12 @@ public class GameCanvas {
 	/**
 	 * Binds keys to browser window to move map around and zoom in/out
 	 */
+	
 	private void registerMapMovements() {
 		RootPanel.get().addDomHandler(new KeyDownHandler() {
+			//TODO: Check SuppressWarnings.
+			// FINDBUG - Added Suppress Warning to local variable
+			@SuppressWarnings("unused")
 			private long lastHit = System.currentTimeMillis();
 
 			@Override
@@ -358,16 +385,19 @@ public class GameCanvas {
 					case KeyCodes.KEY_E: rotateRight = true; break;
 					case KeyCodes.KEY_X: center = true; break;
 					case KeyCodes.KEY_I: 
-						theModel.sendCommand(new PlaceUnitCommand( UnitType.CANNON, 1, mouseTile));
+						theModel.sendCommand(new PlaceUnitCommand( UnitType.CANNON, playerID, mouseTile));
 						break;
 					case KeyCodes.KEY_K:
-						theModel.sendCommand(new PlaceUnitCommand( UnitType.INFANTRY, (int) (8*Math.random()), mouseTile));
+						//theModel.sendCommand(new PlaceUnitCommand( UnitType.INFANTRY, (int) (8*Math.random()), mouseTile));
+						theModel.sendCommand(new PlaceUnitCommand( UnitType.INFANTRY, playerID, mouseTile));
 						break;
 					case KeyCodes.KEY_L:
-						theModel.sendCommand(new PlaceUnitCommand( UnitType.ARCHER, (int) (8*Math.random()), mouseTile));
+						//theModel.sendCommand(new PlaceUnitCommand( UnitType.ARCHER, (int) (8*Math.random()), mouseTile));
+						theModel.sendCommand(new PlaceUnitCommand( UnitType.ARCHER, playerID, mouseTile));
 						break;
 					case KeyCodes.KEY_H:
-						theModel.sendCommand(new ConstructBuildingCommand( BuildingType.BARRACKS, (int) (8*Math.random()), mouseTile));
+						//theModel.sendCommand(new ConstructBuildingCommand( BuildingType.BARRACKS, (int) (8*Math.random()), mouseTile));
+						theModel.sendCommand(new ConstructBuildingCommand( BuildingType.BARRACKS, playerID, mouseTile));
 						break;
 					case KeyCodes.KEY_N:
 						for( int i : selectedEntities )
@@ -446,7 +476,11 @@ public class GameCanvas {
 				case NativeEvent.BUTTON_LEFT:
 					if(currMode == Mode.BUILDING) {
 						// Build the type that is specified
-						theModel.sendCommand(new ConstructBuildingCommand( BuildingType.BARRACKS, (int) (8*Math.random()), mouseTile));
+						//theModel.sendCommand(new ConstructBuildingCommand( BuildingType.BARRACKS, (int) (8*Math.random()), mouseTile));
+						// Get Enum from string
+						BuildingType bt = BuildingType.valueOf($("#building-toolbar").html());
+						Console.log(bt.toString());
+						theModel.sendCommand(new ConstructBuildingCommand(bt, playerID, mouseTile));
 					} else if(event.isShiftKeyDown()) {
 						int targetID = objectSelector.pickEntity(event.getClientX(), event.getClientY());
 						if(commandDebug) Console.log("Target ID: " + targetID);
@@ -465,12 +499,20 @@ public class GameCanvas {
 						int selectedID = objectSelector.pickEntity(event.getClientX(), event.getClientY());
 						if(commandDebug) Console.log("Selected entity with ID " + selectedID + ".");
 						if (theModel.getGameModel().getGameObjects().containsKey(selectedID)) {
-							if(commandDebug) Console.log("This entity exists! Adding to selected entities...");
+							Console.log("This entity exists! Adding to selected entities x: " + event.getX() + "y: " + event.getY());
 							selectedEntities.add(selectedID);
+							GameObject  temp = theModel.getGameModel().getGameObject(selectedID);
+						//	if (theModel.getGameModel().getGameObjects().)
+							$("#unit-toolbar").toggle();
+							$("#unit-toolbar").css("left", (event.getX()+25) + "px");
+							$("#unit-toolbar").css("top", (event.getY()-25) + "px");
+							$("#unit-toolbar").html(GameInterface.getInfo(selectedID));
 						} else {
 							if(commandDebug) Console.log("This entity DOES NOT exist!");
 						}
 					}
+					first = new Coordinate(event.getClientX(), event.getClientY());
+					curr = first;
 					break;
 				}
 				
@@ -509,9 +551,40 @@ public class GameCanvas {
 				}
 				RootPanel.get("tile-info").getElement().setInnerHTML(mouseTile.toString());
 				//Console.log("(after) TILE: " + mouseTile.toString());
+				if (first != null){
+					curr = new Coordinate(event.getClientX(), event.getClientY());
+				}
 			}
 			
 		}, MouseMoveEvent.getType());
+		
+		RootPanel.get().addDomHandler(new MouseUpHandler() {
+
+			@Override
+			public void onMouseUp(MouseUpEvent event) {
+				int x1 = (int) Math.min(first.x, curr.x);
+				int x2 = (int) (x1 + Math.abs(first.x - curr.x));
+				
+				int y1 = (int) Math.min(first.y, curr.y);
+				int y2 = (int) (y1 + Math.abs(first.y - curr.y));
+				
+				Integer[] ids = objectSelector.pickEntities(x1, y1, x2, y2);
+				
+				for (int selectedID : ids){
+					if(commandDebug) Console.log("Selected entity with ID " + selectedID + ".");
+					if (theModel.getGameModel().getGameObjects().containsKey(selectedID)) {
+						if(commandDebug) Console.log("This entity exists! Adding to selected entities...");
+							if(theModel.getGameModel().getGameObjects().get(selectedID).getPlayerID() == playerID);
+								selectedEntities.add(selectedID);
+					} else {
+						if(commandDebug) Console.log("This entity DOES NOT exist!");
+					}
+				}
+				first = null;
+			}
+		
+		}, MouseUpEvent.getType());
+
 	}
 	
 	private Vector3 getCenterOfMap() {
@@ -521,7 +594,6 @@ public class GameCanvas {
 	}
 
 	private boolean onEdgeOfMap(MouseMoveEvent event) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -564,7 +636,7 @@ public class GameCanvas {
 			camera.left(delta);
 		if (right)
 			camera.right(delta);
-		if (in && camZ >= 2.0)
+		if (in && camZ >= 1.0)
 			camera.zoomIn();
 		if (out && camZ <= 25.0f)
 			camera.zoomOut();
@@ -581,6 +653,9 @@ public class GameCanvas {
 	/**
 	 * 
 	 */
+	//TODO: Check SuppressWarnings.
+	// FINDBUG - Added SuppressWarning for unuesed Local Variabls.
+	@SuppressWarnings("unused")
 	private void start() {
 		glContext.clearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glContext.clearDepth(1.0f);
@@ -617,6 +692,11 @@ public class GameCanvas {
 				.selectedVS().getText(),ClientResources.INSTANCE
 				.selectedFS().getText());
 		
+		final Shader selectBoxShader = new Shader(glContext,ClientResources.INSTANCE
+				.selectboxVS().getText(),ClientResources.INSTANCE
+				.selectboxFS().getText());
+		
+		
 		final Mesh barrel = OBJImporter.objToMesh(ClientResources.INSTANCE.barrelOBJ().getText(), glContext);
 		
 		final long startTime = System.currentTimeMillis();
@@ -641,6 +721,7 @@ public class GameCanvas {
 				
 				renderEntities(texturedPhongMeshShader);
 				renderSelectedEntities(selectedShader);
+				renderSelection(selectBoxShader);
 			}
 		};
 		t.scheduleRepeating(33); // roughly 30 FPS
@@ -772,6 +853,8 @@ public class GameCanvas {
 	/**
 	 * Creates the vertex and texture coordinate buffer for  rendering
 	 */
+	//TODO: Check SuppressWarnings.
+	@SuppressWarnings("static-access")
 	private void initBuffers() {
 		tileVertexBuffer = glContext.createBuffer();
 		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileVertexBuffer);
@@ -792,8 +875,12 @@ public class GameCanvas {
 
 		glContext.bufferData(glContext.ARRAY_BUFFER, tileSelectData,
 				WebGLRenderingContext.DYNAMIC_DRAW);
+		
+		selectVertBuffer = glContext.createBuffer();
 	}
 	
+	//TODO: Check SuppressWarnings.
+	@SuppressWarnings("static-access")
 	private void makeAgent(){
 		float[] verts = { 
 				0.0f, 0.0f, 0.0f,
@@ -871,7 +958,9 @@ public class GameCanvas {
 		tileTexCoordData = Float32Array.create(NUM_TILES * 6 * 2);
 		tileSelectData = Float32Array.create(NUM_TILES * 6 * 2);
 		
-		RenderTile[][] map = RenderTile.makeMap(System.currentTimeMillis(), GRID_WIDTH);
+		RenderTile[][] map = RenderTile.makeMap(this.theModel.getGameModel().getBoard(), GRID_WIDTH);
+		// Testing - remove and replace with above for shipment
+		//RenderTile[][] map = RenderTile.makeFlatMap(this.theModel.getGameModel().getBoard(), GRID_WIDTH);
 		
 		int index = 0;
 		for (int x = 0; x < GRID_WIDTH; x++)
@@ -920,4 +1009,55 @@ public class GameCanvas {
 		glContext.flush();
 	}
 	
+	//TODO: Check SuppressWarnings.
+	@SuppressWarnings("static-access")
+	public void renderSelection(Shader selectShader){
+		if (first == null)
+			return;
+		
+		Console.log("Rendering Selection");
+		Console.log(first + ", " + curr);
+		
+		
+		
+		float x1 = (float) ((2 * first.x - WIDTH ) / WIDTH);
+		float y1 = -(float) ((2 * first.y - HEIGHT ) / HEIGHT);
+		
+		float x2 = (float) ((2 * curr.x - WIDTH ) / WIDTH);
+		float y2 = -(float) ((2 * curr.y - HEIGHT ) / HEIGHT);
+		
+		Float32Array selectData = Float32Array.create(new float [] {
+				x1, y1,
+				x2, y1,
+				x1, y2,
+				
+				x1, y2,
+				x2, y2,
+				x2, y1
+		});
+		
+		Console.log(new Coordinate(x1, y1) + ", " + new Coordinate(x2, y2));
+		
+		glContext.useProgram(selectShader.shaderProgram);
+		
+		glContext.enable(WebGLRenderingContext.BLEND);
+		glContext.blendFunc(WebGLRenderingContext.SRC_ALPHA, WebGLRenderingContext.ONE);
+		
+		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, selectVertBuffer);
+		glContext.bufferData(glContext.ARRAY_BUFFER, selectData,
+				WebGLRenderingContext.DYNAMIC_DRAW);
+		
+		int selectVertAttrib = glContext.getAttribLocation(selectShader.shaderProgram, "vertices");
+		glContext.enableVertexAttribArray(selectVertAttrib);
+		glContext.vertexAttribPointer(selectVertAttrib, 2, WebGLRenderingContext.FLOAT, false, 0, 0);
+		
+		glContext.disable(WebGLRenderingContext.DEPTH_TEST);
+		
+		glContext.drawArrays(WebGLRenderingContext.TRIANGLES, 0, 6);
+		
+		glContext.enable(WebGLRenderingContext.DEPTH_TEST);
+		glContext.disable(WebGLRenderingContext.BLEND);
+		
+		glContext.flush();
+	}
 }
