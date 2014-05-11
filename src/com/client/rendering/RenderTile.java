@@ -220,7 +220,7 @@ public class RenderTile {
 		
 		float R = position.fx() / ((float)GameCanvas.GRID_WIDTH);
 		float G = position.fy() / ((float)GameCanvas.GRID_WIDTH);
-		//Console.log("R: " + R + ", G: " + G);
+		// Console.log("R: " + R + ", G: " + G);
 		
 		float[] selectColor = new float[] {
 				R, G,

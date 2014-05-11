@@ -147,8 +147,9 @@ public class GameInterface {
 										// second.
 
 		// Add the Player object to the game model
+		Console.log(clientModel.toString());
 		clientModel.sendCommand(new AddPlayerCommand(playerName, playerID));
-
+		
 		Console.log("getting current players...");
 		HashMap<Integer, Player> tempPlayers = gameModel.getPlayers();
 		for (Integer i : tempPlayers.keySet()) {

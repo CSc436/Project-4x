@@ -29,7 +29,7 @@ public class ClientController {
 	private long lastUpdateTime;
 	private final SimpleSimulatorAsync simpleSimulator;
 	private GameModel model = new GameModel();
-	private boolean readyForNext = true;
+	private volatile boolean readyForNext = false;
 	private int cycleTime = 100;
 	
 	private Queue<Command> commandQueue = new LinkedList<Command>();
@@ -57,6 +57,7 @@ public class ClientController {
 	
 	public void sendCommand( Command c ) {
 		commandQueue.add(c);
+		Console.log("Adding Command");
 	}
 	
 	public void run() {
@@ -70,7 +71,7 @@ public class ClientController {
 
 			@Override
 			public void onSuccess(Integer playerNum) {
-				if(debug) Console.log("Joined game");
+				Console.log("Joined game");
 				playerNumber = playerNum;
 				GameInterface.setPlayerID(playerNumber); // Give the ID to the game interface
 				retrieveGame();
@@ -85,41 +86,59 @@ public class ClientController {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				if(debug) Console.log("Could not retrieve game.");
+				Console.log("Could not retrieve game.");
 			}
 
 			@Override
 			public void onSuccess(GameModel result) {
 				if(debug) Console.log("Game retrieved!");
 				model = result;
-				
-				simpleSimulator.getTiles(new AsyncCallback<Tile[][]>() {
+				$("#loading-screen").remove();
+				turnNumber = result.getTurnNumber();
+				simpleSimulator.confirmReceipt(playerNumber, turnNumber, new AsyncCallback<String>() {
+
 					@Override
 					public void onFailure(Throwable caught) {
-						Console.log("Could not grab tiles");
+						Console.log("    Receipt failed, retrying...");
 					}
-					
+
 					@Override
-					public void onSuccess(Tile[][] map) {
-						Console.log("Tiles retrived!");
-						model.getBoard().setTiles(map);
-						
-						
-						// Remove loading screen
-						$("#loading-screen").remove();
-						beginPlaying();
+					public void onSuccess(String result) {
+						if(debug) Console.log("    Receipt success!");
+						readyForNext = true;
+						getTiles();
 					}
 				});
-
 			}
 			
 		});
 	}
 	
+	public void getTiles() {
+		
+		simpleSimulator.getTiles(new AsyncCallback<Tile[][]>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				Console.log("Could not grab tiles");
+			}
+			
+			@Override
+			public void onSuccess(Tile[][] map) {
+				Console.log("Tiles retrived!");
+				model.getBoard().setTiles(map);
+				
+				
+				// Remove loading screen
+				$("#loading-screen").remove();
+				beginPlaying();
+			}
+		});
+		
+	}
+	
 	private Timer pollTimer;
 	
 	public void beginPlaying(){
-		readyForNext = true;
 		
 		GameCanvas canvas = new GameCanvas(this);
 		GameInterface.init(this, canvas);
@@ -176,6 +195,7 @@ public class ClientController {
 								public void onSuccess(GameModel result) {
 									if(debug) Console.log("Game retrieved!");
 									model = result;
+									confirmReceipt();
 								}
 								
 							});
@@ -192,7 +212,7 @@ public class ClientController {
 							if(debug) Console.log("    Simulation state received! Cycle time: " + cycleTime + " ms");
 							confirmReceipt();
 						}
-						resetTimer();
+						
 					}
 				});
 			}
@@ -223,8 +243,9 @@ public class ClientController {
 
 			@Override
 			public void onSuccess(String result) {
-				if(debug) Console.log("    Receipt success!");
+				Console.log("    Receipt success!");
 				readyForNext = true;
+				resetTimer();
 			}
 
 		});

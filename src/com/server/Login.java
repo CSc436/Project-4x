@@ -33,11 +33,12 @@ public class Login implements Serializable {
 	int width;
 	// FINDBUG - initialized variable.
 	GameModel model = null;
-	File users = new File(System.getProperty("user.dir") + "/4x/users.txt");
+	//File users = new File(System.getProperty("user.dir") + "/4x/users.txt");
+	//File users = new File(System.getProperty("user.dir") + "/4x/users.txt");
 
 	public Login() {
 		accounts = new HashMap<String, String>();
-		loadObjects();
+		//loadObjects();
 	}
 
 	/**
@@ -47,38 +48,38 @@ public class Login implements Serializable {
 	 * @return a list of the list of current Game Players
 	 */
 
-	private void loadObjects() {
-		System.out.println("in loadObjects");
-		FileReader fi;
-		BufferedReader bi;
-
-		try {
-			fi = new FileReader(users);
-			bi = new BufferedReader(fi);
-
-			String temp;
-
-			while ((temp = bi.readLine()) != null) {
-
-				String[] split = temp.split(",");
-
-				String user = split[0];
-				String pw = split[1];
-				System.out.println("username: " + user);
-				System.out.println("password: "+ pw);
-				accounts.put(user, pw);
-
-			}
-
-			bi.close();
-			fi.close();
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+//	private void loadObjects() {
+//		System.out.println("in loadObjects");
+//		FileReader fi;
+//		BufferedReader bi;
+//
+//		try {
+//			fi = new FileReader(users);
+//			bi = new BufferedReader(fi);
+//
+//			String temp;
+//
+//			while ((temp = bi.readLine()) != null) {
+//
+//				String[] split = temp.split(",");
+//
+//				String user = split[0];
+//				String pw = split[1];
+//				System.out.println("username: " + user);
+//				System.out.println("password: "+ pw);
+//				accounts.put(user, pw);
+//
+//			}
+//
+//			bi.close();
+//			fi.close();
+//
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	/**
 	 * saveObjects(): This method is called whenever a change to the HashMap
@@ -88,32 +89,32 @@ public class Login implements Serializable {
 	 * @return none
 	 */
 
-	private void saveObjects() {
-		FileWriter fw;
-		BufferedWriter bw;
-
-		try {
-
-			fw = new FileWriter(users);
-			bw = new BufferedWriter(fw);
-
-			Object[] v = accounts.values().toArray();
-			Object[] k = accounts.keySet().toArray();
-
-			for (int x = 0; x < v.length; x++) {
-				bw.write(k[x] + "," + v[x] + "\n");
-			}
-
-			bw.close();
-			fw.close();
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}
+//	private void saveObjects() {
+//		FileWriter fw;
+//		BufferedWriter bw;
+//
+//		try {
+//
+//			fw = new FileWriter(users);
+//			bw = new BufferedWriter(fw);
+//
+//			Object[] v = accounts.values().toArray();
+//			Object[] k = accounts.keySet().toArray();
+//
+//			for (int x = 0; x < v.length; x++) {
+//				bw.write(k[x] + "," + v[x] + "\n");
+//			}
+//
+//			bw.close();
+//			fw.close();
+//
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//
+//	}
 
 	/**
 	 * addUserToHashMap() : Adds the specified user and password to the accounts
@@ -122,15 +123,15 @@ public class Login implements Serializable {
 	 * @return a list of the list of current Game Players
 	 */
 
-	public boolean addUserToHashMap(String user, String pass) {
-		if (accounts.containsKey(user))
-			return false;
-		else {
-			accounts.put(user, pass);
-			saveObjects();
-			return true;
-		}
-	}
+//	public boolean addUserToHashMap(String user, String pass) {
+//		if (accounts.containsKey(user))
+//			return false;
+//		else {
+//			accounts.put(user, pass);
+//			saveObjects();
+//			return true;
+//		}
+//	}
 
 	/**
 	 * removeUserFromHashMap(): deletes a user from the accounts hashmap
@@ -138,15 +139,15 @@ public class Login implements Serializable {
 	 * @returns true when the User was successfully removed from the hashmap
 	 */
 
-	public boolean removeUserFromHashMap(String user) {
-		if (!accounts.containsKey(user)) {
-			return false;
-		} else {
-			accounts.remove(user);
-			saveObjects();
-		}
-		return false;
-	}
+//	public boolean removeUserFromHashMap(String user) {
+//		if (!accounts.containsKey(user)) {
+//			return false;
+//		} else {
+//			accounts.remove(user);
+//			saveObjects();
+//		}
+//		return false;
+//	}
 
 	/**
 	 * addUserToGame(): This method will check if the user entered the correct

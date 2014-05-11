@@ -40,10 +40,10 @@ public class ConstructBuildingCommand implements Command {
 
 		Player p = model.getPlayers().get(playerId);
 		GameBoard gb = model.getBoard();
-
-		Building b = Factory.buildBuilding(p, playerId, buildingType, c.fx(),
-				c.fy(), gb);
-
+		
+		Building b = model.getFactory().buildBuilding(p, playerId, buildingType, c.fx(), c.fy(),
+				gb);
+		
 		if (b == null) {
 			return false;
 		} else {

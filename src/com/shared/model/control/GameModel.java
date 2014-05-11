@@ -39,6 +39,8 @@ public class GameModel implements Serializable {
 	private HashMap<Integer, Producer> producers;
 	private HashMap<Integer, ResourceGenerator> resourceGenerators;
 	
+	private Factory factory;
+	
 	private LinkedList<GameObject> producedBuildings = new LinkedList<GameObject>();
 
 	private int turnNumber = 0;
@@ -62,6 +64,7 @@ public class GameModel implements Serializable {
 		
 	//	map = new GameBoard(255, 255);
 		
+		factory = new Factory();
 		chatLog = new ArrayList<SendMessageCommand>();
 		
 		/* Do Not Remove this or accidentally merge it away! */
@@ -280,9 +283,7 @@ public class GameModel implements Serializable {
 			
 			int playerID = ((GameObject) p).getPlayerID();
 			for( UnitType ut : unitQueue ) {
-				Unit u = Factory.buildUnit(getPlayer(playerID), playerID, ut, x, y+1);
-				Player player = players.get(playerID);
-				player.addUnit(u);
+				Unit u = factory.buildUnit(getPlayer(playerID), playerID, ut, x, y+1);
 				int unitID = u.getId();
 				gameObjects.put(unitID, u);
 				attackers.put(unitID, u);
@@ -426,9 +427,7 @@ public class GameModel implements Serializable {
 	}
 	
 	public void createUnit( UnitType ut, int pn, Coordinate c ) {
-		Unit u = Factory.buildUnit(players.get(pn), pn, ut, c.fx(), c.fy());
-		Player p = players.get(pn);
-		p.addUnit(u);
+		Unit u = factory.buildUnit(players.get(pn), pn, ut, c.fx(), c.fy());
 		int unitID = u.getId();
 		gameObjects.put(unitID, u);
 		attackers.put(unitID, u);
@@ -437,6 +436,19 @@ public class GameModel implements Serializable {
 		if(u != null) {
 			System.out.println(ut.name() + " created with ID " + u.getId());
 		}
+	}
+	
+	public Factory getFactory() {
+		if (factory == null) {
+			factory = new Factory();
+		}
+		return factory;
+	}
+	
+	public Factory getFactory(int id) {
+		Factory instance = getFactory();
+		instance.nextID = id;
+		return instance;
 	}
 	
 }
