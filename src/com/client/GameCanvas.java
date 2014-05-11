@@ -386,7 +386,15 @@ public class GameCanvas {
 					case KeyCodes.KEY_E: rotateRight = true; break;
 					case KeyCodes.KEY_X: center = true; break;
 					case KeyCodes.KEY_I: 
-						theModel.sendCommand(new PlaceUnitCommand( UnitType.CANNON, playerID, mouseTile));
+						int selectedID = objectSelector.pickEntity(mouseX, mouseY);
+						if (theModel.getGameModel().getGameObjects().containsKey(selectedID)) {
+							Console.log("id " + selectedID);
+							$("#unit-toolbar").empty();
+							$("#unit-toolbar").toggle();
+							$("#unit-toolbar").css("left", (mouseX+25) + "px");
+							$("#unit-toolbar").css("top", (mouseY-25) + "px");
+							$("#unit-toolbar").html(GameInterface.getInfo(selectedID));
+						}
 						break;
 					/*
 					case KeyCodes.KEY_K:
@@ -508,13 +516,6 @@ public class GameCanvas {
 						if (theModel.getGameModel().getGameObjects().containsKey(selectedID)) {
 							Console.log("This entity exists! Adding to selected entities x: " + event.getX() + "y: " + event.getY());
 							selectedEntities.add(selectedID);
-							// FINDBUG - temp unused.
-							//GameObject  temp = theModel.getGameModel().getGameObject(selectedID);
-						//	if (theModel.getGameModel().getGameObjects().)
-							$("#unit-toolbar").toggle();
-							$("#unit-toolbar").css("left", (event.getX()+25) + "px");
-							$("#unit-toolbar").css("top", (event.getY()-25) + "px");
-							$("#unit-toolbar").html(GameInterface.getInfo(selectedID));
 						} else {
 							if(commandDebug) Console.log("This entity DOES NOT exist!");
 						}
