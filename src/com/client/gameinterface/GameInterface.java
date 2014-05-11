@@ -1,6 +1,7 @@
 package com.client.gameinterface;
 
 import static com.google.gwt.query.client.GQuery.$;
+
 import com.google.gwt.dom.client.Document;
 
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.List;
 import com.client.model.ClientController;
 import com.client.GameCanvas;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.media.client.Audio;
 import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.user.client.Event;
@@ -45,7 +47,9 @@ public class GameInterface {
 	private static int msgCount = 0; // keeps count of number of messages.
 	private static boolean chatBoxHidden = true; // if chat box is hidden,
 													// changed when toggled.
-
+	private static Audio messageNotification;
+	
+	
 	/**
 	 * Responsible for registering callbacks that are purely bound to the
 	 * interface
@@ -62,6 +66,14 @@ public class GameInterface {
 
 		// set canvas to c
 		canvas = c;
+		
+		// set message sound
+		messageNotification = Audio.createIfSupported();
+		if (messageNotification == null)
+		{
+			Console.log("Notification Sound is null");
+		}
+		//messageNotification.setSrc();
 	}
 
 	/**
@@ -834,6 +846,7 @@ public class GameInterface {
 			for (int i = msgCount; i < chatLogLength; i++) {
 				updateMessages(gameModel.getChatLog().get(i).getMessage(),
 						gameModel.getChatLog().get(i).getPlayerID());
+				messageNotification.play();
 			}
 		} else {
 			// Console.log("No new Messages to prepend");
