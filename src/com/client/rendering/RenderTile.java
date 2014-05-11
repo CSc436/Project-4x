@@ -8,6 +8,8 @@ import com.shared.model.Terrain;
 import com.shared.utils.Coordinate;
 import com.shared.utils.DiamondSquare;
 
+// FINDBUG - added suppress warning for unused GWT imports.
+@SuppressWarnings("unused")
 public class RenderTile {
 	private static int NW = 0b1, NE = 0b10, SW = 0b100, SE = 0b1000;
 	

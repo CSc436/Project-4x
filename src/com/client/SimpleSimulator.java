@@ -1,9 +1,8 @@
 package com.client;
 
-import java.util.HashMap;
+// FINDBUG - Reorganzied import statments
 import java.util.Queue;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.shared.model.commands.Command;

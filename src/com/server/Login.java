@@ -8,7 +8,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.shared.model.control.GameModel;
@@ -29,9 +28,11 @@ public class Login implements Serializable {
 	 */
 	private static final long serialVersionUID = 7009566566451237218L;
 	private HashMap<String, String> accounts;
-	Controller controller;
+	// FINDBUG - initialized variable.
+	Controller controller = null;
 	int width;
-	GameModel model;
+	// FINDBUG - initialized variable.
+	GameModel model = null;
 	File users = new File(System.getProperty("user.dir") + "/4x/users.txt");
 
 	public Login() {

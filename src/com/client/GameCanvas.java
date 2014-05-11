@@ -132,9 +132,10 @@ public class GameCanvas {
 		glContext = (WebGLRenderingContext) webGLCanvas
 				.getContext("experimental-webgl");
 
-		if (glContext == null) {
-			Window.alert("Sorry, your browser doesn't support WebGL!");
-		}
+		// FINDBUG - Refactored below to avoid null pointer
+		//if (glContext == null) {
+			//Window.alert("Sorry, your browser doesn't support WebGL!");
+		//}
 		
 		// These lines make the viewport fullscreen
 		webGLCanvas.setCoordinateSpaceHeight(webGLCanvas.getParent()
@@ -144,8 +145,12 @@ public class GameCanvas {
 		HEIGHT = webGLCanvas.getParent().getOffsetHeight();
 		WIDTH = webGLCanvas.getParent().getOffsetWidth();
 		camera = new Camera();
-
-		glContext.viewport(0, 0, WIDTH, HEIGHT);
+		if (glContext != null){
+			glContext.viewport(0, 0, WIDTH, HEIGHT);
+		}else{
+			Window.alert("Sorry, your browser doesn't support WebGL!");
+		}
+			
 		
 		// MORE CLICK CODE
 		objectSelector = new Selector(glContext, this);
@@ -338,8 +343,12 @@ public class GameCanvas {
 	/**
 	 * Binds keys to browser window to move map around and zoom in/out
 	 */
+	
 	private void registerMapMovements() {
 		RootPanel.get().addDomHandler(new KeyDownHandler() {
+			//TODO: Check SuppressWarnings.
+			// FINDBUG - Added Suppress Warning to local variable
+			@SuppressWarnings("unused")
 			private long lastHit = System.currentTimeMillis();
 
 			@Override
@@ -542,7 +551,6 @@ public class GameCanvas {
 
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
-				// TODO Auto-generated method stub
 				int x1 = (int) Math.min(first.x, curr.x);
 				int x2 = (int) (x1 + Math.abs(first.x - curr.x));
 				
@@ -573,7 +581,6 @@ public class GameCanvas {
 	}
 
 	private boolean onEdgeOfMap(MouseMoveEvent event) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -633,6 +640,9 @@ public class GameCanvas {
 	/**
 	 * 
 	 */
+	//TODO: Check SuppressWarnings.
+	// FINDBUG - Added SuppressWarning for unuesed Local Variabls.
+	@SuppressWarnings("unused")
 	private void start() {
 		glContext.clearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glContext.clearDepth(1.0f);
@@ -830,6 +840,8 @@ public class GameCanvas {
 	/**
 	 * Creates the vertex and texture coordinate buffer for  rendering
 	 */
+	//TODO: Check SuppressWarnings.
+	@SuppressWarnings("static-access")
 	private void initBuffers() {
 		tileVertexBuffer = glContext.createBuffer();
 		glContext.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, tileVertexBuffer);
@@ -854,6 +866,8 @@ public class GameCanvas {
 		selectVertBuffer = glContext.createBuffer();
 	}
 	
+	//TODO: Check SuppressWarnings.
+	@SuppressWarnings("static-access")
 	private void makeAgent(){
 		float[] verts = { 
 				0.0f, 0.0f, 0.0f,
@@ -980,6 +994,8 @@ public class GameCanvas {
 		glContext.flush();
 	}
 	
+	//TODO: Check SuppressWarnings.
+	@SuppressWarnings("static-access")
 	public void renderSelection(Shader selectShader){
 		if (first == null)
 			return;
