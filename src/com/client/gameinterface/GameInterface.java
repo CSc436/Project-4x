@@ -185,7 +185,27 @@ public class GameInterface {
 		};
 		playerTimer.schedule(1000); // Keep trying to get the player every
 									// second
+		startResourcesTimer();
 
+	}
+	
+	/**
+	 * Creates a timer to continually update the resources in the toolbar
+	 * Updates every second
+	 */
+	public static void startResourcesTimer() {
+		Timer resourcesTimer = new Timer() {
+
+			public void run() {
+				Resources r = me.getResources();
+				$("#toolbar-gold").html(" " + r.getGold() + " ");
+				$("#toolbar-wood").html(" " + r.getWood() + " ");
+				$("#toolbar-food").html(" " + r.getFood() + " ");
+				$("#toolbar-stone").html(" " + r.getStone() + " ");
+				$("#toolbar-research").html(" " + r.getResearchPts() + " ");
+			}
+		};
+		resourcesTimer.scheduleRepeating(1000);
 	}
 
 	/**
