@@ -147,12 +147,13 @@ public class RenderTile {
 						RenderTile curr = map[x][y];
 						curr.setFlags(0, 0, 0, 0, val);
 						
+						
 						e = (x + 1) % dimension;
 						w = (x - 1 + dimension) % dimension;
 						n = (y - 1 + dimension) % dimension;
 						s = (y + 1) % dimension;
 	
-						// cardinal directions
+						// cardinal directions - Need to do only with in boundaries, this is causing issues along edges!
 						map[w][y].getEastFrom(curr, val);
 						map[e][y].getWestFrom(curr, val);
 						map[x][n].getSouthFrom(curr, val);
@@ -242,10 +243,12 @@ public class RenderTile {
 		Console.log("2nd print");
 		Console.log(gameBoard.toString());
 		
+		int padding = 2; 
+		
 		// initialize the map
-		RenderTile[][] map = new RenderTile[dimension][dimension];
-		for (int x = 0; x < dimension; x++)
-			for (int y = 0; y < dimension; y++){
+		RenderTile[][] map = new RenderTile[dimension + padding][dimension + padding];
+		for (int x = 0; x < dimension + padding; x++)
+			for (int y = 0; y < dimension + padding; y++){
 				map[x][y] = new RenderTile(x, y, 1.0f, 0.0f, Resource.NONE);
 			}
 		
@@ -258,17 +261,17 @@ public class RenderTile {
 			
 			val = t.getValue();
 			
-			for (int x = 0; x < dimension; x++)
-				for (int y = 0; y < dimension; y++)
-					if (gameBoard.getTileAt(x, y).getTerrainType().getLower() >= t.getLower()){
+			for (int x = 0; x < dimension + padding; x++)
+				for (int y = 0; y < dimension + padding; y++)
+					if (gameBoard.getUntrimmedMap()[x+1][y+1].getTerrainType().getLower() >= t.getLower()){
 						RenderTile curr = map[x][y];
-						curr.setResource(gameBoard.getTileAt(x, y).getResource());
+						curr.setResource(gameBoard.getUntrimmedMap()[x+1][y+1].getResource());
 						curr.setFlags(0, 0, 0, 0, val);
 						
-						e = (x + 1) % dimension;
-						w = (x - 1 + dimension) % dimension;
-						n = (y - 1 + dimension) % dimension;
-						s = (y + 1) % dimension;
+						e = (x + 1) % (dimension + padding);
+						w = (x - 1 + (dimension + padding)) % (dimension + padding);
+						n = (y - 1 + (dimension + padding)) % (dimension + padding);
+						s = (y + 1) % (dimension + padding);
 	
 						// cardinal directions
 						map[w][y].getEastFrom(curr, val);
@@ -290,6 +293,38 @@ public class RenderTile {
 						map[e][s].getNorthFrom(map[e][y], val);
 					}
 		}
-		return map;		
+		
+		
+		return trimEdges(map, dimension);		
+	}
+	
+	/**
+	 * changes the x and y coordinates of the tile
+	 * @param x new x coordinate
+	 * @param y new y coordinate
+	 */
+	private void setCoordinate(int x, int y)
+	{
+		this.position = new Coordinate(x,y);
+	}
+	
+	/**
+	 * trim off excess edges from rendertiles
+	 * @param map
+	 * @param dimension
+	 * @return
+	 */
+	private static RenderTile[][] trimEdges(RenderTile[][] map, int dimension)
+	{
+		RenderTile[][] nMap = new RenderTile[dimension][dimension];
+		for (int i = 0; i < dimension; i++)
+		{
+			for (int j = 0; j < dimension; j++)
+			{
+				nMap[i][j] = map[i+1][j+1];
+				nMap[i][j].setCoordinate(i, j);
+			}
+		}
+		return nMap;
 	}
 }

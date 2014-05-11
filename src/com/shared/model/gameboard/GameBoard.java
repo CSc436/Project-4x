@@ -34,15 +34,17 @@ public class GameBoard implements Serializable {
 
 	private static final float foodMult  = 0.02f;  // 5% of tiles that can
 													// support food have food
-	private static final float woodMult  = 0.15f;   // 5% of tiles that can support
+	private static final float woodMult  = 0.02f;   // 5% of tiles that can support
 													// wood have wood
 	private static final float stoneMult = 0.050f;  // 5% of tiles that can
 													// support stone have stone
 	private static final float goldMult  = 0.010f;  // 0.2% of tiles that can
 													// support gold have gold
-	private int[] terrainCount = new int[6];		// stores the count of each resource tile type.
+	private int[] terrainCount = new int[Terrain.values().length];		// stores the count of each resource tile type.
 	
-	private int massageEdge = 2; // used to create slightly larger board to massage map first. 
+	private int massageEdge = 4; // used to create slightly larger board to massage map first. 
+	
+	private Tile[][] unTrimmedMap; // used for creating render Tiles, worth a shot/
 	/**
 	 * GameBoard(): Description: Constructor for a game board object, requires
 	 * the number of rows and columns for board dimensions - should be equal for
@@ -113,7 +115,7 @@ public class GameBoard implements Serializable {
 				map[r][c] = new Tile(Resource.NONE, height + heightAdjust,
 						(float) r, (float) c); // Use the adjusted height to
 												// create the tile
-				terrainCount[map[r][c].getTerrainType().getValue() + 2]++; // increment counts
+				terrainCount[map[r][c].getTerrainType().ordinal()]++; // increment counts
 				//[0] = Forest, [1] = Water, [2] = Sand, [3] = Grass, [4] = mountain, [5] = snow.
 			}
 		}
@@ -121,16 +123,11 @@ public class GameBoard implements Serializable {
 		// massageTerrain so that it will produce a visually pleasing map
 		massageTerrain();
 		
+		// Store untrimmed, for renderTile. 
+		unTrimmedMap = map;
+		
 		// Trim off the edges of map, gets rid of left over noise from massage.
 		trimEdges();
-		
-		// TODO distribute players
-		// Based on num players
-		// 1 - place player roughly in center
-		// 2 - place players caddy corner
-		// 3 + 4 - place players in corners of map
-		// 5 - 1-4 place in corner, 5 place in center.
-		// attempt to distribute near resources.
 
 		//System.out.println(toString());
 		endTime = System.currentTimeMillis();
@@ -143,9 +140,9 @@ public class GameBoard implements Serializable {
 		
 	}
 
-	public float getAverageHeight()
+	public Tile[][] getUntrimmedMap()
 	{
-		return this.averageHeight; 
+		return this.unTrimmedMap; 
 	}
 	
 	/**
@@ -159,7 +156,7 @@ public class GameBoard implements Serializable {
 		{
 			for (int j = 0; j < cols; j++)
 			{
-				newMap[i][j] = map[i+1][j+1];
+				newMap[i][j] = map[i+(massageEdge / 2)][j+(massageEdge / 2)];
 			}
 		}
 		map = newMap;
@@ -446,10 +443,10 @@ public class GameBoard implements Serializable {
 		int r,c;
 		
 		// determine tiles that can support resources, number of which will be placed for each resource
-		int foodCount  = (int) ((terrainCount[2] + terrainCount[3] + terrainCount[0]) * foodMult); // food placed on dirt, grass, and forest. 
-		int stoneCount = (int) ((terrainCount[4] + terrainCount[5] + terrainCount[0]) * stoneMult); // stone can go on forest, mountain, snow.
-		int woodCount  = (int) ((terrainCount[0] + terrainCount[4]) * woodMult); // wood can go in forest and mountain
-		int goldCount  = (int) ((terrainCount[4] + terrainCount[5]) * goldMult); // gold can go on mountain and snow. 
+		int foodCount  = (int) Math.ceil(((terrainCount[Terrain.SAND.ordinal()] + terrainCount[Terrain.GRASS.ordinal()]) * foodMult)); // food placed on dirt, grass, and forest. 
+		int stoneCount = (int) Math.ceil(((terrainCount[Terrain.MOUNTAIN.ordinal()] + terrainCount[Terrain.SNOW.ordinal()]) * stoneMult)); // stone can go on forest, mountain, snow.
+		int woodCount  = (int) Math.ceil(((terrainCount[Terrain.GRASS.ordinal()] + terrainCount[Terrain.MOUNTAIN.ordinal()]) * woodMult)); // wood can go in forest and mountain
+		int goldCount  = (int) Math.ceil(((terrainCount[Terrain.MOUNTAIN.ordinal()] + terrainCount[Terrain.SNOW.ordinal()]) * goldMult)); // gold can go on mountain and snow. 
 
 		// start picking Coordinates at random, randomly choose valid resource to place on tile
 		System.out.println("resourceDistNat: Distributing food resources...");

@@ -218,10 +218,10 @@ public class Tile implements Serializable {
 			this.height = (float)(140/255);
 			break;*/
 		case MOUNTAIN:
-			this.height = (float)(164/255);
+			this.height = (float)(150/255);
 			break;
 		case SNOW:
-			this.height = (float)(222/255);
+			this.height = (float)(200/255);
 			break;
 		}
 	}
@@ -317,15 +317,15 @@ public class Tile implements Serializable {
 
 		float newHeight = 255 * height;
 
-		if (newHeight < 100) {
+		if (newHeight < 115) {
 			return Terrain.WATER;
-		} else if (newHeight < 116) {
+		} else if (newHeight < 120) {
 			return Terrain.SAND;
-		} else if (newHeight < 140 + 5) {
+		} else if (newHeight < 140) {
 			return Terrain.GRASS;
 		} /*else if (newHeight < 164 + 10) {
 			return Terrain.FOREST;
-		}*/ else if (newHeight < 222 + 5) {
+		}*/ else if (newHeight < 170) {
 			return Terrain.MOUNTAIN;
 		} else {
 			return Terrain.SNOW;
