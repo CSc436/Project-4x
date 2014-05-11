@@ -34,15 +34,17 @@ public class GameBoard implements Serializable {
 
 	private static final float foodMult  = 0.02f;  // 5% of tiles that can
 													// support food have food
-	private static final float woodMult  = 0.15f;   // 5% of tiles that can support
+	private static final float woodMult  = 0.02f;   // 5% of tiles that can support
 													// wood have wood
 	private static final float stoneMult = 0.050f;  // 5% of tiles that can
 													// support stone have stone
 	private static final float goldMult  = 0.010f;  // 0.2% of tiles that can
 													// support gold have gold
-	private int[] terrainCount = new int[6];		// stores the count of each resource tile type.
+	private int[] terrainCount = new int[Terrain.values().length];		// stores the count of each resource tile type.
 	
-	private int massageEdge = 2; // used to create slightly larger board to massage map first. 
+	private int massageEdge = 4; // used to create slightly larger board to massage map first. 
+	
+	private Tile[][] unTrimmedMap; // used for creating render Tiles, worth a shot/
 	/**
 	 * GameBoard(): Description: Constructor for a game board object, requires
 	 * the number of rows and columns for board dimensions - should be equal for
@@ -90,15 +92,15 @@ public class GameBoard implements Serializable {
 
 		float heightAdjust = 0.0f;
 		// Determine adjustment for height
-		if (this.averageHeight < 0.5f) // If average height is less than .5, it
+		if (this.averageHeight < 0.45f) // If average height is less than .5, it
 										// is a 'waterworld'
 		{
-			heightAdjust = 0.55f - this.averageHeight;
-		} else if (this.averageHeight > 0.7f) // if average height is greater
+			heightAdjust = 0.50f - this.averageHeight;
+		} else if (this.averageHeight > 0.57f) // if average height is greater
 												// than .7, it is a 'winter
 												// wonderland'
 		{
-			heightAdjust = (0.7f - this.averageHeight - 0.05f); // will give us
+			heightAdjust = (0.57f - this.averageHeight - 0.05f); // will give us
 																// a negative
 																// height. to
 																// lower some of
@@ -113,7 +115,7 @@ public class GameBoard implements Serializable {
 				map[r][c] = new Tile(Resource.NONE, height + heightAdjust,
 						(float) r, (float) c); // Use the adjusted height to
 												// create the tile
-				terrainCount[map[r][c].getTerrainType().getValue() + 2]++; // increment counts
+				terrainCount[map[r][c].getTerrainType().ordinal()]++; // increment counts
 				//[0] = Forest, [1] = Water, [2] = Sand, [3] = Grass, [4] = mountain, [5] = snow.
 			}
 		}
@@ -121,16 +123,11 @@ public class GameBoard implements Serializable {
 		// massageTerrain so that it will produce a visually pleasing map
 		massageTerrain();
 		
+		// Store untrimmed, for renderTile. 
+		unTrimmedMap = map;
+		
 		// Trim off the edges of map, gets rid of left over noise from massage.
 		trimEdges();
-		
-		// TODO distribute players
-		// Based on num players
-		// 1 - place player roughly in center
-		// 2 - place players caddy corner
-		// 3 + 4 - place players in corners of map
-		// 5 - 1-4 place in corner, 5 place in center.
-		// attempt to distribute near resources.
 
 		//System.out.println(toString());
 		endTime = System.currentTimeMillis();
@@ -143,6 +140,11 @@ public class GameBoard implements Serializable {
 		
 	}
 
+	public Tile[][] getUntrimmedMap()
+	{
+		return this.unTrimmedMap; 
+	}
+	
 	/**
 	 * trimEdges()
 	 * After massaging the terrain, need to trim off the edges.
@@ -154,7 +156,7 @@ public class GameBoard implements Serializable {
 		{
 			for (int j = 0; j < cols; j++)
 			{
-				newMap[i][j] = map[i+1][j+1];
+				newMap[i][j] = map[i+(massageEdge / 2)][j+(massageEdge / 2)];
 			}
 		}
 		map = newMap;
@@ -177,9 +179,9 @@ public class GameBoard implements Serializable {
 		// Transition Analysis - ensure that transitions between tile types are correct. 
 		mtShoreAnalysis(Terrain.WATER, Terrain.SAND, Terrain.SAND);
 		mtShoreAnalysis(Terrain.SAND, Terrain.WATER, Terrain.GRASS);
-		mtShoreAnalysis(Terrain.GRASS, Terrain.SAND, Terrain.FOREST);
-		mtShoreAnalysis(Terrain.FOREST, Terrain.GRASS, Terrain.MOUNTAIN);
-		mtShoreAnalysis(Terrain.MOUNTAIN, Terrain.FOREST, Terrain.SNOW);
+		mtShoreAnalysis(Terrain.GRASS, Terrain.SAND, Terrain.MOUNTAIN);
+		mtShoreAnalysis(Terrain.MOUNTAIN, Terrain.GRASS, Terrain.SNOW);
+		//mtShoreAnalysis(Terrain.MOUNTAIN, Terrain.FOREST, Terrain.SNOW);
 		mtShoreAnalysis(Terrain.SNOW, Terrain.MOUNTAIN, Terrain.SNOW);
 		
 		// Diagonal analysis
@@ -188,18 +190,18 @@ public class GameBoard implements Serializable {
 		// Transition Analysis - ensure that transitions between tile types are correct. 
 		mtShoreAnalysis(Terrain.WATER, Terrain.SAND, Terrain.SAND);
 		mtShoreAnalysis(Terrain.SAND, Terrain.WATER, Terrain.GRASS);
-		mtShoreAnalysis(Terrain.GRASS, Terrain.SAND, Terrain.FOREST);
-		mtShoreAnalysis(Terrain.FOREST, Terrain.GRASS, Terrain.MOUNTAIN);
-		mtShoreAnalysis(Terrain.MOUNTAIN, Terrain.FOREST, Terrain.SNOW);
+		mtShoreAnalysis(Terrain.GRASS, Terrain.SAND, Terrain.MOUNTAIN);
+		mtShoreAnalysis(Terrain.MOUNTAIN, Terrain.GRASS, Terrain.SNOW);
+		// mtShoreAnalysis(Terrain.MOUNTAIN, Terrain.FOREST, Terrain.SNOW);
 		mtShoreAnalysis(Terrain.SNOW, Terrain.MOUNTAIN, Terrain.SNOW);
 		
+		
+		// Make sure two layers of sand along shore line. 
+		mtDoubleSand();
 		
 		// Body Analysis - if a body of a terrain type is smaller than threshold, 
 		// change body to surrounding?
 		mtSingleton();
-		
-		// Make sure two layers of sand along shore line. 
-		mtDoubleSand();
 		
 		System.out.println("Terrain Massage Complete!");
 	}
@@ -441,10 +443,10 @@ public class GameBoard implements Serializable {
 		int r,c;
 		
 		// determine tiles that can support resources, number of which will be placed for each resource
-		int foodCount  = (int) ((terrainCount[2] + terrainCount[3] + terrainCount[0]) * foodMult); // food placed on dirt, grass, and forest. 
-		int stoneCount = (int) ((terrainCount[4] + terrainCount[5] + terrainCount[0]) * stoneMult); // stone can go on forest, mountain, snow.
-		int woodCount  = (int) ((terrainCount[0] + terrainCount[4]) * woodMult); // wood can go in forest and mountain
-		int goldCount  = (int) ((terrainCount[4] + terrainCount[5]) * goldMult); // gold can go on mountain and snow. 
+		int foodCount  = (int) Math.ceil(((terrainCount[Terrain.SAND.ordinal()] + terrainCount[Terrain.GRASS.ordinal()]) * foodMult)); // food placed on dirt, grass, and forest. 
+		int stoneCount = (int) Math.ceil(((terrainCount[Terrain.MOUNTAIN.ordinal()] + terrainCount[Terrain.SNOW.ordinal()]) * stoneMult)); // stone can go on forest, mountain, snow.
+		int woodCount  = (int) Math.ceil(((terrainCount[Terrain.GRASS.ordinal()] + terrainCount[Terrain.MOUNTAIN.ordinal()]) * woodMult)); // wood can go in forest and mountain
+		int goldCount  = (int) Math.ceil(((terrainCount[Terrain.MOUNTAIN.ordinal()] + terrainCount[Terrain.SNOW.ordinal()]) * goldMult)); // gold can go on mountain and snow. 
 
 		// start picking Coordinates at random, randomly choose valid resource to place on tile
 		System.out.println("resourceDistNat: Distributing food resources...");
@@ -454,7 +456,7 @@ public class GameBoard implements Serializable {
 			r = rand.nextInt(rows);
 			c = rand.nextInt(cols);
 			if (map[r][c].getResource() == Resource.NONE && (map[r][c].getTerrainType() == Terrain.SAND || 
-			    map[r][c].getTerrainType() == Terrain.GRASS || map[r][c].getTerrainType() == Terrain.FOREST))
+			    map[r][c].getTerrainType() == Terrain.GRASS /*|| map[r][c].getTerrainType() == Terrain.FOREST*/))
 			{
 				map[r][c].setResource(Resource.FOOD);
 				foodCount -= (resourceClump(r, c, 2, Resource.FOOD) + 1);
@@ -470,7 +472,7 @@ public class GameBoard implements Serializable {
 			r = rand.nextInt(rows);
 			c = rand.nextInt(cols);
 			if (map[r][c].getResource() == Resource.NONE && (map[r][c].getTerrainType() == Terrain.MOUNTAIN || 
-			    map[r][c].getTerrainType() == Terrain.SNOW || map[r][c].getTerrainType() == Terrain.FOREST))
+			    map[r][c].getTerrainType() == Terrain.SNOW /*|| map[r][c].getTerrainType() == Terrain.FOREST*/))
 			{
 				map[r][c].setResource(Resource.STONE);
 				stoneCount -= (resourceClump(r, c, 3, Resource.STONE) + 1);
@@ -486,7 +488,7 @@ public class GameBoard implements Serializable {
 			r = rand.nextInt(rows);
 			c = rand.nextInt(cols);
 			if (map[r][c].getResource() == Resource.NONE &&
-			    (map[r][c].getTerrainType() == Terrain.MOUNTAIN || map[r][c].getTerrainType() == Terrain.FOREST))
+			    (map[r][c].getTerrainType() == Terrain.MOUNTAIN /*|| map[r][c].getTerrainType() == Terrain.FOREST*/))
 			{
 				map[r][c].setResource(Resource.WOOD);
 				woodCount -= (resourceClump(r, c, 10, Resource.WOOD) + 1);

@@ -76,8 +76,8 @@ class draw extends JPanel {
 						g.setColor(new Color(255, 241, 212));
 					else if (game.getTileAt(r, c).getTerrainType() == Terrain.WATER)
 						g.setColor(new Color(51, 126, 255));
-					else if (game.getTileAt(r, c).getTerrainType() == Terrain.FOREST)
-						g.setColor(new Color(100, 131, 120));
+					/*(else if (game.getTileAt(r, c).getTerrainType() == Terrain.FOREST)
+						g.setColor(new Color(100, 131, 120));*/
 					else if (game.getTileAt(r, c).getTerrainType() == Terrain.MOUNTAIN)
 						g.setColor(new Color(140, 132, 118));
 					else if (game.getTileAt(r, c).getTerrainType() == Terrain.SNOW)
