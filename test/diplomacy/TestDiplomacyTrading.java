@@ -24,6 +24,7 @@ public class TestDiplomacyTrading {
 		plist.add("Pedro");
 
 		GameModel model = new GameModel();
+		@SuppressWarnings("unused") //The construction of this has side effects.
 		Controller controller = new Controller(model);
 
 		Player p1 = model.getPlayer(1);

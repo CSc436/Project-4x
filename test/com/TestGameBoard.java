@@ -11,7 +11,6 @@ import com.shared.model.buildings.BuildingType;
 import com.shared.model.control.Factory;
 import com.shared.model.control.Player;
 import com.shared.model.gameboard.GameBoard;
-import com.shared.model.gameboard.Tile;
 import com.shared.model.resources.Resources;
 
 
@@ -64,6 +63,7 @@ public class TestGameBoard {
 
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testOccupied2() {
 		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));

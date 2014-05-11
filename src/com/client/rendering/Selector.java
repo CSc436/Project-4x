@@ -161,11 +161,12 @@ public class Selector {
 	private Integer[] getIDS(int x1, int y1, int x2, int y2){
 		TreeSet<Integer> set = new TreeSet<Integer>();
 		Uint8Array pixelData = Uint8Array.create((x2 - x1) * (y2 - y1) * 4);
+
 		// FINDBUG - Refactored canvas.HEIGHT to GAMECANVAS.HEIGHT
 		glContext.readPixels(x1, GameCanvas.HEIGHT - y2, (x2 - x1), (y2 - y1), WebGLRenderingContext.RGBA, WebGLRenderingContext.UNSIGNED_BYTE, pixelData);
-		
+
 		int id;
-		for (int x = 0; x < pixelData.getLength(); x += 4){
+		for (int x = 0; x < pixelData.getLength(); x += 20){
 			id = pixelData.get(x + 2) + (pixelData.get(x + 1) * 256) + (pixelData.get(x) * 65536);
 			set.add(id);
 			Console.log("" + id);
@@ -174,7 +175,7 @@ public class Selector {
 		return set.toArray(new Integer[set.size()]);
 	}
 	
-	/**
+	/*
 	 * Reset the framebuffer to the default framebuffer
 	 */
 	private void resetFramebuffer() {

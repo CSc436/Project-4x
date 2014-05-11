@@ -15,7 +15,9 @@ public class RunGame {
 
 	public static void main(String[] args) {
 
+
 		GameBoard game = new GameBoard(256, 256); // To change resolution, just change two parameters here
+
 		game.resourceDistNat();				        // must be able to divide 1000 evenly. 
 
 		JFrame frame = new JFrame("display");
@@ -41,6 +43,10 @@ public class RunGame {
 
 class draw extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1185015430197023481L;
 	GameBoard game;
 	int mult; 
 

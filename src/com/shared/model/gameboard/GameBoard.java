@@ -131,6 +131,7 @@ public class GameBoard implements Serializable {
 		// 5 - 1-4 place in corner, 5 place in center.
 		// attempt to distribute near resources.
 
+		System.out.println(toString());
 		endTime = System.currentTimeMillis();
 		System.out.println("Total execution time: " + (endTime - startTime)
 				+ "\n");
@@ -806,7 +807,8 @@ public class GameBoard implements Serializable {
 			float roughness) {
 		// size is the nearest power of 2 that fully contains SIZE plus 1
 		int size = (1 << (int) Math.ceil(Math.log(SIZE) / Math.log(2))) + 1;
-
+		System.out.println(Math.ceil(Math.log(SIZE) / Math.log(2)));
+		System.out.println(size);
 		// seed random number generator
 		rand.setSeed(seed);
 		float[][] noise = new float[size][size];
@@ -878,6 +880,27 @@ public class GameBoard implements Serializable {
 			sideLength /= 2;
 			rough *= .8;
 		}
+	}
+	
+	@Override
+	public String toString() {
+		String r = "";
+		for (int i = 0; i < this.rows; i++) {
+			for (int j = 0; j < this.cols; j++) {
+				r += this.map[i][j].getTerrainType().toString() + "\t";
+			}
+			r += "\n";
+		}
+		return r;
+	}
+
+	public Tile[][] getTiles() {
+		// TODO Auto-generated method stub
+		return this.map;
+	}
+	
+	public void setTiles(Tile[][] map) {
+		this.map = map;
 	}
 
 }
