@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.client.SimpleSimulator;
@@ -43,6 +45,13 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 	public void init() {
 		controller = new Controller();
 		controller.run();
+//		Timer timer = new Timer();
+//		timer.schedule(new TimerTask() {
+//			@Override
+//			public void run() {
+//				advanceTable();
+//			}
+//		}, 0, 100);
 	}
 	
 	public CommandPacket sendCommands( int playerNumber, Queue<Command> commandQueue ) {
@@ -63,7 +72,7 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 	private void awaitPacketReady() {
 		while (!controller.isPacketReady()) {
 			try {
-				Thread.sleep(150);
+				Thread.sleep(20);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -109,20 +118,16 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 		return controller.getGameModel();
 	}
 
-	public Integer joinGame() {
-		if(!controller.isRunning) controller.run();
+	public synchronized Integer joinGame() {
+		System.out.println("New player joining the game!");
 		return nextPlayerSlot++;
 	}
 
 	public Integer exitGame(int playerNumber) {
+		System.out.println("Player " + playerNumber + " exiting the game!");
 		playerTable.remove(playerNumber);
-		if (playerTable.isEmpty())
-			controller.stop();
+		advanceTable();
 		return nextPlayerSlot;
-	}
-	
-	public Tile[][] getTiles() {
-		return controller.getGameModel().getBoard().getTiles();
 	}
 	
 	public boolean allPlayersAtState(PlayerState...states) {
@@ -150,8 +155,7 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 			}
 		}
 	}
-
-	private static Object lock = new Object();
+	
 	public void synchronizeOn( PlayerState state ) {
 		synchronized(this) {
 			if(allPlayersAtState(state)) {
@@ -159,6 +163,7 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 					for(Entry<Integer,PlayerState> e : newPlayerTable.entrySet()) {
 						playerTable.put(e.getKey(), e.getValue());
 					}
+					newPlayerTable.clear();
 					controller.continueSimulation();
 				}
 				notifyAll();
@@ -169,14 +174,34 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 					e1.printStackTrace();
 				}
 			}
-			
+		}
+	}
+	
+	public void advanceTable() {
+		synchronized(this) {
+			if(playerTable.isEmpty()) {
+				notifyAll();
+				return;
+			} else if(allPlayersAtState(PlayerState.HasSentCommands)) {
+				for(Entry<Integer,PlayerState> e : newPlayerTable.entrySet()) {
+					playerTable.put(e.getKey(), e.getValue());
+				}
+				newPlayerTable.clear();
+				controller.continueSimulation();
+				notifyAll();
+			} else if(allPlayersAtState(PlayerState.ModelUpToDate)) {
+				notifyAll();	
+			}
 		}
 	}
 
 	@Override
 	public boolean login(String username) {
-
 		return login.addUserToGame(username, "1");
+	}
+	
+	public Tile[][] getTiles() {
+		return controller.getGameModel().getBoard().getTiles();
 	}
 	
 }

@@ -28,6 +28,7 @@ import com.shared.model.entities.GameObject;
 import com.shared.model.resources.Resources;
 import com.shared.model.units.Unit;
 import com.shared.model.units.UnitType;
+import com.shared.utils.ColorFunctions;
 
 public class GameInterface {
 
@@ -802,8 +803,13 @@ public class GameInterface {
 	 */
 	public static void updateMessages(String mssg, int id) {
 		// Log to messages.
-
+		$("#messages").prepend("<br />");
+		$("#messages").prepend(
+				"<font color=\"#" + ColorFunctions.intToHexString(id) + "\">" + mssg + "</font>");
+		Console.log("" + id + ": " + ColorFunctions.intToHexString(id));
+		/*
 		int numberOfColors = 10; // number of colors supported
+		
 		switch (id % numberOfColors) {
 		case 0:
 			// Use default color
@@ -859,6 +865,7 @@ public class GameInterface {
 			$("#messages").prepend("<br />" + mssg);
 			break;
 		}
+		*/
 
 		msgCount++; // increment message count, only matters locally.
 

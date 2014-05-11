@@ -243,7 +243,7 @@ public class ClientController {
 
 			@Override
 			public void onSuccess(String result) {
-				Console.log("    Receipt success!");
+				if(debug) Console.log("    Receipt success!");
 				readyForNext = true;
 				resetTimer();
 			}
