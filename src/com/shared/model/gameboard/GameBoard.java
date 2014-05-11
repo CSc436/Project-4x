@@ -169,6 +169,19 @@ public class GameBoard implements Serializable {
 		map = newMap;
 	}
 	
+	public void getMapFromUntrimmed()
+	{
+		Tile [][] newMap = new Tile [rows][cols];
+		for (int i = 0; i < rows; i++)
+		{
+			for (int j = 0; j < cols; j++)
+			{
+				newMap[i][j] = this.unTrimmedMap[i+2][j+2];
+			}
+		}
+		map = newMap;
+	}
+	
 	
 	/**
 	 * massageTerrain(): 
@@ -969,13 +982,13 @@ public class GameBoard implements Serializable {
 		return r;
 	}
 
-	public Tile[][] getTiles() {
+	public Tile[][] getUntrimmedTiles() {
 		// TODO Auto-generated method stub
-		return this.map;
+		return this.unTrimmedMap;
 	}
 	
-	public void setTiles(Tile[][] map) {
-		this.map = map;
+	public void setUntrimmedTiles(Tile[][] map) {
+		this.unTrimmedMap = map;
 	}
 
 }

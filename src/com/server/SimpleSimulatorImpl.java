@@ -130,6 +130,10 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 		return nextPlayerSlot;
 	}
 	
+	public Tile[][] getUntrimmedTiles() {
+		return controller.getGameModel().getBoard().getUntrimmedTiles();
+	}
+	
 	public boolean allPlayersAtState(PlayerState...states) {
 		synchronized(playerTable) {
 			Set<Integer> keySet = playerTable.keySet();
@@ -198,10 +202,6 @@ public class SimpleSimulatorImpl extends RemoteServiceServlet implements
 	@Override
 	public boolean login(String username) {
 		return login.addUserToGame(username, "1");
-	}
-	
-	public Tile[][] getTiles() {
-		return controller.getGameModel().getBoard().getTiles();
 	}
 	
 }

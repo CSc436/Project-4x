@@ -240,8 +240,8 @@ public class RenderTile {
 		//float[][] heightmap = DiamondSquare.DSGen(dimension, 
 			//	seed, 0.2f);
 		
-		Console.log("2nd print");
-		Console.log(gameBoard.toString());
+	//	Console.log("2nd print");
+		//Console.log(gameBoard.toString());
 		
 		int padding = 2; 
 		

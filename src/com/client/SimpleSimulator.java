@@ -30,5 +30,5 @@ public interface SimpleSimulator extends RemoteService {
 	
 	Integer exitGame( int playerNumber );
 	
-	Tile[][] getTiles();
+	Tile[][] getUntrimmedTiles();
 }

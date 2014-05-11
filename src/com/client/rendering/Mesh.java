@@ -45,7 +45,8 @@ public class Mesh // implements Renderable {
 
 	private FloatMatrix modelMatrix;
 
-	private WebGLUniformLocation texUniform;
+	// FINDBUG - texUniform never reassigned from null. Commented out.
+	//private WebGLUniformLocation texUniform;
 
 	// FINDBUG - added unused suppress warning for unused GWT import.
 	// TODO: Does this field need to remain?
@@ -454,7 +455,9 @@ public class Mesh // implements Renderable {
 		// Enable the texture
 		glContext.activeTexture(WebGLRenderingContext.TEXTURE0);
 		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
-		glContext.uniform1i(texUniform, 0);
+		// FINDBUG - refactoring method call to use directly use null.
+		// TODO Is this method call required?
+		glContext.uniform1i(null, 0);
 
 		// Set the uniform variable for the perspective matrix
 		WebGLUniformLocation uniformLocation = glContext.getUniformLocation(
