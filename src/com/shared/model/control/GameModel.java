@@ -142,7 +142,8 @@ public class GameModel implements Serializable {
 	}
 
 	public Player getPlayer(int playerId) {
-		return players.get((playerId +1)); // Client model is one off from gameModel, so add one....
+		//return players.get((playerId +1)); // Client model is one off from gameModel, so add one....
+		return players.get(playerId);
 	}
 	
 	public Player getPlayerByUsername(String username) {

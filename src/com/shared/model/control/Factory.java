@@ -142,6 +142,7 @@ public class Factory implements Serializable {
 						.println("Building placement error;  Out of range, or overlap");
 				result = null;
 		}
+		System.out.println(result.toString());
 		return result;
 
 	}

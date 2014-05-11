@@ -487,7 +487,6 @@ public class GameCanvas {
 						//theModel.sendCommand(new ConstructBuildingCommand( BuildingType.BARRACKS, (int) (8*Math.random()), mouseTile));
 						// Get Enum from string
 						BuildingType bt = BuildingType.valueOf($("#building-toolbar").html());
-						Console.log(bt.toString());
 						theModel.sendCommand(new ConstructBuildingCommand(bt, playerID, mouseTile));
 					} else if(event.isShiftKeyDown()) {
 						int targetID = objectSelector.pickEntity(event.getClientX(), event.getClientY());

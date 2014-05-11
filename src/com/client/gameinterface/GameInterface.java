@@ -174,13 +174,13 @@ public class GameInterface {
 					Console.log("got player instance for " + playerName);
 					// Share player ID with the game canvas
 					canvas.setPlayerID(playerID);
+					startResourcesTimer(); // Start refreshing resources
 				}
 			}
 
 		};
 		playerTimer.schedule(1000); // Keep trying to get the player every
 									// second
-		startResourcesTimer();
 
 	}
 
