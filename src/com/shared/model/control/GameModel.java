@@ -327,7 +327,7 @@ public class GameModel implements Serializable {
 	public GameBoard getBoard() {
 		if (map == null){
 			map = new GameBoard(255, 255);
-			map.resourceDistNat();
+			map.resourceDistPretty();
 		}
 		return map;
 	}
@@ -424,6 +424,8 @@ public class GameModel implements Serializable {
 	
 	public void createUnit( UnitType ut, int pn, Coordinate c ) {
 		Unit u = Factory.buildUnit(players.get(pn), pn, ut, c.fx(), c.fy());
+		Player p = players.get(pn);
+		p.addUnit(u);
 		int unitID = u.getId();
 		gameObjects.put(unitID, u);
 		attackers.put(unitID, u);

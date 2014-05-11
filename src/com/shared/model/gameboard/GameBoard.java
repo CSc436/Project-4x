@@ -40,6 +40,13 @@ public class GameBoard implements Serializable {
 													// support stone have stone
 	private static final float goldMult  = 0.010f;  // 0.2% of tiles that can
 													// support gold have gold
+	
+	// Pretty multipliers
+	private static final float pFoodMult = 0.005f;
+	private static final float pWoodMult = 0.005f;
+	private static final float pStoneMult = 0.005f; 
+	private static final float pGoldMult = 0.0025f; 
+	
 	private int[] terrainCount = new int[Terrain.values().length];		// stores the count of each resource tile type.
 	
 	private int massageEdge = 4; // used to create slightly larger board to massage map first. 
@@ -570,6 +577,125 @@ public class GameBoard implements Serializable {
 		return count;
 	}
 
+	/**
+	 * Since resource tiles are very simple for demo, though I'd make a 
+	 * distribution method that does a "prettier" job. Makes sure resources are
+	 * not placed on bordering tiles, and only placed on tiles with same background 
+	 * color. 
+	 */
+	public void resourceDistPretty()
+	{
+		int foodCount  = (int) Math.ceil(((terrainCount[Terrain.GRASS.ordinal()])    * pFoodMult));
+		int woodCount  = (int) Math.ceil(((terrainCount[Terrain.GRASS.ordinal()])    * pWoodMult));
+		int stoneCount = (int) Math.ceil(((terrainCount[Terrain.MOUNTAIN.ordinal()]) * pStoneMult));
+		int goldCount  = (int) Math.ceil(((terrainCount[Terrain.MOUNTAIN.ordinal()]) * pGoldMult));
+	
+		int r, c; // random position
+		
+		while (foodCount > 0)
+		{
+			r = rand.nextInt(rows);
+			c = rand.nextInt(cols);
+			if (map[r][c].getResource() == Resource.NONE && map[r][c].getTerrainType() == Terrain.GRASS
+					&& isCenterTile(r,c,Terrain.GRASS))
+			{
+				map[r][c].setResource(Resource.FOOD);
+				foodCount--; 
+			}
+		}
+		
+		while (woodCount > 0)
+		{
+			r = rand.nextInt(rows);
+			c = rand.nextInt(cols);
+			if (map[r][c].getResource() == Resource.NONE && map[r][c].getTerrainType() == Terrain.GRASS
+					&& isCenterTile(r,c,Terrain.GRASS))
+			{
+				map[r][c].setResource(Resource.WOOD);
+				woodCount--; 
+			}	
+		}
+		
+		while (stoneCount > 0)
+		{
+			r = rand.nextInt(rows);
+			c = rand.nextInt(cols);
+			if (map[r][c].getResource() == Resource.NONE && map[r][c].getTerrainType() == Terrain.MOUNTAIN
+					&& isCenterTile(r,c,Terrain.MOUNTAIN))
+			{
+				map[r][c].setResource(Resource.STONE);
+				stoneCount--; 
+			}
+		}
+		
+		while (goldCount > 0)
+		{
+			r = rand.nextInt(rows);
+			c = rand.nextInt(cols);
+			if (map[r][c].getResource() == Resource.NONE && map[r][c].getTerrainType() == Terrain.MOUNTAIN
+				&& isCenterTile(r,c,Terrain.MOUNTAIN))
+			{
+				map[r][c].setResource(Resource.GOLD);
+				goldCount--; 
+			}
+		}
+	}
+	
+	/**
+	 * Used to check if a tile is a center tile (surrounded by tiles of the same type).
+	 * @param r - row position
+	 * @param c - column position
+	 * @param type - type of resource it should be
+	 * @return true if center tile, false if not
+	 */
+	private boolean isCenterTile(int r, int c, Terrain type)
+	{
+		// Top row tile
+		if (r > 0)
+		{
+			// NE tile 
+			if (c > 0)
+				if (map[r-1][c-1].getTerrainType() != type)
+					return false;
+			// N tile
+			if (map[r-1][c].getTerrainType() != type)
+				return false;
+			// NW tile
+			if (c < cols - 1)
+				if (map[r-1][c+1].getTerrainType() != type)
+					return false;
+		}
+		// Middle Row tile
+		// E tile
+		if (c > 0)
+			if (map[r][c-1].getTerrainType() != type)
+				return false;
+		// don't need to check middle tile, already checked. 
+		
+		// W tile
+		if (c < cols - 1)
+			if (map[r][c+1].getTerrainType() != type)
+				return false;
+		
+		// Bottom Row tiles
+		if (r < rows - 1)
+		{
+			// SE tile
+			if (c > 0)
+				if (map[r+1][c-1].getTerrainType() != type)
+					return false;
+			// S tile
+			if (map[r+1][c].getTerrainType() != type)
+				return false;
+			// SW tile
+			if (c < cols - 1)
+				if (map[r+1][c+1].getTerrainType() != type)
+					return false;
+		}
+		
+		return true;
+	}
+	
 	/**
 	 * getRows(): Description: returns the number of rows this gameboard object
 	 * has
