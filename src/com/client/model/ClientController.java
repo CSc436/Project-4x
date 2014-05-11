@@ -107,7 +107,6 @@ public class ClientController {
 						
 						// Remove loading screen
 						$("#loading-screen").remove();
-						
 						beginPlaying();
 					}
 				});

@@ -91,6 +91,30 @@ public class RenderTile {
 	}
 	
 	/**
+	 * makes a flat version of renderTiles, used to see if all of the 
+	 * terrain adjustment is actually translating to server, and if so maybe 
+	 * where tiling is going wrong. 
+	 * 
+	 * @param gameBoard	gameboard to use
+	 * @param dimension	dimension of gameboard
+	 * @return renderTiles for gameCanvas
+	 */
+	public static RenderTile[][] makeFlatMap(GameBoard gameBoard, int dimension)
+	{
+		// create the map.
+		RenderTile[][] map = new RenderTile[dimension][dimension];
+		for (int x = 0; x < dimension; x++)
+		{
+			for (int y = 0; y < dimension; y++)
+			{
+				map[x][y] = new RenderTile(x, y, 1.0f, 1.0f, Resource.NONE);
+				map[x][y].setFlags(0, 0, 0, 0, gameBoard.getTileAt(x, y).getTerrainType().getValue());
+			}
+		}
+		return map;
+	}
+	
+	/**
 	 * Creates a 2d array of auto-tiled map of dimension 
 	 * @param seed			seed to use with DiamondSquare
 	 * @param dimension		length of one size
@@ -112,7 +136,7 @@ public class RenderTile {
 		
 		// Auto tiling algorithm
 		for (Terrain t: Terrain.values()){
-			if (t == Terrain.FOREST || t == Terrain.WATER)
+			if (/*t == Terrain.FOREST ||*/ t == Terrain.WATER)
 				continue;
 			
 			val = t.getValue();
@@ -229,7 +253,7 @@ public class RenderTile {
 		
 		// Auto tiling algorithm
 		for (Terrain t: Terrain.values()){
-			if (t == Terrain.FOREST || t == Terrain.WATER)
+			if (/*t == Terrain.FOREST ||*/ t == Terrain.WATER)
 				continue;
 			
 			val = t.getValue();

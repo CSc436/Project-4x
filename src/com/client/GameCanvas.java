@@ -952,6 +952,8 @@ public class GameCanvas {
 		tileSelectData = Float32Array.create(NUM_TILES * 6 * 2);
 		
 		RenderTile[][] map = RenderTile.makeMap(this.theModel.getGameModel().getBoard(), GRID_WIDTH);
+		// Testing - remove and replace with above for shipment
+		//RenderTile[][] map = RenderTile.makeFlatMap(this.theModel.getGameModel().getBoard(), GRID_WIDTH);
 		
 		int index = 0;
 		for (int x = 0; x < GRID_WIDTH; x++)

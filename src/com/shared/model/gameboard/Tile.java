@@ -206,22 +206,22 @@ public class Tile implements Serializable {
 		switch (t)
 		{
 		case WATER:
-			this.height = (float)(131/255);
+			this.height = (float)(0/255);
 			break;
 		case SAND:
-			this.height = (float)(135/255);
+			this.height = (float)(100/255);
 			break;
 		case GRASS:
-			this.height = (float)(139/255);
+			this.height = (float)(116/255);
 			break;
-		case FOREST:
-			this.height = (float)(155/255);
-			break;
+		/*case FOREST:
+			this.height = (float)(140/255);
+			break;*/
 		case MOUNTAIN:
-			this.height = (float)(183/255);
+			this.height = (float)(164/255);
 			break;
 		case SNOW:
-			this.height = (float)(200/255);
+			this.height = (float)(222/255);
 			break;
 		}
 	}
@@ -317,15 +317,15 @@ public class Tile implements Serializable {
 
 		float newHeight = 255 * height;
 
-		if (newHeight < 132) {
+		if (newHeight < 100) {
 			return Terrain.WATER;
-		} else if (newHeight < 136) {
+		} else if (newHeight < 116) {
 			return Terrain.SAND;
 		} else if (newHeight < 140 + 5) {
 			return Terrain.GRASS;
-		} else if (newHeight < 156 + 10) {
+		} /*else if (newHeight < 164 + 10) {
 			return Terrain.FOREST;
-		} else if (newHeight < 184 + 5) {
+		}*/ else if (newHeight < 222 + 5) {
 			return Terrain.MOUNTAIN;
 		} else {
 			return Terrain.SNOW;
