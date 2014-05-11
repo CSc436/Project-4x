@@ -23,7 +23,7 @@ public class TestLogin {
 		Login log = new Login();
 		assertTrue("God", log.addUserToGame("God", "1234"));
 
-		assertFalse(log.addUserToHashMap("God", "1234"));
+		assertFalse(log.addUserToGame("God", "1234"));
 		assertTrue(log.hasUserInHashMap("God"));
 
 		assertFalse(log.addUserToGame("God", "21234"));
@@ -37,7 +37,7 @@ public class TestLogin {
 		assertEquals("God", players[0]);
 		assertEquals("Satan", players[1]);
 
-		assertFalse(log.addUserToHashMap("Meathook", "43"));
+		assertFalse(log.addUserToGame("Meathook", "43"));
 
 		assertEquals(2, players.length);
 

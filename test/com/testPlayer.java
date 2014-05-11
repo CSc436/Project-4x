@@ -21,9 +21,10 @@ public class testPlayer {
 		GameBoard g = new GameBoard(20, 20);
 		p1.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));
 //		assertFalse(p1.hasSelectedEligibleBuilding());
-		Building a = Factory.buildBuilding(p1, 0, BuildingType.BARRACKS, 1, 1, g);
-		Building b = Factory.buildBuilding(p1, 0, BuildingType.BARRACKS, 5, 5, g);
-		Building c = Factory.buildBuilding(p1, 0, BuildingType.BARRACKS, 12, 12, g);
+		Factory f = new Factory();
+		Building a = f.buildBuilding(p1, 0, BuildingType.BARRACKS, 1, 1, g);
+		Building b = f.buildBuilding(p1, 0, BuildingType.BARRACKS, 5, 5, g);
+		Building c = f.buildBuilding(p1, 0, BuildingType.BARRACKS, 12, 12, g);
 		
 		if (b == null || a == null || c== null)
 		{
