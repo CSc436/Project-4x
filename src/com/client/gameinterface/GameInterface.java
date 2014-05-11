@@ -161,8 +161,6 @@ public class GameInterface {
 	 */
 	private static void initClickHandlers() {
 
-		
-		
 		// Building Menu Button
 		// Callback to show buildings-menu
 		$("#buildings-button").click(new Function() {
@@ -192,9 +190,9 @@ public class GameInterface {
 									+ "<button type='button' class='btn btn-green'>Goto</button>"
 									+ "</td>" + "</tr>");
 				}
-			
+
 				return true; // Default return true
-				
+
 			}
 		});
 
@@ -223,11 +221,11 @@ public class GameInterface {
 									+ "' class='btn btn-green units-detail-button'>View</button>"
 									+ "</td>"
 									+ "<td>"
-									+ "<button type='button' data-x="
+									+ "<button type='button' data-x='"
 									+ a.getPosition().getX()
-									+ " data-y="
+									+ "' data-y='"
 									+ a.getPosition().getY()
-									+ "class='btn btn-green units-goto'>Goto</button>"
+									+ "' class='btn btn-green units-goto'>Goto</button>"
 									+ "</td>" + "</tr>");
 				}
 
@@ -238,14 +236,14 @@ public class GameInterface {
 
 		$(Document.get()).on("click", ".units-goto", new Function() {
 			public boolean f(Event e) {
-			String xCoord = $(this).attr("data-x");
-			String yCoord = $(this).attr("data-y");
-			canvas.updateCamera(Integer.parseInt(xCoord),Integer.parseInt(yCoord));
-			
-			
-			return true;
+				String xCoord = $(this).attr("data-x");
+				String yCoord = $(this).attr("data-y");
+				canvas.updateCamera(Integer.parseInt(xCoord),
+						Integer.parseInt(yCoord));
+
+				return true;
 			}
-			
+
 		});
 
 		// Diplomacy Menu Button

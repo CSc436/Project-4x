@@ -107,8 +107,6 @@ public class GameCanvas {
 	private boolean chatFlag = false; // if chat is selected, do not allow
 										// camera movment/input
 
-	private boolean gotoLocation = false;
-	private Vector3 moveVector;
 
 	// Game mode
 	private enum Mode {
@@ -732,16 +730,15 @@ public class GameCanvas {
 		if (move)
 			camera.move(mouseVector);
 
-		if (gotoLocation)
-			camera.move(moveVector);
 	}
 
 	public void updateCamera(int x, int y) {
 
-		gotoLocation = true;
-		moveVector = new Vector3(x, y, camera.getZ());
-		updateCamera();
-		gotoLocation = false;
+		Vector3 newVector = Vector3.getVectorBetween(mouseVector, new Vector3(
+				x, y, camera.getZ()));
+		Window.alert(newVector.toString() );
+		camera.move(newVector);
+
 	}
 
 	/**
