@@ -389,6 +389,7 @@ public class GameCanvas {
 					case KeyCodes.KEY_I: 
 						theModel.sendCommand(new PlaceUnitCommand( UnitType.CANNON, playerID, mouseTile));
 						break;
+					/*
 					case KeyCodes.KEY_K:
 						//theModel.sendCommand(new PlaceUnitCommand( UnitType.INFANTRY, (int) (8*Math.random()), mouseTile));
 						theModel.sendCommand(new PlaceUnitCommand( UnitType.INFANTRY, playerID, mouseTile));
@@ -404,6 +405,11 @@ public class GameCanvas {
 					case KeyCodes.KEY_N:
 						for( int i : selectedEntities )
 							theModel.sendCommand(new BuildingProductionCommand( i, UnitType.INFANTRY ));
+						break;
+					*/
+					case KeyCodes.KEY_H:
+						// Keycode to hide the sidebar
+						GameInterface.toggleSidebar(true);
 						break;
 					case KeyCodes.KEY_B:
 						if (event.getNativeEvent().getShiftKey()) {
