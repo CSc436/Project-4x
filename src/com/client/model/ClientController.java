@@ -82,6 +82,7 @@ public class ClientController {
 	}
 	
 	private void retrieveGame() {
+		Console.log("" + playerNumber);
 		simpleSimulator.getGame(playerNumber, -1, new AsyncCallback<GameModel>() {
 
 			@Override

@@ -15,6 +15,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Timer;
 import com.shared.model.buildings.Building;
+import com.shared.model.buildings.BuildingType;
 import com.shared.model.buildings.ResourceBuilding;
 import com.shared.model.commands.AddPlayerCommand;
 import com.shared.model.commands.BuildingProductionCommand;
@@ -483,6 +484,11 @@ public class GameInterface {
 													.generateResource()
 													.getResearchPts()
 											+ "</div>");
+						}
+						if (b.getBuildingType().equals(BuildingType.BARRACKS)) {
+							$("#create-unit-div").show();
+						} else {
+							$("#create-unit-div").hide();
 						}
 						return true; // Default return true
 					}
