@@ -19,7 +19,7 @@ public class Vector3 implements Serializable {
 	}
 	
 	
-	public void normalize() {
+	public boolean normalize() {
 		float length = (float) Math.sqrt(x*x + y*y + z*z);
 		if (length == 0)
 			return false;
