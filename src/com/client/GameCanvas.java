@@ -622,9 +622,16 @@ public class GameCanvas {
 									+ ".");
 						if (theModel.getGameModel().getGameObjects()
 								.containsKey(selectedID)) {
-							Console.log("This entity exists! Adding to selected entities x: "
-									+ event.getX() + "y: " + event.getY());
-							selectedEntities.add(selectedID);
+							if (theModel.getGameModel().getGameObjects()
+									.get(selectedID).getPlayerID() != playerID) {
+								// Tried to select someone else's things
+								// Error message
+								GameInterface.showErrorMessage("This item is not yours, you cannot select it");
+							} else {
+								Console.log("This entity exists! Adding to selected entities x: "
+										+ event.getX() + "y: " + event.getY());
+								selectedEntities.add(selectedID);
+							}
 						} else {
 							if (commandDebug)
 								Console.log("This entity DOES NOT exist!");
