@@ -224,6 +224,11 @@ public class GameCanvas {
 				.cannonOBJ().getText(), glContext);
 		cannon1.setTexture(glContext, ClientResources.INSTANCE.cannonTexture());
 
+		final Mesh barracks1 = OBJImporter.objToMesh(ClientResources.INSTANCE
+				.barracksOBJ().getText(), glContext);
+		barracks1.setTexture(glContext,
+				ClientResources.INSTANCE.barracksTexture());
+
 		/*
 		 * // STRAIN THE SERVER AAAAAAHHHHH int idcount = 300; for (int i = 0; i
 		 * < 20; i++) { for (int j = 0; j < 20; j++) { entities.put(idcount,
@@ -244,6 +249,8 @@ public class GameCanvas {
 		for (BuildingType t : BuildingType.values()) {
 			buildingMeshes.put(t, castle1);
 		}
+
+		buildingMeshes.put(BuildingType.BARRACKS, barracks1);
 
 	}
 
@@ -462,7 +469,8 @@ public class GameCanvas {
 							BuildingType currBuilding = buildingTypes[(buildingTypes.length + buildingCounter)
 									% buildingTypes.length];
 							// Display in the menu
-							$("#building-toolbar").html(currBuilding.toStringWithResources());
+							$("#building-toolbar").html(
+									currBuilding.toStringWithResources());
 						} else {
 							Console.log("pressed b");
 							// Toggle building mode
@@ -474,13 +482,14 @@ public class GameCanvas {
 								// Set div to mouse position
 								$("#building-toolbar").css("left",
 										(mouseX + 25) + "px");
-								$("#building-toolbar")
-										.css("top", (mouseY - 25) + "px");
+								$("#building-toolbar").css("top",
+										(mouseY - 25) + "px");
 								// Set current building type
 								BuildingType currBuilding = buildingTypes[(buildingTypes.length + buildingCounter)
 										% buildingTypes.length];
 								// Display in the menu
-								$("#building-toolbar").html(currBuilding.toStringWithResources());
+								$("#building-toolbar").html(
+										currBuilding.toStringWithResources());
 							}
 						}
 						break;
@@ -567,12 +576,19 @@ public class GameCanvas {
 							GameInterface
 									.showErrorMessage("Buildings cannot be placed on water");
 						} else if (!bt.canBuild(t.getResource())) {
-							// We can't build this building type on this tile type
+							// We can't build this building type on this tile
+							// type
 							// Error message
-							GameInterface.showErrorMessage("You cannot build a " + bt.toStringDisplay() + " here");
-						} else if (!theModel.getGameModel().getPlayer(playerID).canBuild(bt.getResourcesCost())){
-							// We don't have enough resources to build this building
-							GameInterface.showErrorMessage("You do not have enough resources to build a " + bt.toStringDisplay());
+							GameInterface
+									.showErrorMessage("You cannot build a "
+											+ bt.toStringDisplay() + " here");
+						} else if (!theModel.getGameModel().getPlayer(playerID)
+								.canBuild(bt.getResourcesCost())) {
+							// We don't have enough resources to build this
+							// building
+							GameInterface
+									.showErrorMessage("You do not have enough resources to build a "
+											+ bt.toStringDisplay());
 						} else {
 							theModel.sendCommand(new ConstructBuildingCommand(
 									bt, playerID, mouseTile));
@@ -659,13 +675,13 @@ public class GameCanvas {
 					mouseTile.y = (int) (mouseTile.y / (255.0 / GRID_WIDTH) + 0.5);
 				}
 				String display = mouseTile.toString();
-				Tile t = theModel.getGameModel().getBoard().getTileAt((int)mouseTile.x, (int)mouseTile.y);
+				Tile t = theModel.getGameModel().getBoard()
+						.getTileAt((int) mouseTile.x, (int) mouseTile.y);
 				if (!t.getResource().equals(Resource.NONE)) {
 					// If there's a resource on this tile, show it in the div
 					display += "<br>" + t.getResource().toString();
 				}
-				RootPanel.get("tile-info").getElement()
-						.setInnerHTML(display);
+				RootPanel.get("tile-info").getElement().setInnerHTML(display);
 				// Console.log("(after) TILE: " + mouseTile.toString());
 				if (first != null) {
 					curr = new Coordinate(event.getClientX(), event
