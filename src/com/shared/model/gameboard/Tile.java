@@ -317,15 +317,15 @@ public class Tile implements Serializable {
 
 		float newHeight = 255 * height;
 
-		if (newHeight < 115) {
+		if (newHeight < 105) {
 			return Terrain.WATER;
-		} else if (newHeight < 120) {
+		} else if (newHeight < 110) {
 			return Terrain.SAND;
-		} else if (newHeight < 140) {
+		} else if (newHeight < 129) {
 			return Terrain.GRASS;
 		} /*else if (newHeight < 164 + 10) {
 			return Terrain.FOREST;
-		}*/ else if (newHeight < 170) {
+		}*/ else if (newHeight < 160) {
 			return Terrain.MOUNTAIN;
 		} else {
 			return Terrain.SNOW;

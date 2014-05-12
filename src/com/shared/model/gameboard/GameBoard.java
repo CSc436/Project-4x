@@ -76,7 +76,7 @@ public class GameBoard implements Serializable {
 		cols = col;
 		map = new Tile[row + massageEdge][col + massageEdge];
 
-		// create players with default "playerIDno" names
+		
 
 		// create a noisemap
 		System.out.println("Building noisemap...");
