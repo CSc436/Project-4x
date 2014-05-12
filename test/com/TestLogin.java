@@ -1,12 +1,13 @@
 package com;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import com.server.Login;
+import com.shared.model.control.Player;
 
 public class TestLogin {
 
@@ -20,10 +21,9 @@ public class TestLogin {
 		// God,1234
 
 		Login log = new Login();
-		assertFalse(log.hasPlayers());
 		assertTrue("God", log.addUserToGame("God", "1234"));
 
-		assertFalse(log.addUserToHashMap("God", "1234"));
+		assertFalse(log.addUserToGame("God", "1234"));
 		assertTrue(log.hasUserInHashMap("God"));
 
 		assertFalse(log.addUserToGame("God", "21234"));
@@ -33,15 +33,13 @@ public class TestLogin {
 
 		assertFalse(log.addUserToGame("Satan", "4321"));
 
-		ArrayList<String> players = log.getGamePlayers();
-		assertEquals("God", players.get(0));
-		assertEquals("Satan", players.get(1));
+		Player[] players = (Player[])log.getGameModel().getPlayers().values().toArray();
+		assertEquals("God", players[0]);
+		assertEquals("Satan", players[1]);
 
-		assertFalse(log.addUserToHashMap("Meathook", "43"));
+		assertFalse(log.addUserToGame("Meathook", "43"));
 
-		assertEquals(2, log.getGamePlayers().size());
-
-		log.createGame();
+		assertEquals(2, players.length);
 
 	}
 }

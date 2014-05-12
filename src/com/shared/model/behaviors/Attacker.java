@@ -12,4 +12,6 @@ public interface Attacker extends Serializable {
 	
 	public void stopAttack();
 	
+	public boolean isAnimatingAttack();
+	
 }

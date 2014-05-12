@@ -11,7 +11,6 @@ import com.shared.model.buildings.BuildingType;
 import com.shared.model.control.Factory;
 import com.shared.model.control.Player;
 import com.shared.model.gameboard.GameBoard;
-import com.shared.model.gameboard.Tile;
 import com.shared.model.resources.Resources;
 
 
@@ -26,8 +25,9 @@ public class TestGameBoard {
 		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));
 		assertEquals(200, board.getCols());
 		assertEquals(200, board.getRows());
-
-		Building b = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f,
+		Factory f = new Factory();
+		
+		Building b = f.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f,
 				2.0f, board);
 
 		for (int r = 0; r < 1; r++) {
@@ -64,21 +64,23 @@ public class TestGameBoard {
 
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testOccupied2() {
 		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));
 		// These should fail, as there is a building at 1,2
-		Building b = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f,
+		Factory f = new Factory();
+		Building b = f.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f,
 				2.0f, board);
-		Building c = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f,
+		Building c = f.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f,
 				3.0f, board);
 
 		// This should pass
-		c = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 5.0f, 4.0f,
+		c = f.buildBuilding(p, 0, BuildingType.BARRACKS, 5.0f, 4.0f,
 				board);
 
 		// This should fail, as it is off the map
-		Building d = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 199.0f,
+		Building d = f.buildBuilding(p, 0, BuildingType.BARRACKS, 199.0f,
 				3.0f, board);
 
 	}

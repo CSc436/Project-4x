@@ -1,6 +1,7 @@
 package com.client.resources;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dev.javac.testing.impl.StaticJavaResource;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.TextResource;
@@ -50,6 +51,9 @@ public interface ClientResources extends ClientBundle{
     @Source(value={"id.fs"})
     TextResource idFS();
     
+    @Source(value={"selected.vs"})
+    TextResource selectedVS();
+    
     @Source(value={"selected.fs"})
     TextResource selectedFS();
     
@@ -65,6 +69,12 @@ public interface ClientResources extends ClientBundle{
     @Source(value={"tileId.vs"})
     TextResource tileIdVS();
     
+    @Source(value={"selectbox.fs"})
+    TextResource selectboxFS();
+    
+    @Source(value={"selectbox.vs"})
+    TextResource selectboxVS();
+    
     // OBJ definitions
     @Source(value={"barrel.obj"})
     TextResource barrelOBJ();
@@ -78,11 +88,38 @@ public interface ClientResources extends ClientBundle{
     @Source(value={"cannon.obj"})
     TextResource cannonOBJ();
     
-    @Source("castle_base_colors_medium.png")
+    @Source(value={"swordsman.obj"})
+    TextResource swordsmanOBJ();
+    
+    @Source(value={"archer.obj"})
+    TextResource archerOBJ();
+    
+    @Source(value={"barracks.obj"})
+    TextResource barracksOBJ();
+    
+    @Source(value={"floorSprite.obj"})
+    TextResource floorSpriteOBJ();
+    
+    @Source(value={"ring.obj"})
+    TextResource ringOBJ();
+    
+    @Source("castle_base_colors_medium.jpg")
     ImageResource castleTexture();
 	
-    @Source("cannon_base_colors_medium.png")
+    @Source("cannon_base_colors_small.png")
     ImageResource cannonTexture();
+    
+    @Source("swordsman_base_colors_medium.png")
+    ImageResource swordsmanTexture();
+    
+    @Source("archer_base_colors_medium.jpg")
+    ImageResource archerTexture();
+    
+    @Source("barracks_base_colors_medium.jpg")
+    ImageResource barracksTexture();
+    
+    @Source("ring_medium.png")
+    ImageResource ringTexture();
     
     @Source(value={"tile.obj"})
     TextResource tileOBJ();
@@ -92,7 +129,6 @@ public interface ClientResources extends ClientBundle{
 	
     @Source("terrains.png")
     ImageResource terrainTexture();
-    
 
 }
 

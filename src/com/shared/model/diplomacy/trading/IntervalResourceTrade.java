@@ -64,17 +64,6 @@ public class IntervalResourceTrade extends AbstractIntervalTrade {
 		}
 	}
 
-	// This naming gives me cancer
-	@Override
-	public int getPlayer1() {
-		return creatingPlayer;
-	}
-
-	@Override
-	public int getPlayer2() {
-		return receivingPlayer;
-	}
-
 	// This is much better
 	public int getCreatingPlayer() {
 		return creatingPlayer;
@@ -82,15 +71,6 @@ public class IntervalResourceTrade extends AbstractIntervalTrade {
 
 	public int getReceivingPlayer() {
 		return receivingPlayer;
-	}
-
-	// This naming gives me cancer
-	public Resources getP1Trade() {
-		return p1Trade;
-	}
-
-	public Resources getP2Trade() {
-		return p2Trade;
 	}
 	
 	// This is much better

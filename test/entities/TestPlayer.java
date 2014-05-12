@@ -19,14 +19,15 @@ import com.shared.model.units.UnitType;
 public class TestPlayer {
 	GameBoard board = new GameBoard(200,200);
 	Player p = new Player("meathook", 0);
-	
-	Unit u = Factory.buildUnit(p, p.getId(), UnitType.ARCHER, 1.0f, 1.0f);
+	Factory f = new Factory();
+	Unit u = f.buildUnit(p, p.getId(), UnitType.ARCHER, 1.0f, 1.0f);
 
 	@Test
 	public void testGet() {
 		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));
 		
-		Building b = Factory.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f, 1.0f,board);
+		Factory f = new Factory();
+		Building b = f.buildBuilding(p, 0, BuildingType.BARRACKS, 1.0f, 1.0f,board);
 		
 		p.getGameObjects().addBuilding(b);
 		p.getGameObjects().addUnit(u);

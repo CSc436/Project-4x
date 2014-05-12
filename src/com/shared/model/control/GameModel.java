@@ -3,6 +3,7 @@ package com.shared.model.control;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -13,6 +14,7 @@ import com.shared.model.behaviors.Movable;
 import com.shared.model.behaviors.Producer;
 import com.shared.model.behaviors.ResourceGenerator;
 import com.shared.model.buildings.Building;
+import com.shared.model.commands.SendMessageCommand;
 import com.shared.model.diplomacy.trading.TradeManager;
 import com.shared.model.entities.GameObject;
 import com.shared.model.gameboard.GameBoard;
@@ -26,6 +28,7 @@ public class GameModel implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -3911016502183103473L;
+	private static final int chatLogMaxLength = 10; 
 	private HashMap<Integer, Player> players;
 	private GameBoard map;
 	// Hashmap of all gameObjects
@@ -36,15 +39,15 @@ public class GameModel implements Serializable {
 	private HashMap<Integer, Producer> producers;
 	private HashMap<Integer, ResourceGenerator> resourceGenerators;
 	
+	private Factory factory;
+	
+	private LinkedList<GameObject> producedBuildings = new LinkedList<GameObject>();
+
 	private int turnNumber = 0;
 	private int nextPlayerID = 1;
 	private TradeManager tradeManager;
 
-	private ArrayList<String> chatLog; 
-	
-	// ADdd chat log. 
-	// add functionality to see if chat log has updated
-	// once all players have checked a message, remove from new messages?
+	private ArrayList<SendMessageCommand> chatLog; 
 	
 	
 	// simple test model start up.
@@ -59,9 +62,13 @@ public class GameModel implements Serializable {
 		producers   = new HashMap<Integer, Producer>();
 		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
 		
-		map = new GameBoard(500, 500);
+	//	map = new GameBoard(255, 255);
 		
-		chatLog = new ArrayList<String>();
+		factory = new Factory();
+		chatLog = new ArrayList<SendMessageCommand>();
+		
+		/* Do Not Remove this or accidentally merge it away! */
+		tradeManager = new TradeManager(this);
 	}
 	
 	/**
@@ -70,27 +77,34 @@ public class GameModel implements Serializable {
 	 * 
 	 * @param width width of gameboard
 	 */
-	public GameModel(int width) {
-		players = new HashMap<Integer,Player>();
-		
-		gameObjects = new HashMap<Integer, GameObject>();
-		attackers = new HashMap<Integer, Attacker>();
-		movables = new HashMap<Integer, Movable>();
-		attackables = new HashMap<Integer, Attackable>();
-		producers = new HashMap<Integer, Producer>();
-		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
-		
-		map = new GameBoard(width, width);
-		
-		chatLog = new ArrayList<String>();
-	}
+//	public GameModel(int width) {
+//		players = new HashMap<Integer,Player>();
+//		
+//		gameObjects = new HashMap<Integer, GameObject>();
+//		attackers = new HashMap<Integer, Attacker>();
+//		movables = new HashMap<Integer, Movable>();
+//		attackables = new HashMap<Integer, Attackable>();
+//		producers = new HashMap<Integer, Producer>();
+//		resourceGenerators = new HashMap<Integer, ResourceGenerator>();
+//		
+//	//	map = new GameBoard(width, width);
+//		
+//		chatLog = new ArrayList<SendMessageCommand>();
+//		
+//		
+//	}
 	
 	/**
 	 * updates chat log with a new message
 	 * @param message
 	 */
-	public void updateChatLog(String message)
+	public void updateChatLog(SendMessageCommand message)
 	{
+		// if chat log has gotten to big, reset. 
+		if (chatLog.size() > chatLogMaxLength)
+		{
+			chatLog.clear();
+		}
 		chatLog.add(message);
 	}
 	
@@ -98,7 +112,7 @@ public class GameModel implements Serializable {
 	 * returns current chat log.
 	 * @return
 	 */
-	public ArrayList<String> getChatLog()
+	public ArrayList<SendMessageCommand> getChatLog()
 	{
 		return chatLog; 
 	}
@@ -121,12 +135,29 @@ public class GameModel implements Serializable {
 		players.put(nextPlayerID, new Player(playerName, nextPlayerID++));
 	}
 	
+	public void addPlayer(int id, String playerName) {
+		players.put(id, new Player(playerName, id));
+		nextPlayerID = id + 1;
+	}
+	
 	public HashMap<Integer, Player> getPlayers() {
 		return players;
 	}
 
 	public Player getPlayer(int playerId) {
+		//return players.get((playerId +1)); // Client model is one off from gameModel, so add one....
 		return players.get(playerId);
+	}
+	
+	public Player getPlayerByUsername(String username) {
+		for (Integer i : players.keySet()) {
+			Player p = players.get(i);
+			if (p.getAlias().equals(username)) {
+				return p;
+			}
+		}
+		
+		return null;
 	}
 	
 	/**
@@ -182,13 +213,17 @@ public class GameModel implements Serializable {
 	
 	private void updateHealth( int timeStep ) {
 		Set<Integer> keySet = attackables.keySet();
+		LinkedList<Integer> dead = new LinkedList<Integer>();
 		for( int i : keySet ) {
 			Attackable a = attackables.get(i);
 			a.simulateDamage(timeStep);
 			if(a.isDead()) {
-				removeFromAll((GameObject) a);
+				System.out.println("Object with ID " + i + " is dead!");
+				dead.add(i);
 			}
 		}
+		for( int i : dead )
+			removeFromAll(gameObjects.get(i));
 	}
 	
 	private void removeFromAll(GameObject o) {
@@ -200,14 +235,11 @@ public class GameModel implements Serializable {
 		resourceGenerators.remove(id);
 		producers.remove(id);
 		
-		int playerID = o.getPlayerID();
-		getPlayer( playerID ).getGameObjects().removeGameObject(id);
+		//int playerID = o.getPlayerID();
+		//getPlayer( playerID ).getGameObjects().removeGameObject(id);
 	}
 
 	private void placeNewObjects() {
-		
-		
-		
 		
 		Set<Integer> keySet = producers.keySet();
 		for( int k : keySet ) {
@@ -217,48 +249,31 @@ public class GameModel implements Serializable {
 			int x = (int) position.getX();
 			int y = (int) position.getY();
 			
-			// Attempt to place units in a spiraling pattern around the building
-			/*
-			int dx = 0, dy = 0;
-			while( !unitQueue.isEmpty() ) {
-				
-				
-				if(dy == 0) {
-					dy = -(dx + 1);
-					dx = 0;
-					if(dy > 0)
-						for(int i = 0; i < dx + dy; i++) {
-							
-						}
-					else
-						for(int i = 0; i < dx + dy; i++) {
-							
-						}
-				} else {
-					dx = dy;
-					dy = 0;
-				}
-				
-				if(dy == 0)
-				for(int i = 0; i < dx + dy; i++) {
-					
-				}
-				if()
-				x += dx;
-				y += dy;
-				
-			}*/
-			
 			int playerID = ((GameObject) p).getPlayerID();
 			for( UnitType ut : unitQueue ) {
-				Unit u = Factory.buildUnit(getPlayer(playerID), playerID, ut, x, y+1);
+				Unit u = factory.buildUnit(getPlayer(playerID), playerID, ut, x, y);
+				Player p2 = players.get(playerID);
+				p2.addUnit(u);
 				int unitID = u.getId();
 				gameObjects.put(unitID, u);
 				attackers.put(unitID, u);
 				movables.put(unitID, u);
 				attackables.put(unitID, u);
+				if(p instanceof GameObject) {
+					PhysicsVector pos = ((GameObject) p).getMoveTarget();
+					u.setMoveTarget( pos.getX(), pos.getY() );
+				}
 			}
 		}
+		for( GameObject o : producedBuildings ) {
+			int id = o.getId();
+			gameObjects.put(id, o);
+			movables.put(id, o);
+			attackables.put(id, o);
+			if(o instanceof Producer) producers.put(id, (Producer) o);
+			if(o instanceof ResourceGenerator) resourceGenerators.put(id, (ResourceGenerator) o);
+		}
+		producedBuildings.clear();
 	}
 
 	public void modelState() {
@@ -288,12 +303,14 @@ public class GameModel implements Serializable {
 	}
 
 	public GameBoard getBoard() {
-
+		if (map == null){
+			map = new GameBoard(255, 255);
+			map.resourceDistPretty();
+		}
 		return map;
 	}
 
 	public GameObject getGameObject(int entityID) {
-		// TODO Auto-generated method stub
 		return gameObjects.get(entityID);
 	}
 	
@@ -378,8 +395,14 @@ public class GameModel implements Serializable {
 		return gameObjects;
 	}
 	
+	public LinkedList<GameObject> getProducedBuildings() {
+		return producedBuildings;
+	}
+	
 	public void createUnit( UnitType ut, int pn, Coordinate c ) {
-		Unit u = Factory.buildUnit(players.get(pn), pn, ut, c.fx(), c.fy());
+		Unit u = factory.buildUnit(players.get(pn), pn, ut, c.fx(), c.fy());
+		Player p = players.get(pn);
+		p.addUnit(u);
 		int unitID = u.getId();
 		gameObjects.put(unitID, u);
 		attackers.put(unitID, u);
@@ -388,6 +411,19 @@ public class GameModel implements Serializable {
 		if(u != null) {
 			System.out.println(ut.name() + " created with ID " + u.getId());
 		}
+	}
+	
+	public Factory getFactory() {
+		if (factory == null) {
+			factory = new Factory();
+		}
+		return factory;
+	}
+	
+	public Factory getFactory(int id) {
+		Factory instance = getFactory();
+		instance.nextID = id;
+		return instance;
 	}
 	
 }

@@ -1,12 +1,6 @@
 package entities;
 
-import static org.junit.Assert.*;
-
-import java.util.UUID;
-
 import org.junit.Test;
-
-import com.shared.model.buildings.Barracks;
 
 // import control.Player;
 

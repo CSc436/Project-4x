@@ -9,5 +9,7 @@ public interface Attackable extends Serializable {
 	public void takeDamage( int damage );
 	
 	public boolean isDead();
+
+	public float getHealthPercentage();
 	
 }

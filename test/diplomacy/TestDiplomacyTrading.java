@@ -24,6 +24,7 @@ public class TestDiplomacyTrading {
 		plist.add("Pedro");
 
 		GameModel model = new GameModel();
+		@SuppressWarnings("unused") //The construction of this has side effects.
 		Controller controller = new Controller(model);
 
 		Player p1 = model.getPlayer(1);
@@ -43,7 +44,7 @@ public class TestDiplomacyTrading {
 		 * for a total of 5 trades. Create this trade between player1 and
 		 * player2. Player1 trades r1 against Player2's r2.
 		 */
-		ITrade trade = TradeFactory.createIntervalResourceTrade(1, 5,
+		ITrade trade = TradeFactory.createIntervalResourceTrade(5,
 				p1.getId(), p2.getId(), r1, r2);
 		/* Create the proposal */
 		tradeManager.createProposal(trade);
@@ -58,7 +59,7 @@ public class TestDiplomacyTrading {
 		 */
 		assertEquals(p1.resources.compareTo(initial), true);
 
-		tradeManager.acceptProposal(trade);
+		tradeManager.acceptProposal(trade.getId());
 
 		/* Update a bunch of times again. */
 		for (int i = 0; i < 500; i++) {

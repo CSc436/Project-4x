@@ -9,7 +9,7 @@ public class Camera {
 	private float[] cameraMatrix;
 	private float camX = GameCanvas.GRID_WIDTH/2 * -1, camY = GameCanvas.GRID_WIDTH * -1, camZ = 20.0f;
 	private float yaw = 0.0f, pitch = 225.0f, roll = 0.0f;
-	private static float DELTA_ROTATE = 0.5f;
+	private static float DELTA_ROTATE = 1.0f;
 	
 	public Camera() {
 		makeCameraMatrix();
@@ -40,7 +40,7 @@ public class Camera {
 	}
 
 	public float up(float delta) {
-		// TODO Auto-generated method stub
+		
 		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 10/camZ);
 		if (!temp.normalize())
 			return 0;
@@ -54,7 +54,6 @@ public class Camera {
 	}
 
 	public float down(float delta) {
-		// TODO Auto-generated method stub
 		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw) , getSign(yaw), 10/camZ);
 		temp.left();
 		temp.left();
@@ -69,7 +68,6 @@ public class Camera {
 	}
 
 	public void left(float delta) {
-		// TODO Auto-generated method stub
 		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 10/camZ);
 		temp.right(); // the map starts off backwards...
 		if (!temp.normalize())
@@ -83,7 +81,6 @@ public class Camera {
 	}
 
 	public void right(float delta) {
-		// TODO Auto-generated method stub
 		Vector3 temp = new Vector3((float)-Math.tan(Math.toRadians(yaw)) * getSign(yaw), getSign(yaw), 10/camZ);
 		temp.left();
 		if (!temp.normalize())
@@ -96,20 +93,17 @@ public class Camera {
 	}
 
 	private float getSign(float yaw) {
-		// TODO Auto-generated method stub
 		yaw = (float) Math.cos(Math.toRadians(yaw));
 		float toRet = yaw >= 0 ? 1 : -1;
 		return toRet;
 	}
 
 	public void zoomIn() {
-		// TODO Auto-generated method stub
 		float delta = this.up(1.0f);
 		camZ -= delta;
 	}
 
 	public void zoomOut() {
-		// TODO Auto-generated method stub
 		float delta = this.down(1.0f);
 		camZ += delta;
 	}
@@ -131,7 +125,6 @@ public class Camera {
 	}
 
 	public void defaultPosition() {
-		// TODO Auto-generated method stub
 		camX = GameCanvas.GRID_WIDTH/2 * -1;
 		camY = GameCanvas.GRID_WIDTH * -1; 
 		camZ = 20.0f;
@@ -141,16 +134,8 @@ public class Camera {
 	}
 
 	public void move(Vector3 moveVector) {
-		// TODO Auto-generated method stub 
 		moveVector.normalize();
 		this.down(moveVector.y);
 		this.right(moveVector.x);
 	}
-	
-// This doesn't work	
-//	public Vector3 getNormalLookAtVector() {
-//		Vector3 vect = new Vector3(cameraMatrix[8], cameraMatrix[9], 0);
-//		vect.normalize();
-//		return vect;
-//	}
 }

@@ -16,6 +16,7 @@ public class StandardAttacker implements Attacker {
 	private float range; // Attack range
 	private int strength; // Attack strength
 	private boolean isAttacking; // Whether or not I am actively attacking my target
+	private boolean isAnimatingAttack = false;
 	/*
 	 * Must have an associated movementBehavior in order to calculate distance from
 	 * target and in order to perform appropriate attack-move commands
@@ -30,9 +31,9 @@ public class StandardAttacker implements Attacker {
 	}
 	
 	public StandardAttacker(int strength, float range, float coolDown, Movable mb) {
-		this.coolDown = 1000;
+		this.coolDown = (int) coolDown * 1000;
 		this.range = range;
-		this.strength = 1;
+		this.strength = strength;
 		this.isAttacking = false;
 		this.moveBehavior = mb;
 	}
@@ -51,25 +52,49 @@ public class StandardAttacker implements Attacker {
 
 	@Override
 	public void simulateAttack(int timeStep) {
-		if(isAttacking) {
+		if(target != null && isAttacking && !target.isDead()) {
 			PhysicsVector targetPosition = target.getPosition();
 			PhysicsVector myPosition = moveBehavior.getPosition();
 			double distanceToTarget = targetPosition.sub(myPosition).magnitude();
 			
 			coolDownTimer += timeStep;
 			int numAttacks = coolDownTimer / coolDown;
+			if(numAttacks > 0) isAnimatingAttack = true;
 			coolDownTimer %= coolDown;
 			
 			if( distanceToTarget <= range ) {
-				target.takeDamage(numAttacks * strength);
+				double x = myPosition.getX();
+				double y = myPosition.getY();
+				moveBehavior.setMoveTarget(x, y);
+				for(int i = 0; i < numAttacks; i++) target.takeDamage(strength);
 			} else {
-				double x = targetPosition.getX();
-				double y = targetPosition.getY();
+				PhysicsVector dir = targetPosition.sub(myPosition);
+				PhysicsVector moveTo = targetPosition.sub(dir.normalize(range - 1));
+				double x = moveTo.getX();
+				double y = moveTo.getY();
 				moveBehavior.setMoveTarget(x, y);
 			}
 		} else {
-			coolDownTimer = coolDown;
+			if( isAttacking && (target == null || target.isDead())) {
+				// Stop moving if the target has been killed already
+				PhysicsVector myPosition = moveBehavior.getPosition();
+				double x = myPosition.getX();
+				double y = myPosition.getY();
+				moveBehavior.setMoveTarget(x, y);
+				// STOP WIGGLING
+				moveBehavior.setVelocity(0, 0);
+			}
+			stopAttack();
+			coolDownTimer += timeStep;
+			coolDownTimer = coolDownTimer > coolDown ? coolDown : coolDownTimer;
 		}
+	}
+
+	@Override
+	public boolean isAnimatingAttack() {
+		boolean temp = isAnimatingAttack;
+		isAnimatingAttack = false;
+		return temp;
 	}
 	
 }

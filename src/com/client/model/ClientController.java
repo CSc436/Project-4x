@@ -5,6 +5,8 @@ import static com.google.gwt.query.client.GQuery.$;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.client.PlayGame;
+import com.client.GameCanvas;
 import com.client.SimpleSimulator;
 import com.client.SimpleSimulatorAsync;
 import com.client.gameinterface.Console;
@@ -17,23 +19,24 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.shared.model.commands.Command;
 import com.shared.model.control.CommandPacket;
 import com.shared.model.control.GameModel;
+import com.shared.model.gameboard.Tile;
 
-public class ClientModel {
+public class ClientController {
 	
 	private int turnNumber = -1;
 	private int playerNumber = -1;
 	float[] position = { 0.0F, 0.0F };
 	private long lastUpdateTime;
 	private final SimpleSimulatorAsync simpleSimulator;
-	private GameModel model = new GameModel();
-	private boolean readyForNext = true;
+	private volatile boolean readyForNext = false;
+	private GameModel model;// = new GameModel();
 	private int cycleTime = 100;
 	
 	private Queue<Command> commandQueue = new LinkedList<Command>();
 	private Queue<Command> commandQueueCopy = new LinkedList<Command>();
 	private boolean debug = false;
 	
-	public ClientModel() {
+	public ClientController() {
 		
 		simpleSimulator = GWT.create(SimpleSimulator.class);
 		
@@ -54,6 +57,7 @@ public class ClientModel {
 	
 	public void sendCommand( Command c ) {
 		commandQueue.add(c);
+		Console.log("Adding Command");
 	}
 	
 	public void run() {
@@ -67,8 +71,9 @@ public class ClientModel {
 
 			@Override
 			public void onSuccess(Integer playerNum) {
-				if(debug) Console.log("Joined game");
+				Console.log("Joined game");
 				playerNumber = playerNum;
+				GameInterface.setPlayerID(playerNumber); // Give the ID to the game interface
 				retrieveGame();
 			}
 
@@ -77,38 +82,71 @@ public class ClientModel {
 	}
 	
 	private void retrieveGame() {
+		Console.log("" + playerNumber);
 		simpleSimulator.getGame(playerNumber, -1, new AsyncCallback<GameModel>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				if(debug) Console.log("Could not retrieve game.");
+				Console.log("Could not retrieve game.");
 			}
 
 			@Override
 			public void onSuccess(GameModel result) {
 				if(debug) Console.log("Game retrieved!");
 				model = result;
-				// Give game model to interface
-				GameInterface.setGameModel(result);
-				// Remove loading screen
-				$("#loading-screen").remove();
-				beginPlaying();
+				turnNumber = result.getTurnNumber();
+				simpleSimulator.confirmReceipt(playerNumber, turnNumber, new AsyncCallback<String>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Console.log("    Receipt failed, retrying...");
+					}
+
+					public void onSuccess(String result) {
+						if(debug) Console.log("    Receipt success!");
+						readyForNext = true;
+						getUntrimmedTiles();
+					}
+				});
 			}
 			
 		});
 	}
 	
+	public void getUntrimmedTiles() {
+		
+		simpleSimulator.getUntrimmedTiles(new AsyncCallback<Tile[][]>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				Console.log("Could not grab tiles");
+			}
+			
+			@Override
+			public void onSuccess(Tile[][] map) {
+				Console.log("Tiles retrived!");
+				model.getBoard().setUntrimmedTiles(map);
+				model.getBoard().getMapFromUntrimmed();
+				
+				// Remove loading screen
+				$("#loading-screen").remove();
+				beginPlaying();
+			}
+		});
+		
+	}
+	
 	private Timer pollTimer;
 	
 	public void beginPlaying(){
-		readyForNext = true;
+		
+		GameCanvas canvas = new GameCanvas(this);
+		GameInterface.init(this, canvas);
+		GameInterface.setGameModel(model);
 		
 		pollTimer = new Timer() {
 
 			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				
+			public void run() {				
 				if(!readyForNext) {
 					//Console.log("Not ready for next set of commands");
 					resetTimer();
@@ -129,8 +167,7 @@ public class ClientModel {
 				simpleSimulator.sendCommands(playerNumber, commandQueue, new AsyncCallback<CommandPacket>() {
 					@Override
 					public void onFailure(Throwable caught) {
-						if(debug) Console.log("    Unable to receive simulation state");
-						if(debug) Console.log(caught.getMessage());
+						Console.log("    Unable to receive simulation state");
 						readyForNext = true;
 						resetTimer();
 					}
@@ -138,8 +175,6 @@ public class ClientModel {
 					@Override
 					public void onSuccess(CommandPacket result) {
 						
-						// for chat commands, update the gameInterface. ClientModel likely needs reference to gameInterface?
-						// Will try
 						for (Command c: commandQueueCopy) {
 							// Remove every item in the copy from commandQueue
 							commandQueue.remove(c);
@@ -152,18 +187,20 @@ public class ClientModel {
 
 								@Override
 								public void onFailure(Throwable caught) {
-									if(debug) Console.log("Could not retrieve game.");
+									Console.log("Could not retrieve game.");
 								}
 
 								@Override
 								public void onSuccess(GameModel result) {
 									if(debug) Console.log("Game retrieved!");
 									model = result;
+									confirmReceipt();
 								}
 								
 							});
 						} else {
-							if(debug) Console.log(result.getCommandQueue().size() + " commands received, simulate for " + result.getTime() + " ms");
+							//Console.log("Turn " + result.getTurnNumber() + ", " + result.getCommandQueue().size() + " commands received, simulate for " + result.getTime() + " ms");
+							if(debug)Console.log("Turn " + result.getTurnNumber() + ", " + result.getCommandQueue().size() + " commands received, simulate for " + result.getTime() + " ms");
 							result.executeOn(model);
 							model.advanceTimeStep(result.getTime());
 							
@@ -174,7 +211,7 @@ public class ClientModel {
 							if(debug) Console.log("    Simulation state received! Cycle time: " + cycleTime + " ms");
 							confirmReceipt();
 						}
-						resetTimer();
+						
 					}
 				});
 			}
@@ -200,13 +237,14 @@ public class ClientModel {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				if(debug) Console.log("    Receipt failed, retrying...");
+				Console.log("    Receipt failed, retrying...");
 			}
 
 			@Override
 			public void onSuccess(String result) {
 				if(debug) Console.log("    Receipt success!");
 				readyForNext = true;
+				resetTimer();
 			}
 
 		});
@@ -218,6 +256,31 @@ public class ClientModel {
 	
 	public int timeSinceLastUpdate() {
 		return (int) (System.currentTimeMillis() - lastUpdateTime);
+	}
+	
+	public void login(String user, String pass) {
+		
+		simpleSimulator.login(user, new AsyncCallback<Boolean> () {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Console.log("invalid");
+			}
+
+			@Override
+			public void onSuccess(Boolean result) {
+				if (result) {
+					Console.log("valid login");
+					// Callback to PlayGame
+					PlayGame.startGame();
+				} else {
+					Console.log("invalid login");
+					// TODO: show 'invalid' message in interface and don't start game
+					// Play game anyways for now
+					PlayGame.startGame();
+				}
+			}
+		});
 	}
 	
 }

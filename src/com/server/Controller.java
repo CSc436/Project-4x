@@ -3,8 +3,6 @@ package com.server;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import com.shared.model.commands.Command;
 import com.shared.model.control.CommandPacket;
@@ -29,6 +27,9 @@ public class Controller implements Runnable, Serializable {
 	private int movingAverage;
 	private int numTimesSaved = 3; // Keep track of the last n cycle times to compute moving average
 	private boolean packetReady = false;
+	// FINDBUG - added unused suppress warning for unused GWT import.
+	// TODO: Does this field need to remain?
+	@SuppressWarnings("unused")
 	private boolean stop = false;
 	public boolean isRunning;
 	private boolean debug = true;
@@ -60,39 +61,39 @@ public class Controller implements Runnable, Serializable {
 		lastTime = System.currentTimeMillis();
 		stop = false;
 		
-		Timer timer = new Timer();
-		TimerTask task = new TimerTask() {
+		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				simulateFrame();
+				while(true) {
+					long currTime = System.currentTimeMillis();
+					if( currTime < lastTime + timeStep || !continueSimulation ) {
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						continue;
+					}
+					
+					continueSimulation = false;
+					updateRunningAverage( (int) (currTime - lastTime) );
+					lastTime = currTime;
+					
+					packetToSend = commandPacket;
+					commandPacket = new CommandPacket();
+					packetToSend.executeOn(model);
+					
+					if(debug) System.out.println(packetToSend.getCommandQueue().size() + " commands processed this turn");
+					
+					model.advanceTimeStep( movingAverage );
+					packetToSend.setTime( movingAverage );
+					packetToSend.setTurnNumber(turnNumber);
+					turnNumber++;
+					packetReady = true; // Game updated, ready to update clients
+				}
 			}
-		};
-
-		timer.scheduleAtFixedRate(task, 0, 10);
-
-	}
-	
-	public synchronized void simulateFrame() {
-		
-		long currTime = System.currentTimeMillis();
-		if( currTime < lastTime + timeStep || !continueSimulation ) return;
-		
-		continueSimulation = false;
-		updateRunningAverage( (int) (currTime - lastTime) );
-		lastTime = currTime;
-		
-		packetToSend = commandPacket;
-		commandPacket = new CommandPacket();
-		packetToSend.executeOn(model);
-		
-		if(debug) System.out.println(packetToSend.getCommandQueue().size() + " commands processed this turn");
-		
-		model.advanceTimeStep( movingAverage );
-		packetToSend.setTime( movingAverage );
-		packetToSend.setTurnNumber(turnNumber);
-		turnNumber++;
-		packetReady = true; // Game updated, ready to update clients
-		
+			
+		}).start();
 	}
 	
 	public synchronized void continueSimulation() {

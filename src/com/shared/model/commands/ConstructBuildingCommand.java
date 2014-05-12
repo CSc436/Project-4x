@@ -6,7 +6,7 @@ import com.shared.model.control.Factory;
 import com.shared.model.control.GameModel;
 import com.shared.model.control.Player;
 import com.shared.model.gameboard.GameBoard;
-
+import com.shared.utils.Coordinate;
 
 public class ConstructBuildingCommand implements Command {
 
@@ -16,24 +16,18 @@ public class ConstructBuildingCommand implements Command {
 	private static final long serialVersionUID = -1798034723745667705L;
 	private int playerId;
 	private BuildingType buildingType;
-	private int xco;
-	private int yco;
-	private Player p;
-	GameBoard gb;
+	private Coordinate c;
 
-	public ConstructBuildingCommand(Player p, int playerId, BuildingType bt, int xco,
-			int yco, GameBoard gb) {
+	public ConstructBuildingCommand(BuildingType bt, int playerId, Coordinate c) {
 
-		this.p = p;
 		this.playerId = playerId;
 		this.buildingType = bt;
-		this.xco = xco;
-		this.yco = yco;
-		this.gb = gb;
+		this.c = c;
 
 	}
-	
-	public ConstructBuildingCommand() {}
+
+	public ConstructBuildingCommand() {
+	}
 
 	@Override
 	public boolean validateCommand(GameModel model) {
@@ -44,13 +38,20 @@ public class ConstructBuildingCommand implements Command {
 	@Override
 	public boolean performCommand(GameModel model) {
 
-		Building b = Factory.buildBuilding(p, playerId, buildingType, xco, yco,
+		Player p = model.getPlayers().get(playerId);
+		GameBoard gb = model.getBoard();
+		
+		Building b = model.getFactory().buildBuilding(p, playerId, buildingType, c.fx(), c.fy(),
 				gb);
-
-		if (b == null)
+		
+		if (b == null) {
 			return false;
-		else
+		} else {
+			model.getProducedBuildings().add(b);
+			p.addBuilding(b);
+			p.getResources().spend(buildingType.getResourcesCost());
 			return true;
+		}
 
 	}
 }

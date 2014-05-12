@@ -31,8 +31,8 @@ public class PhysicsVector implements Serializable {
 	
 	/**
 	 * 
-	 * @param length
-	 * @return
+	 * @param length - length to shorten the PhysicsVector to
+	 * @return PhysicsVector in the same direction with the normalized length
 	 */
 	public PhysicsVector normalize(double length) {
 		if (Math.hypot(p.x, p.y) != 0.0) {

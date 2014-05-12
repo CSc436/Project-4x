@@ -15,7 +15,8 @@ public class SendMessageCommand implements Command
 	 * 
 	 */
 	private static final long serialVersionUID = -396455197222500915L;
-	private String message; 
+	private String message; // Message and Player Name 
+	private int playerID;   // Id of player, used to pick chat color
 	
 	public SendMessageCommand() {}
 
@@ -23,9 +24,10 @@ public class SendMessageCommand implements Command
 	 * constructor. used to create a new message to be processed by other games.
 	 * @param msg
 	 */
-	public SendMessageCommand(String msg)
+	public SendMessageCommand(String msg, int id)
 	{
-		this.message = msg; 
+		this.message = msg;
+		this.playerID = id; 
 	}
 	// Automatically validate the command
 	@Override
@@ -42,8 +44,17 @@ public class SendMessageCommand implements Command
 		// TODO Auto-generated method stub
 		// model.getInterface.updateMessages?
 		// or add some sort of flag so that interface knows to look at the gameModel.
-		model.updateChatLog(message);
+		model.updateChatLog(this);
 		return true;
 	}
 
+	public String getMessage()
+	{
+		return message;
+	}
+	
+	public int getPlayerID()
+	{
+		return playerID;
+	}
 }

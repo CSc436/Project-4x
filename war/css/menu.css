@@ -18,6 +18,7 @@
 /* Main div to hold buttons excluding the Close button */
 #menu-content {
 	height: 85%;
+	overflow: auto;
 }
 
 #building-toolbar {
@@ -27,4 +28,27 @@
 	position: absolute;
 	z-index: 1001;
 	padding: 5px;
+}
+
+#unit-toolbar {
+	display: none;
+	background-image: url('../assets/Panels/panel_sidebar.png');
+	background-size: 100% 100%;
+	position: absolute;
+	z-index: 1001;
+	padding: 5px;
+}
+
+#error-message {
+	display: none;
+	background-image: url('../assets/Panels/toolbar.png');
+	background-size: 100% 100%;
+	position: fixed;
+	z-index: 1001;
+	padding-left: 5px;
+	padding-top: 5px;
+	width: 100%;
+	height: 20px;
+	top: 50px;
+	color: red !important;
 }

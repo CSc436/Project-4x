@@ -18,13 +18,17 @@ public class Factory implements Serializable {
 	 * 
 	 */
 	public static final long serialVersionUID = -8480151288632582040L;
-	static int nextID = 1;
+	int nextID = 1;
 	
-	public static int getUniqueID() {
+	public void setId(int id) {
+		nextID = id;
+	}
+	
+	public int getUniqueID() {
 		return nextID++;
 	}
 
-	public static Unit buildUnit(Player p, int playerId, UnitType unitType,
+	public Unit buildUnit(Player p, int playerId, UnitType unitType,
 			float xco, float yco) {
 
 		int id = getUniqueID();
@@ -85,32 +89,40 @@ public class Factory implements Serializable {
 	// Do not remove Player p arg. It is needed to maintain the collection of
 	// buildings for the player
 
-	public static Building buildBuilding(Player p, int playerId,
+	public Building buildBuilding(Player p, int playerId,
 			BuildingType buildingType, float xco, float yco, GameBoard gb) {
 		int newId = getUniqueID();
 		Building result = null;
 
 		// if the tile is not occupied
 		if (!gb.getTileAt((int) xco, (int) yco).isOccupiedByBuilding()) {
-
+			
+			ArrayList<UnitType> producibleUnitTypes = new ArrayList<UnitType>();
 			switch (buildingType) {
 			case TOWN_HALL:
 				result = new Barracks(newId, playerId, xco, yco);
 				break;
 				
 			case BARRACKS:
-				ArrayList<UnitType> producibleUnitTypes = new ArrayList<UnitType>();
 				producibleUnitTypes.add(UnitType.INFANTRY);
+				producibleUnitTypes.add(UnitType.SKIRMISHER);
+				producibleUnitTypes.add(UnitType.MILITIA);
 				producibleUnitTypes.add(UnitType.ARCHER);
-				Producer producer = new StandardProduction( producibleUnitTypes );
+				
+				producibleUnitTypes.add(UnitType.RANGED_CALVARY);
+				producibleUnitTypes.add(UnitType.KNIGHT);
+				producibleUnitTypes.add(UnitType.CATAPULT);
+				producibleUnitTypes.add(UnitType.BATTERING_RAM);
+				producibleUnitTypes.add(UnitType.CANNON);
+				
 				result = new ProductionBuilding(newId, playerId, BaseStatsEnum.BARRACKS, BaseStatsEnum.BARRACKS.getStats(),
-						BuildingType.BARRACKS, xco, yco, 2, 4, producer);
+						BuildingType.BARRACKS, xco, yco, 2, 4, new StandardProduction( producibleUnitTypes ));
 				break;
 			case BANK:
 				result = new Barracks(newId, playerId, xco, yco);
 				break;
 			case CASTLE:
-				result = new Castle(newId, playerId, xco, yco, 100, 100); // last two args are populationCap and influenceArea 
+				result = new Castle(newId, playerId, xco, yco, 100, 100, new StandardProduction( producibleUnitTypes )); // last two args are populationCap and influenceArea 
 				break;
 			case LUMBER_MILL:
 				result = new ResourceBuilding(newId, playerId, BaseStatsEnum.LUMBER_MILL, BaseStatsEnum.LUMBER_MILL.getStats(), 
@@ -145,5 +157,4 @@ public class Factory implements Serializable {
 		return result;
 
 	}
-
 }

@@ -20,8 +20,8 @@ public class TestBuilding {
 	@Test
 	public void testGet() {
 		p.resources.receive(new Resources(1000, 1000, 1000, 1000, 1000));
-		
-		Building b = Factory.buildBuilding(p, p.getId(), BuildingType.BARRACKS,
+		Factory f = new Factory();
+		Building b = f.buildBuilding(p, p.getId(), BuildingType.BARRACKS,
 				1.0f, 1.0f, board);
 		assertEquals(100.0, 0, b.getHealth());
 		assertEquals(2, b.getHeight());

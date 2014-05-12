@@ -15,8 +15,9 @@ public class RunGame {
 
 	public static void main(String[] args) {
 
-		GameBoard game = new GameBoard(500, 500); // To change resolution, just change two parameters here
-		game.resourceDistNat();				        // must be able to divide 1000 evenly. 
+
+		GameBoard game = new GameBoard(255,255); // To change resolution, just change two parameters here
+		//game.resourceDistNat();				        // must be able to divide 1000 evenly. 
 
 		JFrame frame = new JFrame("display");
 		frame.setVisible(true);
@@ -41,6 +42,10 @@ public class RunGame {
 
 class draw extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1185015430197023481L;
 	GameBoard game;
 	int mult; 
 
@@ -71,8 +76,8 @@ class draw extends JPanel {
 						g.setColor(new Color(255, 241, 212));
 					else if (game.getTileAt(r, c).getTerrainType() == Terrain.WATER)
 						g.setColor(new Color(51, 126, 255));
-					else if (game.getTileAt(r, c).getTerrainType() == Terrain.FOREST)
-						g.setColor(new Color(100, 131, 120));
+					/*(else if (game.getTileAt(r, c).getTerrainType() == Terrain.FOREST)
+						g.setColor(new Color(100, 131, 120));*/
 					else if (game.getTileAt(r, c).getTerrainType() == Terrain.MOUNTAIN)
 						g.setColor(new Color(140, 132, 118));
 					else if (game.getTileAt(r, c).getTerrainType() == Terrain.SNOW)

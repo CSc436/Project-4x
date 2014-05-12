@@ -67,7 +67,9 @@ public class StandardMover implements Serializable, Movable {
 	@Override
 	public void simulateMovement( int timeStep ) {
 		
-		if(position.equals(targetPosition)) return;
+		if(position.equals(targetPosition)) {
+			return;
+		}
 		
 		double timeSeconds = timeStep / 1000.0;
 		targetVelocity = targetPosition.sub(position).normalize(maxVelocity);
@@ -93,5 +95,15 @@ public class StandardMover implements Serializable, Movable {
 			position = position.add(avgVelocity.multiply(timeSeconds));
 		}
 		
+	}
+
+	@Override
+	public PhysicsVector getMoveTarget() {
+		return targetPosition;
+	}
+
+	@Override
+	public void setVelocity(double x, double y) {
+		velocity = new PhysicsVector(x,y);
 	}
 }

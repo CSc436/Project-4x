@@ -116,8 +116,15 @@ hr {
 	left: 0;
 	height: 100%;
 	width: 100%;
-	background-color: white;
-	color: black;
+	/*background-color: black;*/
+	background-image: url('../assets/Panels/castle_entrance1.jpg');
+	background-size: 100% 100%;
+	color: white;
+}
+
+#login-screen h1 {
+	font-size: 60px;
+	color: #FCD583 !important
 }
 
 #login-screen>div {
