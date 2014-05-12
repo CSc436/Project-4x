@@ -49,6 +49,7 @@ public class ConstructBuildingCommand implements Command {
 		} else {
 			model.getProducedBuildings().add(b);
 			p.addBuilding(b);
+			p.getResources().spend(buildingType.getResourcesCost());
 			return true;
 		}
 

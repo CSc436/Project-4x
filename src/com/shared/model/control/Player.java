@@ -42,7 +42,9 @@ public class Player implements Serializable {
 	}
 
 	public Player(String alias, int id, Civilization civ) {
-		this(alias, id, civ, new Resources(0, 0, 0, 0, 0));
+		// Start player out with:
+		// 1000 Gold, 1000 Wood, 1000 Food, 1000 Stone, 50 Research
+		this(alias, id, civ, new Resources(1000, 1000, 1000, 1000, 50));
 	}
 
 	public Player(String alias, int id, Civilization civ, Resources resources) {
@@ -111,5 +113,22 @@ public class Player implements Serializable {
 	public void addUnit(Unit u) {
 		objects.addUnit(u);
 
+	}
+	
+	/**
+	 * Checks if the player can build based on that building's resource cost
+	 * 
+	 * @param buildingResources - Resources of the BuildingType
+	 * @return - boolean T/R if this player can build something based on that building's resource cost
+	 */
+	public boolean canBuild(Resources buildingResources) {
+		if (resources.getFood() >= buildingResources.getFood() &&
+				resources.getGold() >= buildingResources.getGold() &&
+				resources.getResearchPts() >= buildingResources.getResearchPts() &&
+				resources.getStone() >= buildingResources.getStone() &&
+				resources.getWood() >= buildingResources.getWood()) {
+			return true;
+		}
+		return false;
 	}
 }

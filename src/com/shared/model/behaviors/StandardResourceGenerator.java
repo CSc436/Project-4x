@@ -28,10 +28,11 @@ public class StandardResourceGenerator implements ResourceGenerator {
 	
 	@Override
 	public Resources generateResources( int timeStep ) {
+		/** NOTE: resources now generate every 10 seconds **/
 		timeStepTracker += timeStep;
-		double t = timeStepTracker / 1000.0;
-		if (timeStepTracker > 1000.0) {
-			// If we've reached 1s, send off resources
+		double t = timeStepTracker / 10000.0;
+		if (timeStepTracker > 10000.0) {
+			// If we've reached 10s, send off resources
 			timeStepTracker = 0.0;
 			return new Resources((int) t*gps, (int) t*wps, (int) t*fps, (int) t*sps, (int) t*rps);
 		}

@@ -450,7 +450,7 @@ public class GameCanvas {
 					 * BuildingProductionCommand( i, UnitType.INFANTRY ));
 					 * break;
 					 */
-					case KeyCodes.KEY_H:
+					case KeyCodes.KEY_M:
 						// Keycode to show/hide the sidebar
 						GameInterface.toggleSidebar(true);
 						break;
@@ -459,10 +459,10 @@ public class GameCanvas {
 							Console.log("pressed shift-b");
 							// Cycle through building types
 							buildingCounter++;
-							String currBuilding = buildingTypes[(buildingTypes.length + buildingCounter)
-									% buildingTypes.length].toStringDisplay();
+							BuildingType currBuilding = buildingTypes[(buildingTypes.length + buildingCounter)
+									% buildingTypes.length];
 							// Display in the menu
-							$("#building-toolbar").html(currBuilding);
+							$("#building-toolbar").html(currBuilding.toStringWithResources());
 						} else {
 							Console.log("pressed b");
 							// Toggle building mode
@@ -477,10 +477,10 @@ public class GameCanvas {
 								$("#building-toolbar")
 										.css("top", (mouseY - 25) + "px");
 								// Set current building type
-								String currBuilding = buildingTypes[(buildingTypes.length + buildingCounter)
-										% buildingTypes.length].toString();
+								BuildingType currBuilding = buildingTypes[(buildingTypes.length + buildingCounter)
+										% buildingTypes.length];
 								// Display in the menu
-								$("#building-toolbar").html(currBuilding);
+								$("#building-toolbar").html(currBuilding.toStringWithResources());
 							}
 						}
 						break;
@@ -554,13 +554,13 @@ public class GameCanvas {
 						// BuildingType.BARRACKS, (int) (8*Math.random()),
 						// mouseTile));
 						// Get Enum from string
+						Console.log($("#building-toolbar span").html());
 						BuildingType bt = BuildingType.fromDisplayToEnum($(
-								"#building-toolbar").html());
+								"#building-toolbar span").html());
 						Tile t = theModel
 								.getGameModel()
 								.getBoard()
 								.getTileAt((int) mouseTile.x, (int) mouseTile.y);
-						Console.log(t.getTerrainType().toString());
 						if (t.getTerrainType().equals(Terrain.WATER)) {
 							// We can't build anything on water
 							// Error message
@@ -570,6 +570,9 @@ public class GameCanvas {
 							// We can't build this building type on this tile type
 							// Error message
 							GameInterface.showErrorMessage("You cannot build a " + bt.toStringDisplay() + " here");
+						} else if (!theModel.getGameModel().getPlayer(playerID).canBuild(bt.getResourcesCost())){
+							// We don't have enough resources to build this building
+							GameInterface.showErrorMessage("You do not have enough resources to build a " + bt.toStringDisplay());
 						} else {
 							theModel.sendCommand(new ConstructBuildingCommand(
 									bt, playerID, mouseTile));

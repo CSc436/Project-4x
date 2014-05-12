@@ -225,13 +225,12 @@ public class GameInterface {
 						.getGameObjects().getBuildings();
 				for (int u : buildings.keySet()) {
 					Building b = buildings.get(u);
-					Console.log(b.getBuildingType().toString());
 					$("#buildings-table tbody")
 							.append(""
 									+ "<tr>"
 									+ "<td>"
 									+ "<div>"
-									+ b.getBuildingType().toString()
+									+ b.getBuildingType().toStringDisplay()
 									+ "</div>"
 									+ "<button type='button' data-id='"
 									+ u
@@ -445,7 +444,7 @@ public class GameInterface {
 						Building b = me.getGameObjects().getBuildings().get(id);
 						// Populate buildings-menu-detail with info
 						$("#buildings-menu-detail #building-name").html(
-								"" + "<h2>" + b.getBuildingType().toString()
+								"" + "<h2>" + b.getBuildingType().toStringDisplay()
 										+ "</h2>");
 						$("#buildings-menu-detail #building-data").html(
 								"" + "<div>Health: " + b.getHealth() + "</div>"
