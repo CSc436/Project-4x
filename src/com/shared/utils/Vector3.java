@@ -18,15 +18,15 @@ public class Vector3 implements Serializable {
 		this.z = z;
 	}
 	
-	public Vector3() {}
 	
-	public void normalize() {
+	public boolean normalize() {
 		float length = (float) Math.sqrt(x*x + y*y + z*z);
 		if (length == 0)
-			return;
+			return false;
 		x /= length;
 		y /= length;
 		z /= length;
+		return true;
 	}
 	
 	public void multScalar(float scalar) {

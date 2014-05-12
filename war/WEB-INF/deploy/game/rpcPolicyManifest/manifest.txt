@@ -1,0 +1,3 @@
+# Module game
+# RPC service class, partial path of RPC policy file
+com.client.SimpleSimulator, 6D4D4C978121BE1C1389893ED82AF2FC.gwt.rpc

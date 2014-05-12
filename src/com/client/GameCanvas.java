@@ -396,6 +396,7 @@ public class GameCanvas {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				objectSelector.invalidMap = true;
+				
 				if (debug)
 					Console.log("Pressed: " + event.getNativeKeyCode());
 				if (!chatFlag) {
