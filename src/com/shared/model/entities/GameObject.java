@@ -145,4 +145,14 @@ public class GameObject implements Serializable, Combatable {
 		return healthBehavior.getHealthPercentage();
 	}
 
+	@Override
+	public PhysicsVector getMoveTarget() {
+		return moveBehavior.getMoveTarget();
+	}
+
+	@Override
+	public void setVelocity(double x, double y) {
+		moveBehavior.setVelocity(x, y);
+	}
+
 }

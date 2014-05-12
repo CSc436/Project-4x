@@ -66,13 +66,24 @@ public class StandardAttacker implements Attacker {
 				double x = myPosition.getX();
 				double y = myPosition.getY();
 				moveBehavior.setMoveTarget(x, y);
-				target.takeDamage(numAttacks * strength);
+				for(int i = 0; i < numAttacks; i++) target.takeDamage(strength);
 			} else {
-				double x = targetPosition.getX();
-				double y = targetPosition.getY();
+				PhysicsVector dir = targetPosition.sub(myPosition);
+				PhysicsVector moveTo = targetPosition.sub(dir.normalize(range - 1));
+				double x = moveTo.getX();
+				double y = moveTo.getY();
 				moveBehavior.setMoveTarget(x, y);
 			}
 		} else {
+			if( isAttacking && (target == null || target.isDead())) {
+				// Stop moving if the target has been killed already
+				PhysicsVector myPosition = moveBehavior.getPosition();
+				double x = myPosition.getX();
+				double y = myPosition.getY();
+				moveBehavior.setMoveTarget(x, y);
+				// STOP WIGGLING
+				moveBehavior.setVelocity(0, 0);
+			}
 			stopAttack();
 			coolDownTimer += timeStep;
 			coolDownTimer = coolDownTimer > coolDown ? coolDown : coolDownTimer;

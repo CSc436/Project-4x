@@ -244,7 +244,14 @@ public class GameCanvas {
 			unitMeshes.put(t, cannon1);
 		}
 		unitMeshes.put(UnitType.INFANTRY, swordsman1);
+		unitMeshes.put(UnitType.SKIRMISHER, swordsman1);
+		unitMeshes.put(UnitType.MILITIA, swordsman1);
+		unitMeshes.put(UnitType.KNIGHT, swordsman1);
 		unitMeshes.put(UnitType.ARCHER, archer1);
+		unitMeshes.put(UnitType.RANGED_CALVARY, archer1);
+		unitMeshes.put(UnitType.CATAPULT, cannon1);
+		unitMeshes.put(UnitType.CANNON, cannon1);
+		unitMeshes.put(UnitType.BATTERING_RAM, cannon1);
 
 		for (BuildingType t : BuildingType.values()) {
 			buildingMeshes.put(t, castle1);

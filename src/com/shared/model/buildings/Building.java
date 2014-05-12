@@ -59,6 +59,7 @@ public abstract class Building extends GameObject {
 		this.height = height;
 		this.width = width;
 		this.moveBehavior = new StandardMover(new PhysicsVector(xco,yco), 0, 0);
+		moveBehavior.setMoveTarget(xco, yco+1);
 	}
 
 	public Building() {}

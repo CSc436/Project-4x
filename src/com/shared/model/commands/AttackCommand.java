@@ -1,7 +1,6 @@
 package com.shared.model.commands;
 
 import com.shared.model.behaviors.Attacker;
-import com.shared.model.behaviors.Combatable;
 import com.shared.model.control.GameModel;
 import com.shared.model.entities.GameObject;
 

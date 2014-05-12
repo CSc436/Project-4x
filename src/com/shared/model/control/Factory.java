@@ -96,25 +96,31 @@ public class Factory implements Serializable {
 
 		// if the tile is not occupied
 		if (!gb.getTileAt((int) xco, (int) yco).isOccupiedByBuilding()) {
-
+			
+			ArrayList<UnitType> producibleUnitTypes = new ArrayList<UnitType>();
 			switch (buildingType) {
 			case TOWN_HALL:
 				result = new Barracks(newId, playerId, xco, yco);
 				break;
 				
 			case BARRACKS:
-				ArrayList<UnitType> producibleUnitTypes = new ArrayList<UnitType>();
 				producibleUnitTypes.add(UnitType.INFANTRY);
+				producibleUnitTypes.add(UnitType.SKIRMISHER);
+				producibleUnitTypes.add(UnitType.MILITIA);
 				producibleUnitTypes.add(UnitType.ARCHER);
-				Producer producer = new StandardProduction( producibleUnitTypes );
 				result = new ProductionBuilding(newId, playerId, BaseStatsEnum.BARRACKS, BaseStatsEnum.BARRACKS.getStats(),
-						BuildingType.BARRACKS, xco, yco, 2, 4, producer);
+						BuildingType.BARRACKS, xco, yco, 2, 4, new StandardProduction( producibleUnitTypes ));
 				break;
 			case BANK:
 				result = new Barracks(newId, playerId, xco, yco);
 				break;
 			case CASTLE:
-				result = new Castle(newId, playerId, xco, yco, 100, 100); // last two args are populationCap and influenceArea 
+				producibleUnitTypes.add(UnitType.RANGED_CALVARY);
+				producibleUnitTypes.add(UnitType.KNIGHT);
+				producibleUnitTypes.add(UnitType.CATAPULT);
+				producibleUnitTypes.add(UnitType.BATTERING_RAM);
+				producibleUnitTypes.add(UnitType.CANNON);
+				result = new Castle(newId, playerId, xco, yco, 100, 100, new StandardProduction( producibleUnitTypes )); // last two args are populationCap and influenceArea 
 				break;
 			case LUMBER_MILL:
 				result = new ResourceBuilding(newId, playerId, BaseStatsEnum.LUMBER_MILL, BaseStatsEnum.LUMBER_MILL.getStats(), 

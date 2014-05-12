@@ -249,42 +249,9 @@ public class GameModel implements Serializable {
 			int x = (int) position.getX();
 			int y = (int) position.getY();
 			
-			// Attempt to place units in a spiraling pattern around the building
-			/*
-			int dx = 0, dy = 0;
-			while( !unitQueue.isEmpty() ) {
-				
-				
-				if(dy == 0) {
-					dy = -(dx + 1);
-					dx = 0;
-					if(dy > 0)
-						for(int i = 0; i < dx + dy; i++) {
-							
-						}
-					else
-						for(int i = 0; i < dx + dy; i++) {
-							
-						}
-				} else {
-					dx = dy;
-					dy = 0;
-				}
-				
-				if(dy == 0)
-				for(int i = 0; i < dx + dy; i++) {
-					
-				}
-				if()
-				x += dx;
-				y += dy;
-				
-			}*/
-			
-			
 			int playerID = ((GameObject) p).getPlayerID();
 			for( UnitType ut : unitQueue ) {
-				Unit u = factory.buildUnit(getPlayer(playerID), playerID, ut, x, y+1);
+				Unit u = factory.buildUnit(getPlayer(playerID), playerID, ut, x, y);
 				Player p2 = players.get(playerID);
 				p2.addUnit(u);
 				int unitID = u.getId();
@@ -292,6 +259,10 @@ public class GameModel implements Serializable {
 				attackers.put(unitID, u);
 				movables.put(unitID, u);
 				attackables.put(unitID, u);
+				if(p instanceof GameObject) {
+					PhysicsVector pos = ((GameObject) p).getMoveTarget();
+					u.setMoveTarget( pos.getX(), pos.getY() );
+				}
 			}
 		}
 		for( GameObject o : producedBuildings ) {
