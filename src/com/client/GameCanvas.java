@@ -690,11 +690,14 @@ public class GameCanvas {
 					mouseTile.y = (int) (mouseTile.y / (255.0 / GRID_WIDTH) + 0.5);
 				}
 				String display = mouseTile.toString();
-				Tile t = theModel.getGameModel().getBoard()
-						.getTileAt((int) mouseTile.x, (int) mouseTile.y);
-				if (!t.getResource().equals(Resource.NONE)) {
-					// If there's a resource on this tile, show it in the div
-					display += "<br>" + t.getResource().toString();
+				if (mouseTile.x > 0 && mouseTile.y > 0)
+				{
+					Tile t = theModel.getGameModel().getBoard()
+							.getTileAt((int) mouseTile.x, (int) mouseTile.y);
+					if (!t.getResource().equals(Resource.NONE)) {
+						// If there's a resource on this tile, show it in the div
+						display += "<br>" + t.getResource().toString();
+					}
 				}
 				RootPanel.get("tile-info").getElement().setInnerHTML(display);
 				// Console.log("(after) TILE: " + mouseTile.toString());
