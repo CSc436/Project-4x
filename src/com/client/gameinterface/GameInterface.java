@@ -197,7 +197,6 @@ public class GameInterface {
 
 			public void run() {
 				Resources r = me.getResources();
-				Console.log("my stone: " + r.getStone());
 				$("#toolbar-gold").html(" " + r.getGold() + " ");
 				$("#toolbar-wood").html(" " + r.getWood() + " ");
 				$("#toolbar-food").html(" " + r.getFood() + " ");
@@ -971,6 +970,20 @@ public class GameInterface {
 			showing = toShow; // Change showing variable
 		}
 
+	}
+	
+	public static void showErrorMessage(String message) {
+		$("#error-message span").html(message);
+		$("#error-message").slideDown();
+		// Slide up after 1s
+		Timer timer = new Timer() {
+
+			public void run() {
+				$("#error-message").slideUp();
+			}
+
+		};
+		timer.schedule(3000);
 	}
 
 }

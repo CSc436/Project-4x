@@ -133,5 +133,9 @@ public abstract class Building extends GameObject {
 		return buildingType;
 	}
 	
+	public static boolean canBuild(BuildingType bt) {
+		return false;
+	}
+	
 
 }
