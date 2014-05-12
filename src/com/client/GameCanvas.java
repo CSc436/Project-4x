@@ -210,6 +210,7 @@ public class GameCanvas {
 		final Mesh castle1 = OBJImporter.objToMesh(ClientResources.INSTANCE
 				.castleOBJ().getText(), glContext);
 		castle1.setTexture(glContext, ClientResources.INSTANCE.castleTexture());
+		castle1.posZ = .05f;
 
 		final Mesh swordsman1 = OBJImporter.objToMesh(ClientResources.INSTANCE
 				.swordsmanOBJ().getText(), glContext);

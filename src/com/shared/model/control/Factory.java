@@ -108,6 +108,13 @@ public class Factory implements Serializable {
 				producibleUnitTypes.add(UnitType.SKIRMISHER);
 				producibleUnitTypes.add(UnitType.MILITIA);
 				producibleUnitTypes.add(UnitType.ARCHER);
+				
+				producibleUnitTypes.add(UnitType.RANGED_CALVARY);
+				producibleUnitTypes.add(UnitType.KNIGHT);
+				producibleUnitTypes.add(UnitType.CATAPULT);
+				producibleUnitTypes.add(UnitType.BATTERING_RAM);
+				producibleUnitTypes.add(UnitType.CANNON);
+				
 				result = new ProductionBuilding(newId, playerId, BaseStatsEnum.BARRACKS, BaseStatsEnum.BARRACKS.getStats(),
 						BuildingType.BARRACKS, xco, yco, 2, 4, new StandardProduction( producibleUnitTypes ));
 				break;
@@ -115,11 +122,6 @@ public class Factory implements Serializable {
 				result = new Barracks(newId, playerId, xco, yco);
 				break;
 			case CASTLE:
-				producibleUnitTypes.add(UnitType.RANGED_CALVARY);
-				producibleUnitTypes.add(UnitType.KNIGHT);
-				producibleUnitTypes.add(UnitType.CATAPULT);
-				producibleUnitTypes.add(UnitType.BATTERING_RAM);
-				producibleUnitTypes.add(UnitType.CANNON);
 				result = new Castle(newId, playerId, xco, yco, 100, 100, new StandardProduction( producibleUnitTypes )); // last two args are populationCap and influenceArea 
 				break;
 			case LUMBER_MILL:
